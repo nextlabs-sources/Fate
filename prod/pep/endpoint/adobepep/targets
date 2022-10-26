@@ -1,0 +1,4 @@
+
+TARGETS = \
+	prod/common/celog2 \
+	prod/pep/endpoint/adobepep/plugin/Samples/adobepep

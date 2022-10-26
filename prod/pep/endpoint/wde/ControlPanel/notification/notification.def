@@ -1,0 +1,5 @@
+LIBRARY	"nl_notification"
+
+EXPORTS
+	notify @1
+	notify2 @2

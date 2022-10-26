@@ -1,0 +1,19 @@
+# Ordering of the following targets is important.
+
+TARGETS = \
+	prod/common/celog2 \
+	prod/pep/endpoint/se/pcs_rpc \
+	prod/pep/endpoint/se/service \
+	prod/pep/endpoint/se/nlfsverify \
+	prod/pep/endpoint/se/nl_sysenc_lib \
+	prod/pep/endpoint/se/nl_sysenc \
+	prod/pep/endpoint/se/nl_sysenc_tool \
+	prod/pep/endpoint/se/nl_SysEncryption/user \
+    prod/pep/endpoint/se/nl_SysEncryptionFW/user \
+	prod/pep/endpoint/se/nlseDecompression \
+	prod/pep/endpoint/se/nlseRecovery \
+	prod/pep/endpoint/se/nl_autounwrapper \
+	prod/pep/endpoint/se/IconBadging \
+	prod/pep/endpoint/se/NLPortableEncryption \
+	prod/pep/endpoint/se/NLPortableEncryptionCtx \
+	prod/pep/endpoint/se/nxl_ifilter

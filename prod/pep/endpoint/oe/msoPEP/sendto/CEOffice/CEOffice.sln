@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CEOffice", "CEOffice.vcproj", "{1D865E94-5508-4A54-9BDE-F1B6558EC744}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Debug|Win32.ActiveCfg = release|Win32
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Debug|Win32.Build.0 = release|Win32
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Debug|x64.ActiveCfg = release|x64
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Debug|x64.Build.0 = release|x64
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Release|Win32.ActiveCfg = release|Win32
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Release|Win32.Build.0 = release|Win32
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Release|x64.ActiveCfg = release|x64
+		{1D865E94-5508-4A54-9BDE-F1B6558EC744}.Release|x64.Build.0 = release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

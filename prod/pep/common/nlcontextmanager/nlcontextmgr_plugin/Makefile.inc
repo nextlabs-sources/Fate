@@ -1,0 +1,21 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_EDP)
+VERSION_MAJOR		= $(VERSION_MAJOR_EDP)
+VERSION_MINOR		= $(VERSION_MINOR_EDP)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_EDP)
+VERSION_PATCH		= $(VERSION_PATCH_EDP)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS   = 
+SUBTARGET = nlcontextmgr_plugin
+
+SRC = \
+  src/dllmain.cpp \
+  src/nlcontextmgr_plugin.cpp \
+  src/stdafx.cpp 
+
+INCPATH += \
+  include \
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	Run a correlateBuildInventory.pl.
+
+pushd ..
+ROOT_DIR=`pwd`
+popd
+
+perl correlateBuildInventory.pl $ROOT_DIR correlateBuildInventory.conf buildInventory.html
+

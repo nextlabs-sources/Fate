@@ -1,0 +1,18 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'enhancement'
+		{
+			val DllSurrogate = s ''
+		}
+		'enhancement.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}
+
+
+		
+		

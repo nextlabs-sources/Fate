@@ -1,0 +1,28 @@
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error NLEXTERNALDIR undefined.)
+endif
+
+ifeq ($(BUILDTYPE),)
+	BUILDTYPE=dev
+endif
+
+ifeq ($(VERSION_BUILD_SHORT),)
+	VERSION_BUILD_SHORT=1
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+VERSION_STR=$(VERSION_MAJOR_UPDATER).$(VERSION_MINOR_UPDATER).$(VERSION_MAINTENANCE_UPDATER).$(VERSION_PATCH_UPDATER)
+PRODUCT_DIR_NAME=pc
+ISM_TEMPLATE_FILE_NAME=PolicyController_x64.ism
+ISM_RELEASE=CompliantEnterpriseFileServer64
+ISM_PRODUCT_CONFIG=CompliantEnterpriseFileServer64
+MSI_FILE=CE-WFSE-PolicyController-setup64.msi
+PACKAGE_DIR_NAME=package64-wfse
+PACKAGE_FILE=PolicyController-WFSE-64-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+
+include $(NLBUILDROOT)/install/scripts/Makefile.install.single

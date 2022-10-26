@@ -1,0 +1,10 @@
+EXPORTS
+  SetNLCAThreadPoolLog
+  SetContentAnalysisRPCLog
+  NLCA_ThreadPool_Initialize
+  NLCA_ThreadPool_Shutdown
+  NLCA_ThreadPool_AddTask
+  NLCA_RPCServer_Deserialization
+  NLCA_ThreadPool_CancelTask
+  NLCA_InitializeAClient
+  NLCA_FreeAClient

@@ -1,0 +1,5 @@
+LIBRARY	"EFTAdhoc"
+
+EXPORTS
+	EFTAdhoc_CreateNewRandomUser	@1
+	EFTAdhoc_UploadFile				@2

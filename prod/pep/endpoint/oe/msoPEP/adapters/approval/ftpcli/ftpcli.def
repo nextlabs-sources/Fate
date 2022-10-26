@@ -1,0 +1,4 @@
+LIBRARY	"ftpcli"
+
+EXPORTS
+    FtpUpload

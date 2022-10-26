@@ -1,0 +1,6 @@
+LIBRARY   emgrdgnstc
+
+
+EXPORTS
+	DoAction			@1 
+	QueryStatus			@2

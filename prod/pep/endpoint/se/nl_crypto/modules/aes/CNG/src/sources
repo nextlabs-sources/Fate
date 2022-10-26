@@ -1,0 +1,13 @@
+TARGETNAME=nl_crypto
+TARGETTYPE=EXPORT_DRIVER
+DLLDEF=nl_crypto.def
+INCLUDES=$(INCLUDES);		\
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\modules\aes\CNG\include;	\
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\include
+
+TARGETLIBS=$(TARGETLIBS) \
+           $(IFSKIT_LIB_PATH)\ksecdd.lib
+
+C_DEFINES=$(C_DEFINES)
+
+SOURCES = nl_cng_crypto.c nl_crypto.rc

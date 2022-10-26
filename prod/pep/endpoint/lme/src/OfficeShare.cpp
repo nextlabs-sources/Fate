@@ -1,0 +1,5 @@
+#include "StdAfx.h"
+#include "OfficeShare.h"
+
+// hook Microsoft Live Meeting Collaborate 1.0 Type Library
+//////////////////////////////////////////////////////////////////////////

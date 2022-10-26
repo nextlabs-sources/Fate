@@ -1,0 +1,512 @@
+# Makefile.assembly
+#
+# Description:
+#	This script assemble files that are needed to buld a Policy Controller installer.
+#
+# Written By:
+#	Poon Fung
+#
+# Change History:
+#	11/18/2012 Full integration of PC installer build into Fate branch
+
+
+#
+# Check for errors
+#
+
+ifeq ($(NLBUILDROOT),)
+  $(error ERROR: NLBUILDROOT undefined)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error ERROR: NLEXTERNALDIR undefined)
+endif
+
+ifeq ($(BUILD_NUMBER),)
+  $(error ERROR: BUILD_NUMBER undefined)
+endif
+
+
+#
+# Includes
+#
+
+# Current build
+#	The version # of each product in current build is defined in Makefile.ver.
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+
+#
+# Variables
+#
+
+PERL=perl
+JDK_DIR=$(JAVA_HOME)
+ANT_DIR=$(NLEXTERNALDIR)/apache-ant/apache-ant-1.7.0
+
+JAVAC=$(JDK_DIR)/bin/javac.exe
+JAR=$(JDK_DIR)/bin/jar.exe
+ANT=$(ANT_DIR)/bin/ant
+
+VERSION_STR=$(VERSION_MAJOR_PC).$(VERSION_MINOR_PC)
+ISM_TEMPLATE_FILE_NAME32=PolicyController_x86.ism
+ISM_TEMPLATE_FILE_NAME64=PolicyController_x64.ism
+
+# Because we need build EDP, CE and WFSE Policy Controllers, the MSI_FILEANME will be overriden by
+# ISCmdBld.exe commandline arguements. The names specified here are just placeholders.
+MSI_FILENAME32=PolicyController-setup.msi
+MSI_FILENAME64=PolicyController-setup64.msi
+
+SIGNTOOL_DIR=$(NLBUILDROOT)/build/signtool
+
+DIST_BIN_x86_DIR=$(NLBUILDROOT)/bin/release_win_x86
+DIST_BIN_x64_DIR=$(NLBUILDROOT)/bin/release_win_x64
+DIST_BIN_DOTNET_DIR=$(NLBUILDROOT)/bin/release_dotnet2
+DIST_BIN_JAVA_DIR=$(NLBUILDROOT)/bin/java
+DIST_XLIB_x86_DIR=$(NLBUILDROOT)/xlib/release_win_x86
+DIST_XLIB_x64_DIR=$(NLBUILDROOT)/xlib/release_win_x64
+DIST_XLIB_JAVA_DIR=$(NLBUILDROOT)/xlib/java
+DIST_XLIB_JRE_x86_DIR=$(NLBUILDROOT)/xlib/jre_x86
+DIST_XLIB_JRE_x64_DIR=$(NLBUILDROOT)/xlib/jre_x64
+
+INSTALL_DIR=$(NLBUILDROOT)/install
+INSTALL_PC_DIR=$(NLBUILDROOT)/install/pc
+
+PROD_COMMON_DIR=$(NLBUILDROOT)/prod/common
+
+PROD_PA_DIR=$(NLBUILDROOT)/prod/pa
+
+PROD_PC_DIR=$(NLBUILDROOT)/prod/pc
+PROD_PC_CONFIG_DIR=$(PROD_PC_DIR)/configuration
+
+PROD_PC_CONTEXT_CONFIG_DIR=$(NLBUILDROOT)/prod/pep/common/nlcontextmanager/configuration
+
+PROD_ENDPOINT_DIR=$(NLBUILDROOT)/prod/pep/endpoint
+PROD_WDE_DIR=$(PROD_ENDPOINT_DIR)/wde
+PROD_WDE_CONFIG_DIR=$(PROD_WDE_DIR)/configuration
+
+VERSION_DIR=$(INSTALL_PC_DIR)/build/version
+VERSION_PROPERTIES_DIR=$(VERSION_DIR)/META-INF/com/nextlabs/version
+VERSION_MANIFEST_FILE=$(VERSION_DIR)/MANIFEST.MF
+VERSION_PROPERTIES_FILE=$(VERSION_PROPERTIES_DIR)/version.properties
+
+ASSEMBLY_DIR=$(INSTALL_PC_DIR)/build/data
+ASSEMBLY_JRE32_DIR=$(ASSEMBLY_DIR)/jre_x86
+ASSEMBLY_JRE64_DIR=$(ASSEMBLY_DIR)/jre_x64
+ASSEMBLY_BIN32_DIR=$(ASSEMBLY_DIR)/release_win_x86
+ASSEMBLY_BIN64_DIR=$(ASSEMBLY_DIR)/release_win_x64
+ASSEMBLY_DOTNET_DIR=$(ASSEMBLY_DIR)/release_dotnet
+ASSEMBLY_JAVA_DIR=$(ASSEMBLY_DIR)/java
+ASSEMBLY_RES_DIR=$(ASSEMBLY_DIR)/resource
+ASSEMBLY_RES32_DIR=$(ASSEMBLY_DIR)/resource32
+ASSEMBLY_RES64_DIR=$(ASSEMBLY_DIR)/resource64
+
+
+#
+# Print environment
+#
+
+$(info )
+$(info --------------------------------------------------------------------------)
+$(info Makefile.assembly (/install/pc))
+$(info VERSION_STR            = $(VERSION_STR))
+$(info VERSION_BUILD_SHORT    = $(VERSION_BUILD_SHORT))
+$(info DIST_BIN_x86_DIR       = $(DIST_BIN_x86_DIR))
+$(info DIST_BIN_x64_DIR       = $(DIST_BIN_x64_DIR))
+$(info DIST_BIN_JAVA_DIR      = $(DIST_BIN_JAVA_DIR))
+$(info DIST_BIN_DOTNET_DIR    = $(DIST_BIN_DOTNET_DIR))
+$(info ASSEMBLY_DIR           = $(ASSEMBLY_DIR))
+$(info NLBUILDROOT            = $(NLBUILDROOT))
+$(info BUILD_NUMBER           = $(BUILD_NUMBER))
+$(info --------------------------------------------------------------------------)
+
+
+#
+# Targets
+#
+
+.PHONY: all
+all: prepare_version_jar \
+	prepare_bin_x86 prepare_bin_x64 prepare_external_x86 prepare_external_x64 \
+	prepare_bin_dotnet \
+	prepare_bin_java prepare_destiny_java prepare_external_java \
+	prepare_external_jre_x86 prepare_external_jre_x64 \
+	prepare_resource \
+	prepare_installer_script prepare_ism_file
+
+.PHONY: prepare_version_jar
+prepare_version_jar:
+	@if [ ! -d $(VERSION_DIR) ]; then		\
+		mkdir -p $(VERSION_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JAVA_DIR) ;			\
+	fi
+	mkdir -p $(VERSION_PROPERTIES_DIR)
+	echo "Manifest-Version: 1.0" > $(VERSION_MANIFEST_FILE)
+	echo "Created-By: NextLabs Inc." >> $(VERSION_MANIFEST_FILE)
+	echo "major=$(VERSION_MAJOR_PC)" > $(VERSION_PROPERTIES_FILE)
+	echo "minor=$(VERSION_MINOR_PC)" >> $(VERSION_PROPERTIES_FILE)
+	echo "maintenance=$(VERSION_MAINTENANCE_PC)" >> $(VERSION_PROPERTIES_FILE)
+	echo "patch=$(VERSION_PATCH_PC)" >> $(VERSION_PROPERTIES_FILE)
+	echo "build=$(BUILD_NUMBER)" >> $(VERSION_PROPERTIES_FILE)
+	cd $(VERSION_DIR); "$(JAR)" cvfm $(ASSEMBLY_JAVA_DIR)/version.jar MANIFEST.MF META-INF
+
+.PHONY: prepare_bin_x86
+prepare_bin_x86:
+	@if [ ! -d $(ASSEMBLY_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/cebrain32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cecem32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceconn32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceeval32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceinjection32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cekif32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celog32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celog232.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celogging32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cemarshal5032.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpconn32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpeval32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpgeneric32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdplog32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpman.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpprivate32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpprotect32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpsec32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepepman32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceprivate32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cesdk32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cesec32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceservice32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceTamperproof32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cetransctrl32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cetransport32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/Decrypt.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/IPCJNI32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/IPCStub32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/KeyManagementConsumer32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mch30_setup32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mch_install_test.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NextLabsTaggingLib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NlRegisterPlugins32.exe" "$(ASSEMBLY_BIN32_DIR)/NlRegisterPlugins.exe"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_client32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_framework32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_plugin32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_service.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc_dispatcher32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc_ulib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcommonlib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcontextmgr.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcontextmgr_plugin32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nldevcon.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlQuench.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlTamperproofConfig32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_sysenc_lib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper_plugin32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pafUI32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_encrypt32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_filetagging32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_pe32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pcs_server32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pdflib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pdpjni32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pgp_adapter32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/PDPStop32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/PluginInstallerSDK32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/resattrlib32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/resattrmgr32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/StopEnforcer.exe" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/TagViewMenu32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/tag_office2k732.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/zip_adapter32.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc.sys" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.sys" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlinjection.sys" "$(ASSEMBLY_BIN32_DIR)/"
+
+.PHONY: prepare_bin_x64
+prepare_bin_x64:
+	@if [ ! -d $(ASSEMBLY_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/cebrain.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cecem.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceconn.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceeval.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceinjection.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cekif.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celog.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celog2.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celogging.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cemarshal50.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpconn.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpeval.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpgeneric.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdplog.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpman.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpprivate.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpprotect.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpsec.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepepman.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceprivate.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cesdk.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cesec.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceservice.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceTamperproof.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cetransctrl.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cetransport.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/Decrypt.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/IPCJNI.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/IPCStub.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/KeyManagementConsumer.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/mch30_setup.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/mch_install_test.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NextLabsTaggingLib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NlRegisterPlugins.exe" "$(ASSEMBLY_BIN64_DIR)//NlRegisterPlugins.exe"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_client.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_framework.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_plugin.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_service.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc_dispatcher.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc_ulib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcommonlib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcontextmgr.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcontextmgr_plugin.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nldevcon.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlQuench.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlTamperproofConfig.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_sysenc_lib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper_plugin.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pafUI.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_encrypt.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_filetagging.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_pe.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pcs_server.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pdflib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pgp_adapter.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pdpjni.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/PDPStop.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/PluginInstallerSDK.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/resattrlib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/resattrmgr.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/StopEnforcer.exe" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/TagViewMenu.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/tag_office2k7.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/zip_adapter.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc.sys" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.sys" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlinjection.sys" "$(ASSEMBLY_BIN64_DIR)/"
+
+# Notes: We are getting the Podofo library from //depot/external/podofo-0.8.1-NextLabs-WFSE/.
+# This version of Podofo.dll contains a WFSE bug fix that has gone into PC 5.5.8.2.
+.PHONY: prepare_external_x86
+prepare_external_x86:
+	@if [ ! -d $(ASSEMBLY_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_XLIB_x86_DIR)/atl90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/mfc90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/mfc90u.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/mfcm90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/mfcm90u.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/msvcm90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/msvcp90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/msvcr90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/vcomp90.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/WdfCoInstaller01009.dll" "$(ASSEMBLY_BIN32_DIR)"
+	cp -f "$(DIST_XLIB_x86_DIR)/freetype6.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/libtiff.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/PoDoFoLib.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/zlib1.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_XLIB_x86_DIR)/InstallerCommon32.dll" "$(ASSEMBLY_BIN32_DIR)/InstallerCommon.dll"
+
+# Notes: We are getting the Podofo library from //depot/external/podofo-0.8.1-NextLabs-WFSE/.
+# This version of Podofo.dll contains a WFSE bug fix that has gone into PC 5.5.8.2.
+.PHONY: prepare_external_x64
+prepare_external_x64:
+	@if [ ! -d $(ASSEMBLY_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_XLIB_x64_DIR)/atl90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/msvcm90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/msvcp90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/msvcr90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/mfc90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/mfc90u.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/mfcm90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/mfcm90u.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/vcomp90.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/WdfCoInstaller01009.dll" "$(ASSEMBLY_BIN64_DIR)"
+	cp -f "$(DIST_XLIB_x64_DIR)/libtiff.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/PoDoFoLib.dll" "$(ASSEMBLY_BIN64_DIR)/"
+	cp -f "$(DIST_XLIB_x64_DIR)/zlibwapi.dll" "$(ASSEMBLY_BIN64_DIR)/"
+
+.PHONY: prepare_bin_dotnet
+prepare_bin_dotnet:
+	@if [ ! -d $(ASSEMBLY_DOTNET_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_DOTNET_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_DOTNET_DIR)/NextLabs.CSCInvoke.dll" "$(ASSEMBLY_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_DOTNET_DIR)/NextLabs.CSCInvoke.dll" "$(ASSEMBLY_BIN64_DIR)/"
+
+.PHONY: prepare_bin_java
+prepare_bin_java:
+	@if [ ! -d $(ASSEMBLY_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JAVA_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_JAVA_DIR)/NLCCService.jar" "$(ASSEMBLY_JAVA_DIR)/"
+
+.PHONY: prepare_destiny_java
+prepare_destiny_java:
+	@if [ ! -d $(ASSEMBLY_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JAVA_DIR) ;			\
+	fi
+	cp -f "$(DIST_XLIB_JAVA_DIR)/agent-common.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/agent-controlmanager.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/agent-ipc.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/agent-tools.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/agent-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/client-pf.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-domain-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-domain.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-framework-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-framework.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-oil.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-pf.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-version-impl.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/common-version.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/dabs-agent-services.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/dabs-common-services.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/deployment-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/log-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/management-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/policy-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/server-base.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/server-shared-services.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/server-shared-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/version-types.jar" "$(ASSEMBLY_JAVA_DIR)/"
+
+.PHONY: prepare_external_java
+prepare_external_java:
+	@if [ ! -d $(ASSEMBLY_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JAVA_DIR) ;			\
+	fi
+	cp -f "$(DIST_XLIB_JAVA_DIR)/activation.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/antlr.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/axis.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/c3p0.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/castor-0.9.5.4.jar" "$(ASSEMBLY_JAVA_DIR)/castor.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/cglib-full.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/commons-cli.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/commons-collections-2.1.1.jar" "$(ASSEMBLY_JAVA_DIR)/commons-collections.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/commons-discovery-0.2.jar" "$(ASSEMBLY_JAVA_DIR)/commons-discovery.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/commons-logging-1.0.4.jar" "$(ASSEMBLY_JAVA_DIR)/commons-logging.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/crypt.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/dnsjava.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/dom4j.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/ehcache-1.1.jar" "$(ASSEMBLY_JAVA_DIR)/ehcache.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/hibernate.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/jargs.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/jaxrpc.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/junit-4.3.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/mail.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/odmg.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/saaj.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/wsdl4j-1.5.1.jar" "$(ASSEMBLY_JAVA_DIR)/wsdl4j.jar"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/xercesImpl.jar" "$(ASSEMBLY_JAVA_DIR)/"
+	cp -f "$(DIST_XLIB_JAVA_DIR)/xml-apis.jar" "$(ASSEMBLY_JAVA_DIR)/"
+
+.PHONY: prepare_external_jre_x86
+prepare_external_jre_x86:
+	@if [ ! -d $(ASSEMBLY_JRE32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JRE32_DIR) ;			\
+	fi
+	cp -fR "$(DIST_XLIB_JRE_x86_DIR)"/x86/* "$(ASSEMBLY_JRE32_DIR)/"
+
+.PHONY: prepare_external_jre_x64
+prepare_external_jre_x64:
+	@if [ ! -d $(ASSEMBLY_JRE64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_JRE64_DIR) ;			\
+	fi
+	cp -fR "$(DIST_XLIB_JRE_x64_DIR)"/x64/* "$(ASSEMBLY_JRE64_DIR)/"
+
+.PHONY: prepare_resource
+prepare_resource:
+	@if [ ! -d $(ASSEMBLY_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_RES32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_RES64_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_RES64_DIR) ;			\
+	fi
+	cp -fR "$(INSTALL_PC_DIR)/resource/" "$(ASSEMBLY_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/nlcc/driver/nlcc.inf" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc.x86.cat" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc.x64.cat" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/nlcc/service/java/NLCCService.properties" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/lib/mch/3.0/src/driver/nlinjection.inf" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(PROD_PA_DIR)/encryptionPA/configuration/encryption_adapters32.conf" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(PROD_PA_DIR)/encryptionPA/configuration/encryption_adapters.conf" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/fs/filter/nl_tamper.inf" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.x86.cat" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.x64.cat" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin32.cfg" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin.cfg" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/configuration/TamperResistance.cfg" "$(ASSEMBLY_RES_DIR)/PolicyController_TamperResistance.cfg"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_tamper.cfg" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_plugin32.cfg" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_plugin.cfg" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/procexp.exe32.ini" "$(ASSEMBLY_RES32_DIR)/procexp.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskkill.exe32.ini" "$(ASSEMBLY_RES32_DIR)/taskkill.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskmgr.exe32.ini" "$(ASSEMBLY_RES32_DIR)/taskmgr.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/procexp.exe.ini" "$(ASSEMBLY_RES64_DIR)/procexp64.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskkill.exe.ini" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskmgr.exe.ini" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nlcontextmgr_tamper.cfg" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin32.cfg" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin.cfg" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/license.cfg" "$(ASSEMBLY_RES_DIR)/"
+	cp -f "$(SIGNTOOL_DIR)/x86/CertMgr.exe" "$(ASSEMBLY_RES32_DIR)/"
+	cp -f "$(SIGNTOOL_DIR)/x64/CertMgr.exe" "$(ASSEMBLY_RES64_DIR)/"
+	cp -f "$(SIGNTOOL_DIR)/NextlabsPub.cer" "$(ASSEMBLY_RES_DIR)/"
+	echo "$(VERSION_PRODUCT_PC) v$(VERSION_STR).$(VERSION_BUILD)" > "$(ASSEMBLY_RES_DIR)/README.txt"
+
+.PHONY: prepare_installer_script
+prepare_installer_script:
+	@if [ ! -d "$(ASSEMBLY_DIR)" ]; then		\
+		mkdir -p "$(ASSEMBLY_DIR)" ;			\
+	fi
+	cp -fR "$(INSTALL_PC_DIR)/Script Files/" "$(ASSEMBLY_DIR)/Script Files/"
+
+.PHONY: prepare_ism_file
+prepare_ism_file:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo "Update ISM file"
+	@echo "-----------------------------------------------------------------------------"
+	@if [ ! -d $(ASSEMBLY_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_DIR) ;			\
+	fi
+	"$(PERL)" $(INSTALL_PC_DIR)/updateIsmFile.pl --template=$(ISM_TEMPLATE_FILE_NAME32) \
+		--msiFileName32=$(MSI_FILENAME32) --msiFileName64=$(MSI_FILENAME64) \
+		--versionStr=$(VERSION_STR) --buildNum=$(BUILD_NUMBER)
+	"$(PERL)" $(INSTALL_PC_DIR)/updateIsmFile.pl --template=$(ISM_TEMPLATE_FILE_NAME64) \
+		--msiFileName32=$(MSI_FILENAME32) --msiFileName64=$(MSI_FILENAME64) \
+		--versionStr=$(VERSION_STR) --buildNum=$(BUILD_NUMBER)
+
+.PHONY: clean
+clean:
+	rm -rf $(ASSEMBLY_DIR)
+	rm -rf $(VERSION_DIR)

@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'msoPEP'
+		'msoPEP.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

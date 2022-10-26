@@ -1,0 +1,70 @@
+<project name="post-build" default="build" xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property environment="env" />
+
+  <!-- The path here is hard coded.  I can't find a reference to the log directory from Hudson.  Will have to test this on a slave -->
+  <property name="compileRecord" value="${env.WORKSPACE}/../builds/${env.BUILD_ID}/postbuild.log" />
+
+  <property name="common.build.script.dir" value="${basedir}/build_scripts" />
+
+  <property name="common.build.script.location" 
+            value="file://bluejungle/share/data/build/build_script/build_script-5.5.zip" />
+  <mkdir dir="${common.build.script.dir}" />
+  <get src="${common.build.script.location}" dest="${common.build.script.dir}/build_script-5.5.zip" 
+       usetimestamp="true" 
+   	   verbose="true"/>
+
+  <unzip src="${common.build.script.dir}/build_script-5.5.zip" 
+         dest="${common.build.script.dir}" 
+	     overwrite="false" />  
+
+  <import file="${common.build.script.dir}/ivy_build.xml" />
+
+  <target name="build" depends="init_ivy">		
+    <!-- Disable on slave <record name="${compileRecord}" action="start" append="no" loglevel="info"/> -->
+
+	<!-- zip up build folder -->
+	<zip destfile="${project.root.dir}/build.zip" basedir="${build.root.dir}" />
+ 
+	<condition property="resolver" value="nextlabs-pcv-repository" else="nextlabs-build-repository">
+	  <isset property="PCV" />
+	</condition>
+
+    <ivy:resolve file="${project.root.dir}/ivy.xml" conf="*" />
+	<ivy:publish resolver="${resolver}"
+				 overwrite="true"
+				 forcedeliver="true"
+				 publishivy="true"
+				 haltonmissing="true"
+				 pubrevision="${env.BUILD_NUMBER}" 
+   	>
+	  <artifacts pattern="${build.root.dir}/([releasetype]_)([os]_)([arch])/([compiler])[artifact].[ext]" />
+	  <artifacts pattern="${project.root.dir}/[artifact].[ext]" />
+	  <artifacts pattern="${env.WORKSPACE}/../builds/${env.BUILD_ID}/[artifact].[ext]" />
+	  <artifact type="zip" name="build" /> 
+	  <!-- Disable on slave <artifact type="xml" name="changelog" />  -->
+    </ivy:publish>
+
+     <condition property="CALLTARGET" value="PUBLATEST" else="NOACTION">
+	  <isset property="PUBLATEST" />
+     </condition>
+ 
+     <antcall target="${CALLTARGET}"/>
+     <!-- Disable on slave <record name="${compileRecord}" action="stop"/> -->
+    </target>
+
+    <target name="NOACTION"/>
+
+    <target name="PUBLATEST">
+      <ivy:resolve file="${project.root.dir}/ivy.xml" conf="*" />
+      <ivy:publish resolver="nextlabs-milestones-repository"
+				 overwrite="true"
+				 forcedeliver="true"
+				 publishivy="true"
+				 haltonmissing="true" >
+	  <artifacts pattern="${build.root.dir}/([releasetype]_)([os]_)([arch])/([compiler])[artifact].[ext]" />
+	  <artifacts pattern="${project.root.dir}/[artifact].[ext]" />
+	  <artifacts pattern="${env.WORKSPACE}/../builds/${env.BUILD_ID}/[artifact].[ext]" />
+	  <artifact type="zip" name="build" /> 
+      </ivy:publish>
+    </target>
+</project>

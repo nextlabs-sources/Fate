@@ -1,0 +1,156 @@
+#include "Setup.h"  
+#include "ifx.h" 
+#include "include/servicecontrol.h" 
+#include "include/logging.h"
+#include "include/common.h"
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateAdministrationPassword(hMSI)
+	INT result; 
+    STRING resultAsString;  
+    STRING UNINSTALL_PASSWORD;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateAdministrationPassword()");  
+	UNINSTALL_PASSWORD=GetProperty(hMSI,"UNINSTALL_PASSWORD");
+	if (UNINSTALL_PASSWORD = "") then
+		MessageBox("Please input password !!", INFORMATION);
+	    DenyNextDialog(hMSI);
+	    return ERROR_SUCCESS;
+	endif;
+
+ 	result = StopService(hMSI);             
+    
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password ! \nThe password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);
+	 		return result;	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	  
+	 		return result;                                          				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end; 
+
+function INT RestoreKeystoreFiles(hMSI)
+	INT result; 
+	STRING InstallDir;
+	STRING backupDir;
+begin  
+	
+	InstallDir=GetProperty(hMSI,"INSTALLDIR");
+	backupDir=InstallDir^"backup\\KMC"; 
+	WriteToLogFile(hMSI,"iDir:"+InstallDir);
+	WriteToLogFile(hMSI,"bDir:"+backupDir);
+	if (ExistsDir(backupDir^"config")==0) then
+	    result = XCopyFile(  backupDir^"config"^"config2.dat*", InstallDir^"Policy Controller"^"config",INCLUDE_SUBDIR);
+	    if (result != 0) then
+		    WriteToLogFile(hMSI, "Failed to restore config2.dat files. Error: " + FormatMessage(result));
+	    endif;
+	endif;
+	if (ExistsDir(backupDir^"config"^"security")==0) then
+	    result = XCopyFile( backupDir^"config"^"security"^"KM*.*", InstallDir^"Policy Controller"^"config"^"security", INCLUDE_SUBDIR);
+	    if (result != 0) then
+		    WriteToLogFile(hMSI, "Failed to restore keystore files. Error: " + FormatMessage(result));
+	    endif;
+	endif;         
+	
+	return ERROR_SUCCESS; 
+end;
+
+function INT BackupKeystoreFiles(hMSI)
+	INT result,nSize; 
+	NUMBER nvType, nvSize;
+	STRING InstallDir;
+	STRING backupDir;
+begin  
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+	RegDBGetKeyValueEx("SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller","InstallDir",nvType,InstallDir,nvSize);
+	backupDir=InstallDir^"backup\\KMC"; 
+	WriteToLogFile(hMSI,"iDir:"+InstallDir);
+	WriteToLogFile(hMSI,"bDir:"+backupDir);
+	if (ExistsDir(backupDir)<0) then
+	   result = CreateDir(backupDir);
+	endif;
+	if (ExistsDir(backupDir^"config")<0) then
+	   result = CreateDir(backupDir^"config");  
+	endif;
+	if (result != 0) then
+	   WriteToLogFile(hMSI, "Failed to create backup 'config' Directory. Error: " + FormatMessage(result));
+	   return result;
+	endif;
+	result = XCopyFile( InstallDir^"Policy Controller"^"config"^"config2.dat*", backupDir^"config",INCLUDE_SUBDIR);
+	if (result != 0) then
+	   WriteToLogFile(hMSI, "Failed to backup config2.dat. Error: " + FormatMessage(result));
+	endif;
+      result = CreateDir(backupDir^"config"^"security");
+	if (result != 0) then
+	   WriteToLogFile(hMSI, "Failed to create backup 'config/security' Directory. Error: " + FormatMessage(result));
+	   return result;
+	endif;                 
+	result = XCopyFile( InstallDir^"Policy Controller"^"config"^"security"^"KM*.jceks", backupDir^"config"^"security",INCLUDE_SUBDIR);
+	if (result != 0) then
+	   WriteToLogFile(hMSI, "Failed to backup keystore files. Error: " + FormatMessage(result));
+	endif;         
+	return result; 
+end;  
+
+
+function INT InsertDateToRegistry(hMSI)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;
+    
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else    
+ 		ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\Enterprise DLP\\KeyManagementClient";
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif;
+    	
+    endif; 
+    return ERROR_SUCCESS;
+end;

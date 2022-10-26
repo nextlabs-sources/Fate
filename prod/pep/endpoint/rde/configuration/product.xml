@@ -1,0 +1,11 @@
+<!-- Removable Device Enforcer Control Center Configuration -->
+
+<!-- Actions -->
+<ActionList>
+  <Action>
+    <Name>ATTACH_DEVICE</Name>
+    <DisplayName>Attach Device</DisplayName>
+    <ShortName>AD</ShortName>
+    <Category>Device</Category>
+  </Action>
+</ActionList>

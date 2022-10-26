@@ -1,0 +1,19 @@
+; oeinstca.def
+
+
+LIBRARY    "oeinstca"
+
+EXPORTS
+
+MyTest
+
+FindConfigFile
+CopyConfigFile
+BackupFiles
+RestoreFiles
+SetLogProperty
+DeleteFolderAfterReboot
+RefreshEnv
+ResetServiceStatus
+ResetInjectionPath
+DeleteJServiceFolder

@@ -1,0 +1,373 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "..\include\resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "..\\include\\resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0, 0, 0, 0
+ PRODUCTVERSION 0, 0, 0, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "VERSION_PRODUCT (VERSION_ARCHITECTURE)"
+            VALUE "FileVersion", "VERSION_MAJOR.VERSION_MINOR.VERSION_BUILD"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "VERSION_PRODUCT"
+            VALUE "ProductVersion", "VERSION_MAJOR.VERSION_MINOR.VERSION_BUILD"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ENABLELOGDLG DIALOGEX 0, 0, 234, 139
+STYLE DS_SETFONT | DS_CENTER | WS_CHILD | WS_SYSMENU
+FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    LTEXT           "Verbose Logging must be enabled to collect\ndiagnostic files.",IDC_STATIC,12,9,215,20
+    LTEXT           "Select: ",IDC_STATIC,12,33,28,10
+    LTEXT           "Enable logging",IDC_ENABLELOGGING,47,33,79,13,NOT WS_VISIBLE
+    LTEXT           "or cancel.",IDC_STATIC,12,44,120,19
+END
+
+IDD_STOPPCDLG DIALOGEX 0, 0, 316, 182
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Please provide the Enterprise Data Protection password.",IDC_STATIC,17,14,282,19
+    EDITTEXT        IDC_PASSWORD,33,33,136,12,ES_PASSWORD | ES_AUTOHSCROLL
+    CONTROL         "",IDC_WAIT_PROGRESS,"msctls_progress32",PBS_MARQUEE | NOT WS_VISIBLE | WS_BORDER,17,75,224,14
+    LTEXT           "Static",IDC_WAIT_STATUS,17,61,224,10,NOT WS_VISIBLE
+END
+
+IDD_PROGRESSDLG DIALOGEX 0, 0, 279, 176
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",PBS_MARQUEE | WS_BORDER,21,51,225,14
+    LTEXT           "Collecting log file information and storing in ",IDC_STATIC,21,13,251,16
+    LTEXT           "Static",IDC_LOCATION,22,29,224,14,SS_PATHELLIPSIS
+    LTEXT           "Select Cancel to stop collection.",IDC_STATIC,22,82,170,16
+    LTEXT           "",IDC_STATIC,7,7,8,8
+END
+
+IDD_COMPLETEDLG DIALOGEX 0, 0, 316, 182
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Diagnostics have finished the collection. Please select Finish to pick up the files and close the wizard.",IDC_STATIC,18,14,223,35
+    LTEXT           "Remove the original log files and create more disk space (Recommended):",IDC_STATIC,18,51,225,26
+    PUSHBUTTON      "Remove",IDC_BUTTON_REMOVE,39,83,50,14
+END
+
+IDD_PARENTDLG DIALOGEX 0, 0, 265, 191
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enterprise Data Protection - Collect Logs"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Next >",IDC_NEXT,86,171,81,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Cancel",IDC_CANCEL,176,171,81,14,NOT WS_VISIBLE
+    PUSHBUTTON      "< Back",IDC_BACK,2,171,81,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Finish",IDC_FINISH,176,171,81,14,NOT WS_VISIBLE
+    PUSHBUTTON      "OK",IDC_BUTTON_OK,176,171,81,14,NOT WS_VISIBLE
+    CONTROL         120,IDC_STATIC,"Static",SS_BITMAP,0,0,267,18
+    LTEXT           "static",IDC_STATIC_CHILD_TITLE,5,0,114,18,SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,164,267,1
+END
+
+IDD_LOCATIONDLG DIALOGEX 0, 0, 316, 182
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_LOCATION,24,37,172,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Specify a location for the diagnostic log file:",IDC_STATIC,24,15,232,13
+    PUSHBUTTON      "Browse",IDC_BROWSER,202,36,50,14
+END
+
+IDD_DEL_LOGS_CONFIRM_DLG DIALOGEX 0, 0, 177, 83
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel - Remove Log Files"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,61,62,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,120,62,50,14
+    LTEXT           "Removing log files is recommended to reclaim disk space.",IDC_STATIC,12,8,154,19
+    LTEXT           "Warning! The process is irreversible.",IDC_STATIC,12,31,150,11
+    LTEXT           "Select OK to proceed.",IDC_STATIC,12,41,140,9
+END
+
+IDD_LOGPROMPT DIALOGEX 0, 0, 192, 86
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_WARNING_LOCATION DIALOGEX 0, 0, 178, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Warning"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",ID_CLOSE,121,66,50,14
+    LTEXT           "Diagnostics could not finish the collection. Unable to access the disk. Either the disk is full or you do not have access rights.",IDC_STATIC,10,8,158,54
+END
+
+IDD_WARNING_PC_PWD DIALOGEX 0, 0, 179, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Warning"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDC_CLOSE,122,69,50,14
+    LTEXT           "The password you entered is not valid.",IDC_WARNINGTEXT,13,15,159,49
+END
+
+IDD_WARNING_PC_UNEXPECT DIALOGEX 0, 0, 180, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Warning"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDC_CLOSE,123,66,50,14
+    LTEXT           "An unexpected error occurred. Please try again later.",IDC_STATIC,11,12,162,48
+END
+
+IDD_WAITPROGRESSDLG DIALOGEX 0, 0, 185, 69
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Enterprise Data Protection - Collect Logs"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Static",IDC_SHOWSTATUS,8,17,164,14
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",PBS_MARQUEE | WS_BORDER,7,35,171,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ENABLELOGDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 227
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 132
+    END
+
+    IDD_STOPPCDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
+    END
+
+    IDD_PROGRESSDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 272
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
+
+    IDD_COMPLETEDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
+    END
+
+    IDD_PARENTDLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 262
+        BOTTOMMARGIN, 185
+    END
+
+    IDD_LOCATIONDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
+    END
+
+    IDD_DEL_LOGS_CONFIRM_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 170
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 76
+    END
+
+    IDD_LOGPROMPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 79
+    END
+
+    IDD_WARNING_LOCATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 80
+    END
+
+    IDD_WARNING_PC_PWD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_WARNING_PC_UNEXPECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 173
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 80
+    END
+
+    IDD_WAITPROGRESSDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 178
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 62
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_NLBK                BITMAP                  "res\\ntxlabs.bmp"
+IDB_BACKGROUND          BITMAP                  "res\\bk.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_LOGO                ICON                    "res\\dlp.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_HERE                "here"
+    IDS_LOGTITILE           "EDP Manager:"
+    IDS_LOGPROMPT           "Select this link to pick up the diagnostics file:"
+    IDS_LOGLINK             "Pickup"
+    IDS_STOPPC              "Stopping Policy Controller..."
+    IDS_EMPTYPASSWORD       "The password must not be empty."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

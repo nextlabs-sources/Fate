@@ -1,0 +1,2 @@
+TARGETS = \
+	prod/pep/endpoint/se/nlfsverify

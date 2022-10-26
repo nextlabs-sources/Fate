@@ -1,0 +1,6 @@
+LIBRARY	"TagViewMenu.DLL"
+
+EXPORTS
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+

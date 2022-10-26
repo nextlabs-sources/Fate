@@ -1,0 +1,26 @@
+HKCR
+{
+	NLOfficePEP.1 = s 'NxtOfficeSink Class'
+	{
+		CLSID = s '{B2C293BF-962A-42C5-8AC6-ED5C30BD52EA}'
+	}
+	NLOfficePEP = s 'NxtOfficeSink Class'
+	{
+		CLSID = s '{B2C293BF-962A-42C5-8AC6-ED5C30BD52EA}'
+		CurVer = s 'NLOfficePEP.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B2C293BF-962A-42C5-8AC6-ED5C30BD52EA} = s 'NxtOfficeSink Class'
+		{
+			ProgID = s 'NLOfficePEP.1'
+			VersionIndependentProgID = s 'NLOfficePEP'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{A82E0F9D-1A26-438C-A941-E6DED1C76209}'
+		}
+	}
+}

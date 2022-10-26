@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mchtestlib", "mchtestlib\mchtestlib.vcproj", "{29DCC685-CB27-4B65-A3A9-735A498471F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mchtest", "mchtest\mchtest.vcproj", "{2DE16116-5E44-46C1-A4F8-4B722E689998}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Debug|Win32.Build.0 = Debug|Win32
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Debug|x64.ActiveCfg = Debug|x64
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Debug|x64.Build.0 = Debug|x64
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Release|Win32.ActiveCfg = Release|Win32
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Release|Win32.Build.0 = Release|Win32
+		{29DCC685-CB27-4B65-A3A9-735A498471F5}.Release|x64.ActiveCfg = Release|x64
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Debug|Win32.Build.0 = Debug|Win32
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Debug|x64.ActiveCfg = Debug|Win32
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Release|Win32.ActiveCfg = Release|Win32
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Release|Win32.Build.0 = Release|Win32
+		{2DE16116-5E44-46C1-A4F8-4B722E689998}.Release|x64.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

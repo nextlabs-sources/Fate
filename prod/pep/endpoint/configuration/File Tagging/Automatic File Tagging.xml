@@ -1,0 +1,21 @@
+<Obligation>
+    <DisplayName>Automatic File Tagging</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>AUTOMATIC_FILE_TAGGING</Name>
+    <Arguments>
+        <Argument>
+            <Name>Tag Name</Name>
+        </Argument>
+        <Argument usereditable="true">
+            <Name>Tag Value</Name>
+        </Argument>
+        <Argument>
+            <Name>Target</Name>
+            <Value default="true">Source</Value>
+            <Value>Destination</Value>
+        </Argument>
+        <Argument usereditable="true">
+          <Name>Description</Name>
+        </Argument>
+    </Arguments>
+</Obligation>

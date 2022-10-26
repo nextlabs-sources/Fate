@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# DESCRIPTION
+# This script find all Visual Studio projects that does not have a resource file
+# and resource files that do not have VERSIONINFO section. The script starts
+# search from current directory.
+
+
+#
+# Help message
+#
+
+case "$1" in
+"" | "-h" | "--help")
+	echo "Usage: findProjectsWithNoVersionInfo <root path>";
+	echo "       findProjectsWithNoVersionInfo -h |--help";
+	exit 0;;
+esac
+
+
+#
+# Main program
+#
+
+ROOT_PATH=$1
+
+if [ ! -d $ROOT_PATH ]; then
+	echo "Missing root path";
+	exit 1;
+fi
+
+echo "Scanning starts from \"$ROOT_PATH\""
+echo ""
+echo "CHECK RESOURCE FILE (Projects that has resource file but VERSIONINFO is missing)"
+echo "----------------------------------------------------------------------------------"
+
+find $ROOT_PATH -name "*.rc" -exec fgrep -L "VERSIONINFO" {} \;
+
+echo ""
+echo "CHECK VISUAL STUDIO PROJECTS (Projects that do not contain a resource file)"
+echo "----------------------------------------------------------------------------------"
+
+find "$ROOT_PATH" -name "*.vcproj" -exec fgrep -L '.rc"' {} \;

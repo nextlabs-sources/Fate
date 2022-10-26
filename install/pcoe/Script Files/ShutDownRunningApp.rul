@@ -1,0 +1,370 @@
+//////////////////////////////////////////////////////////////////////////////
+// SDG - Found on community.installshield.com
+//
+// Description: Windows NT process control functions.
+//
+//              The process code is adapted from code posted by William F.
+//              Snodgrass to www.installsite.org. The original code header
+//              is appended below. The array code is adapted from code posted
+//              by Rajesh Ramachandran to the installshield.is6.installscript
+//              newsgroup.
+// 
+// Submitted by Richard Iwasa (riwasa@email.com).
+//
+// Usage example:
+//
+// if ProcessRunning("notepad") then
+//		MessageBox("Application is running.", INFORMATION);
+//
+//		ProcessEnd("notepad");
+//        
+//      Delay(2);  // Delay to allow process list to refresh
+//        
+//		if ProcessRunning("notepad") then
+//			MessageBox("Application is running.", INFORMATION);
+//		else
+//			MessageBox("Application is not running.", INFORMATION);
+//		endif;
+//	else
+//		MessageBox("Application is not running.", INFORMATION);
+//	endif;
+//
+// Original code header appended below:
+//
+// GetRunningApp();
+// ShutDownApp();
+// 
+// These script created functions will look for any running application
+// based on the file name, then display an error message within the Setup.
+// You can optionally halt the install or just continue on.
+// 
+// You can use the ShutDownApp() function for shutting down that process
+// or others as well. This is useful for processes that run in the 
+// background but have no Windows associated with them. May not work with
+// Services.
+// 
+// This script calls functions in PSAPI.DLL that are not supported on 
+// Windows 95 or 98.
+// 
+// ***Instructions***
+// Place these script peices into the Setup.rul file.
+// 
+// Modify the script to include the applications you would like to get or
+// shutdown.
+// 
+// Submitted by William F. Snodgrass
+// Contact info: bsnodgrass@geographix.com
+// 
+// Created by Theron Welch, 3/3/99
+// Minor modifications by Stefan Krueger, 11/03/99
+// 
+// Copyright (c) 1999-2000 GeoGraphix, Inc. 
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////
+// Function prototypes.
+/////////////////////////////////////////////////
+
+prototype POINTER ArrayToPointer(BYREF VARIANT);
+prototype NUMBER  ProcessEnd(STRING);
+prototype BOOL    ProcessRunning(STRING);
+
+// Kernel functions.
+
+prototype NUMBER Kernel32.OpenProcess(NUMBER, BOOL, NUMBER);
+prototype NUMBER Kernel32.TerminateProcess(NUMBER, NUMBER);
+
+// Process information functions.
+
+prototype NUMBER PSAPI.EnumProcesses(POINTER, NUMBER, BYREF NUMBER);
+prototype NUMBER PSAPI.EnumProcessModules(NUMBER, BYREF NUMBER, NUMBER,
+		BYREF NUMBER);
+prototype NUMBER PSAPI.GetModuleFileNameExA(NUMBER, NUMBER, BYREF STRING,
+		NUMBER);
+
+
+
+/////////////////////////////////////////////////
+// Structures.
+/////////////////////////////////////////////////
+
+// Structure to mirror the C/C++ SAFEARRAY data structure.
+
+typedef _SAFEARRAY
+begin
+	SHORT   cDims;
+	SHORT   fFeatures;
+	LONG    cbElements;
+	LONG    cLocks;
+	POINTER pvData;
+	// rgsaBound omitted
+end;
+
+// Structure to mirror the C/C++ VARIANT data structure.
+
+typedef _VARIANT
+begin
+	SHORT  vt;
+	SHORT  wReserver1;
+	SHORT  wReserved2;
+	SHORT  wReserved3;
+	NUMBER nData;
+end;
+
+
+		
+/////////////////////////////////////////////////
+// Constants.
+/////////////////////////////////////////////////
+
+#define PSAPI_FILE        "psapi.dll"  // Windows NT process DLL
+#define PROCESSID_LENGTH  4            // 4 bytes (DWORD) for a process ID
+
+// Process information constants.
+
+#define PROCESS_QUERY_INFORMATION  0x400
+#define PROCESS_ALL_ACCESS         0x1f0fff
+#define PROCESS_VM_READ            0x10
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Function:    ArrayToPointer
+//
+// Description: Converts an InstallShield array into a C array.
+//
+//              When an array is created in InstallScript, a VARIANT variable
+//              is created which holds an OLEAutomation SAFEARRAY. To pass
+//              such an array to a DLL function expecting a C-style array,
+//              this function explicitly typecasts the pointer to the array
+//              to a _VARIANT pointer so that the _SAFEARRAY pointer can be
+//              extracted. The pointer to the actual data is then extracted
+//              from the _SAFEARRAY pointer.
+//
+// Parameters:  structArray - Array variable.
+//
+// Returns:     POINTER - Pointer to array.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+function POINTER ArrayToPointer(structArray)
+	_SAFEARRAY POINTER pstructArray;    // _SAFEARRAY array pointer
+	_VARIANT   POINTER pstructVariant;  // _VARIANT array pointer
+begin
+	// Typecast the pointer to the array to a _VARIANT pointer.
+	
+	pstructVariant = &structArray;
+	
+	// Extract the _SAFEARRAY pointer from the _VARIANT.
+	
+	pstructArray = pstructVariant->nData;
+	
+	// Return the pointer to the actual data from the _SAFEARRAY.
+	
+	return pstructArray->pvData;
+end;
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Function:    _Process_End
+//
+// Description: Terminates running processes for the specified application.
+//
+// Parameters:  szAppName - Name of the application to terminate.
+//
+// Returns:     >= 0 - Number of processes terminated.
+//                -1 - Failure.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+function NUMBER ProcessEnd(szAppName)
+	NUMBER  nvReturn;           // Number of processes terminated
+	NUMBER  nvProcessIDs(512);  // Array of process IDs
+	NUMBER  nvBytesReturned;    // Number of bytes returned in process ID array
+	NUMBER  nvProcesses;        // Number of processes running
+	NUMBER  nvIndex;            // Loop index
+	NUMBER  nvProcessHandle;    // Handle to a process
+	NUMBER  nvModuleHandle;     // Handle to a process module
+	NUMBER  nvBytesRequired;    // Number of bytes required to store values
+	POINTER pvProcessIDs;       // Pointer to process ID array
+	STRING  svModuleName;       // Module name
+	STRING  svFileName;         // Module filename 
+begin
+	// The psapi.dll reads the Windows NT performance database. The DLL
+	// is part of the Win32 SDK.
+	
+	if UseDLL(WINSYSDIR ^ PSAPI_FILE) < 0 then
+		// Could not load psapi.dll.
+		
+		MessageBox("ERROR: Could not load [" + WINSYSDIR ^ PSAPI_FILE +
+				"].", SEVERE);
+		
+		return -1;
+	endif;
+    
+    // Get the PIDs of all currently running processes.
+    
+	pvProcessIDs = ArrayToPointer(nvProcessIDs);
+
+	EnumProcesses(pvProcessIDs, 512, nvBytesReturned);
+
+	// Determine the number of process IDs retrieved. Each process ID
+	// is PROCESSID_LENGTH bytes.
+	
+	nvProcesses = nvBytesReturned / PROCESSID_LENGTH;
+	
+	// Get the executable associated with each process, and check if
+	// its filename matches the one passed to the function.
+	
+	for nvIndex = 1 to nvProcesses
+		// Get a handle to the process. The OpenProcess function
+		// must have full (all) access to be able to terminate
+		// processes.
+		
+		nvProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION |
+				PROCESS_ALL_ACCESS, 0, nvProcessIDs(nvIndex));
+				
+		if nvProcessHandle != 0 then
+			// Get a handle to the first module in the process, which
+			// should be the executable.
+			
+			if EnumProcessModules(nvProcessHandle, nvModuleHandle,		
+					PROCESSID_LENGTH, nvBytesRequired) != 0 then
+				// Get the path of the module.
+				
+				if GetModuleFileNameExA(nvProcessHandle, nvModuleHandle,
+						svModuleName, SizeOf(svModuleName)) != 0 then
+					// Extract the filename (without an extension) from
+					// the path.
+					
+					ParsePath(svFileName, svModuleName, FILENAME_ONLY);
+
+					if StrCompare(svFileName, szAppName) = 0 then
+						// The process module matches the application 
+						// name passed to the function.
+						
+						if TerminateProcess(nvProcessHandle, 0) > 0 then
+							nvReturn++;
+						endif;
+					endif;
+				endif;
+			endif;
+		endif;
+	endfor;
+			
+	if UnUseDLL(PSAPI_FILE) < 0 then
+		MessageBox("ERROR: Could not unload [" + WINSYSDIR ^ PSAPI_FILE +
+				"].", SEVERE);
+				
+		return -1;
+	endif;
+		
+	return nvReturn;
+end;
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Function:    _Process_Running
+//
+// Description: Determines if the specified process is running in memory.
+//
+// Parameters:  szAppName - Name of the application to check.
+//
+// Returns:     TRUE  - The process is running.
+//              FALSE - The process is not running.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+function BOOL ProcessRunning(szAppName)
+	BOOL    bvRunning;          // Process is running
+	NUMBER  nvProcessIDs(512);  // Array of process IDs
+	NUMBER  nvBytesReturned;    // Number of bytes returned in process ID array
+	NUMBER  nvProcesses;        // Number of processes running
+	NUMBER  nvIndex;            // Loop index
+	NUMBER  nvProcessHandle;    // Handle to a process
+	NUMBER  nvModuleHandle;     // Handle to a process module
+	NUMBER  nvBytesRequired;    // Number of bytes required to store values
+	POINTER pvProcessIDs;       // Pointer to process ID array
+	STRING  svModuleName;       // Module name
+	STRING  svFileName;         // Module filename 
+begin
+	// The psapi.dll reads the Windows NT performance database. The DLL
+	// is part of the Win32 SDK.
+	
+	if UseDLL(WINSYSDIR ^ PSAPI_FILE) < 0 then
+		// Could not load psapi.dll.
+		
+		MessageBox("ERROR: Could not load [" + WINSYSDIR ^ PSAPI_FILE +
+				"].", SEVERE);
+		
+		return FALSE;
+	endif;
+    
+    // Get the PIDs of all currently running processes.
+    
+	pvProcessIDs = ArrayToPointer(nvProcessIDs);
+
+	EnumProcesses(pvProcessIDs, 512, nvBytesReturned);
+
+	// Determine the number of process IDs retrieved. Each process ID
+	// is PROCESSID_LENGTH bytes.
+	
+	nvProcesses = nvBytesReturned / PROCESSID_LENGTH;
+	
+	// Get the executable associated with each process, and check if
+	// its filename matches the one passed to the function.
+	
+	for nvIndex = 1 to nvProcesses
+		// Get a handle to the process.
+		
+		nvProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION |
+				PROCESS_VM_READ, 0, nvProcessIDs(nvIndex));
+				
+		if nvProcessHandle != 0 then
+			// Get a handle to the first module in the process, which
+			// should be the executable.
+			
+			if EnumProcessModules(nvProcessHandle, nvModuleHandle,		
+					PROCESSID_LENGTH, nvBytesRequired) != 0 then
+				// Get the path of the module.
+				
+				if GetModuleFileNameExA(nvProcessHandle, nvModuleHandle,
+						svModuleName, SizeOf(svModuleName)) != 0 then
+					// Extract the filename (without an extension) from
+					// the path.
+					
+					ParsePath(svFileName, svModuleName, FILENAME_ONLY);
+					
+					if StrCompare(svFileName, szAppName) = 0 then
+						// The process module matches the application 
+						// name passed to the function.
+						
+						bvRunning = TRUE;
+					    
+					    goto ProcessRunningEnd;
+					endif;
+				endif;
+			endif;
+		endif;
+	endfor;
+			
+	ProcessRunningEnd:
+		
+	if UnUseDLL(PSAPI_FILE) < 0 then
+		MessageBox("ERROR: Could not unload [" + WINSYSDIR ^ PSAPI_FILE +
+				"].", SEVERE);
+				
+		return FALSE;
+	endif;
+		
+	return bvRunning;
+end;
+

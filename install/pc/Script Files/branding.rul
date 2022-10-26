@@ -1,0 +1,22 @@
+#include "branding.h" 
+#include "policycontroller.h"   
+    
+#define DISPLAY_ICON_REG_KEY_PREFIX "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"
+#define DISPLAY_ICON_NAME "app-icon.ico"
+/*
+ * Set the Add/Remove programs icon
+ */ 
+function INT setApplicationIcon(hMSI)
+	INT result;	
+begin          
+	 WriteToLogFile(hMSI, "Begin setApplicationIcon()");
+	 
+	 RegDBSetDefaultRoot( HKEY_LOCAL_MACHINE );
+szIcon = getPolicyControllerDirectory() ^ "app-icon.ico";
+szKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + PRODUCT_GUID;
+RegDBSetKeyValueEx( szKey, "DisplayIcon", REGDB_STRING, szIcon, -1 );               
+	 
+	 WriteToLogFile(hMSI, "End setApplicationIcon()");
+	  
+	 return ERROR_SUCCESS;
+end; 

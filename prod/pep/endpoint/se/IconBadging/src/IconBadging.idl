@@ -1,0 +1,36 @@
+// IconBadging.idl : IDL source for IconBadging
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (IconBadging.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(3E797AEB-BE13-47D8-8134-0515D92DF756),
+	dual,
+	nonextensible,
+	helpstring("ISeIconOverlay Interface"),
+	pointer_default(unique)
+]
+interface ISeIconOverlay : IDispatch{
+};
+[
+	uuid(C63410A4-B195-436F-91E2-357045BA641E),
+	version(1.0),
+	helpstring("IconBadging 1.0 Type Library")
+]
+library IconBadgingLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(B7B41182-895A-4936-AECF-B4180C66614F),
+		helpstring("SeIconOverlay Class")
+	]
+	coclass SeIconOverlay
+	{
+		[default] interface ISeIconOverlay;
+	};
+};

@@ -1,0 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////
+//                                                                            
+//  File Name:    Setup.rul                                                   
+//                                                                            
+//  Description:  InstallShield script                                          
+//                                                                            
+//                                                                                                               
+/////////////////////////////////////////////////////////////////////////////
+
+// Include header files /////////////////////////////////////////////////////
+#include "ifx.h"
+#include "policycontroller.rul"
+#include "include/servicecontrol.h"
+#include "setupfiles.rul"
+#include "include/logging.h"           
+         

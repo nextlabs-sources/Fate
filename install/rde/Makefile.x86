@@ -1,0 +1,29 @@
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error NLEXTERNALDIR undefined.)
+endif
+
+ifeq ($(BUILDTYPE),)
+	BUILDTYPE=dev
+endif
+
+ifeq ($(VERSION_BUILD_SHORT),)
+	VERSION_BUILD_SHORT=1
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+PRODUCT_DIR_NAME=rde
+VERSION_STR=$(VERSION_MAJOR_RDE).$(VERSION_MINOR_RDE).$(VERSION_MAINTENANCE_RDE).$(VERSION_PATCH_RDE)
+ISM_TEMPLATE_FILE_NAME=RemovableDeviceEnforcer.ism
+ISM_RELEASE=msi32
+ISM_PRODUCT_CONFIG=32bit
+#MSI_FILE=RemovableDeviceEnforcer-32-$(VERSION_STR).msi
+MSI_FILE=EDP-RemovableDeviceEnforcer-setup.msi
+PACKAGE_DIR_NAME=package32
+PACKAGE_FILE=RemovableDeviceEnforcer-32-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+
+include $(NLBUILDROOT)/install/scripts/Makefile.install.single

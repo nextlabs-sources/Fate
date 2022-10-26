@@ -1,0 +1,34 @@
+TARGETNAME=nlinjection
+TARGETTYPE=DRIVER
+
+_LIBARCH = obj$(BUILD_ALT_DIR)\$(_BUILDARCH)
+
+!if "$(_BUILDARCH)" == "x86"
+_LIBARCH = obj$(BUILD_ALT_DIR)\i386
+!endif
+
+C_DEFINES=$(C_DEFINES) -D_WIN2K_COMPAT_SLIST_USAGE
+
+LINKER_FLAGS=$(LINKER_FLAGS) /INTEGRITYCHECK
+
+INCLUDES=$(INCLUDES);	\
+		 ..\include;
+
+
+TARGETLIBS= $(TARGETLIBS)
+
+
+SOURCES=RipeMD.c		\
+		StrMatch.c		\
+		DelayedInjectList.c		\
+		ToolFuncs.c		\
+		InjectLibrary.c \
+		ProcessList.c	\
+		Config.c		\
+		DllList.c		\
+		SessionList.c	\
+		DriverEvents.c	\
+		Ioctl.c			\
+		mchInjDrv.c		\
+		nlinjection.rc
+

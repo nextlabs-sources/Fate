@@ -1,0 +1,89 @@
+Here is the description of the build tools in this directory:
+
+- build_all
+  The build script that builds all the native binaries, including
+        - kernel drivers
+        - user mode libraries
+        - user mode executables
+        - custom targets
+
+    It references the targets* files in the prods directory and invoke
+    the individual module build.
+
+- build_java
+  Obsolete, it should use "linux_ant" instead
+
+- env.CYGWIN_NT-5.1
+  Environment file for the CYGWIN_NT-5.1 (aka WinXP) build environment
+
+- env.Linux
+  Environment file for the Linux build environment
+
+- installer_gen
+  A installer generator that generates an executable installing package on
+  Linux.  It 
+        1. Calls rpm_gen (below) to generates the RPM package first 
+        2. Wrap around the RPM package to include NL customized script
+           for enforcer setup.
+
+- label_gen
+  Perforce label generator.  It
+        1. It refers to the prods config file  (prods/SDK/SDK.cfg) for
+           a label template
+        2. Create a new label with date-timestamp based on the label template
+        3. Applies the new label to the file specified by p4view file
+
+- linux_ant
+  A wrapper for ant to be run on Linux.  It takes care of the different 
+  JDK environment so that the Java can be built with different version
+  of the JDK.
+    The JDK version can be customized per product by the the product config
+    file.
+
+- Makefile
+  Master Makefile that sets up the 
+    1. Platform environment (based on the env."OS")
+    2. Product environment  (based on the env."PROD") 
+    3. Rules of building
+        - Libraries
+        - Executables
+        - Unit Test 
+
+- Makefile.kernel.master
+  This is a linux kernel module makefile.
+      0. The driver directory link this file as "makefile" (lower case!)
+      1. During make:
+          - It generates a Makefile ("M"akefile), with our
+              1. Platform environment (based on Makefile.kernel.template.Linux)
+              2. Product environment (based on env."PROD") 
+          -  Build
+      2. Slightly convoluted because it needs to work with the recursive 
+         Linux kernel build system
+
+- Makefile.kernel.template.Linux
+  Environment file for the Linux KERNEL build environment
+
+- readme_gen
+  Generating the README.txt file, which is the version file for the product.
+    1. The name of the product is specified in the product config file (e.g. SDK.cfg)
+       PRODUCT_NAME
+    2. The version of the product is specified in the product config file 
+       VERSION
+
+- rpm_gen
+  RPM package generator, to generate the RPM package on Linux.  This can be called
+   by itself.  However, because of the extra configuration of the Enforcer product,
+   you probably want to call the installer_gen instead, which generates the rpm AND
+   then wrap around with the NL customization installation script.
+
+
+How to update build version # format?
+	Build version # is constructed in a number of locations. When you update build version #
+	format, you must update all locations. Here are the files you need to update:
+	
+	1. //depot/dev/D_SiriusR2/build/Makefile (search for VERSION_BUILD)
+	2. //depot/dev/D_SiriusR2/build/updateVersionInfo_vsproj.pl (search for $refCode)
+	3. //depot/dev/scripts/nightlyBuild_cdc (search for BUILD_VERSION)
+	4. //depot/dev/scripts/nightlyBuild_smdc (search for BUILD_VERSION)
+	5. //depot/dev/scripts/releaseBuild (search for BUILD_VERSION)
+	

@@ -1,0 +1,9 @@
+; TagView.def : Declares the module parameters.
+
+LIBRARY      "TagView.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE

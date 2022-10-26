@@ -1,0 +1,21 @@
+
+TARGETS = \
+	prod/pa/encryptionPA/pa_encryption \
+	prod/pa/encryptionPA/pgp_adapter \
+	prod/pa/encryptionPA/zip_adapter \
+	prod/pa/filetaggingPA/FileTagging \
+	prod/pa/filetaggingPA/TagViewMenu \
+	prod/pa/filetaggingPA/OfficeTagLib \
+	prod/pa/filetaggingPA/tag_office2k7 \
+	prod/pa/odhd \
+	prod/pa/paf/pafUI \
+	prod/pep/endpoint/se/pcs_rpc \
+	prod/pep/endpoint/se/service \
+	prod/pep/endpoint/se/nl_sysenc_lib \
+	prod/pa/PA_PortableEncrypt
+
+# vibe_adapter vcproj does not compile
+#	prod/pa/encryptionPA/vibe_adapter \
+
+# TagView compiles ok with x86 but does not compile with x64
+#	prod/pa/filetaggingPA/TagView \

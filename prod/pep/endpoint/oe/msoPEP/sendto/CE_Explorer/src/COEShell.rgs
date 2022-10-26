@@ -1,0 +1,26 @@
+HKCR
+{
+	CE_Explorer.COEShell.1 = s 'COEShell Class'
+	{
+		CLSID = s '{38B14C4F-31AE-468B-8BD2-DCB57645074A}'
+	}
+	CE_Explorer.COEShell = s 'COEShell Class'
+	{
+		CLSID = s '{38B14C4F-31AE-468B-8BD2-DCB57645074A}'
+		CurVer = s 'CE_Explorer.COEShell.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {38B14C4F-31AE-468B-8BD2-DCB57645074A} = s 'COEShell Class'
+		{
+			ProgID = s 'CE_Explorer.COEShell.1'
+			VersionIndependentProgID = s 'CE_Explorer.COEShell'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{7949C60D-35D5-40F5-B09E-03F4DDF82AD9}'
+		}
+	}
+}

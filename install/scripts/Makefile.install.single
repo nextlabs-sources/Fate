@@ -1,0 +1,131 @@
+# Common make file for building installers
+#
+# IsCmdBld.exe commandline options:
+#	-a <product configuration>
+#	-b Output directory
+#	-n								No compile
+#	-p <ISM file>
+#	-q3                             Only compile setup.rul
+#	-r <release name>
+#	-x								Stop on error
+#	-y <product version>
+
+
+#
+# Prepare environment
+#
+
+ifeq ($(ProgramW6432), )
+	ENV_OS=x86
+	PROGRAM_FILES_X86=C:/Program Files
+else
+	ENV_OS=x64
+	PROGRAM_FILES_X86=C:/Program Files (x86)
+endif
+
+PROGRAM_FILES_X86_DOS=$(subst /,\,$(PROGRAM_FILES_X86))
+
+PERL=perl
+ISCMDBLD=$(PROGRAM_FILES_X86)/InstallShield/2010 StandaloneBuild/System/IsCmdBld.exe
+# SIGNTOOL_OFFICIAL_TOOL=$(PROGRAM_FILES_X86)/Windows Kits/8.0/bin/x64/signtool.exe
+SIGNTOOL_OFFICIAL_TOOL=echo
+SIGNTOOL_OFFICIAL_ARGS=sign /ac c:/release/bin/DigiCertAssuredIDRootCA.cer /f c:/release/bin/NextLabs.pfx /p IiVf1itvOrqJ /n "NextLabs Inc." /fd sha256 /tr http://timestamp.digicert.com
+SIGNTOOL_OFFICIAL='$(SIGNTOOL_OFFICIAL_TOOL)' $(SIGNTOOL_OFFICIAL_ARGS)
+
+OFFICIALCERT=0
+VERSION_BUILD_SHORT=$(firstword $(subst -, ,$(VERSION_BUILD)))
+
+INSTALL_DIR=$(NLBUILDROOT)/install/$(PRODUCT_DIR_NAME)
+SCRIPT_DIR=$(NLBUILDROOT)/install/scripts
+INSTALL_BUILD_DIR=$(INSTALL_DIR)/build
+ASSEMBLY_DIR=$(INSTALL_BUILD_DIR)/data
+OUTPUT_DIR=$(INSTALL_BUILD_DIR)/output
+PACKAGE_DIR=$(INSTALL_BUILD_DIR)/$(PACKAGE_DIR_NAME)
+PUBLISH_DIR=$(NLBUILDROOT)/bin/installer
+ASSMEBLY_DIR_DOS=$(subst /,\,$(ASSEMBLY_DIR))
+OUTPUT_DIR_DOS=$(subst /,\,$(OUTPUT_DIR))
+
+
+#
+# Print environment
+#
+
+$(info -----------------------------------------------------------------------------)
+$(info BUILDTYPE                   = $(BUILDTYPE))
+$(info VERSION_BUILD               = $(VERSION_BUILD))
+$(info VERSION_BUILD_SHORT         = $(VERSION_BUILD_SHORT))
+$(info BUILD_NUMBER                = $(BUILD_NUMBER))
+$(info Product directory name      = $(PRODUCT_DIR_NAME))
+$(info Packaging list              = $(PACKAGE_LIST))
+$(info Install directory           = $(INSTALL_DIR))
+$(info Assembly directory          = $(ASSEMBLY_DIR))
+$(info Output directory            = $(OUTPUT_DIR))
+$(info Package directory           = $(PACKAGE_DIR))
+$(info Package file                = $(PACKAGE_FILE))
+$(info Publish directory           = $(PUBLISH_DIR))
+$(info Current OS                  = $(ENV_OS))
+$(info Program files (x86)         = $(PROGRAM_FILES_X86))
+$(info Program files (x86) DOS     = $(PROGRAM_FILES_X86_DOS))
+$(info ISM template file name      = $(ISM_TEMPLATE_FILE_NAME))
+$(info ISM release                 = $(ISM_RELEASE))
+$(info ISM product config          = $(ISM_PRODUCT_CONFIG))
+$(info ISM file name               = $(MSI_FILE_NAME))
+$(info ISM output directory        = $(OUTPUT_DIR_DOS))
+$(info -----------------------------------------------------------------------------)
+
+
+#
+# Targets
+#
+
+.PHONY: all
+all: assembly installer publish
+
+.PHONY: assembly
+assembly:
+	@echo "INFO: Prepare assembly"
+	@if [ -d $(ASSEMBLY_DIR) ] || [ -d $(OUTPUT_DIR) ] ; then	\
+		echo "INFO:   Removing old build directory" ;			\
+		rm -rf $(INSTALL_BUILD_DIR) ;							\
+	fi
+	"$(PERL)" $(INSTALL_DIR)/prepareAssembly.pl --buildType=$(BUILDTYPE) --buildNum=$(BUILD_NUMBER) --version=$(VERSION_STR) \
+		--template=$(ISM_TEMPLATE_FILE_NAME) $(PREPARE_ASSEMBLY_OPTIONS)
+
+.PHONY: assemblyNoCopy
+assemblyNoCopy:
+	@echo "INFO: Prepare assembly (no copy)"
+	"$(PERL)" $(INSTALL_DIR)/prepareAssembly.pl --buildType=$(BUILDTYPE) --buildNum=$(BUILD_NUMBER) --version=$(VERSION_STR) \
+		--template=$(ISM_TEMPLATE_FILE_NAME) --noCopy
+
+.PHONY: installer
+installer:
+	@echo "INFO: Compile installer"
+	@chmod -R +w $(ASSEMBLY_DIR)
+	'$(ISCMDBLD)' -x -r $(ISM_RELEASE) -a $(ISM_PRODUCT_CONFIG) -p "$(ASSMEBLY_DIR_DOS)\$(ISM_TEMPLATE_FILE_NAME)" -b "$(OUTPUT_DIR_DOS)"
+	@if [ $(OFFICIALCERT) -ne 0 ]; then							\
+		echo "INFO: Signing $(MSI_FILE) msi file" ;						\
+		echo "'$(SIGNTOOL_OFFICIAL_TOOL)' $(SIGNTOOL_OFFICIAL_ARGS) $(OUTPUT_DIR)/$(ISM_PRODUCT_CONFIG)/$(ISM_RELEASE)/DiskImages/DISK1/$(MSI_FILE)" ; \
+		'$(SIGNTOOL_OFFICIAL_TOOL)' $(SIGNTOOL_OFFICIAL_ARGS) $(OUTPUT_DIR)/$(ISM_PRODUCT_CONFIG)/$(ISM_RELEASE)/DiskImages/DISK1/$(MSI_FILE) ; \
+	fi
+
+.PHONY: clean
+clean:
+	@if [ -d ./build/data ] || [ -d ./build/output ]; then		\
+		rm -rf build ;											\
+	fi
+
+.PHONY: publish
+publish:
+	@echo "INFO: Publish installer packages"
+	echo "INFO:   Create installer package"
+	@if [ ! -d $(PACKAGE_DIR) ]; then						\
+		mkdir -p $(PACKAGE_DIR) ;							\
+	fi
+	cp -f $(OUTPUT_DIR)/$(ISM_PRODUCT_CONFIG)/$(ISM_RELEASE)/DiskImages/DISK1/$(MSI_FILE) $(PACKAGE_DIR)
+	cd $(PACKAGE_DIR); zip ../$(PACKAGE_FILE) *
+	@if [ ! -d $(PUBLISH_DIR) ]; then						\
+		mkdir -p $(PUBLISH_DIR)	;							\
+	fi
+	cp -f $(INSTALL_BUILD_DIR)/*.zip $(PUBLISH_DIR)
+	@echo "INFO:   Content of $(PUBLISH_DIR)"
+	@ls -al $(PUBLISH_DIR)

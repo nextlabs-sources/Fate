@@ -1,0 +1,775 @@
+<Obligation>
+  <DisplayName>Content Redaction - Credit Card Number</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_CCN</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>RegexType</Name>
+	  <Value>CCN</Value>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>regex</Name>
+	  <Value>\b\d{4}(\s|[-]){0,1}\d{4}(\s|[-]){0,1}\d{2}(\s|[-]){0,1}\d{2}(\s|[-]){0,1}\d{1,4}\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Currency Value</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_CV</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>([\x{0024}\x{00a2}-\x{00a5}\x{20a1}-\x{20cf}])(\s)*((([-(]){0,1}\d{1,3}([,.]\d{3})*([,.]\d{1,2}){0,1}[)]{0,1})|([,.]\d{1,2}))</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Phone Number</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_PH</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>(([(]{0,1}\d{3}([).-]|\s)\s{0,10}\d{3}([-.]|\s)\d{4})|(\b\d{3}([.-]|\s)\d{4}))\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+			<DisplayName>Outlook: Hierarchical Classification</DisplayName>
+			<RunAt>PEP</RunAt>
+			<Name>OE_HIERARCHICAL_CLASSIFICATION</Name>
+			<Arguments>
+				<Argument usereditable="true">
+					<Name>Title</Name>
+					<Value>Classify the following document/attachment</Value>
+				</Argument>
+				<Argument>
+					<Name>Target</Name>
+					<Value default="true">Both</Value>
+					<Value>Source</Value>
+					<Value>Destination</Value>
+				</Argument>
+				<Argument>
+					<Name>Decision on Tag Error</Name>
+					<Value default="true">continue</Value>
+					<Value>block</Value>
+				</Argument>
+				<Argument>
+					<Name>Decision on Tag to Non-Supported Document</Name>
+					<Value default="true">continue</Value>
+					<Value>block</Value>
+				</Argument>
+				<Argument usereditable="true">
+					<Name>Message for block reason</Name>
+					<Value>The application is unable to tag the attached file: &lt; filename &gt;, due to unsupported file type or other issues.</Value>
+				</Argument>
+				<Argument usereditable="true">
+					<Name>Classification Data(XML file format)</Name>
+					<Value>xml data example</Value>
+				</Argument>
+                <Argument usereditable="true">
+                    <Name>CheckModifiedTime</Name>
+                    <Value default="true">True</Value>
+					<Value>false</Value>
+                </Argument>
+				<Argument usereditable="false" hidden="true">
+                			<Name>LogId</Name>
+           				<Value default="true">$CELogUid</Value>
+           			 </Argument> 			
+			</Arguments>
+</Obligation>
+
+
+<Obligation>
+                <DisplayName>Rich Alert Message</DisplayName>
+                <RunAt>PEP</RunAt>
+                <Name>RICH_ALERT_MESSAGE</Name>
+                <Arguments>
+                                <Argument usereditable="true">
+                                                <Name>HeaderTextForDeny</Name>
+                                                <Value><![CDATA[The email is subject to <b>Trade Compliance Regulations</b>.<br><br>Following policies are preventing you from sending this email.]]></Value>
+                                </Argument>
+                                <Argument usereditable="true">
+                                                <Name> HeaderTextForAllow</Name>
+                                                <Value><![CDATA[The email is subject to <b>Trade Compliance Regulations</b>.<br><br>The following policies are applied to this email.]]></Value>
+                                </Argument>
+                                <Argument usereditable="true">
+                                                <Name>Alert Text</Name>
+                                                <Value></Value>
+                                </Argument>
+                </Arguments>
+</Obligation>
+
+
+<Obligation>
+<DisplayName>Email Notification</DisplayName>
+<RunAt>PEP</RunAt>
+<Name>EMAIL_NOTIFICATION</Name> 
+<Arguments>
+     <Argument usereditable="false">
+     <Name>Target</Name>
+	 <Value default="true">Sender</Value>
+	 <Value>Recipients</Value>
+	 <Value>Both</Value>
+     </Argument>
+</Arguments>
+</Obligation>
+
+
+
+
+
+
+
+
+
+<Obligation>
+  <DisplayName>Content Redaction - Social Security Number</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_SSN</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>RegexType</Name>
+	  <Value>SSN</Value>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>\b\d{3}([- ]){0,1}\d{2}([- ]){0,1}\d{4}\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - IPv4 Address</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_IP</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>\b((2[0-4]\d)|(25[0-5])|(1{0,1}\d{1,2}))([.]((2[0-4]\d)|(25[0-5])|(1{0,1}\d{1,2}))){3}(/\d{1,2}){0,1}\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Email Address</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_EM</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>\b\w(\w|[.+#$!-])*@(\w+\.){1,3}\w{2,6}\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Date of Birth (DOB)</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_DOB</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>\b\d{1,2}\s*/\s*\d{1,2}\s*/\s*(\d{4}|\d{2})|((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w{0,6}(\s)+\d{1,2}(st|nd|rd|th){0,1}(\s)*([,]){0,1}\s*\d{4})|(\d{1,2}(st|nd|rd|th){0,1}(\s)*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w{0,6}\s*[,]{0,1}\s*\d{4})\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Mailing Address</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_MA</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>Regex</Name>
+	  <Value>\b(AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY)(\s)*\d{5}(\s|[-]\d{4}){0,1}\b</Value>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Content Redaction - Keyword(s)</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NLCA_REDACTION_KEYWORD</Name>
+  <Arguments>
+      <Argument usereditable="true">
+          <Name>With Match Count >=</Name>
+      </Argument>
+      <Argument usereditable="false" hidden="true">
+          <Name>RegexType</Name>
+	  <Value>Keyword(s)</Value>
+      </Argument>
+      <Argument usereditable="true" hidden="false">
+          <Name>Keyword(s)</Name>
+      </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+      <DisplayName>APEND_BODY</DisplayName>
+      <RunAt>PEP</RunAt>
+      <Name>Apend_Body</Name>
+      <Arguments>
+      <Argument usereditable="true">
+          <Name>Apend</Name>
+      </Argument>
+      </Arguments>
+     </Obligation>
+
+<Obligation>
+      <DisplayName>Prepend Email Body</DisplayName>
+      <RunAt>PEP</RunAt>
+      <Name>PREPEND_BODY</Name>
+      <Arguments>
+      <Argument>
+          <Name/>
+      </Argument>
+      </Arguments>
+</Obligation>
+
+<Obligation>
+      <DisplayName>Prepend Email Subject</DisplayName>
+      <RunAt>PEP</RunAt>
+      <Name>PREPEND_SUBJECT</Name>
+      <Arguments>
+      <Argument>
+          <Name/>
+      </Argument>
+      </Arguments>
+</Obligation>
+
+
+
+    <Obligation>
+      <DisplayName>Hidden Data Removal</DisplayName>
+      <RunAt>PEP</RunAt>
+      <Name>HDR</Name>
+      <Arguments>
+      <Argument usereditable="true">
+          <Name>Help URL</Name>
+      </Argument>
+      </Arguments>
+     </Obligation>
+   <DisplayName>Automatic File Tagging</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>AUTOMATIC_FILE_TAGGING</Name>
+    <Arguments>
+        <Argument>
+            <Name>Tag Name</Name>
+        </Argument>
+        <Argument usereditable="true">
+            <Name>Tag Value</Name>
+        </Argument>
+        <Argument>
+            <Name>Target</Name>
+            <Value default="true">Destination</Value>
+                    <Value>Source</Value>
+            <Value>Destination</Value>
+        </Argument>
+        <Argument usereditable="true">
+          <Name>Description</Name>
+        </Argument>
+                <Argument>
+            <Name>Decision on Tag Error</Name>
+                    <Value default="true">continue</Value>
+            <Value>block</Value>
+        </Argument>
+                <Argument>
+            <Name>Decision on Tag to Non-Supported Document</Name>
+                    <Value default="true">continue</Value>
+            <Value>block</Value>
+        </Argument>
+                <Argument usereditable="true">
+            <Name>Message for block reason</Name>
+                    <Value default="true">Unable to tag the attached the file</Value>
+        </Argument>
+    </Arguments>
+</Obligation>
+
+<Obligation>
+<DisplayName>Interactive File Tagging</DisplayName>
+    <RunAt>PEP</RunAt>
+   <Name>INTERACTIVE_FILE_TAGGING</Name>
+    <Arguments>
+        <Argument>	
+                    <Name>Tag Name</Name>
+        </Argument>
+        <Argument usereditable="true">
+            <Name>Tag Value</Name>   
+        </Argument>
+        <Argument>
+            <Name>Target</Name>
+            <Value default="true">Both</Value>
+            <Value>Destination</Value>
+                    <Value>Source</Value>
+        </Argument>
+        <Argument usereditable="true">
+            <Name>Description</Name>
+        </Argument>
+                <Argument>
+            <Name>Decision on Tag Error</Name>
+                    <Value default="true">continue</Value>
+            <Value>block</Value>
+        </Argument>
+                <Argument>
+            <Name>Decision on Tag to Non-Supported Document</Name>
+                    <Value default="true">continue</Value>
+            <Value>block</Value>
+        </Argument>
+                <Argument usereditable="true">
+            <Name>Message for block reason</Name>
+                    <Value default="true">Unable to tag the attached the file</Value>
+        </Argument>
+    </Arguments>
+</Obligation>
+
+<Obligation>
+			<DisplayName>Password Based Encryption</DisplayName>	
+			<RunAt>PEP</RunAt>	
+			<Name>PASSWORD_BASED_ENCRYPTION</Name>	
+			<Arguments>
+			  <Argument usereditable="false">	
+	                  <Name>Encryption Adapter</Name>	
+                          <Value default="true">ZIP</Value>	
+	                 </Argument>	
+
+			  <Argument usereditable="true"> 
+				<Name>Description</Name> 
+			  </Argument>
+			  <Argument usereditable="true"> 
+				<Name>Optional</Name> 
+				<Value default="true">false</Value> 
+				<Value>true</Value> 
+			  </Argument>
+			</Arguments>
+		</Obligation>
+
+<Obligation>
+			<DisplayName>Identity Based Encryption</DisplayName>	
+			<RunAt>PEP</RunAt>	
+			<Name>IDENTITY_BASED_ENCRYPTION</Name>	
+			<Arguments>
+			  <Argument usereditable="false">	
+	                  <Name>Encryption Adapter</Name>	
+                          <Value default="true">PGP</Value>	
+	                 </Argument>	
+
+			  <Argument usereditable="true"> 
+				<Name>Description</Name>
+          <Value default="true">The email is subject to trade compliance regulations. The email attachment will be encrypted when you send out this email.</Value>
+        </Argument>
+			  <Argument usereditable="true"> 
+				<Name>Optional</Name> 
+				<Value default="true">false</Value> 
+				<Value>true</Value> 
+			  </Argument>
+			</Arguments>
+		</Obligation>
+
+<Obligation>
+<DisplayName>Strip Attachments - FTP Adapter</DisplayName>
+<RunAt>PEP</RunAt>
+<Name>FTPADAPTER</Name>
+<Arguments>
+           <Argument usereditable="false">
+           <Name>FTP Server</Name>
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>User</Name>
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Password</Name> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Location</Name> 
+                    <Value default="true">Bottom</Value> 
+                    <Value>Top</Value> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Text</Name> 
+                    <Value>The attachments [filename] to this message have been removed for security purpose and made available at the following location:[link].</Value> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Link Format</Name> 
+                    <Value default="true">Long</Value> 
+                    <Value>Short</Value> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Subject</Name> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>Body</Name> 
+           </Argument>
+        <Argument>
+            <Name>Separate Password in Email</Name>
+            <Value default="true">No</Value>
+            <Value>Yes</Value>
+        </Argument>
+	   <Argument usereditable="true"> 
+                    <Name>EFT Admin Port</Name> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>EFT User Expiry Date (0...65536)</Name> 
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>EFT Site Name</Name>   
+           </Argument>
+           <Argument usereditable="true"> 
+                    <Name>EFT User Settings Template</Name> 
+           </Argument>
+                     <Argument usereditable="false" hidden="true">
+                         <Name>Error Message For Sender</Name>
+			 <Value>The attachment listed below to the email you sent entitled "[Title of Original Email]" failed to upload correctly to the secure FTP site and the recipients of the email will be unable to access the document. Please create a new email with the same attachments and send it to the same recipients. If you receive this message again please contact the helpdesk.</Value>
+                     </Argument>
+                     <Argument usereditable="false" hidden="true">
+                         <Name>Error Message For Recipients</Name>
+			 <Value>The attachments to this email were stripped for security reasons, but expected links to the documents are not currently available. Please contact the sender of this message to request that they resend the documents.</Value>
+                     </Argument>
+
+</Arguments>
+</Obligation>
+
+<Obligation>
+<DisplayName>Reject Unless Silent Override</DisplayName>
+<RunAt>PEP</RunAt>
+<Name>REJECT_UNLESS_SILENT_OVERRIDE</Name>
+<Arguments>
+<!--<Argument usereditable="true">
+<Name>Help URL</Name>
+</Argument>-->
+                                <Argument usereditable="false">
+<Name>Allow Override</Name>
+<Value default="true">No</Value>
+<Value>Yes</Value>
+</Argument>
+<Argument usereditable="true">
+<Name>Message</Name>
+  <Value default="true">
+    One or more recipients are not authorized to receive the attachment. Do you still want to send? <a href="http://www.nextlabs.com\" > Visit NextLabs for policies.</a >.
+  </Value>
+</Argument>
+</Arguments>
+</Obligation>
+
+   <Obligation>
+    <DisplayName>Verify Recipients</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>EXTERNAL</Name>
+    <Arguments>
+        <Argument usereditable="true">
+            <Name>Help URL</Name>
+        </Argument>
+        <Argument>
+            <Name>Offending Recipients</Name>
+            <Value>$CEMatchedRecipients</Value>
+        </Argument>
+    </Arguments>
+   </Obligation>
+
+   <Obligation>
+    <DisplayName>Internal Use Only</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>INTERNAL</Name>
+    <Arguments>
+        <Argument usereditable="true">
+            <Name>Help URL</Name>
+        </Argument>
+    </Arguments>
+   </Obligation>
+
+  <Obligation>
+    <DisplayName>Domain Mismatch Confirmation</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>MISMATCH</Name>
+    <Arguments>
+        <Argument usereditable="true">
+          <Name>Help URL</Name>
+        </Argument>
+        <Argument>
+            <Name>Offending Recipients</Name>
+            <Value>$CEMatchedRecipients</Value>
+        </Argument>
+        <Argument>
+            <Name>Resource Client Name</Name>
+            <Value>$CEClientName.client_id</Value>
+        </Argument>
+    </Arguments>
+   </Obligation>
+
+   <Obligation>
+    <DisplayName>Missing Tag</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>MISSING</Name>
+    <Arguments>
+        <Argument usereditable="true">
+            <Name>Help URL</Name>
+        </Argument>
+        <Argument>
+            <Name>Tag Name</Name>
+            <Value>client_id</Value>
+        </Argument>
+        <Argument>
+            <Name>Clients</Name>
+            <Value>$CEClients</Value>
+        </Argument>
+        <Argument>
+            <Name>Client Ids</Name>
+            <Value>$CEClientIds</Value>
+        </Argument>
+        <Argument>
+            <Name>Unknown Id</Name>
+            <Value>**Unknown Client Id**</Value>
+        </Argument>
+    </Arguments>
+</Obligation>
+
+	   <ResourceAttribute>
+                <DisplayName>Resource Client Identifier</DisplayName>
+                <Name>client_id</Name>
+                <Type>STRING</Type>
+                <Attribute>USER.client_id</Attribute>
+            </ResourceAttribute>
+
+            <ResourceAttribute>
+                <DisplayName>Internal Use Only</DisplayName>
+                <Name>internal_use</Name>
+                <Type>STRING</Type>
+            </ResourceAttribute>
+
+   <Obligation>
+    <DisplayName>Multiple Client Confirmation</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>MULTIPLE</Name>
+    <Arguments>
+        <Argument usereditable="true">
+            <Name>Help URL</Name>
+        </Argument>
+        <Argument>
+            <Name>Recipients</Name>
+            <Value>$CEMatchedRecipients</Value>
+        </Argument>
+    </Arguments>
+   </Obligation>
+
+<Obligation>
+  <DisplayName>Outlook Integrated Rights Management - automatic</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>OUTLOOK_INTEGRATED_RIGHTS_MANAGEMENT_AUTOMATIC</Name>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Tag Value</Name>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Outlook Integrated Rights Management - Interactive</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>OUTLOOK_INTEGRATED_RIGHTS_MANAGEMENT_INTERACTIVE</Name>
+</Obligation>
+
+<Obligation>
+            <DisplayName>Rich user message</DisplayName>
+            <RunAt>PEP</RunAt>
+            <Name>RICH_USER_MESSAGE</Name>
+            <Arguments>
+                        <Argument>
+                        <Name>Message</Name>
+                        </Argument>
+                     	<Argument>
+                        <Name>Timeout</Name>
+                        </Argument>
+            </Arguments>
+</Obligation>
+
+
+<Obligation>
+	
+	<DisplayName>Outlook: Warning Message with Proceed/Cancel</DisplayName>
+	
+	<RunAt>PEP</RunAt>
+
+	<Name>OE_WARNING_MSG_PROCEED_CANCEL</Name>
+	
+	<Arguments>
+		
+		<Argument usereditable="true">
+			
+			<Name>Header Text</Name>
+		
+		</Argument>
+		
+		<Argument usereditable="true">
+			
+			<Name>Display Text</Name>
+		
+		</Argument>
+		
+		<Argument usereditable="true">
+			
+			<Name>Proceed Button Label</Name>
+			
+			<Value default="true">Proceed</Value>
+		
+		</Argument>
+		
+		<Argument usereditable="true">
+			
+			<Name>Cancel Button Label</Name>
+			
+			<Value default="true">Cancel</Value>
+		
+		</Argument>
+		
+		<Argument usereditable="false" hidden="true">
+			
+			<Name>logid</Name>
+			
+			<Value default="true">$CELogUid</Value>
+		
+		</Argument>
+	
+	</Arguments>
+
+</Obligation>
+
+<Obligation>
+    <DisplayName>Automatic X-Header Tagging</DisplayName>
+    <RunAt>PEP</RunAt>
+    <Name>AUTOMATIC_XHEADER_TAGGING</Name>
+    <Arguments>
+        <Argument>
+            <Name>Tag Name</Name>
+        </Argument>
+        <Argument usereditable="true">
+            <Name>Tag Value</Name>
+        </Argument>
+        <Argument usereditable="true">
+          <Name>Description</Name>
+        </Argument>
+		<Argument>
+      <Name>Decision on Tag Error</Name>
+      <Value default="true">continue</Value>
+      <Value>block</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Message for block reason</Name>
+      <Value>
+        The application is unable to tag the email, due to unknown issues.</Value>
+    </Argument>
+
+    </Arguments>
+	
+</Obligation>
+<Obligation>
+		<DisplayName>Inherit XHeader</DisplayName>
+		<RunAt>PEP</RunAt>
+		<Name>Inherit_XHeader</Name>
+		<Arguments>
+		  <Argument usereditable="true">
+			<Name>Inherit</Name>
+			<Value default="true">false</Value>
+			<Value>true</Value>
+		  </Argument>
+		  <Argument usereditable="true">
+			<Name>Inherited Tags in X-Header</Name>
+			<Value></Value>
+		</Argument>
+		</Arguments>
+	</Obligation>
+<Obligation>
+  <DisplayName>X-Header Hierarchical Classification</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>XHEADER_HIERARCHICAL_CLASSIFICATION</Name>
+  <Arguments>
+	<Argument usereditable="true">
+      <Name>Title</Name>
+      <Value>Classify the email</Value>
+    </Argument>
+    <Argument>
+      <Name>Decision on Tag Error</Name>
+      <Value default="true">continue</Value>
+      <Value>block</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Message for block reason</Name>
+      <Value>The application is unable to tag the email, due to unknown issues.</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Classification Data(XML file format)</Name>
+      <Value>xml data example</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>CheckModifiedTime</Name>
+      <Value default="true">True</Value>
+      <Value>false</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>LogId</Name>
+      <Value default="true">$CELogUid</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+
+<Obligation>
+<DisplayName>Outlook Integrated Rights Management - automatic</DisplayName>
+<RunAt>PEP</RunAt>
+<Name>OUTLOOK_INTEGRATED_RIGHTS_MANAGEMENT_AUTOMATIC</Name>
+<Arguments>
+     <Argument>
+     <Name>Tag Name</Name>
+     </Argument>
+     <Argument usereditable="true">
+     <Name>Tag Value</Name>
+     </Argument>
+</Arguments>	 
+</Obligation>
+
+
+	   <ResourceAttribute>
+                <DisplayName>Resource Client Identifier</DisplayName>
+                <Name>client_id</Name>
+                <Type>STRING</Type>
+                <Attribute>USER.client_id</Attribute>
+            </ResourceAttribute>
+
+            <ResourceAttribute>
+                <DisplayName>Internal Use Only</DisplayName>
+                <Name>internal_use</Name>
+                <Type>STRING</Type>
+            </ResourceAttribute>
+
+   
+

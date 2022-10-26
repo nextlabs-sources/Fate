@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'iePEP'
+		'iePEP.DLL'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

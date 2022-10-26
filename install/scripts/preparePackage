@@ -1,0 +1,121 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	This script is used to package MSI file with other files for distribution. The files 
+#	are compressed and the compressed file name contains both build # and timestamp.
+
+
+#
+# Process commandline parameters
+#
+
+# ------------------------------
+# printUsage()
+
+function printUsage
+{
+	echo "usage: preparePackage --msifile=<file> --assemblypath=<path> --packagelist=<file list>"
+	echo "         --buildnum=<#> --outpath=<path>"
+	echo "  assemblypath  Absolute path to assembly directory."
+	echo "  buildnum      Build number."
+	echo "  msifile       MSI file to be included in a packaged. Should specify an absolute path."
+	echo "  packagelist   List of files to be packaged with a MSI file. Files are comma"
+	echo "                separated. File path must be relative to --assemblypath."
+	echo "  outpath       Output directory. May be full or relative path."
+}
+
+# Help
+echo "NextLabs Installer Packaging Utility"
+
+if [ $# -ne 5 ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+	printUsage
+	exit 0
+fi
+
+# Parse arguements
+MSI_FILE=
+ASSEMBLY_DIR=
+PACKAGE_LIST=
+BUILD_NUM=
+OUT_DIR=
+
+while [ $# -gt 0 ]; do
+	if [ "${1%%=*}" == "--msifile" ]; then
+		MSI_FILE=${1##*=}
+	elif [ "${1%%=*}" == "--assemblypath" ]; then
+		ASSEMBLY_DIR=${1##*=}
+	elif [ "${1%%=*}" == "--packagelist" ]; then
+		PACKAGE_LIST=${1##*=}
+	elif [ "${1%%=*}" == "--buildnum" ]; then
+		BUILD_NUM=${1##*=}
+	elif [ "${1%%=*}" == "--outpath" ]; then
+		OUT_DIR=${1##*=}
+	fi
+	
+	shift
+done
+
+# Check for errors
+if [ "$MSI_FILE" == "" ]; then
+	echo "### ERROR: Missing MSI file"
+	exit 1
+fi
+
+if [ ! -e $MSI_FILE ]; then
+	echo "### ERROR: MIS file $MSI_FILE does not exist"
+	exit 1
+fi
+
+if [ "$ASSEMBLY_DIR" == "" ]; then
+	echo "### ERROR: Missing assembly path"
+	exit 1
+fi
+
+if [ ! -d $ASSEMBLY_DIR ]; then
+	echo "### ERROR: Assembly directory $ASSEMBLY_DIR does not exist"
+	exit 1
+fi
+
+if [ "$BUILD_NUM" == "" ]; then
+	echo "### ERROR: Missing build #"
+	exit 1
+fi
+
+if [ "$OUT_DIR" == "" ]; then
+	echo "### ERROR: Missing output path"
+	exit 1
+fi
+
+# Print arguements
+echo "INFO: Parameters:"
+echo "  MSI_FILE       = $MSI_FILE"
+echo "  ASSEMBLY_DIR   = $ASSEMBLY_DIR"
+echo "  PACKAGE_LIST   = $PACKAGE_LIST"
+echo "  BUILD_NUM      = $BUILD_NUM"
+echo "  OUT_DIR        = $OUT_DIR"
+
+
+#
+# Package files
+#
+
+echo "INFO: Package files"
+
+# Create output directory
+if [ ! -d $OUT_DIR ]; then
+	mkdir -p $OUT_DIR
+fi
+
+# Tar and zip
+OUT_FILE_NAME=`basename $MSI_FILE`-$BUILD_NUM-$(date +"%Y%m%d-%H%M").tar.gz
+MORE_FILE_LIST=
+
+if [ "$PACKAGE_LIST" != "" ]; then
+	MORE_FILE_LIST="$ASSEMBLY_DIR/${PACKAGE_LIST//,/ $ASSEMBLY_DIR/}"
+fi
+
+set -x
+tar -czvf $OUT_DIR/$OUT_FILE_NAME $MSI_FILE $MORE_FILE_LIST
+set +x
+
+echo "INFO: Done"

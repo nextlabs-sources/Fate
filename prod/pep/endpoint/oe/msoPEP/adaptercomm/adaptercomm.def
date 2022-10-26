@@ -1,0 +1,6 @@
+; adaptercomm.def : Declares the module parameters.
+
+LIBRARY      "adaptercomm.DLL"
+
+EXPORTS
+	

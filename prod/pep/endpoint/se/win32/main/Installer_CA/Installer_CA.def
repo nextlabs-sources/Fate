@@ -1,0 +1,9 @@
+; Installer_CA.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Installer_CA"
+
+EXPORTS
+    ; Explicit exports can go here
+    
+    fnCheckMajorUpgrade @ 1
+    fnDiscoverPolicyServerLocations @2

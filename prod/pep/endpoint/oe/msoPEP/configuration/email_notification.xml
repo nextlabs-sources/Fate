@@ -1,0 +1,32 @@
+<!-- Email Notification -->
+<Obligation>
+  <DisplayName>Email Notification</DisplayName> 
+  <RunAt>PEP</RunAt> 
+  <Name>MAIL_NOTIFICATION</Name> 
+  <Arguments>
+    <Argument>
+      <Name>Result</Name> 
+      <Value default="true">Warn and send</Value> 
+      <Value>Justify and send</Value> 
+    </Argument>
+    <Argument usereditable="true">
+      <Name>MinRecipients</Name> 
+    </Argument>
+    <Argument usereditable="true">
+      <Name>MaxRecipients</Name> 
+     </Argument>
+    <Argument usereditable="true">
+      <Name>Violation</Name> 
+    </Argument>
+    <Argument usereditable="true">
+      <Name>WarningMessage</Name> 
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>LogId</Name> 
+      <Value default="true">$CELogUid</Value> 
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Help URL</Name> 
+    </Argument>
+  </Arguments>
+</Obligation>

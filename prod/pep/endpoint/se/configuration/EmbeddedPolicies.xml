@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export-file>
+    <version>-1</version>
+    <export-entities name="System Encryption/AutoWrap NextLabs Protected Files on Email">
+        <type>POLICY</type>
+        <pql>ID 504 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/AutoWrap NextLabs Protected Files on Email"&#xd;
+    ATTRIBUTE COMMUNICATION_POLICY&#xd;
+    FOR ((FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files") AND TRUE)&#xd;
+    ON (TRUE AND (FALSE OR GROUP="ACTION/Email"))&#xd;
+    SENT_TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND TRUE))&#xd;
+    DO allow&#xd;
+    ON allow DO log, display( "NextLabs Protected file successfully wrapped." ), "NextLabs Wrap Encryption"&#xd;
+    ON deny DO log&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Move and Copy of NextLabs Heavywrite Encrypted Files">
+        <type>POLICY</type>
+        <pql>ID 505 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Move and Copy of NextLabs Heavywrite Encrypted Files"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (FALSE OR GROUP="RESOURCE/NextLabs Protected, Heavywrite Files"))&#xd;
+    ON (TRUE AND (GROUP="ACTION/Copy" OR GROUP="ACTION/Move"))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND TRUE))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files selected cannot be moved or copied." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Copy of NextLabs Protected, Unwrapped Files by Applications that are not Explorer or Save-As Enforced">
+        <type>POLICY</type>
+        <pql>ID 506 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Copy of NextLabs Protected, Unwrapped Files by Applications that are not Explorer or Save-As Enforced"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files"))&#xd;
+    ON (TRUE AND (GROUP="ACTION/Copy" OR FALSE))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (NOT ((GROUP="APPLICATION/Explorer" OR GROUP="APPLICATION/NextLabs Auto Unwrapper" OR GROUP="APPLICATION/Notepad" OR GROUP="APPLICATION/Paint" OR GROUP="APPLICATION/WordPad" OR GROUP="APPLICATION/Excel" OR GROUP="APPLICATION/Word" OR GROUP="APPLICATION/PowerPoint" OR GROUP="APPLICATION/Adobe Reader" OR GROUP="APPLICATION/Adobe Acrobat" OR GROUP="APPLICATION/NextLabs Encryption Tool")) AND TRUE))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files selected is NextLabs Protected and can only be copied using Explorer or a Save-As Enforced application." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Move and Copy of NextLabs Protected, Unwrapped Files to CDs">
+        <type>POLICY</type>
+        <pql>ID 507 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Move and Copy of NextLabs Protected, Unwrapped Files to CDs"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR ((FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files") AND TRUE)&#xd;
+    ON (TRUE AND (GROUP="ACTION/Copy" OR GROUP="ACTION/Move"))&#xd;
+    TO (TRUE AND (FALSE OR GROUP="RESOURCE/CD Burning Locations"))&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND TRUE))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files is NextLabs Protected and cannot be moved or copied to CDs." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Open NextLabs Protected, Unwrapped Files by Remote Desktop Clipboard">
+        <type>POLICY</type>
+        <pql>ID 508 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Open NextLabs Protected, Unwrapped Files by Remote Desktop Clipboard"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files"))&#xd;
+    ON (TRUE AND (FALSE OR GROUP="ACTION/Open"))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND (FALSE OR GROUP="APPLICATION/Remote Desktop Clipboard")))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files selected is NextLabs Protected and cannot be copied via Remote Desktop." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Move of NextLabs Protected, Unwrapped Files by Applications that are not Explorer">
+        <type>POLICY</type>
+        <pql>ID 509 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Move of NextLabs Protected, Unwrapped Files by Applications that are not Explorer"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files"))&#xd;
+    ON (TRUE AND (FALSE OR GROUP="ACTION/Move"))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND NOT ((GROUP="APPLICATION/Explorer" OR GROUP="APPLICATION/NextLabs Auto Unwrapper"))))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files selected is NextLabs Protected and can only be moved using Explorer." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Send and Convert of NextLabs Protected, Unwrapped Files">
+        <type>POLICY</type>
+        <pql>ID 699 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Send and Convert of NextLabs Protected, Unwrapped Files"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR ((FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files") AND TRUE)&#xd;
+    ON (TRUE AND (GROUP="ACTION/Convert" OR GROUP="ACTION/Send"))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND TRUE))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files is NextLabs Protected and cannot be sent or converted." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Upload of NextLabs Protected, Unwrapped Files to any websites">
+        <type>POLICY</type>
+        <pql>ID 700 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Upload of NextLabs Protected, Unwrapped Files to any websites"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (GROUP="RESOURCE/NextLabs Protected, Unwrapped Files" OR FALSE))&#xd;
+    ON (TRUE AND (FALSE OR GROUP="ACTION/Open"))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND (FALSE OR GROUP="APPLICATION/All Web Sites")))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more NextLabs encrypted files cannot be uploaded. Please wrap the files before upload." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Decrypt of NextLabs Protected, Unwrapped Files by Adobe Reader or Acrobat">
+        <type>POLICY</type>
+        <pql>ID 701 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Decrypt of NextLabs Protected, Unwrapped Files by Adobe Reader or Acrobat"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR ((FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files") AND TRUE)&#xd;
+    ON (TRUE AND (GROUP="ACTION/Decrypt" OR FALSE))&#xd;
+    TO (TRUE AND TRUE)&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND (GROUP="APPLICATION/Adobe Acrobat" OR GROUP="APPLICATION/Adobe Reader")))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files selected is NextLabs Protected and cannot be copied using Save-As" )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="System Encryption/Deny Save-As of NextLabs Protected, Unwrapped Files to system's temporary folder">
+        <type>POLICY</type>
+        <pql>ID 801 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON ADMIN&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DEPLOY&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON APPROVE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON WRITE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DELETE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+POLICY "System Encryption/Deny Save-As of NextLabs Protected, Unwrapped Files to system's temporary folder"&#xd;
+    ATTRIBUTE DOCUMENT_POLICY&#xd;
+    FOR (TRUE AND (FALSE OR GROUP="RESOURCE/NextLabs Protected, Unwrapped Files"))&#xd;
+    ON (TRUE AND (FALSE OR GROUP="ACTION/Copy"))&#xd;
+    TO (TRUE AND (FALSE OR GROUP="RESOURCE/System's temporary folder"))&#xd;
+    BY ((TRUE AND TRUE) AND (TRUE AND TRUE) AND (TRUE AND TRUE))&#xd;
+    DO deny&#xd;
+    BY DEFAULT DO allow&#xd;
+    ON allow DO log&#xd;
+    ON deny DO log, display( "One or more files is NextLabs Protected and cannot be Saved-As into system's temporary folder." )&#xd;
+</pql>
+    </export-entities>
+    <export-entities name="ACTION/Copy">
+        <type>COMPONENT</type>
+        <pql>ID 4 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Copy" = &#xd;
+DESCRIPTION "Copying a file."&#xd;
+(EMBED OR COPY)</pql>
+    </export-entities>
+    <export-entities name="ACTION/Email">
+        <type>COMPONENT</type>
+        <pql>ID 9 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Email" = &#xd;
+DESCRIPTION "Attaching to a Microsoft Outlook message."&#xd;
+(FALSE OR EMAIL)</pql>
+    </export-entities>
+    <export-entities name="ACTION/Move">
+        <type>COMPONENT</type>
+        <pql>ID 14 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Move" = &#xd;
+DESCRIPTION "Moving a file."&#xd;
+(FALSE OR MOVE)</pql>
+    </export-entities>
+    <export-entities name="ACTION/Open">
+        <type>COMPONENT</type>
+        <pql>ID 138 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Open" = (FALSE OR OPEN)</pql>
+    </export-entities>
+    <export-entities name="RESOURCE/CD Burning Locations">
+        <type>COMPONENT</type>
+        <pql>ID 140 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "RESOURCE/CD Burning Locations" = (((resource.fso.name = "**\\Documents and Settings\\**\\Local Settings\\Application Data\\Microsoft\\CD Burning\\**" OR resource.fso.name = "**\\Users\\**\\AppData\\Local\\Microsoft\\Windows\\Burn\\**") AND TRUE) AND (TRUE AND TRUE))</pql>
+    </export-entities>
+    <export-entities name="RESOURCE/NextLabs Protected, Unwrapped Files">
+        <type>COMPONENT</type>
+        <pql>ID 141 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "RESOURCE/NextLabs Protected, Unwrapped Files" = (((FALSE OR GROUP="RESOURCE/NextLabs Protected Files") AND TRUE) AND (resource.fso.nxl_wrapped != "true" AND TRUE))</pql>
+    </export-entities>
+    <export-entities name="RESOURCE/NextLabs Protected Files">
+        <type>COMPONENT</type>
+        <pql>ID 142 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "RESOURCE/NextLabs Protected Files" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND resource.fso.nxl_encrypted = "true"))</pql>
+    </export-entities>
+    <export-entities name="RESOURCE/NextLabs Protected, Heavywrite Files">
+        <type>COMPONENT</type>
+        <pql>ID 143 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "RESOURCE/NextLabs Protected, Heavywrite Files" = (((FALSE OR TRUE) AND TRUE) AND (resource.fso.nxl_heavywriteencrypted = "true" AND TRUE))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/NextLabs Auto Unwrapper">
+        <type>COMPONENT</type>
+        <pql>ID 144 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/NextLabs Auto Unwrapper" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\nl_autounwrapper.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Remote Desktop Clipboard">
+        <type>COMPONENT</type>
+        <pql>ID 145 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Remote Desktop Clipboard" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\rdpclip.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Notepad">
+        <type>COMPONENT</type>
+        <pql>ID 510 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Notepad" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\notepad.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/WordPad">
+        <type>COMPONENT</type>
+        <pql>ID 511 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/WordPad" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\wordpad.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Paint">
+        <type>COMPONENT</type>
+        <pql>ID 512 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Paint" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\mspaint.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Explorer">
+        <type>COMPONENT</type>
+        <pql>ID 513 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Explorer" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\explorer.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Adobe Reader">
+        <type>COMPONENT</type>
+        <pql>ID 702 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Adobe Reader" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\AcroRd32.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/All Web Sites">
+        <type>COMPONENT</type>
+        <pql>ID 703 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/All Web Sites" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.url = "http*://**"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Excel">
+        <type>COMPONENT</type>
+        <pql>ID 704 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Excel" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\EXCEL.EXE"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Word">
+        <type>COMPONENT</type>
+        <pql>ID 705 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Word" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\WINWORD.EXE"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/Adobe Acrobat">
+        <type>COMPONENT</type>
+        <pql>ID 706 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/Adobe Acrobat" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\Acrobat.exe"))</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/PowerPoint">
+        <type>COMPONENT</type>
+        <pql>ID 707 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/PowerPoint" = (((FALSE OR TRUE) AND TRUE) AND (TRUE AND application.name = "**\\POWERPNT.EXE"))</pql>
+    </export-entities>
+    <export-entities name="ACTION/Convert">
+        <type>COMPONENT</type>
+        <pql>ID 708 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Convert" = (FALSE OR CONVERT)</pql>
+    </export-entities>
+    <export-entities name="ACTION/Send">
+        <type>COMPONENT</type>
+        <pql>ID 709 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Send" = (FALSE OR SEND)</pql>
+    </export-entities>
+    <export-entities name="ACTION/Decrypt">
+        <type>COMPONENT</type>
+        <pql>ID 710 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.accessgroupid has 10&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON TRUE&#xd;
+        BY appuser.did = resource.dso.owner&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "ACTION/Decrypt" = (FALSE OR DECRYPT)</pql>
+    </export-entities>
+    <export-entities name="APPLICATION/NextLabs Encryption Tool">
+        <type>COMPONENT</type>
+        <pql>ID 779 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON ADMIN&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DEPLOY&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON APPROVE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON WRITE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DELETE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "APPLICATION/NextLabs Encryption Tool" = ((TRUE AND TRUE) AND (TRUE AND application.name = "**\\nlsysencryption.exe"))</pql>
+    </export-entities>
+    <export-entities name="RESOURCE/System's temporary folder">
+        <type>COMPONENT</type>
+        <pql>ID 802 STATUS APPROVED CREATOR "0" &#xd;
+ACCESS_POLICY&#xd;
+ACCESS_CONTROL&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON ADMIN&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON READ&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DEPLOY&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON APPROVE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON WRITE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+    PBAC &#xd;
+        FOR TRUE&#xd;
+        ON DELETE&#xd;
+        BY appuser.did = 0&#xd;
+        DO allow&#xd;
+ALLOWED_ENTITIES &#xd;
+&#xd;
+COMPONENT "RESOURCE/System's temporary folder" = (((resource.fso.name = "?a:\\Users\\*\\AppData\\Local\\Temp\\**" OR resource.fso.name = "?a:\\Documents and Settings\\*\\Local Settings\\Temp\\**") AND TRUE) AND (TRUE AND resource.fso.type != "tmp"))</pql>
+    </export-entities>
+</export-file>

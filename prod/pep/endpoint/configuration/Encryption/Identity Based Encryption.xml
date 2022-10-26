@@ -1,0 +1,21 @@
+
+		<Obligation>
+			<DisplayName>Identity Based Encryption</DisplayName>	
+			<RunAt>PEP</RunAt>	
+			<Name>IDENTITY_BASED_ENCRYPTION</Name>	
+			<Arguments>
+			  <Argument usereditable="false">	
+	                  <Name>Encryption Adapter</Name>	
+                          <Value default="true">PGP</Value>	
+	                 </Argument>	
+
+			  <Argument usereditable="true"> 
+				<Name>Description</Name> 
+			  </Argument>
+			  <Argument usereditable="true"> 
+				<Name>Optional</Name> 
+				<Value default="true">false</Value> 
+				<Value>true</Value> 
+			  </Argument>
+			</Arguments>
+		</Obligation>

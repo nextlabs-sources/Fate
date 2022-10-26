@@ -1,0 +1,8 @@
+LIBRARY   "UCCPPEP"
+
+EXPORTS
+	HOOK_UCCP_CoCreateInstance	 @1 
+	HOOK_UCCP_SetClipboardData	 @2
+	HOOK_UCCP_CreateFileW		 @3
+	HOOK_UCCP_PreCreateProcessW	 @4
+	HOOK_UCCP_PostCreateProcessW @5

@@ -1,0 +1,4694 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.00.50727.42 (dde92a62).
+//
+// c:\derek\sftp\eftadhoc\eftadhoc\debug\sftpcominterface.tli
+//
+// Wrapper implementations for Win32 type library C:\Derek\SFTP\DLL\SFTPCOMInterface.dll
+// compiler-generated file created 07/02/10 at 00:45:39 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface IPermission wrapper method implementations
+//
+
+inline VARIANT_BOOL IPermission::GetFileUpload ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FileUpload(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutFileUpload ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FileUpload(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetFileDelete ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FileDelete(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutFileDelete ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FileDelete(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetFileRename ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FileRename(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutFileRename ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FileRename(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetFileAppend ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FileAppend(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutFileAppend ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FileAppend(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetFileDownload ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FileDownload(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutFileDownload ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FileDownload(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirCreate ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirCreate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirCreate ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirCreate(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirDelete ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirDelete(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirDelete ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirDelete(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirList ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirList(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirList ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirList(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirShowHidden ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirShowHidden(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirShowHidden ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirShowHidden(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirShowReadOnly ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirShowReadOnly(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirShowReadOnly ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirShowReadOnly(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL IPermission::GetDirShowInList ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DirShowInList(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void IPermission::PutDirShowInList ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DirShowInList(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t IPermission::GetFolder ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Folder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t IPermission::GetClient ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Client(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface ICIClientSettings wrapper method implementations
+//
+
+inline VARIANT_BOOL ICIClientSettings::GetEnableAccount ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetEnableAccount(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetEnableAccount ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetEnableAccount(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHomeDirIsRoot ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHomeDirIsRoot(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHomeDirIsRoot ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHomeDirIsRoot(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetAllowNoop ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetAllowNoop(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetAllowNoop ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetAllowNoop(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetAllowXCRC ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetAllowXCRC(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetAllowXCRC ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetAllowXCRC(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetChangePwd ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetChangePwd(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetChangePwd ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetChangePwd(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetEnableTimeOut ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetEnableTimeOut(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetEnableTimeOut ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetEnableTimeOut(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasMaxSpeed ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasMaxSpeed(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasMaxSpeed ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasMaxSpeed(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasMaxUsers ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasMaxUsers(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasMaxUsers ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasMaxUsers(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasPwdRetries ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasPwdRetries(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasPwdRetries ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasPwdRetries(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetClearFTP ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetClearFTP(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetClearFTP ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetClearFTP(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetEnableDiskQuota ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetEnableDiskQuota(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetEnableDiskQuota ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetEnableDiskQuota(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxIPs ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxIPs(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxIPs ( long val ) {
+    HRESULT _hr = raw_SetMaxIPs(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxSpeed ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxSpeed(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxSpeed ( long val ) {
+    HRESULT _hr = raw_SetMaxSpeed(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxUsers ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxUsers(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxUsers ( long val ) {
+    HRESULT _hr = raw_SetMaxUsers(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetPwdRetries ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetPwdRetries(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetPwdRetries ( long val ) {
+    HRESULT _hr = raw_SetPwdRetries(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetTimeOut ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetTimeOut(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetTimeOut ( long val ) {
+    HRESULT _hr = raw_SetTimeOut(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetDownloadsPerSession ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetDownloadsPerSession(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetDownloadsPerSession ( long val ) {
+    HRESULT _hr = raw_SetDownloadsPerSession(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetUploadsPerSession ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetUploadsPerSession(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetUploadsPerSession ( long val ) {
+    HRESULT _hr = raw_SetUploadsPerSession(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetLoginMsg ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetLoginMsg(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetLoginMsg ( long val ) {
+    HRESULT _hr = raw_SetLoginMsg(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHomeDir ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHomeDir(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHomeDir ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHomeDir(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetIncorrectPasswordAttempts ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetIncorrectPasswordAttempts(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICIClientSettings::GetMaxDownloadSize ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxDownloadSize(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxDownloadSize ( long val ) {
+    HRESULT _hr = raw_SetMaxDownloadSize(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxSpace ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxSpace(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxSpace ( long val ) {
+    HRESULT _hr = raw_SetMaxSpace(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxUploadSize ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetMaxUploadSize(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetMaxUploadSize ( long val ) {
+    HRESULT _hr = raw_SetMaxUploadSize(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetUsedSpace ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetUsedSpace(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICIClientSettings::GetDescription ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetDescription(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::SetDescription ( _bstr_t bstrVal ) {
+    HRESULT _hr = raw_SetDescription(bstrVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t ICIClientSettings::GetHomeDirString ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetHomeDirString(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::SetHomeDirString ( _bstr_t bstrVal ) {
+    HRESULT _hr = raw_SetHomeDirString(bstrVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t ICIClientSettings::GetLoginMsgString ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetLoginMsgString(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::SetLoginMsgString ( _bstr_t bstrVal ) {
+    HRESULT _hr = raw_SetLoginMsgString(bstrVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t ICIClientSettings::GetFullName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FullName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutFullName ( _bstr_t pVal ) {
+    HRESULT _hr = put_FullName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetComment ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Comment(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutComment ( _bstr_t pVal ) {
+    HRESULT _hr = put_Comment(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetEmail ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Email(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutEmail ( _bstr_t pVal ) {
+    HRESULT _hr = put_Email(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetFax ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Fax(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutFax ( _bstr_t pVal ) {
+    HRESULT _hr = put_Fax(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetPhone ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Phone(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutPhone ( _bstr_t pVal ) {
+    HRESULT _hr = put_Phone(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetPager ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Pager(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutPager ( _bstr_t pVal ) {
+    HRESULT _hr = put_Pager(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetSftpAuthenticationType ( VARIANT * pInherited ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetSftpAuthenticationType(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::SetSftpAuthenticationType ( _bstr_t val ) {
+    HRESULT _hr = raw_SetSftpAuthenticationType(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetSSHKeyID ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetSSHKeyID(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetSSHKeyID ( long val ) {
+    HRESULT _hr = raw_SetSSHKeyID(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetExpirationDate ( VARIANT * dDate ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetExpirationDate(dDate, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetExpirationDate ( VARIANT * dDate, VARIANT_BOOL bEnable ) {
+    HRESULT _hr = raw_SetExpirationDate(dDate, bEnable);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasMaxIPs ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasMaxIPs(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasMaxIPs ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasMaxIPs(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasDownloadsPerSession ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasDownloadsPerSession(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasDownloadsPerSession ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasDownloadsPerSession(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasUploadsPerSession ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasUploadsPerSession(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasUploadsPerSession ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasUploadsPerSession(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasMaxDownloadSize ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasMaxDownloadSize(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasMaxDownloadSize ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasMaxDownloadSize(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHasMaxUploadSize ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHasMaxUploadSize(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHasMaxUploadSize ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHasMaxUploadSize(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetSFTP ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetSFTP(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetSFTP ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetSFTP(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIClientSettings::SetAllowMODEZ ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetAllowMODEZ(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetAllowMODEZ ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetAllowMODEZ(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetAppletEnabled ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetAppletEnabled(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetAppletEnabled ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetAppletEnabled(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t ICIClientSettings::GetCustom1 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Custom1(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutCustom1 ( _bstr_t pVal ) {
+    HRESULT _hr = put_Custom1(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetCustom2 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Custom2(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutCustom2 ( _bstr_t pVal ) {
+    HRESULT _hr = put_Custom2(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIClientSettings::GetCustom3 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Custom3(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIClientSettings::PutCustom3 ( _bstr_t pVal ) {
+    HRESULT _hr = put_Custom3(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICIClientSettings::GetExpirationDateAsVariant ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetExpirationDateAsVariant(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _bstr_t ICIClientSettings::GetSSLAuthenticationType ( VARIANT * pInherited ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetSSLAuthenticationType(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::SetSSLAuthenticationType ( _bstr_t val ) {
+    HRESULT _hr = raw_SetSSLAuthenticationType(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetSSLKeyID ( VARIANT * pInherited ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetSSLKeyID(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetSSLKeyID ( long val ) {
+    HRESULT _hr = raw_SetSSLKeyID(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetClearHTTP ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetClearHTTP(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetClearHTTP ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetClearHTTP(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICIClientSettings::GetAllowedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetAllowedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICIClientSettings::GetDeniedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetDeniedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICIClientSettings::AddIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_AddIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIClientSettings::RemoveIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_RemoveIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetIPAccessAllowedDefault ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IPAccessAllowedDefault(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIClientSettings::PutIPAccessAllowedDefault ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_IPAccessAllowedDefault(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetLimitLoginAttempts ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetLimitLoginAttempts(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetLimitLoginAttempts ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetLimitLoginAttempts(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetLockoutNotDisable ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetLockoutNotDisable(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetLockoutNotDisable ( VARIANT_BOOL val ) {
+    HRESULT _hr = raw_SetLockoutNotDisable(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIClientSettings::GetMaxInvalidLoginAttempts ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxInvalidLoginAttempts(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIClientSettings::PutMaxInvalidLoginAttempts ( long pVal ) {
+    HRESULT _hr = put_MaxInvalidLoginAttempts(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIClientSettings::GetLockoutPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_LockoutPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIClientSettings::PutLockoutPeriod ( long pVal ) {
+    HRESULT _hr = put_LockoutPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIClientSettings::GetInvalidAttemptsPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_InvalidAttemptsPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIClientSettings::PutInvalidAttemptsPeriod ( long pVal ) {
+    HRESULT _hr = put_InvalidAttemptsPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetFTPS ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetFTPS(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetFTPS ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetFTPS(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetHTTPS ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHTTPS(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetHTTPS ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetHTTPS(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIClientSettings::ForcePasswordChange ( ) {
+    HRESULT _hr = raw_ForcePasswordChange();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetLimitAccessByIP ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetLimitAccessByIP(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetLimitAccessByIP ( SFTPAdvBool val ) {
+    HRESULT _hr = raw_SetLimitAccessByIP(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIClientSettings::IsPasswordAgeLimited ( VARIANT * pDate ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_IsPasswordAgeLimited(pDate, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICIClientSettings::IsInactivityPeriodLimited ( VARIANT * pDate ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_IsInactivityPeriodLimited(pDate, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICIClientSettings::GetForcePasswordResetOnInitialLogin ( VARIANT * pInherited ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetForcePasswordResetOnInitialLogin(pInherited, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIClientSettings::SetForcePasswordResetOnInitialLogin ( VARIANT_BOOL val ) {
+    HRESULT _hr = raw_SetForcePasswordResetOnInitialLogin(val);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ICICommandSettings wrapper method implementations
+//
+
+inline _bstr_t ICICommandSettings::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutName ( _bstr_t pVal ) {
+    HRESULT _hr = put_Name(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandSettings::GetDescription ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Description(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutDescription ( _bstr_t pVal ) {
+    HRESULT _hr = put_Description(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandSettings::GetExecutable ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Executable(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutExecutable ( _bstr_t pVal ) {
+    HRESULT _hr = put_Executable(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandSettings::GetParameters ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Parameters(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutParameters ( _bstr_t pVal ) {
+    HRESULT _hr = put_Parameters(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandSettings::GetMinNumOfParamsMsg ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_MinNumOfParamsMsg(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutMinNumOfParamsMsg ( _bstr_t pVal ) {
+    HRESULT _hr = put_MinNumOfParamsMsg(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICommandSettings::GetIsEnabled ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IsEnabled(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutIsEnabled ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_IsEnabled(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICommandSettings::GetRequireParams ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_RequireParams(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutRequireParams ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_RequireParams(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICommandSettings::GetRedirectOutputToClient ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_RedirectOutputToClient(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutRedirectOutputToClient ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_RedirectOutputToClient(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICommandSettings::GetRedirectOutputToLog ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_RedirectOutputToLog(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutRedirectOutputToLog ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_RedirectOutputToLog(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandSettings::GetLogPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LogPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandSettings::PutLogPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_LogPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICommandSettings::GetEnableProcessTimeOut ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_EnableProcessTimeOut(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutEnableProcessTimeOut ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_EnableProcessTimeOut(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICICommandSettings::GetMinNumOfParams ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MinNumOfParams(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutMinNumOfParams ( long pVal ) {
+    HRESULT _hr = put_MinNumOfParams(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICICommandSettings::GetProcessTimeOut ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ProcessTimeOut(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICommandSettings::PutProcessTimeOut ( long pVal ) {
+    HRESULT _hr = put_ProcessTimeOut(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICICommandSettings::GetUserPermissions ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetUserPermissions(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICICommandSettings::AddUserPermission ( _bstr_t bstrUser ) {
+    HRESULT _hr = raw_AddUserPermission(bstrUser);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICICommandSettings::RemoveUserPermission ( _bstr_t bstrUser ) {
+    HRESULT _hr = raw_RemoveUserPermission(bstrUser);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ICICertInfo wrapper method implementations
+//
+
+inline long ICICertInfo::GetID ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICICertInfo::GetDescription ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Description(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetIssuerOneLine ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_IssuerOneLine(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetIssuerUnit ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_IssuerUnit(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetIssuerOrg ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_IssuerOrg(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetIssuerCountry ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_IssuerCountry(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetIssuerCName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_IssuerCName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetSubjectOneLine ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SubjectOneLine(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetSubjectUnit ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SubjectUnit(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetSubjectOrg ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SubjectOrg(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetSubjectCountry ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SubjectCountry(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetSubjectCName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SubjectCName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetNotBefore ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_NotBefore(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICICertInfo::GetNotAfter ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_NotAfter(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface ICISite wrapper method implementations
+//
+
+inline _bstr_t ICISite::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline long ICISite::GetID ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetConnectedCount ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetConnectedCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICISite::Start ( ) {
+    HRESULT _hr = raw_Start();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::Stop ( ) {
+    HRESULT _hr = raw_Stop();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICISite::GetAuthManagerID ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetAuthManagerID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetRootFolder ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetRootFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICISite::SetRootFolder ( _bstr_t newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetRootFolder(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetIP ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetIP(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetIP ( long newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetIP(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetPort ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetPort(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetPort ( long newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetPort(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetFTPAccess ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetFTPAccess(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetFTPAccess ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetFTPAccess(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetSSLAuth ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetSSLAuth(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetSSLImp ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetSSLImp(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetSSLAuth ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetSSLAuth(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetSSLImp ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetSSLImp(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetCheckClientCert ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetCheckClientCert(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetCheckClientCert ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetCheckClientCert(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetCertFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetCertFilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISite::GetKeyFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetKeyFilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISite::GetPassPhrase ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetPassPhrase(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISite::GetTrustedCertsPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetTrustedCertsPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISite::GetAwaitingCertsPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetAwaitingCertsPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICISite::SetCertFilePath ( _bstr_t newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetCertFilePath(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetKeyFilePath ( _bstr_t newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetKeyFilePath(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetPassPhrase ( _bstr_t newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetPassPhrase(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetIsStarted ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IsStarted(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetDownloadSpeed ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetDownloadSpeed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetUploadSpeed ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetUploadSpeed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetDownloadCount ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetDownloadCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetUploadCount ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetUploadCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetStartTime ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetStartTime(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISite::GetFolderList ( _bstr_t bstrFolderAlias ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetFolderList(bstrFolderAlias, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _variant_t ICISite::GetFolderPermissions ( _bstr_t bstrFolder ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetFolderPermissions(bstrFolder, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::SetPermission ( struct IPermission * pPermission, VARIANT_BOOL bRemoveOtherPermissions ) {
+    HRESULT _hr = raw_SetPermission(pPermission, bRemoveOtherPermissions);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemovePermission ( _bstr_t bstrFolder, _bstr_t bstrClient ) {
+    HRESULT _hr = raw_RemovePermission(bstrFolder, bstrClient);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IPermissionPtr ICISite::GetBlankPermission ( _bstr_t bstrFolder, _bstr_t bstrClient ) {
+    struct IPermission * _result = 0;
+    HRESULT _hr = raw_GetBlankPermission(bstrFolder, bstrClient, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IPermissionPtr(_result, false);
+}
+
+inline HRESULT ICISite::CreatePhysicalFolder ( _bstr_t bstrNewFolder ) {
+    HRESULT _hr = raw_CreatePhysicalFolder(bstrNewFolder);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::CreateVirtualFolder ( _bstr_t bstrNewFolder, _bstr_t bstrTarget ) {
+    HRESULT _hr = raw_CreateVirtualFolder(bstrNewFolder, bstrTarget);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemoveFolder ( _bstr_t bstrFolder ) {
+    HRESULT _hr = raw_RemoveFolder(bstrFolder);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RenameFolder ( _bstr_t bstrSrcFolder, _bstr_t bstrDstFolder ) {
+    HRESULT _hr = raw_RenameFolder(bstrSrcFolder, bstrDstFolder);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::CreatePermissionGroup ( _bstr_t bstrName ) {
+    HRESULT _hr = raw_CreatePermissionGroup(bstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetPermissionGroups ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetPermissionGroups(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::RemovePermissionGroup ( _bstr_t bstrName ) {
+    HRESULT _hr = raw_RemovePermissionGroup(bstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RenamePermissionGroup ( _bstr_t bstrOldName, _bstr_t bstrNewName ) {
+    HRESULT _hr = raw_RenamePermissionGroup(bstrOldName, bstrNewName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::AddUserToPermissionGroup ( _bstr_t bstrUser, _bstr_t bstrGroup ) {
+    HRESULT _hr = raw_AddUserToPermissionGroup(bstrUser, bstrGroup);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemoveUserFromPermissionGroup ( _bstr_t bstrUser, _bstr_t bstrGroup ) {
+    HRESULT _hr = raw_RemoveUserFromPermissionGroup(bstrUser, bstrGroup);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::CreateUser ( _bstr_t bstrLogin, _bstr_t bstrPwd, int nPwdType, _bstr_t bstrDescription ) {
+    HRESULT _hr = raw_CreateUser(bstrLogin, bstrPwd, nPwdType, bstrDescription);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetUsers ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetUsers(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::RemoveUser ( _bstr_t bstrLogin ) {
+    HRESULT _hr = raw_RemoveUser(bstrLogin);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RenameUser ( _bstr_t bstrOldName, _bstr_t bstrNewName ) {
+    HRESULT _hr = raw_RenameUser(bstrOldName, bstrNewName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetSettingsLevels ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetSettingsLevels(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICISite::GetSettingsLevelUsers ( _bstr_t bstrGroup ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetSettingsLevelUsers(bstrGroup, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::CreateSettingsLevel ( _bstr_t bstrName, _bstr_t bstrDescription ) {
+    HRESULT _hr = raw_CreateSettingsLevel(bstrName, bstrDescription);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemoveSettingsLevel ( _bstr_t bstrName ) {
+    HRESULT _hr = raw_RemoveSettingsLevel(bstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RenameSettingsLevel ( _bstr_t bstrOldName, _bstr_t bstrNewName ) {
+    HRESULT _hr = raw_RenameSettingsLevel(bstrOldName, bstrNewName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::MoveUserToSettingsLevel ( _bstr_t bstrUser, _bstr_t bstrGroup ) {
+    HRESULT _hr = raw_MoveUserToSettingsLevel(bstrUser, bstrGroup);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetPermissionGroupsOfUser ( _bstr_t bstrUser ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetPermissionGroupsOfUser(bstrUser, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::ChangeUserPassword ( _bstr_t bstrUser, _bstr_t bstrPwd, int nPwdType ) {
+    HRESULT _hr = raw_ChangeUserPassword(bstrUser, bstrPwd, nPwdType);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline ICIClientSettingsPtr ICISite::GetSettingsLevelSettings ( _bstr_t bstrGroup ) {
+    struct ICIClientSettings * _result = 0;
+    HRESULT _hr = raw_GetSettingsLevelSettings(bstrGroup, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICIClientSettingsPtr(_result, false);
+}
+
+inline ICIClientSettingsPtr ICISite::GetUserSettings ( _bstr_t bstrUser ) {
+    struct ICIClientSettings * _result = 0;
+    HRESULT _hr = raw_GetUserSettings(bstrUser, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICIClientSettingsPtr(_result, false);
+}
+
+inline HRESULT ICISite::Remove ( ) {
+    HRESULT _hr = raw_Remove();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetCommands ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetCommands(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline ICICommandSettingsPtr ICISite::GetCommandSettings ( _bstr_t bstrCommand ) {
+    struct ICICommandSettings * _result = 0;
+    HRESULT _hr = raw_GetCommandSettings(bstrCommand, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICICommandSettingsPtr(_result, false);
+}
+
+inline ICICommandSettingsPtr ICISite::CreateCommand ( _bstr_t bstrName ) {
+    struct ICICommandSettings * _result = 0;
+    HRESULT _hr = raw_CreateCommand(bstrName, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICICommandSettingsPtr(_result, false);
+}
+
+inline HRESULT ICISite::RemoveCommand ( _bstr_t bstrName ) {
+    HRESULT _hr = raw_RemoveCommand(bstrName);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetTrustedCertificates ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetTrustedCertificates(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline ICICertInfoPtr ICISite::GetTrustedCertificateInfo ( long lID ) {
+    struct ICICertInfo * _result = 0;
+    HRESULT _hr = raw_GetTrustedCertificateInfo(lID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICICertInfoPtr(_result, false);
+}
+
+inline _variant_t ICISite::GetPendingCertificates ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetPendingCertificates(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline ICICertInfoPtr ICISite::GetPendingCertificateInfo ( long lID ) {
+    struct ICICertInfo * _result = 0;
+    HRESULT _hr = raw_GetPendingCertificateInfo(lID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICICertInfoPtr(_result, false);
+}
+
+inline _bstr_t ICISite::ExportTrustedCertificate ( long lID ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_ExportTrustedCertificate(lID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline long ICISite::ImportTrustedCertificate ( _bstr_t bstrCertPath ) {
+    long _result = 0;
+    HRESULT _hr = raw_ImportTrustedCertificate(bstrCertPath, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICISite::RemoveTrustedCertificate ( long lID ) {
+    HRESULT _hr = raw_RemoveTrustedCertificate(lID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemovePendingCertificate ( long lID ) {
+    HRESULT _hr = raw_RemovePendingCertificate(lID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICISite::AddCertificateToTrusted ( long lID ) {
+    long _result = 0;
+    HRESULT _hr = raw_AddCertificateToTrusted(lID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetUserLimitMessage ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_UserLimitMessage(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICISite::PutUserLimitMessage ( _bstr_t pVal ) {
+    HRESULT _hr = put_UserLimitMessage(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICISite::GetExitMessage ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ExitMessage(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICISite::PutExitMessage ( _bstr_t pVal ) {
+    HRESULT _hr = put_ExitMessage(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICISite::GetVFSFilter ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_VFSFilter(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICISite::PutVFSFilter ( _bstr_t pVal ) {
+    HRESULT _hr = put_VFSFilter(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetBlockAntiTimeOut ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_BlockAntiTimeOut(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutBlockAntiTimeOut ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_BlockAntiTimeOut(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetBlockSiteToSite ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_BlockSiteToSite(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutBlockSiteToSite ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_BlockSiteToSite(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetAutoCreateHomeFolder ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AutoCreateHomeFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutAutoCreateHomeFolder ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AutoCreateHomeFolder(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetAssignFullPermissionsForHomeFolder ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AssignFullPermissionsForHomeFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutAssignFullPermissionsForHomeFolder ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AssignFullPermissionsForHomeFolder(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetEnablePortRange ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_EnablePortRange(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutEnablePortRange ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_EnablePortRange(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetHasMaxSpeed ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_HasMaxSpeed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutHasMaxSpeed ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_HasMaxSpeed(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetHasMaxUsers ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_HasMaxUsers(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutHasMaxUsers ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_HasMaxUsers(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetHasMaxConnectionsPerAccount ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_HasMaxConnectionsPerAccount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutHasMaxConnectionsPerAccount ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_HasMaxConnectionsPerAccount(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetHasMaxIPPerAccount ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_HasMaxIPPerAccount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutHasMaxIPPerAccount ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_HasMaxIPPerAccount(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetDisconnectOnDOS ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DisconnectOnDOS(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutDisconnectOnDOS ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DisconnectOnDOS(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetBanIPOnDOS ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_BanIPOnDOS(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutBanIPOnDOS ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_BanIPOnDOS(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetAutoBanIPsPermanently ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AutoBanIPsPermanently(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutAutoBanIPsPermanently ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AutoBanIPsPermanently(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetPASVListenIP ( ) {
+    long _result = 0;
+    HRESULT _hr = get_PASVListenIP(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutPASVListenIP ( long pVal ) {
+    HRESULT _hr = put_PASVListenIP(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetPASVPortMin ( ) {
+    long _result = 0;
+    HRESULT _hr = get_PASVPortMin(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutPASVPortMin ( long pVal ) {
+    HRESULT _hr = put_PASVPortMin(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetPASVPortMax ( ) {
+    long _result = 0;
+    HRESULT _hr = get_PASVPortMax(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutPASVPortMax ( long pVal ) {
+    HRESULT _hr = put_PASVPortMax(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetMaxTransferSpeed ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxTransferSpeed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutMaxTransferSpeed ( long pVal ) {
+    HRESULT _hr = put_MaxTransferSpeed(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetMaxConcurrentConnections ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxConcurrentConnections(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutMaxConcurrentConnections ( long pVal ) {
+    HRESULT _hr = put_MaxConcurrentConnections(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetMaxConnectionsPerUser ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxConnectionsPerUser(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutMaxConnectionsPerUser ( long pVal ) {
+    HRESULT _hr = put_MaxConnectionsPerUser(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetMaxConnectionsFromSameIP ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxConnectionsFromSameIP(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutMaxConnectionsFromSameIP ( long pVal ) {
+    HRESULT _hr = put_MaxConnectionsFromSameIP(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetDOSLimit ( ) {
+    long _result = 0;
+    HRESULT _hr = get_DOSLimit(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutDOSLimit ( long pVal ) {
+    HRESULT _hr = put_DOSLimit(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICISite::GetAllowedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetAllowedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICISite::GetDeniedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetDeniedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::AddIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_AddIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::RemoveIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_RemoveIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICISite::GetIPAccessAllowedDefault ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IPAccessAllowedDefault(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutIPAccessAllowedDefault ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_IPAccessAllowedDefault(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline HRESULT ICISite::CreateUserEx ( _bstr_t bstrLogin, _bstr_t bstrPwd, int nPwdType, _bstr_t bstrDescription, _bstr_t bstrFullName, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bFullPermissionsForHomeFolder, _bstr_t bstrSettingsLevel ) {
+    HRESULT _hr = raw_CreateUserEx(bstrLogin, bstrPwd, nPwdType, bstrDescription, bstrFullName, bCreateHomeFolder, bFullPermissionsForHomeFolder, bstrSettingsLevel);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetPermissionGroupList ( _bstr_t bstrGroup ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetPermissionGroupList(bstrGroup, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICISite::ForceSynchronizeUserDatabase ( ) {
+    HRESULT _hr = raw_ForceSynchronizeUserDatabase();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t ICISite::GetConnectMessage ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ConnectMessage(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICISite::PutConnectMessage ( _bstr_t pVal ) {
+    HRESULT _hr = put_ConnectMessage(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::ValidatePassword ( _bstr_t bstrUser, _bstr_t bstrPwd ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_ValidatePassword(bstrUser, bstrPwd, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::CancelTransfer ( _bstr_t bstrPath ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_CancelTransfer(bstrPath, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetSSHKeyFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetSSHKeyFilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICISite::SetSSHKeyFilePath ( _bstr_t newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetSSHKeyFilePath(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::GetODBCSettings ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ODBCSettings(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICISite::PutODBCSettings ( _bstr_t pVal ) {
+    HRESULT _hr = put_ODBCSettings(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline HRESULT ICISite::RemapVirtualFolder ( _bstr_t bstrVFSFolder, _bstr_t bstrTarget ) {
+    HRESULT _hr = raw_RemapVirtualFolder(bstrVFSFolder, bstrTarget);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::AssignEventRuleCustomCommandWorkingFolder ( _bstr_t bstrCustomCommandName, _bstr_t bstrWorkingFolder ) {
+    HRESULT _hr = raw_AssignEventRuleCustomCommandWorkingFolder(bstrCustomCommandName, bstrWorkingFolder);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICISite::GetConnectedUsers ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetConnectedUsers(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline VARIANT_BOOL ICISite::KickUser ( long nUserID ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_KickUser(nUserID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISite::CreateComplexPassword ( const _variant_t & bstrUserName ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_CreateComplexPassword(bstrUserName, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICISite::GetHTTPAccess ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHTTPAccess(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetHTTPAccess ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetHTTPAccess(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetHTTPSAccess ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_GetHTTPSAccess(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetHTTPSAccess ( VARIANT_BOOL newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetHTTPSAccess(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetHTTPPort ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetHTTPPort(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetHTTPPort ( long newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetHTTPPort(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICISite::GetHTTPSPort ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetHTTPSPort(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::SetHTTPSPort ( long newVal ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = raw_SetHTTPSPort(newVal, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISite::GetLimitLoginAttempts ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_LimitLoginAttempts(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutLimitLoginAttempts ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_LimitLoginAttempts(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetLockoutNotDisable ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_LockoutNotDisable(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutLockoutNotDisable ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_LockoutNotDisable(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetMaxInvalidLoginAttempts ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxInvalidLoginAttempts(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutMaxInvalidLoginAttempts ( long pVal ) {
+    HRESULT _hr = put_MaxInvalidLoginAttempts(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetLockoutPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_LockoutPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutLockoutPeriod ( long pVal ) {
+    HRESULT _hr = put_LockoutPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICISite::GetInvalidAttemptsPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_InvalidAttemptsPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutInvalidAttemptsPeriod ( long pVal ) {
+    HRESULT _hr = put_InvalidAttemptsPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline IDispatchPtr ICISite::EventRules ( EventType type ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_EventRules(type, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline _bstr_t ICISite::GetPhysicalPath ( _bstr_t bstrFolderAlias ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetPhysicalPath(bstrFolderAlias, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT ICISite::EnableSFTP ( _bstr_t SFTPKeyFile, _bstr_t SFTPKeyPassword ) {
+    HRESULT _hr = raw_EnableSFTP(SFTPKeyFile, SFTPKeyPassword);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::DisableSFTP ( ) {
+    HRESULT _hr = raw_DisableSFTP();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICISite::SetSSLCertificate ( _bstr_t bzCertFilePath, _bstr_t bzKeyFilePath, _bstr_t bzPassPhrase ) {
+    HRESULT _hr = raw_SetSSLCertificate(bzCertFilePath, bzKeyFilePath, bzPassPhrase);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline AutobanSensitivity ICISite::GetAutobanSensitivity ( ) {
+    AutobanSensitivity _result;
+    HRESULT _hr = get_AutobanSensitivity(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutAutobanSensitivity ( AutobanSensitivity pVal ) {
+    HRESULT _hr = put_AutobanSensitivity(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetAllowChangePassword ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AllowChangePassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutAllowChangePassword ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AllowChangePassword(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICISite::GetForcePasswordResetOnInitialLogin ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_ForcePasswordResetOnInitialLogin(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISite::PutForcePasswordResetOnInitialLogin ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_ForcePasswordResetOnInitialLogin(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICISites wrapper method implementations
+//
+
+inline ICISitePtr ICISites::Item ( long nIndex ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_Item(nIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline long ICISites::Count ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline ICISitePtr ICISites::SiteByID ( long ID ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_SiteByID(ID, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::Add ( _bstr_t bstrName, _bstr_t bstrRootFolder, int nAMID, _bstr_t bstrAMDB, VARIANT_BOOL bEncryptPasswords, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_Add(bstrName, bstrRootFolder, nAMID, bstrAMDB, bEncryptPasswords, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::AddNTLMSite ( _bstr_t bstrName, _bstr_t bstrRootFolder, _bstr_t bstrDomainName, _bstr_t bstrAllowGroup, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_AddNTLMSite(bstrName, bstrRootFolder, bstrDomainName, bstrAllowGroup, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::AddADSite ( _bstr_t bstrName, _bstr_t bstrRootFolder, _bstr_t bstrDomainContext, _bstr_t bstrAllowGroup, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_AddADSite(bstrName, bstrRootFolder, bstrDomainContext, bstrAllowGroup, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::AddODBCSite ( _bstr_t bstrName, _bstr_t bstrRootFolder, _bstr_t bstrDSN, VARIANT_BOOL bEncryptPasswords, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_AddODBCSite(bstrName, bstrRootFolder, bstrDSN, bEncryptPasswords, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::AddLocalSite ( _bstr_t bstrName, _bstr_t bstrRootFolder, _bstr_t bstrFilePath, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_AddLocalSite(bstrName, bstrRootFolder, bstrFilePath, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+inline ICISitePtr ICISites::AddLDAPSite ( _bstr_t bstrName, _bstr_t bstrRootFolder, _bstr_t bstrDomainContext, int nIP, long nPort, VARIANT_BOOL bCreateHomeFolder, VARIANT_BOOL bPermHomeFolder, VARIANT_BOOL bAutoStart, VARIANT_BOOL bCreateFTPFolders ) {
+    struct ICISite * _result = 0;
+    HRESULT _hr = raw_AddLDAPSite(bstrName, bstrRootFolder, bstrDomainContext, nIP, nPort, bCreateHomeFolder, bPermHomeFolder, bAutoStart, bCreateFTPFolders, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitePtr(_result, false);
+}
+
+//
+// interface ICIAudit wrapper method implementations
+//
+
+inline HRESULT ICIAudit::AuditSATTransaction ( _bstr_t From, _bstr_t Subject, _bstr_t Body, _bstr_t TempUserName, _bstr_t TempPassword, _bstr_t SiteName, long ExpireDays, _bstr_t TransGUID, _bstr_t Reserved1, _bstr_t Reserved2 ) {
+    HRESULT _hr = raw_AuditSATTransaction(From, Subject, Body, TempUserName, TempPassword, SiteName, ExpireDays, TransGUID, Reserved1, Reserved2);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIAudit::AuditSATEmail ( _bstr_t Email, long EmailType, _bstr_t TransGUID ) {
+    HRESULT _hr = raw_AuditSATEmail(Email, EmailType, TransGUID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIAudit::AuditSATFile ( _bstr_t FileName, __int64 FileSize, _bstr_t TransGUID ) {
+    HRESULT _hr = raw_AuditSATFile(FileName, FileSize, TransGUID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ICIServer wrapper method implementations
+//
+
+inline HRESULT ICIServer::Connect ( _bstr_t Host, long nPort, _bstr_t Login, _bstr_t Password ) {
+    HRESULT _hr = raw_Connect(Host, nPort, Login, Password);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::Close ( ) {
+    HRESULT _hr = raw_Close();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline ICISitesPtr ICIServer::Sites ( ) {
+    struct ICISites * _result = 0;
+    HRESULT _hr = raw_Sites(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICISitesPtr(_result, false);
+}
+
+inline _bstr_t ICIServer::GetLocalIP ( long nIP ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetLocalIP(nIP, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICIServer::GetLocalTime ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GetLocalTime(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICIServer::GetIPAccessAllowedDefault ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IPAccessAllowedDefault(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutIPAccessAllowedDefault ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_IPAccessAllowedDefault(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetLogPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LogPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutLogPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_LogPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetCertificateFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_CertificateFilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutCertificateFilePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_CertificateFilePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetKeyFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_KeyFilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutKeyFilePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_KeyFilePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetPassPhrase ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PassPhrase(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutPassPhrase ( _bstr_t pVal ) {
+    HRESULT _hr = put_PassPhrase(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline int ICIServer::GetLogType ( ) {
+    int _result = 0;
+    HRESULT _hr = get_LogType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutLogType ( int pVal ) {
+    HRESULT _hr = put_LogType(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline int ICIServer::GetLogRotation ( ) {
+    int _result = 0;
+    HRESULT _hr = get_LogRotation(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutLogRotation ( int pVal ) {
+    HRESULT _hr = put_LogRotation(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIServer::GetAdminPort ( ) {
+    long _result = 0;
+    HRESULT _hr = get_AdminPort(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutAdminPort ( long pVal ) {
+    HRESULT _hr = put_AdminPort(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIServer::GetListenIP ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ListenIP(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutListenIP ( long pVal ) {
+    HRESULT _hr = put_ListenIP(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIServer::GetAllowRemoteAdministration ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AllowRemoteAdministration(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutAllowRemoteAdministration ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AllowRemoteAdministration(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIServer::GetUseSSLForAdministration ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_UseSSLForAdministration(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutUseSSLForAdministration ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_UseSSLForAdministration(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPServer ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPServer(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPServer ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPServer(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIServer::GetSMTPPort ( ) {
+    long _result = 0;
+    HRESULT _hr = get_SMTPPort(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutSMTPPort ( long pVal ) {
+    HRESULT _hr = put_SMTPPort(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPLogin ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPLogin(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPLogin ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPLogin(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPPassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPPassword(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPSenderName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPSenderName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPSenderName ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPSenderName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPSenderAddr ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPSenderAddr(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPSenderAddr ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPSenderAddr(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPRecipientName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPRecipientName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPRecipientName ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPRecipientName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetSMTPRecipientAddr ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SMTPRecipientAddr(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutSMTPRecipientAddr ( _bstr_t pVal ) {
+    HRESULT _hr = put_SMTPRecipientAddr(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICIServer::GetAllowedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetAllowedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICIServer::GetDeniedMasks ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetDeniedMasks(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICIServer::AddIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_AddIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::RemoveIPAccessRule ( _bstr_t bstrMask, VARIANT_BOOL bAllow ) {
+    HRESULT _hr = raw_RemoveIPAccessRule(bstrMask, bAllow);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::SetSSLCertificate ( _bstr_t bzCertFilePath, _bstr_t bzKeyFilePath, _bstr_t bzPassPhrase ) {
+    HRESULT _hr = raw_SetSSLCertificate(bzCertFilePath, bzKeyFilePath, bzPassPhrase);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::ApplyChanges ( ) {
+    HRESULT _hr = raw_ApplyChanges();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline VARIANT_BOOL ICIServer::GetEnableARM ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_EnableARM(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutEnableARM ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_EnableARM(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetARMServerName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ARMServerName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutARMServerName ( _bstr_t pVal ) {
+    HRESULT _hr = put_ARMServerName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetARMDatabaseName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ARMDatabaseName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutARMDatabaseName ( _bstr_t pVal ) {
+    HRESULT _hr = put_ARMDatabaseName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetARMUserName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ARMUserName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutARMUserName ( _bstr_t pVal ) {
+    HRESULT _hr = put_ARMUserName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetARMPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ARMPassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutARMPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_ARMPassword(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline HRESULT ICIServer::RefreshSettings ( ) {
+    HRESULT _hr = raw_RefreshSettings();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICIServer::GetAdminIPs ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = raw_GetAdminIPs(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline long ICIServer::GetServerAdminCount ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_GetServerAdminCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIServer::RemoveServerAdminAccount ( _bstr_t bstrAdminUser, AdminAccountType accountType ) {
+    HRESULT _hr = raw_RemoveServerAdminAccount(bstrAdminUser, accountType);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::ChangeAdminPassword ( _bstr_t bstrAdminUser, _bstr_t bstrNewPassword ) {
+    HRESULT _hr = raw_ChangeAdminPassword(bstrAdminUser, bstrNewPassword);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIServer::GetConnectedUsersNumber ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ConnectedUsersNumber(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline int ICIServer::GetSSLVersionMask ( ) {
+    int _result = 0;
+    HRESULT _hr = get_SSLVersionMask(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutSSLVersionMask ( int pVal ) {
+    HRESULT _hr = put_SSLVersionMask(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIServer::GetAllowClearCommandChannel ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AllowClearCommandChannel(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutAllowClearCommandChannel ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AllowClearCommandChannel(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIServer::GetAllowUnprotectedDataChannel ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AllowUnprotectedDataChannel(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIServer::PutAllowUnprotectedDataChannel ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AllowUnprotectedDataChannel(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIServer::GetCipherList ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_CipherList(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIServer::PutCipherList ( _bstr_t pVal ) {
+    HRESULT _hr = put_CipherList(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ICIAuditPtr ICIServer::Auditor ( ) {
+    struct ICIAudit * _result = 0;
+    HRESULT _hr = raw_Auditor(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return ICIAuditPtr(_result, false);
+}
+
+inline RegistrationState ICIServer::ModuleRegistrationState ( ServerModule m ) {
+    RegistrationState _result;
+    HRESULT _hr = raw_ModuleRegistrationState(m, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _variant_t ICIServer::GetAvailableReports ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_AvailableReports(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICIServer::GetAvailablePGPKeys ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_AvailablePGPKeys(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline HRESULT ICIServer::GenerateReport ( IDispatch * pdispReportParams, _bstr_t bzReportPath ) {
+    HRESULT _hr = raw_GenerateReport(pdispReportParams, bzReportPath);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _variant_t ICIServer::GetAvailableEvents ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_AvailableEvents(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline _variant_t ICIServer::GetAvailableSSHKeys ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_AvailableSSHKeys(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline long ICIServer::ImportSSHKey ( _bstr_t bstrKeyPath ) {
+    long _result = 0;
+    HRESULT _hr = raw_ImportSSHKey(bstrKeyPath, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIServer::RemoveSSHKey ( long lID ) {
+    HRESULT _hr = raw_RemoveSSHKey(lID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT ICIServer::ConnectEx ( _bstr_t Host, long nPort, AdminLoginType nLoginType, _bstr_t Login, _bstr_t Password ) {
+    HRESULT _hr = raw_ConnectEx(Host, nPort, nLoginType, Login, Password);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ICIPgpActionParams wrapper method implementations
+//
+
+inline _bstr_t ICIPgpActionParams::GetPassPhrase ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PassPhrase(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIPgpActionParams::PutPassPhrase ( _bstr_t pVal ) {
+    HRESULT _hr = put_PassPhrase(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIPgpActionParams::GetFilePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FilePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIPgpActionParams::PutFilePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_FilePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIPgpActionParams::GetSignKeyID ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SignKeyID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIPgpActionParams::PutSignKeyID ( _bstr_t pVal ) {
+    HRESULT _hr = put_SignKeyID(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICIPgpActionParams::GetKeyIDs ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_KeyIDs(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void ICIPgpActionParams::PutKeyIDs ( const _variant_t & pVal ) {
+    HRESULT _hr = put_KeyIDs(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline PGPOperation ICIPgpActionParams::GetOperation ( ) {
+    PGPOperation _result;
+    HRESULT _hr = get_Operation(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIPgpActionParams::PutOperation ( PGPOperation pVal ) {
+    HRESULT _hr = put_Operation(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIPgpActionParams::GetASCIIArmoredOutput ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_ASCIIArmoredOutput(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIPgpActionParams::PutASCIIArmoredOutput ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_ASCIIArmoredOutput(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline PGPCompressionLevel ICIPgpActionParams::GetCompressionLevel ( ) {
+    PGPCompressionLevel _result;
+    HRESULT _hr = get_CompressionLevel(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIPgpActionParams::PutCompressionLevel ( PGPCompressionLevel pVal ) {
+    HRESULT _hr = put_CompressionLevel(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIPgpActionParams::GetSignatureInSeparateFile ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_SignatureInSeparateFile(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIPgpActionParams::PutSignatureInSeparateFile ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_SignatureInSeparateFile(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline PGPSigningHash ICIPgpActionParams::GetSigningHash ( ) {
+    PGPSigningHash _result;
+    HRESULT _hr = get_SigningHash(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIPgpActionParams::PutSigningHash ( PGPSigningHash pVal ) {
+    HRESULT _hr = put_SigningHash(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIPgpActionParams::GetSDAPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SDAPassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIPgpActionParams::PutSDAPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_SDAPassword(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIMailActionParams wrapper method implementations
+//
+
+inline _bstr_t ICIMailActionParams::GetTOAddresses ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_TOAddresses(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutTOAddresses ( _bstr_t pVal ) {
+    HRESULT _hr = put_TOAddresses(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIMailActionParams::GetCCAddresses ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_CCAddresses(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutCCAddresses ( _bstr_t pVal ) {
+    HRESULT _hr = put_CCAddresses(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIMailActionParams::GetBCCAddresses ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_BCCAddresses(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutBCCAddresses ( _bstr_t pVal ) {
+    HRESULT _hr = put_BCCAddresses(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIMailActionParams::GetSubject ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Subject(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutSubject ( _bstr_t pVal ) {
+    HRESULT _hr = put_Subject(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIMailActionParams::GetBody ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Body(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutBody ( _bstr_t pVal ) {
+    HRESULT _hr = put_Body(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIMailActionParams::GetCopyToClient ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_CopyToClient(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIMailActionParams::PutCopyToClient ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_CopyToClient(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIMailActionParams::GetUseCustomFromAddress ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_UseCustomFromAddress(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIMailActionParams::PutUseCustomFromAddress ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_UseCustomFromAddress(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIMailActionParams::GetCustomFromAddress ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_CustomFromAddress(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIMailActionParams::PutCustomFromAddress ( _bstr_t pVal ) {
+    HRESULT _hr = put_CustomFromAddress(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICITransferActionParams wrapper method implementations
+//
+
+inline _bstr_t ICITransferActionParams::GetLocalPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LocalPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutLocalPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_LocalPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline NetworkProtocol ICITransferActionParams::GetProtocol ( ) {
+    NetworkProtocol _result;
+    HRESULT _hr = get_Protocol(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITransferActionParams::PutProtocol ( NetworkProtocol pVal ) {
+    HRESULT _hr = put_Protocol(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICITransferActionParams::GetAutoLogin ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_AutoLogin(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITransferActionParams::PutAutoLogin ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_AutoLogin(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetUser ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_User(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutUser ( _bstr_t pVal ) {
+    HRESULT _hr = put_User(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Password(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_Password(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetPrivateKeyPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PrivateKeyPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutPrivateKeyPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_PrivateKeyPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetPrivateKeyPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PrivateKeyPassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutPrivateKeyPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_PrivateKeyPassword(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetPublicKeyPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PublicKeyPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutPublicKeyPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_PublicKeyPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetHost ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Host(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutHost ( _bstr_t pVal ) {
+    HRESULT _hr = put_Host(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITransferActionParams::GetPort ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Port(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITransferActionParams::PutPort ( long pVal ) {
+    HRESULT _hr = put_Port(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICITransferActionParams::GetRemotePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RemotePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICITransferActionParams::PutRemotePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_RemotePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICITransferActionParams::GetDeleteSourceFile ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DeleteSourceFile(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITransferActionParams::PutDeleteSourceFile ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DeleteSourceFile(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICICleanupActionParams wrapper method implementations
+//
+
+inline _bstr_t ICICleanupActionParams::GetFolder ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Folder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICleanupActionParams::PutFolder ( _bstr_t pVal ) {
+    HRESULT _hr = put_Folder(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICleanupActionParams::GetRecursive ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Recursive(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICleanupActionParams::PutRecursive ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Recursive(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICleanupActionParams::GetFileMask ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FileMask(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICleanupActionParams::PutFileMask ( _bstr_t pVal ) {
+    HRESULT _hr = put_FileMask(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICICleanupActionParams::GetExcludeFileMask ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_ExcludeFileMask(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICleanupActionParams::PutExcludeFileMask ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_ExcludeFileMask(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICICleanupActionParams::GetDaysToKeepFiles ( ) {
+    long _result = 0;
+    HRESULT _hr = get_DaysToKeepFiles(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICleanupActionParams::PutDaysToKeepFiles ( long pVal ) {
+    HRESULT _hr = put_DaysToKeepFiles(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIReportActionParams wrapper method implementations
+//
+
+inline IDispatchPtr ICIReportActionParams::GetReport ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = get_Report(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline void ICIReportActionParams::PutReport ( IDispatch * pVal ) {
+    HRESULT _hr = put_Report(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ReportPeriodType ICIReportActionParams::GetDateFormat ( ) {
+    ReportPeriodType _result;
+    HRESULT _hr = get_DateFormat(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutDateFormat ( ReportPeriodType pVal ) {
+    HRESULT _hr = put_DateFormat(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline PredefinedReportPeriod ICIReportActionParams::GetCustomDate ( ) {
+    PredefinedReportPeriod _result;
+    HRESULT _hr = get_CustomDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutCustomDate ( PredefinedReportPeriod pVal ) {
+    HRESULT _hr = put_CustomDate(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICIReportActionParams::GetFromDate ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_FromDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutFromDate ( const _variant_t & pVal ) {
+    HRESULT _hr = put_FromDate(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICIReportActionParams::GetToDate ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_ToDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutToDate ( const _variant_t & pVal ) {
+    HRESULT _hr = put_ToDate(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ReportFormat ICIReportActionParams::GetReportFileFormat ( ) {
+    ReportFormat _result;
+    HRESULT _hr = get_ReportFileFormat(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutReportFileFormat ( ReportFormat pVal ) {
+    HRESULT _hr = put_ReportFileFormat(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIReportActionParams::GetOptionalParameters ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_OptionalParameters(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutOptionalParameters ( _bstr_t pVal ) {
+    HRESULT _hr = put_OptionalParameters(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIReportActionParams::GetFilterField1 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FilterField1(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutFilterField1 ( _bstr_t pVal ) {
+    HRESULT _hr = put_FilterField1(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIReportActionParams::GetFilterField2 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FilterField2(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutFilterField2 ( _bstr_t pVal ) {
+    HRESULT _hr = put_FilterField2(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ReportFilterOperator ICIReportActionParams::GetFilterOperator1 ( ) {
+    ReportFilterOperator _result;
+    HRESULT _hr = get_FilterOperator1(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutFilterOperator1 ( ReportFilterOperator pVal ) {
+    HRESULT _hr = put_FilterOperator1(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ReportFilterOperator ICIReportActionParams::GetFilterOperator2 ( ) {
+    ReportFilterOperator _result;
+    HRESULT _hr = get_FilterOperator2(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutFilterOperator2 ( ReportFilterOperator pVal ) {
+    HRESULT _hr = put_FilterOperator2(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIReportActionParams::GetFilterValue1 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FilterValue1(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutFilterValue1 ( _bstr_t pVal ) {
+    HRESULT _hr = put_FilterValue1(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIReportActionParams::GetFilterValue2 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_FilterValue2(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIReportActionParams::PutFilterValue2 ( _bstr_t pVal ) {
+    HRESULT _hr = put_FilterValue2(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline ReportFiltersCombiningOperator ICIReportActionParams::GetFilterAndOr ( ) {
+    ReportFiltersCombiningOperator _result;
+    HRESULT _hr = get_FilterAndOr(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIReportActionParams::PutFilterAndOr ( ReportFiltersCombiningOperator pVal ) {
+    HRESULT _hr = put_FilterAndOr(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICICommandActionParams wrapper method implementations
+//
+
+inline _bstr_t ICICommandActionParams::GetCommand ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Command(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandActionParams::PutCommand ( _bstr_t pVal ) {
+    HRESULT _hr = put_Command(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandActionParams::GetParameters ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Parameters(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandActionParams::PutParameters ( _bstr_t pVal ) {
+    HRESULT _hr = put_Parameters(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICICommandActionParams::GetWorkingFolder ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_WorkingFolder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICICommandActionParams::PutWorkingFolder ( _bstr_t pVal ) {
+    HRESULT _hr = put_WorkingFolder(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIStopActionParams wrapper method implementations
+//
+
+inline VARIANT_BOOL ICIStopActionParams::GetEnabled ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Enabled(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIStopActionParams::PutEnabled ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Enabled(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline StopType ICIStopActionParams::GetAction ( ) {
+    StopType _result;
+    HRESULT _hr = get_Action(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIStopActionParams::PutAction ( StopType pVal ) {
+    HRESULT _hr = put_Action(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIBackupActionParams wrapper method implementations
+//
+
+inline _bstr_t ICIBackupActionParams::GetFolder ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Folder(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIBackupActionParams::PutFolder ( _bstr_t pVal ) {
+    HRESULT _hr = put_Folder(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIAWTaskActionParams wrapper method implementations
+//
+
+inline _bstr_t ICIAWTaskActionParams::GetTaskName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_TaskName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAWTaskActionParams::PutTaskName ( _bstr_t pVal ) {
+    HRESULT _hr = put_TaskName(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIAS2SendActionParams wrapper method implementations
+//
+
+inline _bstr_t ICIAS2SendActionParams::GetLocalPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LocalPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutLocalPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_LocalPath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIAS2SendActionParams::GetUseClientProfile ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_UseClientProfile(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutUseClientProfile ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_UseClientProfile(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetClientProfile ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ClientProfile(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutClientProfile ( _bstr_t pVal ) {
+    HRESULT _hr = put_ClientProfile(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIAS2SendActionParams::GetDeleteSourceFile ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_DeleteSourceFile(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutDeleteSourceFile ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_DeleteSourceFile(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetHost ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Host(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutHost ( _bstr_t pVal ) {
+    HRESULT _hr = put_Host(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIAS2SendActionParams::GetPort ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Port(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutPort ( long pVal ) {
+    HRESULT _hr = put_Port(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetRemotePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RemotePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutRemotePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_RemotePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetUser ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_User(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutUser ( _bstr_t pVal ) {
+    HRESULT _hr = put_User(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetPassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Password(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutPassword ( _bstr_t pVal ) {
+    HRESULT _hr = put_Password(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetSubject ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Subject(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutSubject ( _bstr_t pVal ) {
+    HRESULT _hr = put_Subject(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline AS2ContentType ICIAS2SendActionParams::GetContentType ( ) {
+    AS2ContentType _result;
+    HRESULT _hr = get_ContentType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutContentType ( AS2ContentType pVal ) {
+    HRESULT _hr = put_ContentType(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIAS2SendActionParams::GetCompress ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Compress(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutCompress ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Compress(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIAS2SendActionParams::GetEncrypt ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Encrypt(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutEncrypt ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Encrypt(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIAS2SendActionParams::GetSign ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Sign(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutSign ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Sign(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetPartnerCertificatePath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PartnerCertificatePath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutPartnerCertificatePath ( _bstr_t pVal ) {
+    HRESULT _hr = put_PartnerCertificatePath(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetAS2ID ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_AS2ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutAS2ID ( _bstr_t pVal ) {
+    HRESULT _hr = put_AS2ID(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIAS2SendActionParams::GetPartnerAS2ID ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_PartnerAS2ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIAS2SendActionParams::PutPartnerAS2ID ( _bstr_t pVal ) {
+    HRESULT _hr = put_PartnerAS2ID(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline AS2ReceiptPolicy ICIAS2SendActionParams::GetReceiptPolicy ( ) {
+    AS2ReceiptPolicy _result;
+    HRESULT _hr = get_ReceiptPolicy(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutReceiptPolicy ( AS2ReceiptPolicy pVal ) {
+    HRESULT _hr = put_ReceiptPolicy(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline AS2ReceiptDelivery ICIAS2SendActionParams::GetReceiptDelivery ( ) {
+    AS2ReceiptDelivery _result;
+    HRESULT _hr = get_ReceiptDelivery(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutReceiptDelivery ( AS2ReceiptDelivery pVal ) {
+    HRESULT _hr = put_ReceiptDelivery(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIAS2SendActionParams::GetTimeoutSec ( ) {
+    long _result = 0;
+    HRESULT _hr = get_TimeoutSec(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutTimeoutSec ( long pVal ) {
+    HRESULT _hr = put_TimeoutSec(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIAS2SendActionParams::GetRetriesCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_RetriesCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutRetriesCount ( long pVal ) {
+    HRESULT _hr = put_RetriesCount(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIAS2SendActionParams::GetRetryDelaySec ( ) {
+    long _result = 0;
+    HRESULT _hr = get_RetryDelaySec(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutRetryDelaySec ( long pVal ) {
+    HRESULT _hr = put_RetryDelaySec(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICIAS2SendActionParams::GetAsyncReceiptTimeoutMin ( ) {
+    long _result = 0;
+    HRESULT _hr = get_AsyncReceiptTimeoutMin(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIAS2SendActionParams::PutAsyncReceiptTimeoutMin ( long pVal ) {
+    HRESULT _hr = put_AsyncReceiptTimeoutMin(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIEventRules wrapper method implementations
+//
+
+inline IDispatchPtr ICIEventRules::Item ( long lIndex ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Item(lIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline HRESULT ICIEventRules::Delete ( long lIndex ) {
+    HRESULT _hr = raw_Delete(lIndex);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICIEventRules::Count ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline IDispatchPtr ICIEventRules::Add ( long lIndex, IDispatch * pdispParams ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Add(lIndex, pdispParams, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICIEventRules::Find ( _bstr_t strName ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Find(strName, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICIEventRule wrapper method implementations
+//
+
+inline IDispatchPtr ICIEventRule::Statement ( long lIndex ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Statement(lIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline long ICIEventRule::StatementsCount ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_StatementsCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIEventRule::DeleteStatement ( long lIndex ) {
+    HRESULT _hr = raw_DeleteStatement(lIndex);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IDispatchPtr ICIEventRule::GetParams ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_GetParams(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline HRESULT ICIEventRule::SetParams ( IDispatch * newVal ) {
+    HRESULT _hr = raw_SetParams(newVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IDispatchPtr ICIEventRule::AddActionStatement ( long lIndex, IDispatch * pdispParams ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_AddActionStatement(lIndex, pdispParams, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICIEventRule::AddIfStatement ( long lIndex, EventProperty property, ConditionOperator op, const _variant_t & varConditionValue, VARIANT_BOOL bNot ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_AddIfStatement(lIndex, property, op, varConditionValue, bNot, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICIEventRuleStatement wrapper method implementations
+//
+
+inline EventRuleStatementType ICIEventRuleStatement::Gettype ( ) {
+    EventRuleStatementType _result;
+    HRESULT _hr = get_type(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface ICIIfStatement wrapper method implementations
+//
+
+inline IDispatchPtr ICIIfStatement::GetIfSection ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = get_IfSection(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICIIfStatement::GetElseSection ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = get_ElseSection(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICIIfStatement::GetCondition ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = get_Condition(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICIActionStatement wrapper method implementations
+//
+
+inline IDispatchPtr ICIActionStatement::FailSection ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_FailSection(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICIActionStatement::Action ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Action(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICIActionStatements wrapper method implementations
+//
+
+inline IDispatchPtr ICIActionStatements::Item ( long lIndex ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Item(lIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline long ICIActionStatements::Count ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIActionStatements::Delete ( long lIndex ) {
+    HRESULT _hr = raw_Delete(lIndex);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IDispatchPtr ICIActionStatements::Add ( long lIndex, IDispatch * pdispActionParams ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Add(lIndex, pdispActionParams, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICIEventAction wrapper method implementations
+//
+
+inline EventActionType ICIEventAction::Gettype ( ) {
+    EventActionType _result;
+    HRESULT _hr = get_type(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline IDispatchPtr ICIEventAction::GetParams ( ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_GetParams(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline HRESULT ICIEventAction::SetParams ( IDispatch * pdispParams ) {
+    HRESULT _hr = raw_SetParams(pdispParams);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ICIEventActions wrapper method implementations
+//
+
+inline IDispatchPtr ICIEventActions::Item ( long lIndex ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Item(lIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline long ICIEventActions::Count ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT ICIEventActions::Delete ( long lIndex ) {
+    HRESULT _hr = raw_Delete(lIndex);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline IDispatchPtr ICIEventActions::Add ( long lIndex, IDispatch * pdispParams ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Add(lIndex, pdispParams, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+//
+// interface ICICompoundCondition wrapper method implementations
+//
+
+inline LogicalOperator ICICompoundCondition::GetOperator ( ) {
+    LogicalOperator _result;
+    HRESULT _hr = get_Operator(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICICompoundCondition::PutOperator ( LogicalOperator pVal ) {
+    HRESULT _hr = put_Operator(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline IDispatchPtr ICICompoundCondition::Item ( long lIndex ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Item(lIndex, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline IDispatchPtr ICICompoundCondition::Add ( EventProperty property, ConditionOperator op, const _variant_t & varValue, VARIANT_BOOL bNot ) {
+    IDispatch * _result = 0;
+    HRESULT _hr = raw_Add(property, op, varValue, bNot, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return IDispatchPtr(_result, false);
+}
+
+inline HRESULT ICICompoundCondition::Delete ( long lIndex ) {
+    HRESULT _hr = raw_Delete(lIndex);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline long ICICompoundCondition::Count ( ) {
+    long _result = 0;
+    HRESULT _hr = raw_Count(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface ICISimpleCondition wrapper method implementations
+//
+
+inline ConditionOperator ICISimpleCondition::GetOperator ( ) {
+    ConditionOperator _result;
+    HRESULT _hr = get_Operator(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISimpleCondition::PutOperator ( ConditionOperator pVal ) {
+    HRESULT _hr = put_Operator(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _variant_t ICISimpleCondition::GetValue ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_Value(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void ICISimpleCondition::PutValue ( const _variant_t & pVal ) {
+    HRESULT _hr = put_Value(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline EventProperty ICISimpleCondition::Getproperty ( ) {
+    EventProperty _result;
+    HRESULT _hr = get_property(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICISimpleCondition::GetNot ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Not(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICISimpleCondition::PutNot ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Not(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIEventRuleParams wrapper method implementations
+//
+
+inline _bstr_t ICIEventRuleParams::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIEventRuleParams::PutName ( _bstr_t pVal ) {
+    HRESULT _hr = put_Name(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIEventRuleParams::GetDescription ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Description(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIEventRuleParams::PutDescription ( _bstr_t pVal ) {
+    HRESULT _hr = put_Description(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIEventRuleParams::GetEnabled ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Enabled(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIEventRuleParams::PutEnabled ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_Enabled(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICITimerEventRuleParams wrapper method implementations
+//
+
+inline _variant_t ICITimerEventRuleParams::GetTimeStart ( ) {
+    VARIANT _result;
+    VariantInit(&_result);
+    HRESULT _hr = get_TimeStart(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _variant_t(_result, false);
+}
+
+inline void ICITimerEventRuleParams::PutTimeStart ( const _variant_t & pVal ) {
+    HRESULT _hr = put_TimeStart(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetDayOfMonth ( ) {
+    long _result = 0;
+    HRESULT _hr = get_DayOfMonth(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutDayOfMonth ( long pVal ) {
+    HRESULT _hr = put_DayOfMonth(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetMonthIndex ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MonthIndex(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutMonthIndex ( long pVal ) {
+    HRESULT _hr = put_MonthIndex(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetWeekDayIndex ( ) {
+    long _result = 0;
+    HRESULT _hr = get_WeekDayIndex(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutWeekDayIndex ( long pVal ) {
+    HRESULT _hr = put_WeekDayIndex(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetDayIndex ( ) {
+    long _result = 0;
+    HRESULT _hr = get_DayIndex(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutDayIndex ( long pVal ) {
+    HRESULT _hr = put_DayIndex(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetMonthPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MonthPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutMonthPeriod ( long pVal ) {
+    HRESULT _hr = put_MonthPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetWeekPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_WeekPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutWeekPeriod ( long pVal ) {
+    HRESULT _hr = put_WeekPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetDayPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_DayPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutDayPeriod ( long pVal ) {
+    HRESULT _hr = put_DayPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICITimerEventRuleParams::GetFixedDate ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_FixedDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutFixedDate ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_FixedDate(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline Recurrence ICITimerEventRuleParams::GetRecurrence ( ) {
+    Recurrence _result;
+    HRESULT _hr = get_Recurrence(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutRecurrence ( Recurrence pVal ) {
+    HRESULT _hr = put_Recurrence(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetCustomPeriod ( ) {
+    long _result = 0;
+    HRESULT _hr = get_CustomPeriod(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutCustomPeriod ( long pVal ) {
+    HRESULT _hr = put_CustomPeriod(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline long ICITimerEventRuleParams::GetWeekdays ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Weekdays(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICITimerEventRuleParams::PutWeekdays ( long pVal ) {
+    HRESULT _hr = put_Weekdays(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline DATE ICITimerEventRuleParams::GetNextRun ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_NextRun(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface ICIFolderMonitorEventRuleParams wrapper method implementations
+//
+
+inline long ICIFolderMonitorEventRuleParams::GetCheckHealthInterval ( ) {
+    long _result = 0;
+    HRESULT _hr = get_CheckHealthInterval(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIFolderMonitorEventRuleParams::PutCheckHealthInterval ( long pVal ) {
+    HRESULT _hr = put_CheckHealthInterval(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIFolderMonitorEventRuleParams::GetCheckHealth ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_CheckHealth(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIFolderMonitorEventRuleParams::PutCheckHealth ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_CheckHealth(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline VARIANT_BOOL ICIFolderMonitorEventRuleParams::GetIncludeSubfolders ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_IncludeSubfolders(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void ICIFolderMonitorEventRuleParams::PutIncludeSubfolders ( VARIANT_BOOL pVal ) {
+    HRESULT _hr = put_IncludeSubfolders(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t ICIFolderMonitorEventRuleParams::GetPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Path(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void ICIFolderMonitorEventRuleParams::PutPath ( _bstr_t pVal ) {
+    HRESULT _hr = put_Path(pVal);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+//
+// interface ICIPGPKeyInfo wrapper method implementations
+//
+
+inline _bstr_t ICIPGPKeyInfo::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICIPGPKeyInfo::GetDescription ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Description(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICIPGPKeyInfo::GetID ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline VARIANT_BOOL ICIPGPKeyInfo::GetPrivate ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_Private(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long ICIPGPKeyInfo::GetSize ( ) {
+    long _result = 0;
+    HRESULT _hr = get_Size(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE ICIPGPKeyInfo::GetCreationDate ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_CreationDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline VARIANT_BOOL ICIPGPKeyInfo::GetNeverExpires ( ) {
+    VARIANT_BOOL _result = 0;
+    HRESULT _hr = get_NeverExpires(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline DATE ICIPGPKeyInfo::GetExpirationDate ( ) {
+    DATE _result = 0;
+    HRESULT _hr = get_ExpirationDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+//
+// interface ICIReportInfo wrapper method implementations
+//
+
+inline _bstr_t ICIReportInfo::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICIReportInfo::GetDefinitionPath ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_DefinitionPath(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface ICIEventInfo wrapper method implementations
+//
+
+inline EventType ICIEventInfo::Gettype ( ) {
+    EventType _result;
+    HRESULT _hr = get_type(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICIEventInfo::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface ICISSHKeyInfo wrapper method implementations
+//
+
+inline long ICISSHKeyInfo::GetID ( ) {
+    long _result = 0;
+    HRESULT _hr = get_ID(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t ICISSHKeyInfo::GetName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t ICISSHKeyInfo::GetFingerprint ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Fingerprint(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}

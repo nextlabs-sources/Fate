@@ -1,0 +1,22 @@
+
+TARGETS = \
+	prod/pep/endpoint/wde/TagOnUsage \
+	prod/pep/common/nl_device \
+	prod/pep/endpoint/wde/BasePEP \
+	prod/pep/endpoint/wde/BasePEPPlugin \
+	prod/pep/endpoint/wde/ScreenCapture/SCE \
+	prod/pep/endpoint/wde/ScreenCapture/SCEKeeper \
+	prod/pep/endpoint/wde/ScreenCapture/elevate \
+	prod/pep/endpoint/wde/ControlPanel/enhancement \
+	prod/pep/endpoint/wde/ControlPanel/diagnostic \
+	prod/pep/endpoint/wde/ControlPanel/dialog \
+	prod/pep/endpoint/wde/ControlPanel/manager \
+	prod/pep/endpoint/wde/ControlPanel/notification \
+	prod/pep/endpoint/wde/ControlPanel/pcplugin \
+	prod/pep/endpoint/wde/ControlPanel/utility \
+	prod/pep/endpoint/wde/iePEP \
+	prod/pep/endpoint/wde/NLVisualLabelingPA \
+	prod/pep/endpoint/wde/NLVisualLabelingPA/subModule/NLVLViewPrint \
+	prod/pep/endpoint/wde/OutlookAddin \
+	prod/pep/endpoint/wde/cbPep \
+	prod/pep/endpoint/adobepep/ForceAdobePEP

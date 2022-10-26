@@ -1,0 +1,6 @@
+; msoPEP.def : Declares the module parameters.
+
+LIBRARY      "msoPEP.DLL"
+
+EXPORTS
+	HDRObligation	PRIVATE

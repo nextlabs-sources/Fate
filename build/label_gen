@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# A more generic label generator, based on the original LFSE build_publish
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR";
+    exit 1;
+fi
+
+if [ $# -lt 1 ] ; then
+    echo
+    echo "Usage: $0 product [targets]"
+    echo
+    exit 1;
+fi
+
+product=$1;
+
+if [ ! -d ${NLENFORCERSDIR}/prods/$product ]; then
+   echo "Invalid product : $product"
+   echo "Usage: $0 product [targets]"
+   echo
+   exit 1;
+fi 
+
+shift 1;
+
+target=$1;
+
+configfile=${NLENFORCERSDIR}/prods/$product/$product.cfg;
+p4viewfile=${NLENFORCERSDIR}/prods/$product/p4view;
+
+# You can customize here
+function process_key_value() {
+  if [ "$key" == "LABEL_TEMPLATE" ] ; then
+      export LABEL_TEMPLATE=${value};
+  fi
+}
+
+# Not using the cat and pipe since it will create a 
+# subshell
+exec<$configfile
+  while read line
+    do
+      # Strip out the comment
+      line=`echo $line | grep -v "^#"`;
+      # Strip out empty lines
+      if [ -n "$line" ]; then 
+        key=`echo $line   | cut -d'=' -f1`
+        value=`echo $line | cut -d'=' -f2`
+        key=`echo $key    | sed "s/[:space:]*$//g"`
+        key=`echo $key    | sed "s/^[:space:]*//g"`
+        value=`echo $value| sed "s/^[:space:]*//g"`
+        # Get the key value pair for each setting
+        if [ -n "key" ] && [ -n "$value" ] ; then
+           process_key_value "$key" "$value"
+        fi 
+      fi
+    done
+
+#generate new label name
+cur_date=`date +%m_%d_%y`
+next_label_name=$product.${cur_date}
+
+# New name to save typing
+echo "Making label $next_label_name from $LABEL_TEMPLATE";
+p4 label -o -t $LABEL_TEMPLATE $next_label_name | p4 label -i
+
+# Tagging each line in the p4view
+exec<$p4viewfile
+  while read line
+    do
+      # Strip out the comment
+      line=`echo $line | grep -v "^#"`;
+      # Strip out the '-'
+      line=`echo $line | grep -v "^-"`;
+      # Strip out empty lines
+      if [ -n "$line" ]; then 
+        echo "tagging $next_label_name to $line";
+        p4 tag -l $next_label_name $line >/dev/null
+      fi
+    done
+

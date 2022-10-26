@@ -1,0 +1,10 @@
+EXPORTS
+	TRANSPORT_Cli_Initialize
+	TRANSPORT_Serv_Initialize
+	TRANSPORT_Serv_GetNextRequest
+	TRANSPORT_GetRecvLength
+	TRANSPORT_Recvn
+	TRANSPORT_Sendn
+	TRANSPORT_Close
+	TRANSPORT_MemoryFree
+	NL_TRANSPORT_Shutdown

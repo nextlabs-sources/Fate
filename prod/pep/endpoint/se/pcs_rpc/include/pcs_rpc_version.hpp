@@ -1,0 +1,9 @@
+
+#ifndef __PCS_IDL_VERSION_HPP__
+#define __PCS_IDL_VERSION_HPP__
+
+#define PCS_IDL_VERSION_MAJOR 1
+#define PCS_IDL_VERSION_MINOR 0
+
+#endif
+

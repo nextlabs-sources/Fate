@@ -1,0 +1,396 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.00.50727.762 (2f237b52).
+//
+// vbscript.tlh
+//
+// C++ source equivalent of Win32 type library ./vbscript.tlb
+// compiler-generated file created 11/18/09 at 23:19:38 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace VBScriptRegEx {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("3f4daca7-160d-11d2-a8e9-00104b365c9f"))
+/* LIBID */ __VBScript_RegExp_55;
+struct __declspec(uuid("3f4daca0-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IRegExp;
+struct __declspec(uuid("3f4daca1-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IMatch;
+struct __declspec(uuid("3f4daca2-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IMatchCollection;
+struct __declspec(uuid("3f4dacb0-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IRegExp2;
+struct __declspec(uuid("3f4dacb1-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IMatch2;
+struct __declspec(uuid("3f4dacb2-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ IMatchCollection2;
+struct __declspec(uuid("3f4dacb3-160d-11d2-a8e9-00104b365c9f"))
+/* dual interface */ ISubMatches;
+struct /* coclass */ RegExp;
+struct /* coclass */ Match;
+struct /* coclass */ MatchCollection;
+struct /* coclass */ SubMatches;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(IRegExp, __uuidof(IRegExp));
+_COM_SMARTPTR_TYPEDEF(IMatch, __uuidof(IMatch));
+_COM_SMARTPTR_TYPEDEF(IMatchCollection, __uuidof(IMatchCollection));
+_COM_SMARTPTR_TYPEDEF(IRegExp2, __uuidof(IRegExp2));
+_COM_SMARTPTR_TYPEDEF(IMatch2, __uuidof(IMatch2));
+_COM_SMARTPTR_TYPEDEF(IMatchCollection2, __uuidof(IMatchCollection2));
+_COM_SMARTPTR_TYPEDEF(ISubMatches, __uuidof(ISubMatches));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("3f4daca0-160d-11d2-a8e9-00104b365c9f"))
+IRegExp : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetPattern,put=PutPattern))
+    _bstr_t Pattern;
+    __declspec(property(get=GetIgnoreCase,put=PutIgnoreCase))
+    VARIANT_BOOL IgnoreCase;
+    __declspec(property(get=GetGlobal,put=PutGlobal))
+    VARIANT_BOOL Global;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetPattern ( );
+    void PutPattern (
+        _bstr_t pPattern );
+    VARIANT_BOOL GetIgnoreCase ( );
+    void PutIgnoreCase (
+        VARIANT_BOOL pIgnoreCase );
+    VARIANT_BOOL GetGlobal ( );
+    void PutGlobal (
+        VARIANT_BOOL pGlobal );
+    IDispatchPtr Execute (
+        _bstr_t sourceString );
+    VARIANT_BOOL Test (
+        _bstr_t sourceString );
+    _bstr_t Replace (
+        _bstr_t sourceString,
+        _bstr_t replaceString );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Pattern (
+        /*[out,retval]*/ BSTR * pPattern ) = 0;
+      virtual HRESULT __stdcall put_Pattern (
+        /*[in]*/ BSTR pPattern ) = 0;
+      virtual HRESULT __stdcall get_IgnoreCase (
+        /*[out,retval]*/ VARIANT_BOOL * pIgnoreCase ) = 0;
+      virtual HRESULT __stdcall put_IgnoreCase (
+        /*[in]*/ VARIANT_BOOL pIgnoreCase ) = 0;
+      virtual HRESULT __stdcall get_Global (
+        /*[out,retval]*/ VARIANT_BOOL * pGlobal ) = 0;
+      virtual HRESULT __stdcall put_Global (
+        /*[in]*/ VARIANT_BOOL pGlobal ) = 0;
+      virtual HRESULT __stdcall raw_Execute (
+        /*[in]*/ BSTR sourceString,
+        /*[out,retval]*/ IDispatch * * ppMatches ) = 0;
+      virtual HRESULT __stdcall raw_Test (
+        /*[in]*/ BSTR sourceString,
+        /*[out,retval]*/ VARIANT_BOOL * pMatch ) = 0;
+      virtual HRESULT __stdcall raw_Replace (
+        /*[in]*/ BSTR sourceString,
+        /*[in]*/ BSTR replaceString,
+        /*[out,retval]*/ BSTR * pDestString ) = 0;
+};
+
+struct __declspec(uuid("3f4daca1-160d-11d2-a8e9-00104b365c9f"))
+IMatch : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetValue))
+    _bstr_t Value;
+    __declspec(property(get=GetFirstIndex))
+    long FirstIndex;
+    __declspec(property(get=GetLength))
+    long Length;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetValue ( );
+    long GetFirstIndex ( );
+    long GetLength ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Value (
+        /*[out,retval]*/ BSTR * pValue ) = 0;
+      virtual HRESULT __stdcall get_FirstIndex (
+        /*[out,retval]*/ long * pFirstIndex ) = 0;
+      virtual HRESULT __stdcall get_Length (
+        /*[out,retval]*/ long * pLength ) = 0;
+};
+
+struct __declspec(uuid("3f4daca2-160d-11d2-a8e9-00104b365c9f"))
+IMatchCollection : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetCount))
+    long Count;
+    __declspec(property(get=GetItem))
+    IDispatchPtr Item[];
+    __declspec(property(get=Get_NewEnum))
+    IUnknownPtr _NewEnum;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr GetItem (
+        long index );
+    long GetCount ( );
+    IUnknownPtr Get_NewEnum ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Item (
+        /*[in]*/ long index,
+        /*[out,retval]*/ IDispatch * * ppMatch ) = 0;
+      virtual HRESULT __stdcall get_Count (
+        /*[out,retval]*/ long * pCount ) = 0;
+      virtual HRESULT __stdcall get__NewEnum (
+        /*[out,retval]*/ IUnknown * * ppEnum ) = 0;
+};
+
+struct __declspec(uuid("3f4dacb0-160d-11d2-a8e9-00104b365c9f"))
+IRegExp2 : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetPattern,put=PutPattern))
+    _bstr_t Pattern;
+    __declspec(property(get=GetIgnoreCase,put=PutIgnoreCase))
+    VARIANT_BOOL IgnoreCase;
+    __declspec(property(get=GetGlobal,put=PutGlobal))
+    VARIANT_BOOL Global;
+    __declspec(property(get=GetMultiline,put=PutMultiline))
+    VARIANT_BOOL Multiline;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetPattern ( );
+    void PutPattern (
+        _bstr_t pPattern );
+    VARIANT_BOOL GetIgnoreCase ( );
+    void PutIgnoreCase (
+        VARIANT_BOOL pIgnoreCase );
+    VARIANT_BOOL GetGlobal ( );
+    void PutGlobal (
+        VARIANT_BOOL pGlobal );
+    VARIANT_BOOL GetMultiline ( );
+    void PutMultiline (
+        VARIANT_BOOL pMultiline );
+    IDispatchPtr Execute (
+        _bstr_t sourceString );
+    VARIANT_BOOL Test (
+        _bstr_t sourceString );
+    _bstr_t Replace (
+        _bstr_t sourceString,
+        const _variant_t & replaceVar );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Pattern (
+        /*[out,retval]*/ BSTR * pPattern ) = 0;
+      virtual HRESULT __stdcall put_Pattern (
+        /*[in]*/ BSTR pPattern ) = 0;
+      virtual HRESULT __stdcall get_IgnoreCase (
+        /*[out,retval]*/ VARIANT_BOOL * pIgnoreCase ) = 0;
+      virtual HRESULT __stdcall put_IgnoreCase (
+        /*[in]*/ VARIANT_BOOL pIgnoreCase ) = 0;
+      virtual HRESULT __stdcall get_Global (
+        /*[out,retval]*/ VARIANT_BOOL * pGlobal ) = 0;
+      virtual HRESULT __stdcall put_Global (
+        /*[in]*/ VARIANT_BOOL pGlobal ) = 0;
+      virtual HRESULT __stdcall get_Multiline (
+        /*[out,retval]*/ VARIANT_BOOL * pMultiline ) = 0;
+      virtual HRESULT __stdcall put_Multiline (
+        /*[in]*/ VARIANT_BOOL pMultiline ) = 0;
+      virtual HRESULT __stdcall raw_Execute (
+        /*[in]*/ BSTR sourceString,
+        /*[out,retval]*/ IDispatch * * ppMatches ) = 0;
+      virtual HRESULT __stdcall raw_Test (
+        /*[in]*/ BSTR sourceString,
+        /*[out,retval]*/ VARIANT_BOOL * pMatch ) = 0;
+      virtual HRESULT __stdcall raw_Replace (
+        /*[in]*/ BSTR sourceString,
+        /*[in]*/ VARIANT replaceVar,
+        /*[out,retval]*/ BSTR * pDestString ) = 0;
+};
+
+struct __declspec(uuid("3f4dacb1-160d-11d2-a8e9-00104b365c9f"))
+IMatch2 : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetValue))
+    _bstr_t Value;
+    __declspec(property(get=GetFirstIndex))
+    long FirstIndex;
+    __declspec(property(get=GetLength))
+    long Length;
+    __declspec(property(get=GetSubMatches))
+    IDispatchPtr SubMatches;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetValue ( );
+    long GetFirstIndex ( );
+    long GetLength ( );
+    IDispatchPtr GetSubMatches ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Value (
+        /*[out,retval]*/ BSTR * pValue ) = 0;
+      virtual HRESULT __stdcall get_FirstIndex (
+        /*[out,retval]*/ long * pFirstIndex ) = 0;
+      virtual HRESULT __stdcall get_Length (
+        /*[out,retval]*/ long * pLength ) = 0;
+      virtual HRESULT __stdcall get_SubMatches (
+        /*[out,retval]*/ IDispatch * * ppSubMatches ) = 0;
+};
+
+struct __declspec(uuid("3f4dacb2-160d-11d2-a8e9-00104b365c9f"))
+IMatchCollection2 : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetItem))
+    IDispatchPtr Item[];
+    __declspec(property(get=GetCount))
+    long Count;
+    __declspec(property(get=Get_NewEnum))
+    IUnknownPtr _NewEnum;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr GetItem (
+        long index );
+    long GetCount ( );
+    IUnknownPtr Get_NewEnum ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Item (
+        /*[in]*/ long index,
+        /*[out,retval]*/ IDispatch * * ppMatch ) = 0;
+      virtual HRESULT __stdcall get_Count (
+        /*[out,retval]*/ long * pCount ) = 0;
+      virtual HRESULT __stdcall get__NewEnum (
+        /*[out,retval]*/ IUnknown * * ppEnum ) = 0;
+};
+
+struct __declspec(uuid("3f4dacb3-160d-11d2-a8e9-00104b365c9f"))
+ISubMatches : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetItem))
+    _variant_t Item[];
+    __declspec(property(get=GetCount))
+    long Count;
+    __declspec(property(get=Get_NewEnum))
+    IUnknownPtr _NewEnum;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _variant_t GetItem (
+        long index );
+    long GetCount ( );
+    IUnknownPtr Get_NewEnum ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Item (
+        /*[in]*/ long index,
+        /*[out,retval]*/ VARIANT * pSubMatch ) = 0;
+      virtual HRESULT __stdcall get_Count (
+        /*[out,retval]*/ long * pCount ) = 0;
+      virtual HRESULT __stdcall get__NewEnum (
+        /*[out,retval]*/ IUnknown * * ppEnum ) = 0;
+};
+
+struct __declspec(uuid("3f4daca4-160d-11d2-a8e9-00104b365c9f"))
+RegExp;
+    // [ default ] interface IRegExp2
+
+struct __declspec(uuid("3f4daca5-160d-11d2-a8e9-00104b365c9f"))
+Match;
+    // [ default ] interface IMatch2
+
+struct __declspec(uuid("3f4daca6-160d-11d2-a8e9-00104b365c9f"))
+MatchCollection;
+    // [ default ] interface IMatchCollection2
+
+struct __declspec(uuid("3f4dacc0-160d-11d2-a8e9-00104b365c9f"))
+SubMatches;
+    // [ default ] interface ISubMatches
+
+//
+// Wrapper method implementations
+//
+
+#include ".\vbscript.tli"
+
+} // namespace VBScriptRegEx
+
+#pragma pack(pop)

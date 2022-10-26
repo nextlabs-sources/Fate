@@ -1,0 +1,299 @@
+/////////////////////////////////////////////////////////////////////////////
+//                                                                            
+//  File Name:    Setup.rul                                                   
+//                                                                            
+//  Description:  InstallShield script                                          
+//                                                                            
+//                                                                                                               
+/////////////////////////////////////////////////////////////////////////////
+
+// Include header files /////////////////////////////////////////////////////
+#include "ifx.h"
+#include "policycontroller.rul"
+#include "include/servicecontrol.h"
+#include "setupfiles.rul"
+#include "include/logging.h"                   
+#include "setup.h"
+         
+function OnFilesInUse(szMessage)
+begin
+return IDIGNORE;
+end;
+
+function OnRMFilesInUse(szMessage)
+begin
+return IDIGNORE;
+end;       
+
+function OnEnd()
+
+begin  
+	MessageBox("debug: deleting uninstall",INFORMATION);
+     if ( !BATCH_INSTALL ) then
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+        RegDBDeleteKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + PRODUCT_GUID);
+        DeleteDir( DISK1TARGET, ALLCONTENTS );
+    endif; 
+end;    
+
+
+function INT InsertDateToRegistry(hMSI, product, sVersion)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    NUMBER nvSize;     
+    STRING nowDate;  
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;      
+    STRING szName; 
+    NUMBER nType;        
+//    STRING nVersion;
+
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else 
+     	ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\"+product;
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif; 
+        szName="ProductCode";
+        nType = REGDB_STRING;
+    	nvResult = RegDBGetKeyValueEx(sKey, szName, nType, svResult, nvSize);
+ 
+    	if (nvResult < 0 )then   
+    		WriteToLogFile(hMSI, "Unable to retrieve product code of "+product+"!!");
+    		return 0;
+    	endif;              
+    	
+/*    	szName="ProductVersion";
+        nType = REGDB_STRING;
+    	nvResult = RegDBGetKeyValueEx(sKey, szName, nType, nVersion, nvSize);
+ 
+    	if (nvResult < 0 )then   
+    		WriteToLogFile(hMSI, "Unable to retrieve Version of "+product+"!!");
+    		return 0;
+    	endif;    
+ */   	
+    	
+    	nowDate = sYear+sMonth+sDate;                           
+		sKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"+svResult;    	                             
+    
+    	WriteToLogFile (hMSI, "Writing " + sKey + " with " + nowDate + " and " + sVersion);
+    	
+    	nvResult = RegDBSetKeyValueEx(sKey,"InstallDate",REGDB_STRING,nowDate,-1);
+    	if (nvResult < 0 )then   
+    		WriteToLogFile(hMSI, "Unable to set installation date of "+product+"!!");
+    		return 0;
+    	endif;    
+    	
+    	nvResult = RegDBSetKeyValueEx(sKey,"DisplayVersion",REGDB_STRING,sVersion,-1);
+    	if (nvResult < 0 )then   
+    		WriteToLogFile(hMSI, "Unable to set display version of "+product+"!!");
+    		return 0;
+    	endif;
+    	
+    	
+    endif; 
+    return ERROR_SUCCESS;
+    
+end;
+
+
+
+function INT KMC_InsertDateToRegistry(hMSI)
+	NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;
+    
+begin
+
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                 
+	WriteToLogFile(hMSI, "Updating KMC date ...");
+    sKey = "Enterprise DLP\\KeyManagementClient";
+    nvResult=InsertDateToRegistry(hMSI, sKey, nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update KMC date");
+    
+    endif;            
+    return nvResult;
+    
+
+end;      
+
+function INT LME_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                
+	WriteToLogFile(hMSI, "Updating LME date ...");
+    sKey = "Enterprise DLP\\Live Meeting Enforcer";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update LME date");
+    
+    endif;            
+    return nvResult;
+    
+end;    
+
+function INT NE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey; 
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);
+                                            
+	WriteToLogFile(hMSI, "Updating NE date ...");
+    sKey = "Enterprise DLP\\Network Enforcer";
+
+    nvResult=InsertDateToRegistry(hMSI, sKey, nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update NE date");
+    
+    endif;            
+    return nvResult;
+    
+end;
+
+function INT SE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                
+	WriteToLogFile(hMSI, "Updating SE date ...");
+    sKey = "Enterprise DLP\\System Encryption";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update SE date");
+    
+    endif;            
+    return nvResult;
+    
+end;  
+
+function INT WDE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                 
+	WriteToLogFile(hMSI, "Updating WDE date ...");
+    sKey = "Compliant Enterprise\\Desktop Enforcer";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update WDE date");
+    
+    endif;            
+    return nvResult;
+    
+end;   
+
+function INT PC_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                
+	WriteToLogFile(hMSI, "Updating PC date ...");
+    sKey = "Compliant Enterprise\\Policy Controller";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update PC date");
+    
+    endif;            
+    return nvResult;
+    
+end;       
+
+function INT OCE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                             
+	WriteToLogFile(hMSI, "Updating OCE date ...");
+    sKey = "Enterprise DLP\\Office Communicator Enforcer";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update OCE date");
+    
+    endif;            
+    return nvResult;
+    
+end;
+
+function INT OE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                 
+	WriteToLogFile(hMSI, "Updating OC date ...");
+    sKey = "Compliant Enterprise\\Outlook Enforcer";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update OE date");
+    
+    endif;            
+    return nvResult;
+    
+end;     
+
+function INT RDE_InsertDateToRegistry(hMSI)
+    NUMBER nvResult;                                            
+    STRING sKey;
+    STRING nVersion;
+    NUMBER nBuffer;    
+begin     
+	MsiGetProperty(hMSI, "CustomActionData", nVersion, nBuffer);
+    //StrSub(nVersion,nVersion,1,StrLength(nVersion)-1);                                                 
+	WriteToLogFile(hMSI, "Updating RDE date ...");
+    sKey = "Compliant Enterprise\\Removable Device Enforcer";
+    nvResult=InsertDateToRegistry(hMSI, sKey,nVersion);
+    if (nvResult < 0) then
+    	WriteToLogFile(hMSI, "Failed to update RDE date");
+    
+    endif;            
+    return nvResult;
+    
+end;

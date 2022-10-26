@@ -1,0 +1,92 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 15.00.21022.08 (801f18a5).
+//
+// c:\source\import\debug\clientftpcomlib.tlh
+//
+// C++ source equivalent of Win32 type library ClientFTPCOMLib.tlb
+// compiler-generated file created 06/29/11 at 17:39:23 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace CLIENTFTPCOMLIBLib {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("16ffe4ee-ca8f-4222-a428-85de3200f196"))
+/* LIBID */ __CLIENTFTPCOMLIBLib;
+struct /* coclass */ ClientFTPEngine;
+struct __declspec(uuid("4176e861-3f5b-4cf2-bf6c-b8374dfb0999"))
+/* dual interface */ IClientFTPEngine;
+enum __MIDL___MIDL_itf_ClientFTPCOMLib_0000_0000_0001;
+typedef enum __MIDL___MIDL_itf_ClientFTPCOMLib_0000_0000_0001 ProtocolEnum;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(IClientFTPEngine, __uuidof(IClientFTPEngine));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("b5a782cd-d82e-4f05-b25e-d5bdf83a43e2"))
+ClientFTPEngine;
+    // [ default ] interface IClientFTPEngine
+
+struct __declspec(uuid("4176e861-3f5b-4cf2-bf6c-b8374dfb0999"))
+IClientFTPEngine : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    HRESULT Upload (
+        _bstr_t strLocalPath,
+        ProtocolEnum nProtocol,
+        _bstr_t strUser,
+        _bstr_t strPassword,
+        _bstr_t strHost,
+        long nPort,
+        _bstr_t strRemotePath );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Upload (
+        /*[in]*/ BSTR strLocalPath,
+        /*[in]*/ ProtocolEnum nProtocol,
+        /*[in]*/ BSTR strUser,
+        /*[in]*/ BSTR strPassword,
+        /*[in]*/ BSTR strHost,
+        /*[in]*/ long nPort,
+        /*[in]*/ BSTR strRemotePath ) = 0;
+};
+
+enum __MIDL___MIDL_itf_ClientFTPCOMLib_0000_0000_0001
+{
+    protocolFTP = 0,
+    protocolFTPS_IMPLICIT = 1,
+    protocolFTPS_EXPLICIT = 2,
+    protocolSFTP2 = 3,
+    protocolHTTP = 4,
+    protocolHTTPS = 5,
+    protocolSOCKS4 = 6,
+    protocolSOCKS5 = 7,
+    protocolFTPS_AUTH_TLS = 8
+};
+
+//
+// Wrapper method implementations
+//
+
+#include ".\import\clientftpcomlib.tli"
+
+} // namespace CLIENTFTPCOMLIBLib
+
+#pragma pack(pop)

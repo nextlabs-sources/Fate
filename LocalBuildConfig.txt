@@ -1,0 +1,34 @@
+
+subst /D x:
+subst /D o:
+subst /D p:
+
+subst x: "C:\Program Files (x86)\Microsoft Visual Studio 9.0"
+subst o: "c:\Program Files\\Microsoft SDKs\\Windows\v7.0"
+
+source ./setenv
+
+subst p: "c:\Program Files"
+export  JDKDIR="p:/Java/jdk1.8.0_261"
+
+export NLAdobePEPDir="$NLBUILDROOT/prod/pep/endpoint/adobepep/plugin/Samples/adobepep"
+export NLOfficePEPDir="$NLBUILDROOT/prod/pep/endpoint/NLOfficePEP"
+
+make BUILDTYPE=release TARGETENVARCH=x86 VERSION_BUILD=101
+make BUILDTYPE=release TARGETENVARCH=x64 VERSION_BUILD=101
+
+make BUILDTYPE=debug TARGETENVARCH=x86 VERSION_BUILD=101
+make BUILDTYPE=debug TARGETENVARCH=x64 VERSION_BUILD=101
+
+make BUILDTYPE=release TARGETENVARCH=x86 VERSION_BUILD=101 clean
+make BUILDTYPE=release TARGETENVARCH=x64 VERSION_BUILD=101 clean
+
+make BUILDTYPE=debug TARGETENVARCH=x86 VERSION_BUILD=101 clean
+make BUILDTYPE=debug TARGETENVARCH=x64 VERSION_BUILD=101 clean
+
+make BUILDTYPE=release TARGETENVARCH=x86 VERSION_BUILD=101 TARGETENV=win_x86
+make BUILDTYPE=release TARGETENVARCH=x64 VERSION_BUILD=101 TARGETENV=win_x64
+
+make BUILDTYPE=debug TARGETENVARCH=x86 VERSION_BUILD=101 TARGETENV=win_x86
+make BUILDTYPE=debug TARGETENVARCH=x64 VERSION_BUILD=101 TARGETENV=win_x64
+ 

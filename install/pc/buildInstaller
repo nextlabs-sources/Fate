@@ -1,0 +1,192 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	This script is used to build PC installers and publish build binaries to Ivy.
+#
+# USAGE:
+#	1. Running in Bash shell
+#		cd to root of source tree
+#		export NLEXTERNALDIR=c:/hudson/jobs/external_latest/workspace
+#		export BUILD_NUMBER=10001
+#		source setEnv
+#		./configure
+#		source build.config
+#		cd $NLBUILDROOT/install/pc
+#		./buildInstaller | tee buildInstaller.log
+
+
+#
+# Check for errors
+#
+
+if [ "$NLBUILDROOT" == "" ]; then
+	echo "### ERROR: Missing \$NLBUILDROOT directory"
+	exit 1
+fi
+
+if [ ! -d $NLBUILDROOT ] && [ ! -d $NLBUILDROOT/ ]; then
+	echo "### ERROR: Build root $NLBUILDROOT does not exist"
+	exit 1
+fi
+
+if [ "$NLEXTERNALDIR" == "" ]; then
+	echo "### ERROR: Missing \$NLEXTERNALDIR directory"
+	exit 1
+fi
+
+if [ ! -d $NLEXTERNALDIR ]; then
+	echo "### ERROR: External directory $NLEXTERNALDIR does not exist"
+	exit 1
+fi
+
+if [ "$VERSION_MAJOR_PC" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_MAJOR_PC"
+	exit 1
+fi
+
+if [ "$VERSION_MINOR_PC" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_MINOR_PC"
+	exit 1
+fi
+
+if [ "$VERSION_MAINTENANCE_PC" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_MAINTENANCE_PC"
+	exit 1
+fi
+
+if [ "$VERSION_PATCH_PC" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_PATCH_PC"
+	exit 1
+fi
+
+if [ "$VERSION_BUILD" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_BUILD"
+	exit 1
+fi
+
+if [ "$VERSION_BUILD_SHORT" == "" ]; then
+	echo "### ERROR: Missing \$VERSION_BUILD_SHORT"
+	exit 1
+fi
+
+if [ "$BUILD_NUMBER" == "" ]; then
+	echo "### ERROR: Missing \$BUILD_NUMBER"
+	exit 1
+fi
+
+
+#
+# Prepare environment
+#
+
+set -x
+JDK_DIR=$NLEXTERNALDIR/j2sdk/jdk1.6.0_18
+JAVA_HOME=$NLEXTERNALDIR/j2sdk/jdk1.6.0_18
+
+JAR=$JDK_DIR/bin/jar.exe
+
+ISCMDBLD=/cygdrive/C/Program\ Files/InstallShield/2010\ StandaloneBuild/System/IsCmdBld.exe
+ANT=$NLEXTERNALDIR/apache-ant/apache-ant-1.7.0/bin/ant
+
+VERSION_STR=$VERSION_MAJOR_PC.$VERSION_MINOR_PC.$VERSION_MAINTENANCE_PC.$VERSION_PATCH_PC
+NLBUILDROOT_DOS=${NLBUILDROOT/\/cygdrive\/c/c:}
+NLBUILDROOT_DOS=${NLBUILDROOT_DOS//\//\\}
+INSTALL_PC_DIR=$NLBUILDROOT/install/pc
+INSTALL_PC_DIR_DOS=$NLBUILDROOT_DOS\\install\\pc
+BUILD_INSTALL_DIR=$NLBUILDROOT/build_install
+
+MSI_FILE32_EDP=EDP-PolicyController-setup.msi
+MSI_FILE64_EDP=EDP-PolicyController-setup64.msi
+MSI_FILE32_CE=CE-PolicyController-setup.msi
+MSI_FILE64_CE=CE-PolicyController-setup64.msi
+MSI_FILE32_WFSE=CE-WFSE-PolicyController-setup.msi
+MSI_FILE64_WFSE=CE-WFSE-PolicyController-setup64.msi
+
+PACKAGE_FILE32_EDP=${MSI_FILE32_EDP%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+PACKAGE_FILE64_EDP=${MSI_FILE64_EDP%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+PACKAGE_FILE32_CE=${MSI_FILE32_CE%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+PACKAGE_FILE64_CE=${MSI_FILE64_CE%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+PACKAGE_FILE32_WFSE=${MSI_FILE32_WFSE%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+PACKAGE_FILE64_WFSE=${MSI_FILE64_WFSE%\.*}-$VERSION_STR-$VERSION_BUILD_SHORT-$(date +"%Y%m%d%H%M").zip
+
+PACKAGE32_EDP=$BUILD_INSTALL_DIR/Package32-edp
+PACKAGE64_EDP=$BUILD_INSTALL_DIR/Package64-edp
+PACKAGE32_CE=$BUILD_INSTALL_DIR/Package32-ce
+PACKAGE64_CE=$BUILD_INSTALL_DIR/Package64-ce
+PACKAGE32_WFSE=$BUILD_INSTALL_DIR/Package32-wfse
+PACKAGE64_WFSE=$BUILD_INSTALL_DIR/Package64-wfse
+
+export VERSION="Build $BUILD_NUMBER PCV"
+export BUILD_DIR="$NLBUILDROOT_DOS\\build_install"
+export DEPLOY_DIR=$BUILD_DIR
+export EDPDIR=$NLBUILDROOT
+export NLENFORCERSDIR=$NLBUILDROOT 
+
+echo "INFO: Get files on Ivy"
+cd $INSTALL_PC_DIR
+"$ANT" -Dbuild.number=$BUILD_NUMBER compile_5.5 || exit $?
+rm -rf $BUILD_INSTALL_DIR
+mv $INSTALL_PC_DIR/build $BUILD_INSTALL_DIR
+
+echo "INFO: Set environment"
+cd $NLBUILDROOT
+bash -f $NLBUILDROOT/build/setwindowenv.sh $NLBUILDROOT
+
+echo "INFO: Prepare files"
+mkdir -p $NLBUILDROOT/bin
+#cp -pR c:/hudson/jobs/pcv_endpoint_SiriusR2_Office2010_1108/workspace/bin/* $NLBUILDROOT/bin
+source $INSTALL_PC_DIR/build_install_prep.sh
+
+echo "INFO: Generate ReadMe.txt"
+README_FILE=$BUILD_INSTALL_DIR/main/resource/ReadMe.txt
+if [ -e $README_FILE ]; then
+	rm -f $README_FILE
+fi
+echo "Policy Controller v$VERSION_STR ($BUILD_NUMBER)" > $README_FILE
+
+echo "INFO: Generate version.jar"
+MANIFEST_FILE=$BUILD_INSTALL_DIR/MANIFEST.MF
+PROP_FILE=$BUILD_INSTALL_DIR/META-INF/com/nextlabs/version/version.properties
+echo "Manifest-Version: 1.0" > $MANIFEST_FILE
+echo "Created-By: NextLabs Inc." >> $MANIFEST_FILE
+mkdir -p $BUILD_INSTALL_DIR/META-INF/com/nextlabs/version
+echo "major=$VERSION_MAJOR_PC" > $PROP_FILE
+echo "minor=$VERSION_MINOR_PC" >> $PROP_FILE
+echo "maintenance=$VERSION_MAINTENANCE_PC" >> $PROP_FILE
+echo "patch=$VERSION_PATCH_PC" >> $PROP_FILE
+echo "build=$BUILD_NUMBER" >> $PROP_FILE
+cd $BUILD_INSTALL_DIR; "$JAR" cvfm version.jar MANIFEST.MF META-INF
+
+echo "INFO: Build installers"
+chmod 777 "$INSTALL_PC_DIR_DOS\\PolicyController_x64.ism"
+chmod 777 "$INSTALL_PC_DIR_DOS\\PolicyController_x86.ism"
+
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x64.ism" -a EnterpriseDLP64 -r EnterpriseDLP64 || exit $?
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x86.ism" -a EnterpriseDLP -r EnterpriseDLP || exit $?
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x64.ism" -a CompliantEnterprise64 -r CompliantEnterprise64 || exit $?
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x86.ism" -a CompliantEnterprise -r CompliantEnterprise || exit $?
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x64.ism" -a CompliantEnterpriseFileServer64 -r CompliantEnterpriseFileServer64 || exit $?
+"$ISCMDBLD" -p "$INSTALL_PC_DIR_DOS\\PolicyController_x86.ism" -a CompliantEnterpriseFileServer -r CompliantEnterpriseFileServer || exit $?
+
+echo "Package installers"
+mkdir $PACKAGE32_EDP
+mkdir $PACKAGE64_EDP
+mkdir $PACKAGE32_CE
+mkdir $PACKAGE64_CE
+mkdir $PACKAGE32_WFSE
+mkdir $PACKAGE64_WFSE
+
+cp -f $BUILD_INSTALL_DIR/main/installer/EnterpriseDLP/EnterpriseDLP/DiskImages/DISK1/$MSI_FILE32_EDP $PACKAGE32_EDP
+cp -f $BUILD_INSTALL_DIR/main/installer/EnterpriseDLP64/EnterpriseDLP64/DiskImages/DISK1/$MSI_FILE64_EDP $PACKAGE64_EDP
+cp -f $BUILD_INSTALL_DIR/main/installer/CompliantEnterprise/CompliantEnterprise/DiskImages/DISK1/$MSI_FILE32_CE $PACKAGE32_CE
+cp -f $BUILD_INSTALL_DIR/main/installer/CompliantEnterprise64/CompliantEnterprise64/DiskImages/DISK1/$MSI_FILE64_CE $PACKAGE64_CE
+cp -f $BUILD_INSTALL_DIR/main/installer/CompliantEnterpriseFileServer/CompliantEnterpriseFileServer/DiskImages/DISK1/$MSI_FILE32_WFSE $PACKAGE32_WFSE
+cp -f $BUILD_INSTALL_DIR/main/installer/CompliantEnterpriseFileServer64/CompliantEnterpriseFileServer64/DiskImages/DISK1/$MSI_FILE64_WFSE $PACKAGE64_WFSE
+
+cd $PACKAGE32_EDP; zip ../$PACKAGE_FILE32_EDP *
+cd $PACKAGE64_EDP; zip ../$PACKAGE_FILE64_EDP *
+cd $PACKAGE32_CE; zip ../$PACKAGE_FILE32_CE *
+cd $PACKAGE64_CE; zip ../$PACKAGE_FILE64_CE *
+cd $PACKAGE32_WFSE; zip ../$PACKAGE_FILE32_WFSE *
+cd $PACKAGE64_WFSE; zip ../$PACKAGE_FILE64_WFSE *
+set +x

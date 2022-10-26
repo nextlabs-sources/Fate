@@ -1,0 +1,2 @@
+findstr "failed, " *.log
+pause

@@ -1,0 +1,656 @@
+////////////////////////////////////////////////////////////////////////////////                                                                        
+//                                                                            
+//    File Name:  Setup.rul                                                   
+//                                                                            
+//  Description:  InstallShield script                                        
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// Include Ifx.h for built-in InstallScript function prototypes, for Windows 
+// Installer API function prototypes and constants, and to declare code for 
+// the OnBegin and OnEnd events.
+#include "ifx.h" 
+#include "include/servicecontrol.h" 
+#include "include/logging.h"
+#include "include/common.h"
+#define ENV_USER "USERNAME" 
+    // The keyword export identifies MyFunction() as an entry-point function.
+    // The argument it accepts must be a handle to the Installer database.
+    export prototype INT ISMSO2007(HWND);  
+    export prototype INT IsUACDisabled(HWND);
+	export prototype INT ValidateAdministrationPassword(HWND);
+	export prototype INT ConfigureOutlookEnforcer(HWND);
+	export prototype INT UnconfigureOutlookEnforcer(HWND);                                       
+    export prototype ExFn_GetEnvVar(HWND);                           
+    export prototype INT InsertDeleteInRunonce(HWND); 
+    export prototype INT InsertDateToRegistry(HWND);
+    export prototype INT StartEDPManager(HWND); 
+    export prototype INT StopEDPManager(HWND);
+    
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ISMSO2007(hMSI)
+//                                                                           
+//  Purpose:  This function is called to determine which version of the
+//            MS Office is installed on the client machine.             
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ISMSO2007(hMSI)     
+	WSTRING mso2007RegKeyName;
+	WSTRING mso2003RegKeyName;  
+	WSTRING msoRegEntryName;
+	NUMBER regDataType;
+	WSTRING regValue;
+	NUMBER regValueSize;     
+	NUMBER returnedResult;
+	WSTRING errString; 
+	WSTRING szUserName;
+	WSTRING systemUser;  
+	NUMBER nResult; 
+begin
+	RegDBSetDefaultRoot ( HKEY_LOCAL_MACHINE );
+	mso2007RegKeyName = "Software\\Microsoft\\Office\\12.0\\Outlook";
+	mso2003RegKeyName = "Software\\Microsoft\\Office\\11.0\\Outlook";
+	msoRegEntryName = "";
+	regDataType = REGDB_STRING;      
+	regValue = "";
+	regValueSize = -1; 
+	returnedResult = -1;
+	errString = "Return Result = %d";
+		                          
+	// First check if the MS Outlook 2007 exists
+	//returnedResult = RegDBGetKeyValueEx (mso2007RegKeyName, msoRegEntryName, regDataType, regValue, regValueSize);		                     
+   	returnedResult = RegDBQueryKeyCount (mso2007RegKeyName, REGDB_KEYS);
+   	//SprintfBox (INFORMATION, "Information", 
+    //            errString, returnedResult); 
+    if (returnedResult > 0) then
+       MsiSetProperty(hMSI, "ISMSO2007", "1");  
+       WriteToLogFile(hMSI, "MSO2007 exists with value " ^ regValue);
+       return ERROR_SUCCESS;
+    else
+        // Then check if MS Outlook 2003 exists 
+    	//returnedResult = RegDBGetKeyValueEx (mso2003RegKeyName, msoRegEntryName, regDataType, regValue, regValueSize);		                     
+    	returnedResult = RegDBQueryKeyCount (mso2003RegKeyName, REGDB_KEYS);
+    	//SprintfBox (INFORMATION, "Information", 
+        //            errString, returnedResult); 
+    	if (returnedResult > 0) then
+       		MsiSetProperty(hMSI, "ISMSO2003", "1");
+       		WriteToLogFile(hMSI, "MSO2003 exists with value " ^ regValue);
+       		return ERROR_SUCCESS;
+    	else                   
+    		// Neither version exists, return error
+    		WriteToLogFile(hMSI, "Neither MSO Versions Exists");
+           	//MsiGetProperty(hMSI, "USERNAME", szUserName, nLength); //the return result is "helpdesk"
+			GetEnvVar (ENV_USER, szUserName);
+       		systemUser = "SYSTEM";
+       		nResult =  StrCompare(szUserName, systemUser);
+       		if( nResult = 0 ) then 
+       			WriteToLogFile(hMSI, "Installation Failed : The installation failed because a supported version of Microsoft Outlook could not be found on this machine.  Please consult the installation documentation for the list of supported versions.");
+       		else 
+       			SprintfBox (SEVERE, "Installation Failed","The installation failed because a supported version of Microsoft Outlook could not be found on this machine.  Please consult the installation documentation for the list of supported versions."); 
+            endif; 
+            return ERROR_INSTALL_USEREXIT;
+       	endif;	
+    endif; 
+end;
+         
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  IsUACDisabled(hMSI)
+//                                                                           
+//  Purpose:  This function is called to determine whether UAC is disabled 
+//                         
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT IsUACDisabled(hMSI)     
+	WSTRING uacRegKeyName;  
+	WSTRING uacRegEntryName;
+	NUMBER regDataType;
+	WSTRING regValue;
+	NUMBER regValueSize;     
+	NUMBER returnedResult;
+	WSTRING errString;
+begin
+	RegDBSetDefaultRoot ( HKEY_LOCAL_MACHINE );
+	uacRegKeyName = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
+	uacRegEntryName = "EnableLUA";
+	regDataType = REGDB_STRING;      
+	regValue = "";
+	regValueSize = -1; 
+	returnedResult = -1;
+	errString = "Return Result = %d";
+	
+	WriteToLogFile(hMSI, "Start UAC Check");	                          
+	// First check if the MS Outlook 2007 exists
+	returnedResult = RegDBGetKeyValueEx (uacRegKeyName, uacRegEntryName, regDataType, regValue, regValueSize);		                     
+   	//SprintfBox (INFORMATION, "Information", 
+    //            errString, returnedResult);  
+    //   	SprintfBox (INFORMATION, "Reg Value", 
+    //            "Reg Value = %s", regValue);             
+    if (regValue != "0" && returnedResult == 0) then
+	   MessageBox("Please disable UAC and reboot before installing.", SEVERE);
+       return -1;
+    else
+       return ERROR_SUCCESS; 
+    endif; 
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateAdministrationPassword(hMSI)
+	INT result; 
+    STRING resultAsString;  
+    STRING UNINSTALL_PASSWORD;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateAdministrationPassword()");  
+	UNINSTALL_PASSWORD=GetProperty(hMSI,"UNINSTALL_PASSWORD");
+	if (UNINSTALL_PASSWORD = "") then
+		MessageBox("Please input password !!", INFORMATION);
+	    DenyNextDialog(hMSI);
+	    return ERROR_SUCCESS;
+	endif;
+	
+ 	result = StopService(hMSI);             
+
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password ! \nThe password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);
+	 		return result;	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	  
+	 		return result;                                          				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end;               
+
+
+function INT ConfigureOutlookEnforcer(hMSI)
+  string Installdir,res_string;
+  NUMBER pathSize;  
+  INT nResult;
+begin  
+ //pathSize=MAX_PATH;                                 
+ MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize);                               
+ WriteToLogFile(hMSI, "OE:"+Installdir^"bin"^"NLRegisterPlugins.exe --oe --register");
+ nResult = LaunchAppAndWait(Installdir^"bin"^"NLRegisterPlugins.exe", "--oe --register", WAIT | LAAW_OPTION_HIDDEN);
+ if(nResult<0) then
+   NumToStr(res_string,nResult);
+   WriteToLogFile(hMSI, "OE Result:"+res_string);  
+   ShowModalDialog(hMSI, "Error", "An unexpected error occured.("+res_string+") NLRegisterPlugins.exe could not be executed!"+Installdir+"Nothing", SEVERE);	 
+ endif;	
+ return nResult;
+end;   
+
+function INT UnconfigureOutlookEnforcer(hMSI)
+  string Installdir,res_string;
+  NUMBER pathSize ;  
+  INT nResult;
+begin                                   
+ MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ WriteToLogFile(hMSI, "OE:"+Installdir^"bin"^"NLRegisterPlugins.exe --oe --unregister"); 
+ //ShowModalDialog(hMSI, "Info", "start to run "+Installdir^"bin"^"NLRegisterPlugins32.exe --oe --unregister", SEVERE);	 
+ nResult = LaunchAppAndWait(Installdir^"bin"^"NLRegisterPlugins.exe", "--oe --unregister", WAIT | LAAW_OPTION_HIDDEN);
+ if(nResult<0) then
+   NumToStr(res_string,nResult);
+   WriteToLogFile(hMSI, "OE Result:"+res_string);  
+   ShowModalDialog(hMSI, "Error", "An unexpected error occured.("+res_string+") NLRegisterPlugins.exe could not be executed.", SEVERE);	 
+ endif;	
+ return nResult;
+end;        
+
+
+
+function INT InsertDeleteInRunonce(hMSI)
+
+  	string Installdir;
+  	NUMBER pathSize;  
+  	INT nResult;   
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+
+begin               
+	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+	WriteToLogFile(hMSI, "Writing runonce registry");                          
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);  
+	szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+	if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        MessageBox ("RegDBCreateKeyEx failed.", SEVERE); 
+    endif; 
+    szNumName  = "DeleteOE"; 
+    szNumValue = "cmd /c rmdir \""+Installdir + "\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;  
+	
+
+	
+	return nResult;
+
+end;      
+
+function INT InsertDateToRegistry(hMSI)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;
+    STRING sISRelFlag;
+    NUMBER pathSize; 
+    
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else    
+ 		ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	MsiGetProperty(hMSI, "CustomActionData", sISRelFlag, pathSize); 
+ 		if (sISRelFlag = "32bit") then
+ 		    REGDB_OPTIONS = REGDB_OPTIONS & (~REGDB_OPTION_WOW64_64KEY);
+ 		else 	
+ 		   	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	endif;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\Compliant Enterprise\\Outlook Enforcer";
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif;
+    	
+    endif; 
+    return ERROR_SUCCESS;
+    
+end;
+
+/*
+ * Start the EDP Manager process 
+ */                              
+function INT StartEDPManager(hMSI)
+	STRING EDPManagerDir;                                           
+	STRING EDPManagerPath; 
+	STRING REGValue;
+	NUMBER pathSize, nType, nvSize;
+	INT nResult;
+begin    	
+	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;
+    nType = REGDB_STRING;     
+    nvSize = 0;  
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);     
+    if (RegDBGetKeyValueEx(
+            "SOFTWARE\\NextLabs\\Compliant Enterprise\\Desktop Enforcer",
+            "ProductName",
+            nType,
+            REGValue,
+            nvSize) = 0) && (nvSize > 0) then  
+ 		return ERROR_SUCCESS;   	                   
+    endif;                                     
+    
+    MsiGetProperty(hMSI, "CustomActionData", EDPManagerDir, pathSize); 
+	WriteToLogFile(hMSI, "EDPMANAGERDIR:"+EDPManagerDir^"bin\\edpmanager.exe");
+	nResult = LaunchAppAndWait(EDPManagerDir^"bin\\edpmanager.exe", "", LAAW_OPTION_NOWAIT | LAAW_OPTION_HIDDEN);                                                                                                      
+    return ERROR_SUCCESS;  
+    
+end;
+
+/*
+ * Stop the EDP Manager process
+ */                              
+function INT StopEDPManager(hMSI)
+  string SYSTEMFOLDER;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ nResult = LaunchAppAndWait(SYSTEMFOLDER^"taskkill.exe", "/f /im edpmanager.exe", WAIT | LAAW_OPTION_HIDDEN);
+ return nResult;
+end;
+
+
+/*==================================FnNewNlOePluginCfg===================================*/
+export prototype FnNewNlOePluginCfg(HWND); 
+
+function FnNewNlOePluginCfg(hMSI) 
+    STRING  szTitle, szMsg; 
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+		
+	dstPath = regValue^"Policy Controller\\config\\plugin";
+    OpenFileMode (FILE_MODE_APPEND);
+    if (CreateFile (nvFileHandle, dstPath, "nl_OE_plugin.cfg") < 0) then 
+		WriteToLogFile (hMSI, "Create nl_OE_plugin.cfg failed. on");
+		WriteToLogFile (hMSI, dstPath); 
+    else 
+        szMsg = ""; 
+        if (WriteLine(nvFileHandle, szMsg) < 0) then 
+            WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+            WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+        endif; 
+
+        szMsg = ""; 
+        if (WriteLine(nvFileHandle, szMsg) < 0) then 
+            WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+            WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+        endif; 
+		
+		szMsg = INSTALLDIR^"bin\\OEService.dll"; 
+        if (WriteLine(nvFileHandle, szMsg) < 0) then 
+            WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+            WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+        endif; 
+    endif; 
+    CloseFile (nvFileHandle); 
+end; 
+
+/*==================================FnDelNlOePluginCfg===================================*/
+export prototype FnDelNlOePluginCfg(HWND);
+
+function FnDelNlOePluginCfg(hMSI) 
+    STRING  szTitle, szMsg; 
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+    
+	begin
+		RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+		RegDBGetKeyValueEx( 
+			"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+			"InstallDir",
+			nvType, 
+			regValue, 
+			nvSize); 
+	
+		dstPath = regValue^"Policy Controller\\config\\plugin\\nl_OE_plugin.cfg";
+		if (DeleteFile(dstPath) < 0) then 
+			WriteToLogFile (hMSI,"Del nl_OE_plugin.cfg failed"); 
+			WriteToLogFile (hMSI,dstPath); 
+		else 
+			WriteToLogFile (hMSI,"Del nl_OE_plugin.cfg succ"); 
+		endif;
+end; 
+
+
+/*==================================FnNewAcroRd32ExeIni===================================*/
+export prototype FnNewAcroRd32ExeIni(HWND); 
+
+function FnNewAcroRd32ExeIni(hMSI)
+	STRING szMsg;
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+		
+	dstPath = regValue^"Policy Controller\\service\\injection";
+    OpenFileMode (FILE_MODE_APPEND); 
+		
+    if (CreateFile (nvFileHandle, dstPath, "acroRd32.exe.ini") < 0) then 
+		WriteToLogFile (hMSI, "Create acroRd32.exe.ini failed.");
+		WriteToLogFile (hMSI, dstPath); 
+    else 
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif; 
+
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif;
+		
+        szMsg = "Hook="+ ProgramFilesFolder^"Nextlabs\\Desktop Enforcer\\bin\\CE_AdobePEPTrm32.dll"; 
+        if (WriteLine(nvFileHandle, szMsg) < 0) then 
+            WriteToLogFile (hMSI, "Write acroRd32.exe.ini failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write acroRd32.exe.ini succ.");  
+        endif; 
+    endif; 
+    CloseFile (nvFileHandle); 
+end; 
+
+/*==================================FnDelAcroRd32ExeIni===================================*/
+export prototype FnDelAcroRd32ExeIni(HWND);
+
+function FnDelAcroRd32ExeIni(hMSI) 
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+	
+	dstPath = regValue^"Policy Controller\\service\\injection\\acroRd32.exe.ini";
+    if (DeleteFile(dstPath) < 0) then 
+        WriteToLogFile (hMSI,"Del acroRd32.exe.ini failed"); 
+        WriteToLogFile (hMSI,dstPath); 
+    else 
+		WriteToLogFile (hMSI,"Del acroRd32.exe.ini succ"); 
+	endif;
+end; 
+
+
+/*==================================FnNewAcrobatExeIni===================================*/
+export prototype FnNewAcrobatExeIni(HWND); 
+
+function FnNewAcrobatExeIni(hMSI)
+	STRING szMsg;
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+		
+	dstPath = regValue^"Policy Controller\\service\\injection";
+    OpenFileMode (FILE_MODE_APPEND); 
+    if (CreateFile (nvFileHandle, dstPath, "acrobat.exe.ini") < 0) then 
+		WriteToLogFile (hMSI, "Create acrobat.exe.ini failed.");
+		WriteToLogFile (hMSI, dstPath); 
+    else 
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif; 
+
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif;
+
+        szMsg = "Hook="+ ProgramFilesFolder^"Nextlabs\\Desktop Enforcer\\bin\\CE_AdobePEPTrm32.dll"; 
+        if (WriteLine(nvFileHandle, szMsg) < 0) then 
+            WriteToLogFile (hMSI, "Write acrobat.exe.ini failed."); 
+            WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write acrobat.exe.ini succ.");  
+        endif; 
+    endif; 
+    CloseFile (nvFileHandle); 
+end; 
+
+/*==================================FnDelAcrobatExeIni===================================*/
+export prototype FnDelAcrobatExeIni(HWND);
+
+function FnDelAcrobatExeIni(hMSI) 
+    NUMBER  nvFileHandle; 
+    
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+    STRING dstPath;
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+	
+	dstPath = regValue^"Policy Controller\\service\\injection\\acrobat.exe.ini";
+    if (DeleteFile(dstPath ) < 0) then 
+        WriteToLogFile (hMSI,"Del acrobat.exe.ini failed"); 
+        WriteToLogFile (hMSI,dstPath); 
+    else 
+		WriteToLogFile (hMSI,"Del acrobat.exe.ini succ"); 
+	endif;
+end; 
+
+/*==================================FnWritePgpAdapter32Cfg===================================*/
+export prototype FnWritePgpAdapter32Cfg(HWND);
+
+function FnWritePgpAdapter32Cfg(hMSI)
+	STRING szMsg;
+    NUMBER  nvFileHandle; 
+    
+    STRING dstPath;
+    NUMBER wr1, wr2, wr3;
+    STRING regValue; 
+    NUMBER nvType, nvSize; 
+begin
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    
+	RegDBGetKeyValueEx( 
+		"SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller",
+		"InstallDir",
+		nvType, 
+		regValue, 
+		nvSize); 
+	
+	dstPath = regValue^"Common\\config";
+	
+    OpenFileMode (FILE_MODE_APPEND); 
+    if (OpenFile (nvFileHandle, dstPath, "encryption_adapters32.conf") < 0) then 
+		WriteToLogFile (hMSI, "Open encryption_adapters32.conf failed.");
+		WriteToLogFile (hMSI, dstPath); 
+    else 
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif; 
+
+		szMsg = ""; 
+		if (WriteLine(nvFileHandle, szMsg) < 0) then 
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg failed."); 
+			WriteToLogFile (hMSI, dstPath); 
+		else
+			WriteToLogFile (hMSI, "Write nl_OE_plugin.cfg succ.");  
+		endif;
+        
+		wr1 = WriteLine(nvFileHandle, "[PGPAdapter]");
+		wr2 = WriteLine(nvFileHandle, "DLLName=pgp_adapter32.dll");
+		wr3 = WriteLine(nvFileHandle, "Extension=.pgp");
+		
+		if (wr1 < 0 || wr2 < 0 || wr3 < 0) then
+            WriteToLogFile (hMSI, "Write encryption_adapters32.conf failed."); 
+            WriteToLogFile (hMSI, dstPath); 
+        else
+			WriteToLogFile (hMSI, "Write encryption_adapters32.conf succ.");  
+        endif; 
+    endif; 
+    CloseFile (nvFileHandle); 
+end;

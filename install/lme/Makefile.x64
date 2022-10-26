@@ -1,0 +1,29 @@
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error NLEXTERNALDIR undefined.)
+endif
+
+ifeq ($(BUILDTYPE),)
+	BUILDTYPE=dev
+endif
+
+ifeq ($(VERSION_BUILD_SHORT),)
+	VERSION_BUILD_SHORT=1
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+PRODUCT_DIR_NAME=lme
+VERSION_STR=$(VERSION_MAJOR_LME).$(VERSION_MINOR_LME).$(VERSION_MAINTENANCE_LME).$(VERSION_PATCH_LME)
+ISM_TEMPLATE_FILE_NAME=LiveMeetingEnforcer.ism
+ISM_RELEASE=msi64
+ISM_PRODUCT_CONFIG=64bit
+#MSI_FILE=LiveMeetingEnforcer-64-$(VERSION_STR).msi
+MSI_FILE=EDP-LiveMeetingEnforcer-setup64.msi
+PACKAGE_DIR_NAME=package64
+PACKAGE_FILE=LiveMeetingEnforcer-64-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+
+include $(NLBUILDROOT)/install/scripts/Makefile.install.single

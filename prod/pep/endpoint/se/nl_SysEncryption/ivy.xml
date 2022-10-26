@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="1.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="nextlabs"
+          module="nl_SysEncryption"
+		  revision="4.5"
+		  branch="main"/>
+      <configurations>
+	    <conf name="main" visibility="public" />
+       	    <conf name="test" visibility="public" />
+	    <conf name="release_lib_win32" extends="main" visibility="public" />
+       	    <conf name="lib_win32" visibility="public" />
+	    <conf name="report" visibility="private" />
+      </configurations>
+</ivy-module>

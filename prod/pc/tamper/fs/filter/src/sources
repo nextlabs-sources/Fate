@@ -1,0 +1,14 @@
+TARGETNAME=nl_tamper
+TARGETTYPE=DRIVER
+DRIVERTYPE=FS
+LINKER_FLAGS=/map
+
+INCLUDES=$(INCLUDES);..\..\inc
+
+TARGETLIBS=$(TARGETLIBS) \
+           $(IFSKIT_LIB_PATH)\fltMgr.lib
+
+C_DEFINES=$(C_DEFINES)
+
+SOURCES = nl_tamper.c nl_tamper.rc
+

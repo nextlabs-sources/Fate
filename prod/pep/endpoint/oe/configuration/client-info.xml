@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client-information>
+	<client
+		identifier="Client1"
+		short-name="anemometer"
+		long-name="maternalize peptization's topples comptroller's moneylender"
+	>
+		<email-template name="*@client1.com"/>
+		<email-template name="*@child.client1.com"/>
+		<email-template name="*@client1.uk"/>
+		<email-template name="*@client1.ua"/>
+		<email-template name="*@client1.com.ua"/>
+		<email-template name="broker12@qaspe.qalab01.nextlabs.com"/>
+		<email-template name="broker14@qaspe.qalab01.nextlabs.com"/>
+		<user name="andrew.johnson@qapf1.qalab01.nextlabs.com"/>
+		<user name="william.taft@qapf1.qalab01.nextlabs.com"/>
+		<user name="george.w.bush@qapf1.qalab01.nextlabs.com"/>
+		<user name="ronald.reagan@qapf1.qalab01.nextlabs.com"/>
+		<user name="john.tyler@qapf1.qalab01.nextlabs.com"/>
+		<user name="james.garfield@qapf1.qalab01.nextlabs.com"/>
+		<user name="martin.vanburen@qapf1.qalab01.nextlabs.com"/>
+		<user name="william.mckinley@qapf1.qalab01.nextlabs.com"/>
+		<user name="andrew.jackson@qapf1.qalab01.nextlabs.com"/>
+		<user name="william.taft@qapf1.qalab01.nextlabs.com"/>
+		<user name="calvin.coolidge@qapf1.qalab01.nextlabs.com"/>
+	</client>
+	<client
+		identifier="Client2"
+		short-name="Quakerization's"
+		long-name="sectionally estremadura plastidial"
+	>
+		<email-template name="william.taft@qapf1.qalab01.nextlabs.com"/>
+		<email-template name="*@client2.com"/>
+		<email-template name="*@client2.uk"/>
+		<email-template name="*@client2.ua"/>
+		<email-template name="*@client2.com.ua"/>
+		<email-template name="damnedest.info"/>
+		<email-template name="broker12@qaspe.qalab01.nextlabs.com"/>
+		<email-template name="broker23@qaspe.qalab01.nextlabs.com"/>
+            <user name="jimmy.carter@qapf1.qalab01.nextlabs.com"/>
+		<user name="jimmy.carter@qapf1.qalab01.nextlabs.com"/>
+		<user name="john.tyler@qapf1.qalab01.nextlabs.com"/>
+		<user name="george.washington@qapf1.qalab01.nextlabs.com"/>
+		<user name="benjamin.harrison@qapf1.qalab01.nextlabs.com"/>
+		<user name="james.monroe@qapf1.qalab01.nextlabs.com"/>
+		<user name="harry.truman@qapf1.qalab01.nextlabs.com"/>
+		<user name="jimmy.carter@qapf1.qalab01.nextlabs.com"/>
+	</client>
+	<client
+		identifier="Client3"
+		short-name="serotonin"
+		long-name="bathyscaph orientalism aggrandizers connaturally ecstatic"
+	>
+		<email-template name="*@client3.com"/>
+		<email-template name="*@client3.uk"/>
+		<email-template name="*@client3.ua"/>
+		<email-template name="*@client3.com.ua"/>
+		<email-template name="broker23@qaspe.qalab01.nextlabs.com"/>
+		<email-template name="liquidly.expatriation.cardiorespiratory.info"/>
+		<email-template name="*@millidegrees.com"/>
+		<user name="william.taft@qapf1.qalab01.nextlabs.com"/>
+		<user name="william.harrison@qapf1.qalab01.nextlabs.com"/>
+		<user name="jimmy.carter@qapf1.qalab01.nextlabs.com"/>
+		<user name="andrew.johnson@qapf1.qalab01.nextlabs.com"/>
+		<user name="warren.harding@qapf1.qalab01.nextlabs.com"/>
+		<user name="gerald.ford@qapf1.qalab01.nextlabs.com"/>
+	</client>
+	<client
+		identifier="Client4"
+		short-name="provisioned mauna"
+		long-name="boarders marquand Feldman prospects"
+	>
+		<email-template name="*@client4.com"/>
+		<email-template name="*@client4.uk"/>
+		<email-template name="*@client4.ua"/>
+		<email-template name="*@client4.com.ua"/>
+		<email-template name="broker14@qaspe.qalab01.nextlabs.com"/>
+		<user name="harry.truman@qapf1.qalab01.nextlabs.com"/>
+		<user name="william.taft@qapf1.qalab01.nextlabs.com"/>
+		<user name="james.polk@qapf1.qalab01.nextlabs.com"/>
+		<user name="jimmy.carter@qapf1.qalab01.nextlabs.com"/>
+		<user name="zachary.taylor@qapf1.qalab01.nextlabs.com"/>
+		<user name="richard.nixon@qapf1.qalab01.nextlabs.com"/>
+		<user name="benjamin.harrison@qapf1.qalab01.nextlabs.com"/>
+		<user name="harry.truman@qapf1.qalab01.nextlabs.com"/>
+	</client>
+</client-information>

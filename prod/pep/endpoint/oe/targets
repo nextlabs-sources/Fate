@@ -1,0 +1,23 @@
+
+TARGETS = \
+	prod/pep/endpoint/oe/msoPEP/sendto/CE_Explorer \
+	prod/pep/endpoint/oe/msoPEP/sendto/CEAdobe \
+	prod/pep/endpoint/oe/msoPEP/sendto/CEAdobeTrm \
+	prod/pep/endpoint/oe/msoPEP/sendto/CEOffice \
+	prod/pep/endpoint/oe/msoPEP/sendto/InjectExp \
+	prod/pep/endpoint/oe/msoPEP/sendto/OEService \
+	prod/pep/endpoint/oe/msoPEP/adaptercomm \
+	prod/pep/endpoint/oe/msoPEP/adaptermanager \
+	prod/pep/endpoint/oe/msoPEP/approvaladapter \
+	prod/pep/endpoint/oe/msoPEP/WindowBlocker \
+	prod/pep/endpoint/oe/msoPEP/StripAttachment/ftpcli \
+	prod/pep/endpoint/oe/msoPEP/StripAttachment/EFTAdhoc \
+	prod/pep/endpoint/oe/msoPEP/StripAttachment/fsadapter \
+	prod/pep/endpoint/oe/msoPEP/StripAttachment/ftpadapter \
+	prod/pep/endpoint/oe/msoPEP
+
+# These are custom apps, not part of OE
+#	prod/pep/endpoint/oe/msoPEP/adapters/approval/ftpcli \
+#	prod/pep/endpoint/oe/msoPEP/adapters/approval/Obligation \
+#	prod/pep/endpoint/oe/msoPEP/adapters/approval/approver
+	

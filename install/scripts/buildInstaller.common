@@ -1,0 +1,223 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	This is the common script that drives all installer builds. It is not to be executed
+#	directly. It is always sourced by an buildInstaller bash script in each installer
+#	directory. The container script (buildInstaller) must define PRODUCT_DIR_NAME before
+#	sourcing this script.
+#
+# SAMPLE COMMANDS:
+#	./buildInstaller --buildtype=pcv --buildnum=10001
+#	./buildInstaller --buildtype=release --buildnum=1341
+
+
+if [ "$ProgramW6432" == "" ]; then
+	ENV_OS=x86
+	PROGRAM_FILES_X86="C:/Program Files"
+else
+	ENV_OS=x64
+	PROGRAM_FILES_X86="C:/Program Files (x86)"
+fi
+
+PROGRAM_FILES_X86_DOS=${PROGRAM_FILES_X86//\//\\}
+
+PERL=perl
+ISCMDBLD="$PROGRAM_FILES_X86/InstallShield/2010 StandaloneBuild/System/IsCmdBld.exe"
+
+BUILD_TYPE=dev
+BUILD_NUM=10001
+
+
+#
+# Process commandline parameters
+#
+
+# ------------------------------
+# printUsage()
+
+function printUsage
+{
+	echo "usage: buildInstaller [<--buildtype=<type>] [<--buildnum=<#>]"
+	echo "  buildnum       A numeric value (e.g., 1001)."
+	echo "  buildtype      Build type affects the construction of build #. Valid values are"
+	echo "                 release, pcv, nighty and dev."
+	echo ""
+	echo "Environment variables:"
+	echo "  NLBUILDROOT    Source tree root (e.g., c:/nightly/current/D_SiriusR2)."
+}
+
+# Help
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+	printUsage
+	exit 0
+fi
+
+# Parse arguements
+echo "INFO: Process parametes"
+
+while [ $# -gt 0 ]; do
+	ARG_NAME=${1%%=*}
+	ARG_VAL=${1##*=}
+
+	if [ "$ARG_NAME" == "--buildtype" ]; then
+		BUILD_TYPE=$ARG_VAL
+	elif [ "$ARG_NAME" == "--buildnum" ]; then
+		BUILD_NUM=$ARG_VAL
+	fi
+
+	shift
+done
+
+# Print parameters
+echo "Parameters:"
+echo "  BUILD_TYPE        = $BUILD_TYPE"
+echo "  BUILD_NUM         = $BUILD_NUM"
+
+
+#
+# Environments
+#
+
+echo "INFO: Check environment variables"
+
+# Check for errors
+if [ "$NLBUILDROOT" == "" ]; then
+	echo "### ERROR: Missing environment variable NLBUILDROOT."
+	exit 1;
+fi
+
+if [ ! -d $NLBUILDROOT ]; then
+	echo "### ERROR: Missing build root directory $NLBUILDROOT."
+	exit 1;
+fi
+
+if [ "$PRODUCT_DIR_NAME" == "" ]; then
+	echo "### ERROR: Missing product directory name (e.g., wde)."
+	exit 1;
+fi
+
+# Derived directory
+INSTALL_DIR=$NLBUILDROOT/install/$PRODUCT_DIR_NAME
+PUBLISH_DIR=$NLBUILDROOT/bin/installer
+
+# Print environment variables
+echo "INFO: Environment Variables:"
+echo "  NLBUILDROOT       = $NLBUILDROOT"
+echo "  PRODUCT_DIR_NAME  = $PRODUCT_DIR_NAME"
+
+
+#
+# Clean up old build
+#
+
+ASSEMBLY_DIR=$INSTALL_DIR/build/data
+OUTPUT_DIR=$INSTALL_DIR/build/output
+
+if [ -d $ASSEMBLY_DIR ] || [ -d $OUTPUT_DIR ] ; then
+	echo "INFO: Removing old build directory"
+
+	rm -rf $INSTALL_DIR/build
+fi
+
+
+#
+# Construct assembly
+#
+
+echo "INFO: Construct assembly"
+
+# Prepare assembly
+"$PERL" $INSTALL_DIR/prepareAssembly.pl $BUILD_TYPE $BUILD_NUM
+
+if [ $? -ne 0 ]; then
+	exit 1;
+fi
+
+# Print installer names
+echo "Installer Names:"
+echo "  ISM_TEMPLATE_FILE_NAME  = $ISM_TEMPLATE_FILE_NAME"
+
+
+#
+# Compile installer
+#
+# Notes: IsCmdBld.exe will fail if some files are not writable.
+
+echo "INFO: Compile MSI files"
+
+# Check for errors
+if [ "$IS_RELEASE" == "" ]; then
+	echo "### ERROR: Missing variable IS_RELEASE."
+	exit 1;
+fi
+
+if [ "$IS_PRODUCT_CONFIG32" == "" ] && [ "$IS_PRODUCT_CONFIG64" == "" ]; then
+	echo "### ERROR: Missing variables IS_PRODUCT_CONFIG32 and IS_PRODUCT_CONFIG64."
+	exit 1;
+fi
+
+# Setup InstallShield environment
+export	BUILD_DIR=${ASSEMBLY_DIR//\//\\}
+export	DEPLOY_DIR=${OUTPUT_DIR//\//\\}
+
+# Print InstallShield environment
+echo "InstallShield Environment:"
+echo "  INSTALL_DIR         = $INSTALL_DIR"
+echo "  ASSEMBLY_DIR        = $ASSEMBLY_DIR"
+echo "  OUTPUT_DIR          = $OUTPUT_DIR"
+echo "  BUILD_DIR           = $BUILD_DIR"
+echo "  DEPLOY_DIR          = $DEPLOY_DIR"
+echo "  IS_RELEASE          = $IS_RELEASE"
+echo "  IS_PRODUCT_CONFIG64 = $IS_PRODUCT_CONFIG64"
+echo "  IS_PRODUCT_CONFIG32 = $IS_PRODUCT_CONFIG32"
+
+# Make files writable
+chmod -R +w $ASSEMBLY_DIR
+
+# Compile installer
+#
+# IsCmdBld Options:
+#	-a <product configuration>
+#	-b Output directory
+#	-n								No compile
+#	-p <ISM file>
+#	-q3                             Only compile setup.rul
+#	-r <release name>
+#	-x								Stop on error
+#	-y <product version>
+
+if [ "$IS_PRODUCT_CONFIG64" != "" ]; then
+	set -x
+#	"$ISCMDBLD" -x -r $IS_RELEASE -a $IS_PRODUCT_CONFIG64 -p "src\\installer\\WindowsDesktopEnforcer.ism" -b $DEPLOY_DIR
+#	"$ISCMDBLD" -x -r $IS_RELEASE -a $IS_PRODUCT_CONFIG64 -p "src\\installer\\main\\CommonLibraries.ism" -b $DEPLOY_DIR
+	"$ISCMDBLD" -x -r $IS_RELEASE -a $IS_PRODUCT_CONFIG64 -p $BUILD_DIR\\$ISM_TEMPLATE_FILE_NAME -b $DEPLOY_DIR
+	STATUS=$?
+	set +x
+
+	if [ $STATUS -ne 0 ]; then
+		exit 1;
+	fi
+fi
+
+if [ "$IS_PRODUCT_CONFIG32" != "" ]; then
+	set -x
+	"$ISCMDBLD" -x -r $IS_RELEASE -a $IS_PRODUCT_CONFIG32 -p $BUILD_DIR\\$ISM_TEMPLATE_FILE_NAME -b $DEPLOY_DIR
+	STATUS=$?
+	set +x
+
+	if [ $STATUS -ne 0 ]; then
+		exit 1;
+	fi
+fi
+
+#
+# Copy to bin directory
+#
+
+echo "INFO: Publish MSI files"
+
+if [ ! -d $PUBLISH_DIR ]; then
+	mkdir -p $PUBLISH_DIR
+fi
+
+echo "INFO: Done"

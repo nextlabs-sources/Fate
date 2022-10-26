@@ -1,0 +1,92 @@
+<!-- System Encryption Control Center Configuration -->
+
+
+
+        <!-- System Encryption obligations -->
+
+        <!-- Encrypt resource -->
+        <Obligation>
+            <DisplayName>System Encryption</DisplayName>
+            <RunAt>PDP</RunAt>
+            <ExecPath>C:\Program Files\NextLabs\System Encryption\bin\nlSysEncryptionObligation.exe</ExecPath>
+            <Arguments>
+                <Argument usereditable="false" hidden="true">
+                    <Name>/path</Name>
+                    <Value>$CESource</Value>
+                </Argument>
+                <Argument usereditable="false" hidden="true">
+                    <Name>/e</Name>
+                    <Value></Value>
+                </Argument>
+            </Arguments>
+        </Obligation>
+
+        <!-- Encrypt specific file or directory -->
+        <Obligation>
+            <DisplayName>System Encryption - File or Directory</DisplayName>
+            <RunAt>PDP</RunAt>
+            <ExecPath>C:\Program Files\NextLabs\System Encryption\bin\nlSysEncryptionObligation.exe</ExecPath>
+            <Arguments>
+                <Argument usereditable="true">
+                    <Name>/path</Name>
+                    <Value></Value>
+                </Argument>
+                <Argument usereditable="true">
+                    <Name></Name>
+                    <Value></Value>
+                </Argument>
+            </Arguments>
+        </Obligation>
+
+
+
+        <!-- Portable Encryption obligations -->
+
+        <!-- Automatic Wrap -->
+        <Obligation>
+            <DisplayName>NextLabs Wrap Encryption</DisplayName>
+            <RunAt>PEP</RunAt>
+            <Name>AUTOWRAP</Name>
+        </Obligation>
+
+
+
+        <!-- System Encryption resource attributes -->
+
+        <!-- NXL_encrypted -->
+        <ResourceAttribute>
+            <Group>With Properties</Group>
+            <DisplayName>NextLabs Encrypted</DisplayName>
+            <Name>NXL_encrypted</Name>
+            <Type>ENUM</Type>
+            <Value>true</Value>
+            <Value>*</Value>
+        </ResourceAttribute>
+
+        <!-- NXL_heavyWriteEncrypted -->
+        <ResourceAttribute>
+            <Group>With Properties</Group>
+            <DisplayName>NextLabs HeavyWrite Encrypted</DisplayName>
+            <Name>NXL_heavyWriteEncrypted</Name>
+            <Type>ENUM</Type>
+            <Value>true</Value>
+            <Value>*</Value>
+        </ResourceAttribute>
+
+        <!-- NXL_wrapped -->
+        <ResourceAttribute>
+            <Group>With Properties</Group>
+            <DisplayName>NextLabs Wrapped</DisplayName>
+            <Name>NXL_wrapped</Name>
+            <Type>ENUM</Type>
+            <Value>true</Value>
+            <Value>*</Value>
+        </ResourceAttribute>
+
+        <!-- NXL_keyRingName -->
+        <ResourceAttribute>
+            <Group>With Properties</Group>
+            <DisplayName>Key Ring Name</DisplayName>
+            <Name>NXL_keyRingName</Name>
+            <Type>STRING</Type>
+        </ResourceAttribute>

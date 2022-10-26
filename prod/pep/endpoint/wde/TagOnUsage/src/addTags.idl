@@ -1,0 +1,18 @@
+// addTags.idl : IDL source for addTags
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (addTags.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(411EBBB1-97D5-474F-B427-95B13012E3BC),
+	version(1.0),
+	helpstring("addTags 1.0 Type Library")
+]
+library addTagsLib
+{
+	importlib("stdole2.tlb");
+};

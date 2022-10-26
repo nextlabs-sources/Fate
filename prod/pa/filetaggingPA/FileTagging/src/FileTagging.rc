@@ -1,0 +1,296 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_COMPANY_LOGO        PNG                     "..\\res\\logo_edp_small.png"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FILETAGPANEL DIALOGEX 0, 0, 267, 190
+STYLE DS_SETFONT | WS_CHILD
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_TAGLIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_TABSTOP,7,93,228,91
+    EDITTEXT        IDC_HINT,7,22,255,25,ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_READONLY | NOT WS_BORDER
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,0,259,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,187,255,1
+    CONTROL         "",IDC_FILELIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,58,228,20
+    LTEXT           "File:",IDC_FILES_DESC,7,50,16,8
+    LTEXT           "Classification",IDC_GROUPHEADER,7,3,93,18
+    LTEXT           "",IDC_LOGO_PICTURE,183,3,79,18
+END
+
+IDD_VIEWRESETTAGSDLG DIALOGEX 0, 0, 278, 156
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "View/Reset Tags"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,155,130,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE,69,130,50,14
+    CONTROL         "",IDC_TAGSLIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,21,264,101
+    EDITTEXT        IDC_FILENAME,7,7,264,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+END
+
+IDD_PROMPT DIALOGEX 0, 0, 165, 65
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Policy Assistant"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    CONTROL         "Custom1",IDC_CUSTOM1,"gs_nonprogressbar",WS_TABSTOP,7,40,151,14
+    LTEXT           "Processing...",IDC_STATIC,7,11,151,8
+    LTEXT           "Static",IDC_FILEPATH,7,27,151,8,SS_PATHELLIPSIS
+END
+
+IDD_DLG_TAGERROR_BLOCK DIALOGEX 0, 0, 211, 79
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Nextlabs Enforcer for Microsoft Outlook"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,153,57,50,14
+    LTEXT           "tagging error block message",IDC_STATIC_MESSAGE,11,7,184,35
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_FILETAGPANEL, DIALOG
+    BEGIN
+        RIGHTMARGIN, 266
+        VERTGUIDE, 7
+        VERTGUIDE, 183
+        VERTGUIDE, 235
+        VERTGUIDE, 262
+        BOTTOMMARGIN, 189
+        HORZGUIDE, 3
+        HORZGUIDE, 23
+        HORZGUIDE, 24
+        HORZGUIDE, 43
+        HORZGUIDE, 53
+        HORZGUIDE, 123
+        HORZGUIDE, 127
+        HORZGUIDE, 184
+    END
+
+    IDD_VIEWRESETTAGSDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 271
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 149
+    END
+
+    IDD_PROMPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 158
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 58
+    END
+
+    IDD_DLG_TAGERROR_BLOCK, DIALOG
+    BEGIN
+        RIGHTMARGIN, 203
+        BOTTOMMARGIN, 76
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 8, 5, 1.072.1345DX-1-1-2017.03.10-16:40
+ PRODUCTVERSION 8, 5, 1.072.1345DX-1-1-2017.03.10-16:40
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "Enterprise Data Protection (x86)"
+            VALUE "FileVersion", "8.5.1"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "Enterprise Data Protection"
+            VALUE "ProductVersion", "8.5.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_LOGO                ICON                    ".\\..\\res\\dlp.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ARROW_DOWN          BITMAP                  ".\\..\\res\\arrow_down.bmp"
+IDB_ARROW_UP            BITMAP                  ".\\..\\res\\arrow_up.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_AUTOMATIC_TAG_OBLIGATION "AUTOMATIC_FILE_TAGGING"
+    IDS_MANUAL_TAG_OBLIGATION "INTERACTIVE_FILE_TAGGING"
+    IDS_FILETAGGING_HINT    "Downloading, saving, or copying information into\r\npublic document repositories require proper\r\ndocument classification. Select the appropriate\r\nclass from Document Class and select a project\r\nwith which to associate this information."
+    IDS_OK                  "OK"
+    106                     "Next"
+    IDS_CANCEL              "Cancel"
+    IDS_TAG_NAME            "Tag Name"
+    IDS_TAG_VALUE           "Tag Value"
+    IDS_REMOVE_WARNING      "Select the tags which you want to delete!"
+    IDS_REMOVE_HINT         "Are you sure you want to remove the selected tags?"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CAPTION             "Policy Assistant"
+    IDS_FILE_NOT_EXIST      "Unable to tag file.  The file does not exist.\r\n%s"
+    IDS_FILE_READONLY       "Unable to tag file.  The file is read only.\r\n%s"
+    IDS_FILE_OPENNING       "Unable to tag file.  The file is opened by another application. \r\n%s"
+    IDS_NOT_ENOUGH_MEMORY   "Not enough memory."
+    IDS_TAGNAME_FROM_OB     "Tag Name"
+    IDS_TAGVALUES_FROM_OB   "Tag Values"
+    IDS_TAG_TARGET_FROM_OB  "Target"
+    IDS_TAGVALUE_FROM_OB    "Tag Value"
+    IDS_FILE_NOT_EXIST_REMOVE 
+                            "Unable to remove tags.  The file does not exist.\r\n%s"
+    IDS_FILE_READONLY_REMOVE 
+                            "Unable to remove tags.  The file is read only.\r\n%s"
+    IDS_FILE_OPENNING_REMOVE 
+                            "Unable to remove tags.  The file is opened by another application. \r\n%s"
+    IDS_DESCRIPTION_OB      "description"
+    IDS_UNKNOWN_ERROR       "Unable to tag file. Unknown errors!"
+    IDS_TAG_TIME            "Tag Time"
+    IDS_REMOVETAG_TIME      "Remove Tag Time"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FILETAG_DESCRIPTION "File Tagging Assistant performs tagging."
+    IDS_FILETAG_DISPLAYNAME "File Tagging Assistant."
+    IDS_FILETAG_ADDTAG      "User tagged file."
+    IDS_FILETAG_REMOVETAG   "User removed a tag."
+    IDS_FILETAG_CANCELTAG   "User cancelled tagging."
+    IDS_FILETAG_TAG_FAIL    "Failed to tag a file."
+    IDS_FILETAG_REMOVE_FAIL "Failed to remove a tag."
+    IDS_TARGET_OB           "target"
+    IDS_TARGET_OB_SOURCE    "source"
+    IDS_TARGET_OB_DESTINATION "destination"
+    IDS_TAGVALUE_EMPTY      "Please provide the tag value."
+    IDS_READTAGS_ERROR      "Unable to read tags. Unknown errors!"
+	IDS_TARGET_OB_BOTH      "both"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

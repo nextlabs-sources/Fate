@@ -1,0 +1,8 @@
+<InstallDir>\redist\wdf\amd64\WdfCoInstaller01007.dll
+<InstallDir>\redist\wdf\amd64\WUDFUpdate_01007.dll
+
+<InstallDir>\redist\wdf\ia64\WdfCoInstaller01007.dll
+<InstallDir>\redist\wdf\ia64\WUDFUpdate_01007.dll
+
+<InstallDir>\redist\wdf\x86\WdfCoInstaller01007.dll
+<InstallDir>\redist\wdf\x86\WUDFUpdate_01007.dll

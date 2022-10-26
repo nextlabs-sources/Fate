@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="1.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="nextlabs"
+          module="PolicyController"
+	  revision="6.0"
+	  branch="6.0"/>
+
+<configurations>
+  <conf name="main" visibility="public" />
+  <conf name="enforcer_plugin" visibility="public" />
+  <conf name="edpm" extends="enforcer_plugin" visibility="public" />
+  <conf name="reference_plugin_installer" visibility="public" />
+
+  <!-- FIX ME - This is not good to have this dependency, but I did it at the last moment for a release 3.5.  These libraries should be built in the platform! -->
+  <conf name="policy_studio" visibility="public" /> 
+
+  <conf name="test" visibility="private" />
+  <conf name="report" visibility="private" />
+</configurations>
+<publications>
+  <artifact conf="main" name="CE-PolicyController-setup" type="msi"/>
+  <artifact conf="main" name="CE-PolicyController-setup64" type="msi"/>
+  <artifact conf="main" name="EDP-PolicyController-setup" type="msi"/>
+  <artifact conf="main" name="CE-WFSE-PolicyController-setup" type="msi"/>
+  <artifact conf="main" name="EDP-PolicyController-setup64" type="msi"/>
+  <artifact conf="main" name="CE-WFSE-PolicyController-setup64" type="msi"/>
+  
+  <artifact conf="main" name="PolicyControllerGPOPrep" e:os="win" e:arch="x86" e:releasetype="release" type="exe"/>
+  <!---<artifact conf="enforcer_plugin" name="PluginInstallerSDK" type="dll"/>-->
+  <artifact conf="enforcer_plugin" name="IPCJNI32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	
+  <artifact conf="enforcer_plugin" name="IPCJNI"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="nl_sysenc_lib32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="nl_sysenc_lib"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	   
+  <artifact conf="enforcer_plugin" name="pdflib32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>
+  <artifact conf="enforcer_plugin" name="pdflib"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>
+  <artifact conf="enforcer_plugin" name="cebrain32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cebrain"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="celog32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="celog"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="nl_sysenc_lib32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="nl_sysenc_lib"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	   
+  <artifact conf="enforcer_plugin" name="pdflib32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="pdflib"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="celog32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="celog"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cebrain32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cebrain"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cecem32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  	  
+  <artifact conf="enforcer_plugin" name="cecem"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  	  
+  <artifact conf="enforcer_plugin" name="cecem32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  	  
+  <artifact conf="enforcer_plugin" name="cecem"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  	  
+  <artifact conf="enforcer_plugin" name="ceconn32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceconn"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceconn32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="ceconn"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="ceeval32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceeval"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceeval32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="ceeval"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="cesec32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cesec"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cesec32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="cesec"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="cesdk32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="cesdk"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="cesdk32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>
+  <artifact conf="enforcer_plugin" name="cesdk"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>
+
+<!--  <artifact conf="enforcer_plugin" name="KeyUtil"  e:os="win" e:arch="x86" e:releasetype="release" type="exe"/>	  
+  <artifact conf="enforcer_plugin" name="KeyUtil"  e:os="win" e:arch="x64" e:releasetype="release" type="exe"/>	  
+  <artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/> 	  
+  <artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/> 	  -->
+  <artifact conf="enforcer_plugin" name="ceservice32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceservice"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="ceservice32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="ceservice"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cemarshal5032"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cemarshal50"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cemarshal5032"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cemarshal50"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cepepman32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cepepman"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="cepepman32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cepepman"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="cetransport32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  	  
+  <artifact conf="enforcer_plugin" name="cetransport"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  	  
+  <artifact conf="enforcer_plugin" name="cetransport32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  	  
+  <artifact conf="enforcer_plugin" name="cetransport"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  	  
+  <!--<artifact conf="enforcer_plugin" name="ceservice"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/> 	  
+  <artifact conf="enforcer_plugin" name="ceservice"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/> 	  
+  <artifact conf="enforcer_plugin" name="CEsdk"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/>	  
+  <artifact conf="enforcer_plugin" name="CEsdk"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/>	  -->
+
+  <!--<artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/>	  
+  <artifact conf="enforcer_plugin" name="KeyManagementConsumer"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/>	  
+  <artifact conf="enforcer_plugin" name="servicecontrol"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/>	  
+  <artifact conf="enforcer_plugin" name="servicecontrol"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/>	  
+  <artifact conf="enforcer_plugin" name="PluginInstallerSDK" type="obl"/>-->
+  <artifact conf="enforcer_plugin" name="celogging32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="celogging"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="celogging32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>
+  <artifact conf="enforcer_plugin" name="celogging"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>
+  <!--<artifact conf="enforcer_plugin" name="nlPnpDriverInstaller"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	 	  
+  <artifact conf="enforcer_plugin" name="nlPnpDriverInstaller"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	 -->	  
+  <artifact conf="enforcer_plugin" name="TagViewMenu32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="TagViewMenu"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+  <artifact conf="enforcer_plugin" name="NextLabs.CSCInvoke"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	 
+  <artifact conf="enforcer_plugin" name="NextLabs.CSCInvoke"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	 
+  <artifact conf="enforcer_plugin" name="pa_filetagging32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="pa_filetagging32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="tag_office2k732"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="tag_office2k7"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="tag_office2k732"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="tag_office2k7"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="zip_adapter32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="zip_adapter32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="pafUI32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="pafUI32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>
+  <artifact conf="enforcer_plugin" name="pa_encrypt32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="pa_encrypt32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="pgp_adapter32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	  
+  <artifact conf="enforcer_plugin" name="pgp_adapter32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="enforcer_plugin" name="nlQuench"  e:os="win" e:arch="x86" e:releasetype="release" type="exe"/>	 	  
+  <artifact conf="enforcer_plugin" name="nlQuench"  e:os="win" e:arch="x64" e:releasetype="release" type="exe"/>	 	  
+<!--  <artifact conf="enforcer_plugin" name="PolicyAdapterSDK"  e:os="win" e:arch="x86" e:releasetype="release" type="zip"/>	-->
+  <!--<artifact conf="enforcer_plugin" name="PolicyAdapterSDK"  e:os="win" e:arch="x64" e:releasetype="release" type="zip"/>	-->
+  <artifact conf="edpm" name="ceprivate32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>
+  <artifact conf="edpm" name="ceprivate"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>
+
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+<!--  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr32"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/>	  
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrmgr"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/>	  -->
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib32"  e:os="win" e:arch="x86" e:releasetype="release" type="dll"/>	 
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib"  e:os="win" e:arch="x64" e:releasetype="release" type="dll"/>	 
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib32"  e:os="win" e:arch="x86" e:releasetype="release" type="lib"/>	  
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib"  e:os="win" e:arch="x64" e:releasetype="release" type="lib"/>	  
+<!--  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib32"  e:os="win" e:arch="x86" e:releasetype="release" type="h"/>	  
+  <artifact conf="policy_studio, enforcer_plugin" name="resattrlib"  e:os="win" e:arch="x64" e:releasetype="release" type="h"/>	  -->
+
+  <!--<artifact conf="reference_plugin_installer" name="ReferencePluginInstaller" type="zip"/>	-->
+</publications>
+<dependencies>
+  <dependency org="nextlabs" name="CommonInstallScript" rev="1.1" conf="main->main" />
+  <dependency org="nextlabs" name="Platform" rev="5.6.0" conf="main->PolicyController" />
+  <dependency org="sun" name="jre" rev="1.6.0_18" conf="main->default" />
+  <dependency org="microsoft" name="ATL" rev="9.0" conf="main->default"/>
+  <dependency org="microsoft" name="MFC" rev="9.0" conf="main->default"/>
+  <dependency org="microsoft" name="CRuntime" rev="9.0" conf="main->default"/>
+  <dependency org="microsoft" name="OpenMP" rev="9.0" conf="main->default"/>
+  <dependency org="libtiff" name="libtiff" rev="4.0.1" conf="main->default"/>
+  <dependency org="7zip" name="7zip" rev="4.87b_Nextlabsed-vs2008" conf="main->default"/>
+
+	  <!-- Make sure we get the ehcache version that we've used in past releases -->
+  <dependency org="ehcache" name="ehcache" rev="1.1" conf="main->default"/>
+  <dependency org="gnuwin32" name="freetype" rev="2.3.5" conf="main->default"/>
+  <dependency org="zlib" name="zlib" rev="1.2.5" conf="main->main"/>
+  <dependency org="podofo" name="podofo" rev="0.81_Modified" conf="main->default"/>
+</dependencies>
+</ivy-module>

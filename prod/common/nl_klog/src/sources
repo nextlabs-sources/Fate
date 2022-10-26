@@ -1,0 +1,12 @@
+TARGETNAME=nl_klog
+TARGETTYPE=EXPORT_DRIVER
+DLLDEF=nl_klog.def
+INCLUDES=$(INCLUDES);..\include;..\..\..\include
+
+TARGETLIBS=$(TARGETLIBS)
+
+C_DEFINES=$(C_DEFINES)
+
+SOURCES =nl_klog.c		\
+		nl_klog.rc
+

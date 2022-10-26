@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# Generate the destiny RPM package from the build  
+
+RUNTIMEROOT=usr/local/ce
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR";
+    exit 1;
+fi
+
+if [ $# -eq 2 ] ; then
+    product=$1;
+    template=$2;
+else
+    echo "Usage: $0 product templatefile";
+    echo "   e.g. $0 LFSE rpm-spec.template.debug"
+    echo "        The generation script will go into the product directory"
+    echo "        to search for the template."
+    exit 1;
+fi
+
+PRODUCTDIR=${NLENFORCERSDIR}/prods/${product}
+
+if [ ! -d $PRODUCTDIR ]; then
+    echo "Invalid product: $product"
+    exit 1;
+fi
+
+BUILDOUTPUTDIR=$PRODUCTDIR/build.output
+
+template=$PRODUCTDIR/$2
+
+
+# Step 1. Gen the directory tree for RPM to work
+# No need for other rpm directories
+
+dirlist=( rpm rpm/BUILD rpm/RPMS rpm/RPMS/i386 )
+
+for d in "${dirlist[@]}" ; do 
+    if [ ! -d ${BUILDOUTPUTDIR}/$d ] ; then
+        mkdir -p ${BUILDOUTPUTDIR}/$d;
+    fi
+done
+
+# Step 2. Gen the macro file to tell RPM to use personal directory
+echo "%_topdir ${BUILDOUTPUTDIR}/rpm" > ${HOME}/.rpmmacros
+
+# Step 3. Gen the spec file for RPM to work on
+
+rm -f /tmp/$$.spec;
+
+date=`date +%y%m%d`;
+userid=`whoami`;
+fullname=`finger $userid@localhost | grep Name | sed "s/^.*Name://"`;
+email=`echo $fullname | tr ' ' '.'`;
+
+cat $template | \
+while read line
+    do 
+        line=`echo $line | sed "s/___DATE___/${date}/"`;
+        line=`echo $line | sed "s/___NAME___/${fullname}/"`;
+        line=`echo $line | sed "s/___EMAIL___/${email}/"`;
+        line=`echo $line | sed "s|___BUILDOUTPUTDIR___|${BUILDOUTPUTDIR}|"`;
+        line=`echo $line | sed "s|___PRODUCTDIR___|${PRODUCTDIR}|"`;
+        line=`echo $line | sed "s|___RUNTIMEROOT___|${RUNTIMEROOT}|"`;
+        echo $line >> /tmp/$$.spec;
+    done
+
+# Step 4 Gen the RPM package
+rpmbuild -bb /tmp/$$.spec ; 
+
+# cleanup
+rm -f /tmp/$$.spec ;

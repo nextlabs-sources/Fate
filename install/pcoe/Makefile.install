@@ -1,0 +1,237 @@
+# Common make file for building installers
+#
+# IsCmdBld.exe commandline options:
+#	-a <product configuration>
+#	-b Output directory
+#	-n								No compile
+#	-p <ISM file>
+#	-q3                             Only compile setup.rul
+#	-r <release name>
+#	-x								Stop on error
+#	-y <product version>
+
+
+#
+# Prepare environment
+#
+
+CURRENT_MKFILE_PATH    := $(abspath $(lastword $(MAKEFILE_LIST)))
+CURRENT_MKFILE_DIRPATH := $(dir $(CURRENT_MKFILE_PATH))
+
+ifeq ($(ProgramW6432), )
+	ENV_OS=x86
+	PROGRAM_FILES_X86=C:/Program Files
+else
+	ENV_OS=x64
+	PROGRAM_FILES_X86=C:/Program Files (x86)
+endif
+
+PROGRAM_FILES_X86_DOS=$(subst /,\,$(PROGRAM_FILES_X86))
+
+PERL=perl
+ISCMDBLD=$(PROGRAM_FILES_X86)/InstallShield/2014 StandaloneBuild/System/IsCmdBld.exe
+# SIGNTOOL_OFFICIAL_TOOL=$(PROGRAM_FILES_X86)/Windows Kits/8.0/bin/x64/signtool.exe
+SIGNTOOL_OFFICIAL_TOOL=echo
+SIGNTOOL_OFFICIAL_ARGS=sign /ac c:/release/bin/DigiCertAssuredIDRootCA.cer /f c:/release/bin/NextLabs.pfx /p IiVf1itvOrqJ /n "NextLabs Inc." /fd sha256 /tr http://timestamp.digicert.com
+SIGNTOOL_OFFICIAL='$(SIGNTOOL_OFFICIAL_TOOL)' $(SIGNTOOL_OFFICIAL_ARGS)
+
+OFFICIALCERT=0
+VERSION_BUILD_SHORT=$(firstword $(subst -, ,$(VERSION_BUILD)))
+
+INSTALL_DIR=$(NLBUILDROOT)/install/$(PRODUCT_DIR_NAME)
+SCRIPT_DIR=$(NLBUILDROOT)/install/scripts
+INSTALL_BUILD_DIR=$(INSTALL_DIR)/build
+ASSEMBLY_DIR=$(INSTALL_BUILD_DIR)/data
+OUTPUT_DIR=$(INSTALL_BUILD_DIR)/output
+PACKAGE32_DIR=$(INSTALL_BUILD_DIR)/package32
+PACKAGE64_DIR=$(INSTALL_BUILD_DIR)/package64
+PACKAGE_FILE32=$(basename $(MSI_FILE32))-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+PACKAGE_FILE64=$(basename $(MSI_FILE64))-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+PUBLISH_DIR=$(NLBUILDROOT)/bin/installer
+BUILD_DIR=$(subst /,\,$(ASSEMBLY_DIR))
+DEPLOY_DIR=$(subst /,\,$(OUTPUT_DIR))
+
+TARGETS=
+
+ifneq ($(ISM_PRODUCT_CONFIG32), )
+	TARGETS+= installer32
+endif
+
+ifneq ($(ISM_PRODUCT_CONFIG64), )
+	TARGETS+= installer64
+endif
+
+PCOEWDE_TEMPDIR := $(shell mktemp -d)
+
+#
+# Print environment
+#
+
+$(info -----------------------------------------------------------------------------)
+$(info BUILDTYPE                   = $(BUILDTYPE))
+$(info VERSION_BUILD               = $(VERSION_BUILD))
+$(info VERSION_BUILD_SHORT         = $(VERSION_BUILD_SHORT))
+$(info BUILD_NUMBER                = $(BUILD_NUMBER))
+$(info Product directory name      = $(PRODUCT_DIR_NAME))
+$(info Packaging list              = $(PACKAGE_LIST))
+$(info Install directory           = $(INSTALL_DIR))
+$(info Assembly directory          = $(ASSEMBLY_DIR))
+$(info Output directory            = $(OUTPUT_DIR))
+$(info Package directory (32-bit)  = $(PACKAGE32_DIR))
+$(info Package directory (64-bit)  = $(PACKAGE64_DIR))
+$(info Package file (32-bit)       = $(PACKAGE_FILE32))
+$(info Package file (64-bit)       = $(PACKAGE_FILE64))
+$(info Publish directory           = $(PUBLISH_DIR))
+$(info Current OS                  = $(ENV_OS))
+$(info Program files (x86)         = $(PROGRAM_FILES_X86))
+$(info Program files (x86) DOS     = $(PROGRAM_FILES_X86_DOS))
+$(info ISM X64 template file name  = $(ISM_TEMPLATE_FILE_NAME_X64))
+$(info ISM X86 template file name  = $(ISM_TEMPLATE_FILE_NAME_X86))
+$(info ISM release                 = $(ISM_RELEASE))
+$(info ISM product config (32-bit) = $(ISM_PRODUCT_CONFIG32))
+$(info ISM product config (64-bit) = $(ISM_PRODUCT_CONFIG64))
+$(info ISM output directory        = $(DEPLOY_DIR))
+$(info ISM output directory        = $(DEPLOY_DIR))
+$(info CURRENT_MKFILE_PATH         = $(CURRENT_MKFILE_PATH))
+$(info CURRENT_MKFILE_DIRPATH      = $(CURRENT_MKFILE_DIRPATH))
+$(info -----------------------------------------------------------------------------)
+
+
+#
+# Targets
+#
+
+.PHONY: all
+all: assembly $(TARGETS) publish
+# all: assembly $(TARGETS) publish
+
+.PHONY: assembly
+assembly: clean
+	@echo "INFO: Prepare PCOE assembly"
+	# "$(PERL)" $(INSTALL_DIR)/prepareAssembly.pl --buildType=$(BUILDTYPE) --buildNum=$(BUILD_NUMBER) --version=$(VERSION_STR) --template=$(ISM_TEMPLATE_FILE_NAME)
+	mkdir -p $(CURRENT_MKFILE_DIRPATH)/installer
+	cd $(NLBUILDROOT)/bin ; tar cf - include java release_dotnet2 release_win_x64 release_win_x86 | ( cd $(CURRENT_MKFILE_DIRPATH)/installer ; tar xf - )
+	cd $(NLBUILDROOT)/install/pc/build/data ; tar cf - java jre_x64 jre_x86 release_dotnet release_win_x64 release_win_x86 resource resource32 resource64 | ( cd $(CURRENT_MKFILE_DIRPATH)/installer ; tar xf - )
+	cd $(NLBUILDROOT)/install/oe/build/data ; tar cf - release_win_x64 release_win_x86 resource resource32 resource64 | ( cd $(CURRENT_MKFILE_DIRPATH)/installer ; tar xf - )
+	cd $(NLBUILDROOT)/install/wde/build/data ; tar cf - artifacts artifacts32 artifacts64 release_win_x64 release_win_x86 | ( cd $(CURRENT_MKFILE_DIRPATH)/installer ; tar xf - )
+	cd $(NLBUILDROOT)/ ; cp -f prod/pc/cesdk/client/service/tamperproof/injection/acrobat.exe.ini $(CURRENT_MKFILE_DIRPATH)/installer/resource32/
+	cd $(NLBUILDROOT)/ ; cp -f prod/pc/cesdk/client/service/tamperproof/injection/acroRd32.exe.ini $(CURRENT_MKFILE_DIRPATH)/installer/resource32/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; tar cf - Install2015 'Script Files' | ( cd $(CURRENT_MKFILE_DIRPATH)/installer ; tar xf - )
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/java/castor.jar 						installer/java/castor-0.9.5.4.jar
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/java/commons-collections.jar			installer/java/commons-collections-2.1.1.jar
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/java/commons-discovery.jar 			installer/java/commons-discovery-0.2.jar
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/java/ehcache.jar 						installer/java/ehcache-1.1.jar
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/java/wsdl4j.jar 						installer/java/wsdl4j-1.5.1.jar
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/commprofile.template.xml		installer/resource/commprofile.xml
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/logging.template.properties	installer/resource/logging.properties
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/nl_tamper.inf 				installer/release_win_x64/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/nlinjection.inf 				installer/release_win_x64/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/nl_tamper.inf 				installer/release_win_x86/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp installer/resource/nlinjection.inf 				installer/release_win_x86/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp Install2015/Data/x86/msvcp71.dll 				installer/release_win_x86/
+	cd $(CURRENT_MKFILE_DIRPATH)/ ; cp Install2015/Data/x86/msvcr71.dll 				installer/release_win_x86/
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/common/lib/mch/3.0/src/driver/nlinjection_2015.inf 	$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/nlinjection.inf
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/common/lib/mch/3.0/src/driver/nlinjection_2015.inf 	$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/nlinjection.inf
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/common/lib/mch/3.0/src/driver/nlinjection_2015.inf 	$(CURRENT_MKFILE_DIRPATH)/installer/resource/nlinjection.inf
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/pc/tamper/fs/filter/nl_tamper_2015.inf 				$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/nl_tamper.inf
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/pc/tamper/fs/filter/nl_tamper_2015.inf 				$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/nl_tamper.inf
+	cd $(NLBUILDROOT)/ ; unix2dos -n prod/pc/tamper/fs/filter/nl_tamper_2015.inf 				$(CURRENT_MKFILE_DIRPATH)/installer/resource/nl_tamper.inf
+	rm -rf $(PCOEWDE_TEMPDIR) ; mkdir -p $(PCOEWDE_TEMPDIR)
+	unzip -o $(WDE_HLKSIGNED_BINARIES_ZIP_FILE) -d $(PCOEWDE_TEMPDIR)
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/procdetect.inf $(CURRENT_MKFILE_DIRPATH)/installer/artifacts/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/procdetect.inf $(CURRENT_MKFILE_DIRPATH)/installer/artifacts/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/amd64/nlcc.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nl_tamper.inf $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nl_tamper.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nl_tamper.x64.cat $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlcc.x64.cat $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlinjection.inf $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlinjection.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/procdetect.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/i386/nlcc.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nl_tamper.inf $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nl_tamper.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nl_tamper.x86.cat $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlcc.x86.cat $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlinjection.inf $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlinjection.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/procdetect.sys $(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nl_tamper.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlcc.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlinjection.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nl_tamper.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlcc.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlinjection.inf $(CURRENT_MKFILE_DIRPATH)/installer/resource/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nl_tamper.x86.cat $(CURRENT_MKFILE_DIRPATH)/installer/resource32/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x86/nlcc.x86.cat $(CURRENT_MKFILE_DIRPATH)/installer/resource32/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nl_tamper.x64.cat $(CURRENT_MKFILE_DIRPATH)/installer/resource64/
+	cd $(PCOEWDE_TEMPDIR) ; cp -f ./x64/nlcc.x64.cat $(CURRENT_MKFILE_DIRPATH)/installer/resource64/
+	cd $(NLBUILDROOT) ; cp -f ./prod/pep/endpoint/adobepep/configuration/64BitMAPIBroker.exe.ini $(CURRENT_MKFILE_DIRPATH)/installer/resource64/
+	rm -rf $(PCOEWDE_TEMPDIR)
+	cd $(NLBUILDROOT)/ ; cp install/pcoe/$(ISM_TEMPLATE_FILE_NAME_X86) $(CURRENT_MKFILE_DIRPATH)/installer/$(ISM_TEMPLATE_FILE_NAME_X86)
+	cd $(NLBUILDROOT)/ ; C:/Windows/syswow64/cscript.exe //nologo build/ISAutoGUIDVersion.js $(CURRENT_MKFILE_DIRPATH)/installer/$(ISM_TEMPLATE_FILE_NAME_X86) $(VERSION_STR).$(BUILD_NUMBER)
+	cd $(NLBUILDROOT)/ ; cp install/pcoe/$(ISM_TEMPLATE_FILE_NAME_X64) $(CURRENT_MKFILE_DIRPATH)/installer/$(ISM_TEMPLATE_FILE_NAME_X64)
+	cd $(NLBUILDROOT)/ ; C:/Windows/syswow64/cscript.exe //nologo build/ISAutoGUIDVersion.js $(CURRENT_MKFILE_DIRPATH)/installer/$(ISM_TEMPLATE_FILE_NAME_X64) $(VERSION_STR).$(BUILD_NUMBER)
+	chmod -R +w $(CURRENT_MKFILE_DIRPATH)/installer
+
+.PHONY: installer32
+installer32: signexedll32
+	@echo "INFO: Generate 32-bit PCOE installer"
+	mkdir -p $(DEPLOY_DIR)
+	'$(ISCMDBLD)' -x -r $(ISM_RELEASE) -p "installer/$(ISM_TEMPLATE_FILE_NAME_X86)" -b "$(DEPLOY_DIR)"
+	
+	@echo "INFO: Sign the msi file"
+	cd '$(OUTPUT_DIR)/CompliantEnterprisex86/$(ISM_RELEASE)/DiskImages/DISK1' && dir && cmd /C '$(NLBUILDROOT)/install/scripts/signModulesByServer256Only.bat'
+
+.PHONY: installer64
+installer64: signexedll64
+	@echo "INFO: Generate 64-bit PCOE installer"
+	mkdir -p $(DEPLOY_DIR)
+	'$(ISCMDBLD)' -x -r $(ISM_RELEASE) -p "installer/$(ISM_TEMPLATE_FILE_NAME_X64)" -b "$(DEPLOY_DIR)"
+	
+	@echo "INFO: Sign the msi file"
+	cd '$(OUTPUT_DIR)/CompliantEnterprisex64/$(ISM_RELEASE)/DiskImages/DISK1' && dir && cmd /C '$(NLBUILDROOT)/install/scripts/signModulesByServer256Only.bat'
+
+.PHONY: signexedll32
+signexedll32:
+	@echo "INFO: Sign 32-bit dll and exe files"
+	cd '$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x86/' && dir && cmd /C '$(NLBUILDROOT)/install/scripts/signModulesByServer256Only.bat'
+
+.PHONY: signexedll64
+signexedll64:
+	@echo "INFO: Sign 64-bit dll and exe files"
+	cd '$(CURRENT_MKFILE_DIRPATH)/installer/release_win_x64/' && dir && cmd /C '$(NLBUILDROOT)/install/scripts/signModulesByServer256Only.bat'
+
+.PHONY: clean
+clean:
+	rm -rf $(CURRENT_MKFILE_DIRPATH)/installer $(DEPLOY_DIR)
+
+.PHONY: publish
+publish:
+	@echo "INFO: Publish installer packages"
+	@if [ "$(MSI_FILE32)" != "" ]; then							\
+		echo "INFO:   Copying 32-bit installer package" ;		\
+		if [ ! -d $(PACKAGE32_DIR) ]; then						\
+			mkdir -p $(PACKAGE32_DIR) ;							\
+		fi ;													\
+		cp -f $(OUTPUT_DIR)/CompliantEnterprisex86/$(ISM_RELEASE)/DiskImages/DISK1/$(MSI_FILE32) $(PACKAGE32_DIR)/ ; \
+		cp -f $(CURRENT_MKFILE_DIRPATH)/installer/resource/commprofile.xml $(PACKAGE32_DIR)/ ; \
+		cp -f $(CURRENT_MKFILE_DIRPATH)/installer/artifacts32/injection.ini $(PACKAGE32_DIR)/injection.ini.template ; \
+		cd $(PACKAGE32_DIR); zip ../$(PACKAGE_FILE32) * ;		\
+	fi
+	@if [ "$(MSI_FILE64)" != "" ]; then							\
+		echo "INFO:   Copying 64-bit installer package" ;		\
+		if [ ! -d $(PACKAGE64_DIR) ]; then						\
+			mkdir -p $(PACKAGE64_DIR) ;							\
+		fi ;													\
+		cp -f $(OUTPUT_DIR)/CompliantEnterprisex64/$(ISM_RELEASE)/DiskImages/DISK1/$(MSI_FILE64) $(PACKAGE64_DIR)/ ; \
+		cp -f $(CURRENT_MKFILE_DIRPATH)/installer/resource/commprofile.xml $(PACKAGE64_DIR)/ ; \
+		cp -f $(CURRENT_MKFILE_DIRPATH)/installer/artifacts64/injection.ini $(PACKAGE64_DIR)/injection.ini.template ; \
+		cd $(PACKAGE64_DIR); zip ../$(PACKAGE_FILE64) * ;		\
+	fi
+	@if [ ! -d $(PUBLISH_DIR) ]; then							\
+		mkdir -p $(PUBLISH_DIR)	;								\
+	fi
+	cp -f $(INSTALL_BUILD_DIR)/*.zip $(PUBLISH_DIR)
+	@echo "INFO:   Content of $(PUBLISH_DIR)"
+	@ls -al $(PUBLISH_DIR)

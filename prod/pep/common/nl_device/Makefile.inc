@@ -1,0 +1,29 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_EDP)
+VERSION_MAJOR		= $(VERSION_MAJOR_EDP)
+VERSION_MINOR		= $(VERSION_MINOR_EDP)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_EDP)
+VERSION_PATCH		= $(VERSION_PATCH_EDP)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS = 
+SUBTARGET = nl_device
+SUBTARGET_STATIC = yes
+
+WINDDK = C:/WinDDK/7600.16385.1
+
+SRC = src/nl_device.cpp
+
+INCPATH = \
+  $(WINSDK_ROOT)/include \
+  $(MSVC_ROOT)/VC/include \
+  $(MSVC_ROOT)/VC/atlmfc/Include \
+  include \
+  $(WINDDK)/inc/api \
+  $(WINDDK)/inc/ddk \
+  $(WINDDK)/inc/crt \
+  $(NLEXTERNALDIR)/boost/boost_1_45_0
+
+LIBS += ole32 setupapi uuid advapi32

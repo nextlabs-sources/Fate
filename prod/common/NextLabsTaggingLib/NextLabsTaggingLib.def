@@ -1,0 +1,5 @@
+EXPORTS
+	NLT_GetAllTags
+	NLT_FreeAllTags
+	NLT_AddTag
+	NLT_DeleteTag

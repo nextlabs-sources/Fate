@@ -1,0 +1,115 @@
+<!-- build_compile.xml
+
+Description:
+	This ANT script compiles Key Management Service Java service.
+	
+	To use this script, you must update properties in build_compile.properties or overide 
+	them from commandline (using -D option). For example:
+		
+		set PATH=%NLEXTERNALDIR%\apache-ant\apache-ant-1.7.0\bin;%PATH%
+		ant -XX:MaxPermSize=512m -Dnlbuildroot=%NLBUILDROOT% -Dbuild_number=10001 -f build_compile.xml
+		
+	or
+		
+		set PATH=%NLEXTERNALDIR%\apache-ant\apache-ant-1.7.0\bin;%PATH%
+		set ANT_OPTS=-XX:MaxPermSize=512m -Dnlbuildroot=%NLBUILDROOT% -Dbuild_number=10001 
+		ant -f build_compile.xml -v
+-->
+<project name="build_compile" default="all" basedir=".">
+
+	<!-- Propery files -->
+	<property file="${basedir}/build_compile.properties" />
+	
+	<!-- Global properties -->
+	<property name="xlib_dir" location="${nlbuildroot}/xlib" />
+	<property name="xlib_jar_dir" location="${xlib_dir}/java" />
+	<property name="bin_dir" location="${nlbuildroot}/bin" />
+	<property name="bin_jar_dir" location="${bin_dir}/java" />
+	<property name="build_dir" location="${basedir}/build" />
+	<property name="classes_dir" value="${build_dir}/classes" />
+	<property name="test_classes_dir" value="${build_dir}/classes-test" />
+	<property name="kms_jar_name" value="KeyManagementService.jar" />
+	<property name="test_jar_name" value="KeyManagementService-test.jar" />
+
+	<!-- Dump properties -->
+	<echoproperties />
+
+	<echo message="INFO: Dump properties completed" />
+	
+	<!-- Sanity checks -->
+	<fail message="nlbuildroot is not set" unless="nlbuildroot" />
+	<fail message="nlbuildroot is empty">
+		<condition>
+			<equals arg1="${nlbuildroot}" arg2="" trim="true" />
+		</condition>
+	</fail>
+	<available file="${nlbuildroot}" type="dir" property="local.nlbuildroot_exists" />
+	<fail message="nlbuildroot directory does not exist - ${nlbuildroot}" unless="local.nlbuildroot_exists" />
+
+	<echo message="INFO: Sanity check completed (no error)" />
+	
+	<!-- Class path -->
+	<path id="compile.classpath">
+		<fileset dir="${xlib_jar_dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- Global tasks -->
+	<tstamp>
+		<format property="local.now" pattern="EEE, d MMM yyyy HH:mm:ss Z" />
+	</tstamp>
+
+	<echo message="version_str = ${version_str}" />
+	<echo message="time = ${local.now}" />
+	
+	<!-- Targets -->
+	<target name="all" depends="compile" />
+
+	<target name="compile">
+		<mkdir dir="${classes_dir}" />
+		<mkdir dir="${test_classes_dir}" />
+
+		<!-- Compile code -->
+		<javac srcdir="main" destdir="${classes_dir}" verbose="true" > 
+			<classpath refid="compile.classpath" />
+			<include name="**/*.java" />
+		</javac>
+		<javac srcdir="test" destdir="${test_classes_dir}" verbose="true" >
+			<classpath refid="compile.classpath" />
+			<classpath path="${classes_dir}" />
+			<include name="**/*.java" />
+		</javac>
+
+		<!-- Create jar files -->
+		<jar destfile="${build_dir}/${kms_jar_name}" basedir="${classes_dir}">
+			<manifest>
+				<attribute name="Provider-Class" value="com.nextlabs.service.keyservice.KeyService" />
+				<attribute name="Implementation-Vendor" value="NextLabs, Inc." />
+				<attribute name="Implementation-Title" value="${product_name}" />
+				<attribute name="Implementation-Version" value="${version_str} (${build_number})" />
+				<attribute name="Implementation-Time" value="${local.now}" />
+			</manifest>
+		</jar>
+		<jar destfile="${build_dir}/${test_jar_name}" basedir="${test_classes_dir}">
+			<manifest>
+				<attribute name="Provider-Class" value="com.nextlabs.service.keyservice.KeyServiceTest" />
+				<attribute name="Implementation-Vendor" value="NextLabs, Inc." />
+				<attribute name="Implementation-Title" value="${product_name}" />
+				<attribute name="Implementation-Version" value="${version_str} (${build_number})" />
+				<attribute name="Implementation-Time" value="${local.now}" />
+			</manifest>
+		</jar>
+
+		<!-- Copy to distribution directory -->
+		<mkdir dir="${bin_jar_dir}" />
+		<copy file="${build_dir}/${kms_jar_name}" todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_dir}/${test_jar_name}" todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+                <copy file="${basedir}/../config/KeyManagementService.properties" todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true" dir="${build_dir}" />
+	</target>
+
+</project>

@@ -1,0 +1,9 @@
+EXPORTS
+	NL_KIF_Probe
+	NL_KIF_Register
+	NL_KIF_Initialize
+	NL_KIF_GetNextKernelRequests
+	NL_KIF_SendKernelResponse
+	NL_KIF_Close
+	NL_KIF_RequestFree
+	NL_KIF_Shutdown

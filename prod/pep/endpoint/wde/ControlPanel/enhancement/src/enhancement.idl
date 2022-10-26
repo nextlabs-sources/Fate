@@ -1,0 +1,40 @@
+// enhancement.idl : IDL source for enhancement
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (enhancement.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(A0E273F0-B6A3-4343-94CE-05C65FCB66F9),
+	dual,
+	nonextensible,
+	helpstring("INLEDPManager Interface"),
+	pointer_default(unique)
+]
+interface INLEDPManager : IDispatch{
+	[id(1), helpstring("method SetDebugMode")] HRESULT SetDebugMode([in] SHORT bEnable, [out] LONG* lRet);
+	[id(2), helpstring("method StartPCService")] HRESULT StartPCService([out] LONG* lRet);
+	[id(3), helpstring("method EnableAgentLog")] HRESULT EnableAgentLog([in] SHORT bEnable, [out] LONG* lRet);
+	[id(4), helpstring("method Decrypt")] HRESULT Decrypt([in] BSTR strPwd);
+};
+[
+	uuid(92C9A2CB-2573-4370-B522-0856A68A59DD),
+	version(1.0),
+	helpstring("enhancement 1.0 Type Library")
+]
+library enhancementLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(68501D9A-B1A1-4EF3-9607-B9B8C0EFEDC0),
+		helpstring("NLEDPManager Class")
+	]
+	coclass NLEDPManager
+	{
+		[default] interface INLEDPManager;
+	};
+};

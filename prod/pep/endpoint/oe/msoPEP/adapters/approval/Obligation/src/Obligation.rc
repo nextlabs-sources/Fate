@@ -1,0 +1,224 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""src\\Obligation.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OBLIGATION_DIALOG DIALOGEX 0, 0, 320, 281
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Approval Required"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Submit For Approval",ID_SUBMIT,20,258,70,16
+    PUSHBUTTON      "Cancel",IDCANCEL,225,258,70,16,WS_GROUP
+    EDITTEXT        IDC_DISPLAY,15,17,273,35,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | NOT WS_BORDER | NOT WS_TABSTOP
+    LTEXT           "Approver",IDC_STATIC,20,52,30,11
+    COMBOBOX        IDC_FTPCUSTOMER,85,202,226,30,CBS_DROPDOWN | CBS_SORT | NOT WS_VISIBLE | WS_VSCROLL | WS_GROUP | WS_TABSTOP
+    LTEXT           "Recipient(s)",IDC_STATIC,20,74,39,8
+    LTEXT           "Content",IDC_STATIC,20,119,27,8
+    LTEXT           "Files",IDC_STATIC,20,171,15,8
+    EDITTEXT        IDC_APPROVERS,69,52,226,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    LTEXT           "Subject",IDC_STATIC_SUBJECT,20,96,25,8
+    EDITTEXT        IDC_FTPRECIPIENT,69,74,226,14,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_SUBJECT,69,96,226,14,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_FTPPURPOSE,69,119,226,45,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | WS_GROUP
+    LISTBOX         IDC_FTPFILE,69,171,226,63,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_GROUP | WS_TABSTOP
+    PUSHBUTTON      "Add File",IDC_FTPADDFILE,86,237,50,14,WS_GROUP
+    PUSHBUTTON      "Delete File",IDC_FTPDELETEFILE,195,237,50,14,WS_GROUP
+END
+
+IDD_EMAILDLG DIALOGEX 0, 0, 313, 262
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Approval Required"
+FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Submit For Approval",ID_EMALSUBMIT,24,240,77,16
+    PUSHBUTTON      "Cancel",IDCANCEL,218,240,77,16
+    LTEXT           "Purpose",IDC_STATIC,24,56,29,8
+    LTEXT           "Files",IDC_STATIC,24,110,21,8
+    EDITTEXT        IDC_EMAILPURPOSE,57,56,238,49,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+    LISTBOX         IDC_FILELIST,57,109,238,108,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add Files",IDC_EMAILAddFile,86,221,56,14
+    PUSHBUTTON      "Delete Files",IDC_EMAILDelFile,211,221,56,14
+    EDITTEXT        IDC_DIAPLAY,23,17,264,33,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | NOT WS_BORDER
+END
+
+IDD_REMOVABLE DIALOGEX 0, 0, 320, 254
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Approval Required"
+FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Submit For Approval",ID_RESUBMIT,21,233,81,16
+    PUSHBUTTON      "Cancel",IDCANCEL,214,233,81,16
+    EDITTEXT        IDC_REDISPLAY,23,20,275,31,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | NOT WS_BORDER
+    EDITTEXT        IDC_REMOVABLEPURPOSE,61,73,234,48,ES_MULTILINE | ES_AUTOHSCROLL | WS_VSCROLL | WS_HSCROLL
+    LISTBOX         IDC_REMOVABLEFILELIST,61,124,234,83,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add Files",IDC_AddFile,77,211,57,14
+    PUSHBUTTON      "Delete Files",IDC_DelFile,203,211,57,14
+    LTEXT           "Purpose",IDC_STATIC,21,71,33,8
+    LTEXT           "Files",IDC_STATIC,21,124,21,8
+    LTEXT           "Recipients",IDC_STATIC,21,56,33,8
+    EDITTEXT        IDC_RMRECIPIENTS,61,54,234,14,ES_AUTOHSCROLL
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5, 5, 0, 0
+ PRODUCTVERSION 5, 5, 0, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "NextLabs Microsoft Outlook Enforcer (Win32)"
+            VALUE "FileVersion", "5.5.0.0 (dev-WAYA-pfung-20110202104948)"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "NextLabs Microsoft Outlook Enforcer"
+            VALUE "ProductVersion", "5.5.0.0 (dev-WAYA-pfung-20110202104948)"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_OBLIGATION_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 274
+    END
+
+    IDD_EMAILDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 306
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 256
+    END
+
+    IDD_REMOVABLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 249
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "..\\res\\dlp.ico"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\Obligation.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,308 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_COMPANY_LOGO        PNG                     ".\\..\\res\\logo_edp_small.png"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MSG_DIALOG DIALOGEX 0, 0, 245, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,98,53,50,14
+    LTEXT           "Static",IDC_STATUS,7,14,231,8
+    LTEXT           "Static",IDC_DESCRIPTION,7,29,231,23
+END
+
+IDD_PASSWORD DIALOGEX 0, 0, 268, 190
+STYLE DS_SETFONT | DS_SETFOREGROUND | DS_CONTROL | WS_CHILD | WS_SYSMENU
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    CONTROL         "Encrypt files",IDC_SYM_ENCRYPT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,47,242,10
+    EDITTEXT        IDC_PASSWORD1,14,141,95,12,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASSWORD2,152,141,95,12,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_SYM_DESC1,5,20,259,25,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_BORDER | WS_VSCROLL
+    LTEXT           "Password",IDC_PASSWORD_DESC,14,131,95,10
+    LTEXT           "Confirm Password",IDC_COMFIRM_DESC,152,131,95,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,187,268,1
+    CONTROL         "",IDC_SYMM_FILE_LIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,14,60,240,66
+    LTEXT           "Encryption",IDC_GROUPHEADER,5,2,104,17
+    LTEXT           "Password must be at least 6 characters and contain a number and uppercase letter.",IDC_BANNER_MSG,30,160,224,21
+    LTEXT           "",IDC_LOGO_PICTURE,185,2,73,17
+    LTEXT           "",IDC_BANNER_FLAG,14,160,16,21,SS_CENTERIMAGE
+END
+
+IDD_ENCRYPT_DIALOG DIALOGEX 0, 0, 268, 190
+STYLE DS_SETFONT | DS_SETFOREGROUND | DS_CONTROL | WS_CHILD | WS_SYSMENU
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "Please press OK to proceed by allowing the Policy Assistant to automatically encrypt your data. The recipient will require an enforcer in order to access this data. Entitlement policies will apply.",IDC_CERT_DESC1,4,29,260,32,SS_NOPREFIX
+    CONTROL         "Encrypt files",IDC_ENCRYPT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,61,260,13
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,4,187,260,1
+    CONTROL         "",IDC_CERT_FILE_LIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,12,74,242,73
+    LTEXT           "Encryption",IDC_GROUPHEADER,9,2,103,17
+    LTEXT           "",IDC_LOGO_PICTURE,185,2,73,17
+END
+
+IDD_PROGRESS_DLG DIALOGEX 0, 0, 242, 78
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Dialog"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,185,57,50,14
+    CONTROL         "",IDC_PROGRESS_BAR,"msctls_progress32",WS_BORDER,7,30,228,14
+    LTEXT           "Static",IDC_INDICATION,7,7,228,23
+END
+
+IDD_PROGRESS_DLG2 DIALOGEX 0, 0, 242, 78
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,185,57,50,14
+    LTEXT           "Static",IDC_INDICATION2,7,7,228,23
+    CONTROL         "Custom1",IDC_CUSTOM1,"gs_nonprogressbar",WS_TABSTOP,7,32,228,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MSG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 238
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_PASSWORD, DIALOG
+    BEGIN
+        RIGHTMARGIN, 267
+        VERTGUIDE, 4
+        VERTGUIDE, 5
+        VERTGUIDE, 14
+        VERTGUIDE, 30
+        VERTGUIDE, 109
+        VERTGUIDE, 152
+        VERTGUIDE, 178
+        VERTGUIDE, 247
+        VERTGUIDE, 254
+        VERTGUIDE, 264
+        BOTTOMMARGIN, 188
+        HORZGUIDE, 2
+        HORZGUIDE, 19
+        HORZGUIDE, 22
+        HORZGUIDE, 43
+        HORZGUIDE, 53
+        HORZGUIDE, 55
+        HORZGUIDE, 126
+        HORZGUIDE, 131
+        HORZGUIDE, 141
+        HORZGUIDE, 153
+        HORZGUIDE, 160
+        HORZGUIDE, 181
+    END
+
+    IDD_ENCRYPT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 264
+        VERTGUIDE, 12
+        VERTGUIDE, 183
+        VERTGUIDE, 254
+        VERTGUIDE, 264
+        BOTTOMMARGIN, 189
+        HORZGUIDE, 21
+        HORZGUIDE, 27
+        HORZGUIDE, 61
+        HORZGUIDE, 64
+        HORZGUIDE, 74
+        HORZGUIDE, 85
+        HORZGUIDE, 89
+        HORZGUIDE, 110
+        HORZGUIDE, 114
+        HORZGUIDE, 146
+    END
+
+    IDD_PROGRESS_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 71
+    END
+
+    IDD_PROGRESS_DLG2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 71
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5, 5, 1, 0
+ PRODUCTVERSION 5, 5, 1, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "Enterprise Data Protection (x86)"
+            VALUE "FileVersion", "5.5.1.0 (11.172.1837DX/v200-kzhou-kzhou-2011.06.21-18:37)"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "Enterprise Data Protection"
+            VALUE "ProductVersion", "5.5.1.0 (11.172.1837DX/v200-kzhou-kzhou-2011.06.21-18:37)"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    ".\\..\\res\\dlp.ico"
+IDI_EMAIL               ICON                    ".\\..\\res\\externalemail32.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  ".\\..\\res\\info16.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_PROGRESS_TITLE      "Encryption Automation"
+    IDS_PROGRESS_DESCRIPTION "Processing file encryption..."
+    IDS_CONFLICT_OBLIGATIONS 
+                            "The file %s has more than one conflicted encryption policies applied!"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_PASSWD2LONG         "Password is too long! It should be less than 128 characters!"
+    IDS_PROGRESS_ENCRYPTING "Encrypting file %s..."
+    IDS_SYM_DESC1           "Please provide the password and click <%s> to encrypt your data. You will need to share your password with any person you wish to give access to this data."
+    IDS_CERT_DESC1          "Please press <%s> to proceed by allowing the Policy Assistant to automatically encrypt your data. The recipient will require an enforcer in order to access this data. Entitlement policies will apply."
+    IDS_CERT_DESC2          "Press <Cancel> will disallow the automated encryption. Depending on your company policies, the request may also be canceled."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

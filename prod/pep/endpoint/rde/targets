@@ -1,0 +1,7 @@
+
+TARGETS = \
+	prod/pep/common/nl_device \
+	prod/pep/endpoint/rde/user \
+	prod/pep/endpoint/rde/win7support/logon_detection_win7 \
+	prod/pep/endpoint/rde/win7support/NextLabsCredentialProvider \
+	prod/pep/endpoint/rde/nlPnpDriverInstaller

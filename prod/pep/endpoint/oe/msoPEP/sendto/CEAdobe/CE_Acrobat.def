@@ -1,0 +1,4 @@
+LIBRARY	"CEAcrobat"
+
+EXPORTS
+	PlugInMain @ 1

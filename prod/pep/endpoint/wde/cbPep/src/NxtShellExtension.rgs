@@ -1,0 +1,26 @@
+HKCR
+{
+	cbPep.NxtShellExtension.1 = s 'NxtShellExtension Class'
+	{
+		CLSID = s '{7ABFB944-EB91-4E60-826E-BC9AB54DD6AB}'
+	}
+	cbPep.NxtShellExtension = s 'NxtShellExtension Class'
+	{
+		CLSID = s '{7ABFB944-EB91-4E60-826E-BC9AB54DD6AB}'
+		CurVer = s 'cbPep.NxtShellExtension.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7ABFB944-EB91-4E60-826E-BC9AB54DD6AB} = s 'NxtShellExtension Class'
+		{
+			ProgID = s 'cbPep.NxtShellExtension.1'
+			VersionIndependentProgID = s 'cbPep.NxtShellExtension'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{06893719-9D67-4DFC-AEEA-D08B905D20BD}'
+		}
+	}
+}

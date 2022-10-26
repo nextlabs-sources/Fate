@@ -1,0 +1,22 @@
+TARGETNAME=procdetect
+TARGETTYPE=DRIVER
+DRIVERTYPE=UNKNOWN
+
+
+_LIBARCH = obj$(BUILD_ALT_DIR)\$(_BUILDARCH)
+
+!if "$(_BUILDARCH)" == "x86"
+_LIBARCH = obj$(BUILD_ALT_DIR)\i386
+!endif
+
+
+TARGETLIBS= $(DDK_LIB_PATH)\Rtlver.lib \
+            $(DDK_LIB_PATH)\Wdmsec.lib \
+            $(DDK_LIB_PATH)\Ksecdd.lib \
+			$(NLBUILDROOT_DOS)\prod\common\nlcc\klib\src\$(_LIBARCH)\nlcc_klib.lib
+
+INCLUDES=$(INCLUDES);..\include;$(NLBUILDROOT_DOS)\prod\common\nlcc;$(NLBUILDROOT)\prod\common\nlcc\klib\include
+
+SOURCES=PROCDETECT.C	\
+		IPCPOLICY.C 	\
+		PROCDETECT.RC

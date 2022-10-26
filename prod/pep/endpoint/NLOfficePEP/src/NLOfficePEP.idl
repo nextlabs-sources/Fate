@@ -1,0 +1,112 @@
+// NxtOfficePEP.idl : IDL source for NxtOfficePEP
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (NxtOfficePEP.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(CDD2A254-2991-40D6-9FD8-E9EED910FD9C),
+	dual,
+	nonextensible,
+	helpstring("INxtOfficeSink Interface"),
+	pointer_default(unique)
+]
+interface INxtOfficeSink : IDispatch{
+		// nextlabs self button, no used anymore
+	// [id(1), helpstring("method OnClickButton")] HRESULT OnClickButton([in] IDispatch* pCtrl);
+	// [id(2), helpstring("method GetImage")] HRESULT GetImage([in] IDispatch* pCtrl, [out,retval] IPictureDisp** pImage);
+
+	[id(4), helpstring("method FileSaveAction")] HRESULT FileSaveAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(5), helpstring("method FileSaveAsAction")] HRESULT FileSaveAsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(6), helpstring("method FileEmailAsPdfEmailAttachmentAction")] HRESULT FileEmailAsPdfEmailAttachmentAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(7), helpstring("method FileEmailAsXpsEmailAttachmentAction")] HRESULT FileEmailAsXpsEmailAttachmentAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(8), helpstring("method FileSendAsAttachmentAction")] HRESULT FileSendAsAttachmentAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(9), helpstring("method OleObjectctInsertAction")] HRESULT OleObjectctInsertAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+	[id(10), helpstring("method TextFromFileInsertAction")] HRESULT TextFromFileInsertAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(11), helpstring("method FileSaveToDocumentManagementServerAction")] HRESULT FileSaveToDocumentManagementServerAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(12), helpstring("method FileNewBlogPostAction")] HRESULT FileNewBlogPostAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(13), helpstring("method FileCreateDocumentWorkspaceAction")] HRESULT FileCreateDocumentWorkspaceAction(IDispatch* RibbonControl, VARIANT_BOOL *pvarfPressed, VARIANT* cancel);
+	
+	[id(14), helpstring("method AdvancedFilePropertiesAction")] HRESULT AdvancedFilePropertiesAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(15), helpstring("method ScreenClippingAction")] HRESULT ScreenClippingAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(16), helpstring("method PasteAction")] HRESULT PasteAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(17), helpstring("method CopyAction")] HRESULT CopyAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(24), helpstring("method FilePrintAction")] HRESULT FilePrintAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(25), helpstring("method PrintPreviewAndPrintAction")] HRESULT PrintPreviewAndPrintAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(18), helpstring("method FilePrintQuickAction")] HRESULT FilePrintQuickAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(27), helpstring("method TableOptionsDialogAction")] HRESULT TableOptionsDialogAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(28), helpstring("method EquationOptionsAction")] HRESULT EquationOptionsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(29), helpstring("method LabelOptionsAction")] HRESULT LabelOptionsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(30), helpstring("method AutoFormatOptionsAction")] HRESULT AutoFormatOptionsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(19), helpstring("method CutAction")] HRESULT CutAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	//[id(20), helpstring("method TabPrintAction")] HRESULT TabPrintAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+	[id(21), helpstring("method FileSaveAsWordDocxAction")] HRESULT FileSaveAsWordDocxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(22), helpstring("method FileSaveAsWordDotxAction")] HRESULT FileSaveAsWordDotxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(23), helpstring("method FileSaveAsWord97_2003Action")] HRESULT FileSaveAsWord97_2003Action([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(24), helpstring("method FileSaveAsPdfOrXpsAction")] HRESULT FileSaveAsPdfOrXpsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(25), helpstring("method FileSaveAsOtherFormatsAction")] HRESULT FileSaveAsOtherFormatsAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(26), helpstring("method FilePropertiesAction")] HRESULT FilePropertiesAction(IDispatch* RibbonControl, VARIANT_BOOL *pvarfPressed, VARIANT* cancel);
+	[id(27), helpstring("method FilePrintAction")] HRESULT FilePrintAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+
+	[id(28), helpstring("method FileSaveAsExcelXlsxAction")] HRESULT FileSaveAsExcelXlsxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(29), helpstring("method FileSaveAsExcelXlsxMacroAction")] HRESULT FileSaveAsExcelXlsxMacroAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(30), helpstring("method FileSaveAsExcel97_2003Action")] HRESULT FileSaveAsExcel97_2003Action([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(31), helpstring("method FilePublishExcelServicesAction")] HRESULT FilePublishExcelServicesAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(20), helpstring("method FileSaveAsExcelXlsbAction")] HRESULT FileSaveAsExcelXlsbAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+	[id(32), helpstring("method FileSaveAsPowerPointPpsxAction")] HRESULT FileSaveAsPowerPointPpsxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(33), helpstring("method FileSaveAsPowerPointPptxAction")] HRESULT FileSaveAsPowerPointPptxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(34), helpstring("method FileSaveAsPowerPoint97_2003Action")] HRESULT FileSaveAsPowerPoint97_2003Action([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(35), helpstring("method FilePackageForCDAction")] HRESULT FilePackageForCDAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(36), helpstring("method FilePublishSlidesAction")] HRESULT FilePublishSlidesAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(37), helpstring("method CreateHandoutsInWordAction")] HRESULT CreateHandoutsInWordAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(38), helpstring("method FileInternetFaxAction")] HRESULT FileInternetFaxAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(40), helpstring("method PictureInsertFromFilePowerPointAction")] HRESULT PictureInsertFromFilePowerPointAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(41), helpstring("method PictureInsertFromFileAction")] HRESULT PictureInsertFromFileAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(42), helpstring("method FileSaveAsWordOpenDocumentTextAction")] HRESULT FileSaveAsWordOpenDocumentTextAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(43), helpstring("method FileSaveAsExcelOpenDocumentSpreadsheetAction")] HRESULT FileSaveAsExcelOpenDocumentSpreadsheetAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(44), helpstring("method FileSaveAsPowerPointOpenDocumentPresentationAction")] HRESULT FileSaveAsPowerPointOpenDocumentPresentationAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+	[id(45), helpstring("method ExportToVideoAction")] HRESULT ExportToVideoAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(46), helpstring("method GetExtDataFromAccess")] HRESULT GetExtDataFromAccess([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(47), helpstring("method GetExtDataFromWeb")] HRESULT GetExtDataFromWeb([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(48), helpstring("method GetExtDataFromText")] HRESULT GetExtDataFromText([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(49), helpstring("method GetExtDataFromExistConn")] HRESULT GetExtDataFromExistConn([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);	
+	[id(50), helpstring("method DuplicateSelectedSlidesAction")] HRESULT DuplicateSelectedSlidesAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(51), helpstring("method BroadcastSlideShowAction")] HRESULT BroadcastSlideShowAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+	[id(52), helpstring("method WindowNewAction")] HRESULT WindowNewAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(53), helpstring("method ZoomCurrent100Action")] HRESULT ZoomCurrent100Action([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(54), helpstring("method ZoomOnePageAction")] HRESULT ZoomOnePageAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(55), helpstring("method ZoomTwoPagesAction")] HRESULT ZoomTwoPagesAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(56), helpstring("method ZoomPageWidthAction")] HRESULT ZoomPageWidthAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(57), helpstring("method CopyAsPictureAction")] HRESULT CopyAsPictureAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+
+	[id(58), helpstring("method FilePrintPreviewAction")] HRESULT FilePrintPreviewAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(59), helpstring("method PrintPreviewCloseAction")] HRESULT PrintPreviewCloseAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	[id(60), helpstring("method SheetMoveOrCopyAction")] HRESULT SheetMoveOrCopyAction([in] IDispatch* RibbonControl, [in,out]VARIANT* cancel);
+	
+};
+[
+	uuid(A82E0F9D-1A26-438C-A941-E6DED1C76209),
+	version(1.0),
+	helpstring("NxtOfficePEP 1.0 Type Library")
+]
+library NxtOfficePEPLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(B2C293BF-962A-42C5-8AC6-ED5C30BD52EA),
+		helpstring("NxtOfficeSink Class")
+	]
+	coclass NxtOfficeSink
+	{
+		[default] interface INxtOfficeSink;
+	};
+};

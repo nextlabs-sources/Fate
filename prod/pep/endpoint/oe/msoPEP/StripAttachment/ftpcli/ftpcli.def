@@ -1,0 +1,6 @@
+LIBRARY	"ftpcli.dll"
+
+EXPORTS
+    FtpUpload
+    FtpUploadEx
+    EFTFtpUpload

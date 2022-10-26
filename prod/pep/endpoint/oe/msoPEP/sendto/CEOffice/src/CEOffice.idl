@@ -1,0 +1,36 @@
+// CEOffice.idl : IDL source for CEOffice
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CEOffice.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(D321974F-1777-4DA7-AAD0-D4F5C01D3E97),
+	dual,
+	nonextensible,
+	helpstring("IOffice Interface"),
+	pointer_default(unique)
+]
+interface IOffice : IDispatch{
+};
+[
+	uuid(A7FC3CDC-20C3-4439-A571-4D7AB809A3FA),
+	version(1.0),
+	helpstring("CEOffice 1.0 Type Library")
+]
+library CEOfficeLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(22151926-4D7F-4452-8A2E-9B4AE4BE8108),
+		helpstring("Office Class")
+	]
+	coclass Office
+	{
+		[default] interface IOffice;
+	};
+};

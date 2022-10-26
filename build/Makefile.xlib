@@ -1,0 +1,243 @@
+# Makefile to get external header files and libraries produced by another branch
+# on a separate compile
+#
+# IMPORTANT
+#	The rules of using xlib are simple:
+#		1. Anything to compile a source tree that does not come off Perforce under
+#			this source branch or //depot/external/... belongs to $(NLBUILDROOT)/xlib.
+#		2. This source tree should not have any external reference other than
+#			to headers and libraries in //depot/external/... or $(NLBUILDROOT)/xlib.
+#			Any hidden external references makes the source tree hard to maintain.
+#		3. You are assumed to build up $(NLBUILDROOT)/xlib before compiling any
+#			source in the source tree. As a result, external references should point
+#			to $(NLBUILDROOT)/xlib. For example, NLCC need agent-pf.jar. That file
+#			must be available in $(NLBUILDROOT)/xlib/java before compilation starts.
+#		4. There are may ways to prepare $(NLBUILDROOT)/xlib. Choose whatever way
+#			you like. The standard way right now is pulling header files, .jar files
+#			and .dlls from release artifact .zip files. You may choose to use Ivy
+#			to pull the right version of these files. You may also copy xlib directory
+#			from release or nightly build.
+#
+# USAGE
+#	Before you compile this source tree, you must do one of the followings:
+#		1. Run Makefile.xlib to populate $(NLBUILDROOT)/xlib
+#			cd $(NLBUILDROOT)
+#			./configure --type=dev
+#			source build.config
+#			make -f build/Makefile.xlib
+#		2. Copy a xlib directory from nightly or release build and place it under
+#			$(NLBUILDROOT)/xlib
+#		3. Unzip xlib*.zip file from build artifacts
+
+
+#
+# Check for errors
+#
+
+ifeq ($(NLBUILDROOT),)
+  $(error ERROR: NLBUILDROOT undefined)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error ERROR: NLEXTERNALDIR undefined)
+endif
+
+ifeq ($(NLEXTERNALDIR2),)
+  $(error ERROR: NLEXTERNALDIR2 undefined)
+endif
+
+ifeq ($(XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE),)
+  $(error ERROR: XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE undefined)
+endif
+
+ifeq ($(XLIB_INSTALLER_BUILD_ARTIFACTS_XLIB_BIN_ZIP_FILE),)
+  $(error ERROR: XLIB_INSTALLER_BUILD_ARTIFACTS_XLIB_BIN_ZIP_FILE undefined)
+endif
+
+
+#
+# Default values
+#
+
+ifneq ($(BUILDTYPE), debug)
+	BUILDTYPE=release
+endif
+
+XLIB_DIR=$(NLBUILDROOT)/xlib
+XLIB_HEADER_DIR=$(XLIB_DIR)/include
+XLIB_BIN32_DIR=$(XLIB_DIR)/release_win_x86
+XLIB_BIN64_DIR=$(XLIB_DIR)/release_win_x64
+XLIB_DOTNET_DIR=$(XLIB_DIR)/release_dotnet
+XLIB_JAVA_DIR=$(XLIB_DIR)/java
+XLIB_JRE32_DIR=$(XLIB_DIR)/jre_x86
+XLIB_JRE64_DIR=$(XLIB_DIR)/jre_x64
+
+
+$(info ---------------------------------------------------------------------------)
+$(info --- Makefile.xlib ---)
+$(info BUILDTYPE                                        = $(BUILDTYPE))
+$(info XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE            = $(XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE))
+$(info XLIB_INSTALLER_BUILD_ARTIFACTS_XLIB_BIN_ZIP_FILE = $(XLIB_INSTALLER_BUILD_ARTIFACTS_XLIB_BIN_ZIP_FILE))
+$(info NLBUILDROOT                                      = $(NLBUILDROOT))
+$(info NLEXTERNALDIR                                    = $(NLEXTERNALDIR))
+$(info NLEXTERNALDIR2                                   = $(NLEXTERNALDIR2))
+$(info ---------------------------------------------------------------------------)
+
+
+.PHONY: all
+all: prepare_header prepare_destiny_java prepare_installer_support \
+	prepare_external_x86 prepare_external_x64 prepare_external_java \
+	prepare_external_jre_x86 prepare_external_jre_x64
+
+.PHONY: prepare_header
+prepare_header:
+	@if [ ! -d "$(XLIB_HEADER_DIR)" ]; then		\
+		mkdir -p "$(XLIB_HEADER_DIR)" ;			\
+	fi
+
+# Projects that uses .jar files
+#	//depot/Fate/main/prod/common/nlcc/service/java
+#	//depot/Fate/main/prod/pc/key_management/KeyManagementConsumer/java
+#	//depot/Fate/main/prod/pep/endpoint/se/service/server/service
+#	//depot/Fate/main/install/pc
+.PHONY: prepare_destiny_java
+prepare_destiny_java:
+	@if [ ! -d $(XLIB_JAVA_DIR) ]; then		\
+		mkdir -p $(XLIB_JAVA_DIR) ;			\
+	fi
+	unzip -jo $(XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE) \
+		'agent/lib/agent-common.jar'			\
+		'agent/lib/agent-controlmanager.jar'	\
+		'agent/lib/agent-ipc.jar'				\
+		'agent/lib/agent-tools.jar'				\
+		'agent/lib/agent-types.jar'				\
+		'agent/lib/client-pf.jar'				\
+		'agent/lib/common-domain-types.jar'		\
+		'agent/lib/common-domain.jar'			\
+		'agent/lib/common-framework-types.jar'	\
+		'agent/lib/common-framework.jar'		\
+		'agent/lib/common-oil.jar'				\
+		'agent/lib/common-pf.jar'				\
+		'agent/lib/common-version-impl.jar'		\
+		'agent/lib/common-version.jar'			\
+		'agent/lib/dabs-agent-services.jar'		\
+		'agent/lib/dabs-common-services.jar'	\
+		'agent/lib/deployment-types.jar'		\
+		'agent/lib/log-types.jar'				\
+		'agent/lib/management-types.jar'		\
+		'agent/lib/policy-types.jar'			\
+		'agent/lib/server-base.jar'				\
+		'server-shared-services.jar'			\
+		'agent/lib/server-shared-types.jar'		\
+		'agent/lib/version-types.jar'			\
+		-d $(XLIB_JAVA_DIR)
+
+.PHONY: prepare_installer_support
+prepare_installer_support:
+	@if [ ! -d $(XLIB_BIN32_DIR) ]; then		\
+		mkdir -p $(XLIB_BIN32_DIR) ;			\
+	fi
+	unzip -jo $(XLIB_INSTALLER_BUILD_ARTIFACTS_XLIB_BIN_ZIP_FILE) 'bin/release_win_x86/InstallerCommon32.dll' -d $(XLIB_BIN32_DIR)
+
+.PHONY: prepare_external_x86
+prepare_external_x86:
+	@if [ ! -d "$(XLIB_BIN32_DIR)" ]; then		\
+		mkdir -p "$(XLIB_BIN32_DIR)" ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/atl90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90u.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90u.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/vcomp90.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/freetype/bin/freetype6.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/tiff-4.0.0beta2/libtiff/libtiff.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/podofo-0.8.1-NextLabs-WFSE/release_lib_win32_vs2008/PoDoFoLib.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/zlib/zlib1.dll" "$(XLIB_BIN32_DIR)"	
+	cp -f "$(NLEXTERNALDIR)/microsoft/wdfCoInstaller/1.9/x86/WdfCoInstaller01009.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/boost/boost_1_43_0/stage-x86/lib/boost_regex-vc90-mt-1_43.dll" "$(XLIB_BIN32_DIR)"
+	cp -f "$(NLEXTERNALDIR)/tag_openxml/DocumentFormat.OpenXml.dll" "$(XLIB_BIN32_DIR)"
+
+.PHONY: prepare_external_x64
+prepare_external_x64:
+	@if [ ! -d "$(XLIB_BIN64_DIR)" ]; then		\
+		mkdir -p "$(XLIB_BIN64_DIR)" ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/atl90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcm90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcp90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcr90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfc90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfc90u.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfcm90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfcm90u.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/vcomp90.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/tiff-4.0.0beta2/release_lib_x64/libtiff.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/podofo-0.8.1-NextLabs-WFSE/release_lib_x64_vs2008/PoDoFoLib.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/zlib/zlib-1.2.5/release_lib_x64/zlibwapi.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/microsoft/wdfCoInstaller/1.9/amd64/WdfCoInstaller01009.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/boost/boost_1_43_0/stage-x64/lib/boost_regex-vc90-mt-1_43.dll" "$(XLIB_BIN64_DIR)"
+	cp -f "$(NLEXTERNALDIR)/tag_openxml/DocumentFormat.OpenXml.dll" "$(XLIB_BIN64_DIR)"
+
+# Notes: The .jar files used by PC should come from the same Destiny build artifacts package to 
+# make sure the right version of libraries are being used.
+.PHONY: prepare_external_java
+prepare_external_java:
+	@if [ ! -d $(XLIB_JAVA_DIR) ]; then		\
+		mkdir -p $(XLIB_JAVA_DIR) ;			\
+	fi
+	unzip -jo $(XLIB_DESTINY_BUILD_ARTIFACTS_ZIP_FILE) \
+		'agent/lib/activation.jar'					\
+		'agent/lib/antlr.jar'						\
+		'agent/lib/axis.jar'						\
+		'agent/lib/castor-0.9.5.4.jar'				\
+		'agent/lib/commons-collections-2.1.1.jar'	\
+		'agent/lib/commons-discovery-0.2.jar'		\
+		'agent/lib/commons-logging-1.0.4.jar'		\
+		'agent/lib/crypt.jar'						\
+		'agent/lib/ehcache-1.1.jar'					\
+		'agent/lib/jargs.jar'						\
+		'agent/lib/jaxrpc.jar'						\
+		'agent/lib/junit-4.3.jar'					\
+		'agent/lib/mail.jar'						\
+		'agent/lib/saaj.jar'						\
+		'agent/lib/wsdl4j-1.5.1.jar'				\
+		'agent/lib/xercesImpl.jar'					\
+		'agent/lib/xml-apis.jar'					\
+		-d $(XLIB_JAVA_DIR)
+	cp -f "$(NLEXTERNALDIR2)/commons-cli-1.0/commons-cli-1.0.jar" "$(XLIB_JAVA_DIR)/commons-cli.jar"
+	cp -f "$(NLEXTERNALDIR2)/dnsjava/dnsjava.jar" "$(XLIB_JAVA_DIR)/"
+	cp -f "$(NLEXTERNALDIR2)/c3p0/c3p0-0.9.1.2/lib/c3p0-0.9.1.2.jar" "$(XLIB_JAVA_DIR)/c3p0.jar"
+	cp -f "$(NLEXTERNALDIR2)/hibernate/hibernate-2.1/hibernate2.jar" "$(XLIB_JAVA_DIR)/hibernate.jar"
+	cp -f "$(NLEXTERNALDIR2)/hibernate/hibernate-2.1/lib/cglib-full-2.0.2.jar" "$(XLIB_JAVA_DIR)/cglib-full.jar"
+	cp -f "$(NLEXTERNALDIR2)/hibernate/hibernate-2.1/lib/dom4j-1.4.jar" "$(XLIB_JAVA_DIR)/dom4j.jar"
+	cp -f "$(NLEXTERNALDIR2)/hibernate/hibernate-2.1/lib/odmg-3.0.jar" "$(XLIB_JAVA_DIR)/odmg.jar"
+
+.PHONY: prepare_external_jre_x86
+prepare_external_jre_x86:
+	@if [ ! -d $(XLIB_JRE32_DIR) ]; then		\
+		mkdir -p $(XLIB_JRE32_DIR) ;			\
+	fi
+	cp -fR "$(NLEXTERNALDIR)/j2sdk/jre_1.8.0_191/x86/" "$(XLIB_JRE32_DIR)/"
+
+.PHONY: prepare_external_jre_x64
+prepare_external_jre_x64:
+	@if [ ! -d $(XLIB_JRE64_DIR) ]; then		\
+		mkdir -p $(XLIB_JRE64_DIR) ;			\
+	fi
+	cp -fR "$(NLEXTERNALDIR)/j2sdk/jre_1.8.0_191/x64/" "$(XLIB_JRE64_DIR)/"
+
+.PHONY: clean
+clean:
+	rm -rf $(XLIB_DIR)

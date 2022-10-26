@@ -1,0 +1,6 @@
+LIBRARY	"zip_adapter"
+
+EXPORTS
+	Encrypt
+	ZipFile
+	UnZipFile

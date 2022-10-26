@@ -1,0 +1,1 @@
+<copy "${enforcers.dir}/platforms/win32/modules/msoPEP/common/log.cpp "." >

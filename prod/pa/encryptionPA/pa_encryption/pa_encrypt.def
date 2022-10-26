@@ -1,0 +1,4 @@
+LIBRARY	"pa_encryption"
+
+EXPORTS
+	DoPolicyAssistant

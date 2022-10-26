@@ -1,0 +1,35 @@
+HKCR
+{
+	iePEP.IEObj.1 = s 'IEObj Class'
+	{
+		CLSID = s '{FB159F40-0C40-4480-9A72-71C1D07606B7}'
+	}
+	iePEP.IEObj = s 'IEObj Class'
+	{
+		CLSID = s '{FB159F40-0C40-4480-9A72-71C1D07606B7}'
+		CurVer = s 'iePEP.IEObj.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FB159F40-0C40-4480-9A72-71C1D07606B7} = s 'IEObj Class'
+		{
+			ProgID = s 'iePEP.IEObj.1'
+			VersionIndependentProgID = s 'iePEP.IEObj'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{62CFD49B-1845-4AF4-BCCC-2A0139133C06}'
+			'Implemented Categories' = s ''
+			{
+				{59fb2056-d625-48d0-a944-1a85b5ab2640} = s ''
+					{
+					}
+			}
+		}
+	}
+}
+
+

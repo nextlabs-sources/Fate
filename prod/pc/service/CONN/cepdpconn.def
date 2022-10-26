@@ -1,0 +1,4 @@
+EXPORTS
+	PDP_CECONN_Initialize
+	PDP_CECONN_Close
+	PDP_CECONN_FreeHandle

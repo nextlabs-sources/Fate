@@ -1,0 +1,10 @@
+; IconBadging.def : Declares the module parameters.
+
+LIBRARY      "nlse_icon32.dll"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllInstall		    PRIVATE

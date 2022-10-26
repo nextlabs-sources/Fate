@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Generate the README file
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR";
+    exit 1;
+fi
+
+if [ $# -lt 1 ] ; then
+    echo
+    echo "Usage: $0 product"
+    echo
+    echo " readme_gen generates the README.txt for a specific product"
+    echo " with the correct build timestamp"
+    echo
+    exit 1;
+fi
+
+product=$1;
+
+if [ ! -d ${NLENFORCERSDIR}/prods/$product ]; then
+   echo "Invalid product : $product"
+   echo "Usage: $0 product"
+   echo
+   exit 1;
+fi 
+
+shift 1;
+
+configfile=${NLENFORCERSDIR}/prods/$product/$product.cfg;
+
+# You can customize here
+function process_key_value() {
+  if [ "$key" == "PRODUCT_NAME" ] ; then
+      export PRODUCT_NAME=${value};
+  fi
+  if [ "$key" == "VERSION" ] ; then
+      export VERSION=${value};
+  fi
+}
+
+# Not using the cat and pipe since it will create a 
+# subshell
+exec<$configfile
+  while read line
+    do
+      # Strip out the comment
+      line=`echo $line | grep -v "^#"`;
+      # Strip out empty lines
+      if [ -n "$line" ]; then 
+        key=`echo $line   | cut -d'=' -f1`
+        value=`echo $line | cut -d'=' -f2`
+        key=`echo $key    | sed "s/[:space:]*$//g"`
+        key=`echo $key    | sed "s/^[:space:]*//g"`
+        value=`echo $value| sed "s/^[:space:]*//g"`
+        # Get the key value pair for each setting
+        if [ -n "key" ] && [ -n "$value" ] ; then
+           process_key_value "$key" "$value"
+        fi 
+      fi
+    done
+
+# Generating the README.txt
+
+mydate=`date +%y%m%d`;
+
+cd ${NLENFORCERSDIR}/prods/$product/build.output ;
+echo "$PRODUCT_NAME $VERSION ($mydate)" > README.txt
+

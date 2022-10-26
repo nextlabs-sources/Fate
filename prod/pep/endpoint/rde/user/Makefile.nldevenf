@@ -1,0 +1,49 @@
+###################################################################################
+#
+# NLDevEnf Test/Development Tool
+#
+###################################################################################
+
+.SUFFIXES: .obj .cpp
+
+VPATH  = src
+
+WINDDK = c:/WINDDK/6001.18001
+MSDEV  = "C:/Dev/tools/Microsoft Visual Studio 8/VC"
+
+LIBPATH  = \
+	   /LIBPATH:$(MSDEV)"/lib" \
+	   /LIBPATH:$(MSDEV)"/PlatformSDK/Lib" \
+	   /LIBPATH:$(WINDDK)/lib/crt/i386 \
+	   /LIBPATH:$(NLENFORCERSDIR)/platforms/win32/modules/nl_device/bin_win32
+
+LIBS = ole32.lib setupapi.lib uuid.lib advapi32.lib nl_device_static.lib
+
+DEFINES  = -D_CRT_SECURE_NO_WARNINGS -D_CRT_NON_CONFORMING_SWPRINTFS
+
+INCLUDES = \
+           /I$(WINDDK)/inc/api \
+           /I$(WINDDK)/inc/ddk \
+           /Iinclude \
+	   /I../inc \
+	   /I$(MSDEV)"/VC/include" \
+	   /I$(NLENFORCERSDIR)/platforms/common/include \
+	   /I$(NLENFORCERSDIR)/platforms/win32/modules/nl_device/include
+
+CC     = $(MSDEV)/bin/cl
+LD     = $(MSDEV)/bin/link
+CFLAGS = /Zi /EHsc /MT /W3
+LFLAGS = /DEBUG
+
+NLDEVENF_OBJS = nl_devenf_tool.obj nl_devenf_lib.obj
+
+all: nldevenf
+
+nldevenf: $(NLDEVENF_OBJS)
+	$(LD) $(NLDEVENF_OBJS) $(LIBS) $(LIBPATH) $(LFLAGS) /OUT:nldevenf.exe
+
+.cpp.obj:
+	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDES) -c $<
+
+clean:
+	@rm -f *.obj *.dll *.lib *.ilk

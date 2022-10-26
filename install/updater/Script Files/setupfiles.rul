@@ -1,0 +1,849 @@
+#include "setupfiles.h"
+    
+function INT ExtractSetupFiles(hMSI)
+	STRING resultAsString; 
+	STRING ISReleaseFlags;
+	INT result, pathsize;
+begin
+	WriteToLogFile(hMSI, "Begin ExtractSetupFiles()."); 
+/*              
+    result = StreamFileFromBinary(hMSI, MCH_SETUP_KEY, MCH_SETUP_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write mch_install_test.exe.  Error code: " + resultAsString);     
+		return result;
+	endif;    
+	 */
+	result = StreamFileFromBinary(hMSI, PDP_STOP_DLL_KEY, PDP_STOP_DLL_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write PDP Stop dll.  Error code: " + resultAsString); 
+		return result;
+	endif;      
+	
+	WriteToLogFile(hMSI, "End ExtractSetupFiles()."); 
+
+	return result;
+end;
+         
+function INT InstallNLCC(hMSI)
+  string Installdir;
+  string resString;
+  NUMBER pathSize;  
+  INT nResult;
+begin            
+
+                      
+ MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ WriteToLogFile(hMSI, "PC:"+Installdir^"driver"^"nldevcon.exe install \""+Installdir^"driver"^"nlcc.inf\" root\\NLCC");
+ nResult = LaunchAppAndWait(Installdir^"driver"^"nldevcon.exe", "install \""+Installdir^"driver"^"nlcc.inf\" root\\NLCC", WAIT | LAAW_OPTION_HIDDEN );
+ NumToStr(resString,nResult);
+ WriteToLogFile(hMSI,"Result:"+resString);
+ return nResult;
+end;
+
+function INT UninstallNLCC(hMSI)
+  string Installdir,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+  NUMBER nFiles;
+  string svResult;
+begin                                   
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "PC:"+Installdir^"driver"^"nldevcon.exe remove root\\NLCC");
+ 	nResult = LaunchAppAndWait(Installdir^"driver"^"nldevcon.exe", "remove root\\NLCC", WAIT | LAAW_OPTION_HIDDEN);
+ 	if (LAAW_PARAMETERS.nLaunchResult < 0) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"nldevcon.exe failed to remove root\\NLCC: "+szResult);
+        return ERROR_ACCESS_DENIED;   
+    /*elseif (LAAW_PARAMETERS.nLaunchResult = 1) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"nldevcon.exe root\\NLCC removal needs reboot: "+szResult);
+		MsiSetProperty(hMSI, "ISSCHEDULEREBOOT", "1");
+    */
+    endif;
+ 
+  	return nResult;
+end; 
+
+function INT DisableServiceStartByName(hMSI,serviceName)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ //MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ if(ServiceExistsService(serviceName)==TRUE) then                             
+    WriteToLogFile(hMSI,SYSTEMFOLDER^"sc.exe config "+serviceName+" start= disabled");
+    nResult = LaunchAppAndWait(SYSTEMFOLDER^"sc.exe", "config "+serviceName+" start= disabled", WAIT | LAAW_OPTION_HIDDEN);
+ else
+     WriteToLogFile(hMSI,serviceName+" does not exist."+szResult);
+ endif;        
+ CheckServiceByName(hMSI, serviceName);
+ end;    
+ 
+function INT EnableServiceStartByName(hMSI,serviceName, szstart)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ //MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ if(ServiceExistsService(serviceName)==TRUE) then                             
+    WriteToLogFile(hMSI,SystemFolder^"sc.exe config "+serviceName+" start= "+ szstart);
+    nResult = LaunchAppAndWait(SystemFolder^"sc.exe", "config "+serviceName+" start= "+szstart, WAIT | LAAW_OPTION_HIDDEN);   
+    
+ else
+     WriteToLogFile(hMSI,serviceName+" does not exist."+szResult);
+ endif;    
+ CheckServiceByName(hMSI,serviceName);
+ end; 
+
+function INT DisableServiceStart(hMSI)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ //MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ DisableServiceStartByName(hMSI,"nlinjection");
+ DisableServiceStartByName(hMSI,"nltamper");
+ DisableServiceStartByName(hMSI,"nlcc");
+ DisableServiceStartByName(hMSI,"ComplianceEnforcerService");  
+ DisableServiceStartByName(hMSI,"ProcDetect");
+ DisableServiceStartByName(hMSI,"NLSysEncryption");      
+ DisableServiceStartByName(hMSI,"NLSysEncryptionFW");
+ CheckService(hMSI);      
+
+ return ERROR_SUCCESS;
+end;     
+
+function INT EnablePCServiceStart(hMSI)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ //MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ EnableServiceStartByName(hMSI,"nlinjection","auto");
+ EnableServiceStartByName(hMSI,"nltamper","auto");
+ EnableServiceStartByName(hMSI,"nlcc","auto");
+ EnableServiceStartByName(hMSI,"ComplianceEnforcerService","auto");    
+ EnableServiceStartByName(hMSI,"Procdetect","auto");
+ EnableServiceStartByName(hMSI,"NLSysEncryption","boot");            
+ EnableServiceStartByName(hMSI,"NLSysEncryptionFW","boot");   
+ CheckService(hMSI);
+ return ERROR_SUCCESS;
+end;     
+    
+function INT DeleteServiceByName(hMSI,serviceName)
+  string szResult;
+  INT nResult;
+begin
+    if(ServiceExistsService(serviceName)) then                             
+    WriteToLogFile(hMSI,"ServiceRemoveService "+serviceName);
+    nResult = ServiceRemoveService(serviceName); 
+    if (nResult != 0) then
+        NumToStr(szResult,nResult);
+        WriteToLogFile(hMSI,"Fail delete "+serviceName+" service"+szResult);
+        return ERROR_ACCESS_DENIED;
+    endif;
+ else
+     WriteToLogFile(hMSI,serviceName+" does not exist."+szResult);
+ endif;
+ return ERROR_SUCCESS;
+end;
+
+ 
+function INT DeleteServices(hMSI) 
+begin 
+  DeleteServiceByName(hMSI,"nlinjection");   
+  DeleteServiceByName(hMSI,"nltamper");
+  DeleteServiceByName(hMSI,"nlcc");
+  DeleteServiceByName(hMSI,"ComplianceEnforcerService");
+  return ERROR_SUCCESS;
+end;   
+
+
+
+         
+function INT CheckVersion(hMSI, productDIR, productVER)
+	NUMBER position;
+	STRING svReturnLine;
+	NUMBER nvResult;  
+	STRING version;  
+	NUMBER position2;     
+	NUMBER position3;
+	STRING mMajVer;
+	STRING mMinVer; 
+	STRING MajVer;
+	STRING MinVer; 
+	STRING SubVer; 
+	NUMBER nvBufferSize; 
+	NUMBER installedVer; 
+	NUMBER updateVer;     
+	STRING sinstalledVer; 
+	STRING supdateVer; 
+	NUMBER temp;
+	
+	//STRING sp1, sp2;
+begin                               
+	productDIR = productDIR ^ "readme.txt";
+	//MessageBox("productdir="+productDIR+ " productver="+productVER, INFORMATION);
+    WriteToLogFile(hMSI,"Checking version of " + productDIR+" with "+ productVER);
+// read product_DIR  
+	nvResult = FileGrep(productDIR, " v", svReturnLine, position, RESTART);
+    if (nvResult < 0 ) then 
+    	//MessageBox("version not found ", INFORMATION);                               
+    	WriteToLogFile(hMSI, "Version not found !");
+    	return -1;
+    endif;
+    position = StrFind(svReturnLine, " v"); 
+    position2 = StrFind(svReturnLine, "("); 
+    if (position2 >= 0) then
+    	position2 = position2 -2; 
+    else
+    	position2 = StrLength(svReturnLine);
+    endif;
+     
+    //StrSub(version, svReturnLine, position + 1, StrLength(svReturnLine) - position );
+    StrSub(version, svReturnLine, position + 1, position2 - position);   
+    StrTrim(version);
+    //MessageBox("Found version : "+version, INFORMATION);
+    WriteToLogFile(hMSI, "Found version : "+version);   
+	//compare with VERSION_product               
+
+    MsiGetProperty(hMSI,"MinMajorVersion",mMajVer,nvBufferSize);
+    MsiGetProperty(hMSI,"MinMinorVersion",mMinVer,nvBufferSize);
+    
+	position=StrFindEx (version, ".", 0); 
+    position2=StrFindEx (version, ".", position + 1);   
+    position3=StrFindEx (version, ".", position2 + 1);
+
+    StrSub(MajVer,version,1,position-1);    
+    StrToNum(temp,MajVer); 
+    installedVer = temp *10000;  
+    StrSub(MinVer,version,position+1,position2-position-1);  
+    StrToNum(temp,MinVer); 
+    temp = temp *100;  
+    installedVer = installedVer + temp ;   
+    StrSub(SubVer,version,position2+1, position3-position2-1);    
+    StrToNum(temp,SubVer); 
+    installedVer = installedVer + temp;
+    //MessageBox("v = "+MajVer+ " " +MinVer+" "+SubVer, INFORMATION);
+
+    if (StrCompare(MajVer,mMajVer) < 0) then       
+    	//MessageBox("Minimum major version is "+mMajVer+". Found ver "+MajVer,INFORMATION);
+    	WriteToLogFile(hMSI,"Minimum major version is "+mMajVer+". Found ver "+MajVer);
+    	return -1;                         
+    else
+        if (StrCompare(MinVer,mMinVer) < 0) then       
+    		//MessageBox("Minimum major version is "+mMinVer+". Found ver "+MinVer,INFORMATION);
+    		WriteToLogFile(hMSI,"Minimum major version is "+mMinVer+". Found ver "+MinVer);
+    		return -1;
+    	endif;
+    endif;
+    
+    position=StrFindEx (productVER, ".", 0); 
+    position2=StrFindEx (productVER, ".", position + 1);   
+    position3=StrFindEx (productVER, ".", position2 + 1);
+
+    StrSub(MajVer,productVER,0,position);    
+    
+    StrToNum(temp,MajVer);
+    updateVer = temp * 10000;
+    StrSub(MinVer,productVER,position+1,position2-position-1);         
+    StrToNum(temp,MinVer);  
+    
+    temp = temp * 100;
+    updateVer = updateVer + temp;
+    StrSub(SubVer,productVER,position2+1, position3-position2-1);
+    StrToNum(temp, SubVer);
+    updateVer = updateVer + temp;                                                         
+    NumToStr(sinstalledVer, installedVer);
+    NumToStr(supdateVer, updateVer);
+    WriteToLogFile(hMSI, "updateVer = " + supdateVer + ", installedVer = " + sinstalledVer);
+    if (installedVer < updateVer) then  
+    	return 1;
+    else
+    	return -1;    
+    endif;
+end;      
+         
+         
+function INT CheckEP(hMSI, EndPoint)
+	STRING EP_DIR;
+	STRING Version_EP;
+	NUMBER nBuffer; 
+	STRING ISReleaseFlags;
+    NUMBER nResult;
+begin           
+
+	WriteToLogFile(hMSI, "Checking Endpoint : "+ EndPoint);
+	MsiGetProperty(hMSI, EndPoint+"_DIR", EP_DIR, nBuffer);
+	MsiGetProperty(hMSI, "Version_"+EndPoint, Version_EP, nBuffer); 
+	MsiGetProperty(hMSI, "ISReleaseFlags",ISReleaseFlags, nBuffer);    
+	
+	nResult = StrFind(ISReleaseFlags, EndPoint);
+	/*if ( nResult < 0 ) then 
+	    MsiSetProperty(hMSI, "INSTALLED_"+EndPoint, "0"); 
+		return 0;
+	endif;
+	*/
+	
+	if (EP_DIR != "") then 
+    	if (CheckVersion(hMSI, EP_DIR, Version_EP) = 1) then
+    		MsiSetProperty(hMSI, "INSTALLED_"+EndPoint, "1");   
+    		WriteToLogFile(hMSI, "Upgrade "+EndPoint);
+    	else
+    		WriteToLogFile(hMSI, EndPoint + " has same or newer version !");  
+    		//MsiSetProperty(hMSI, "INSTALLED_"+EndPoint, "0");     		
+    	endif;  
+    else
+    	WriteToLogFile(hMSI, EndPoint+" is not installed!");
+    endif;      
+
+
+    return 0;
+
+end;         
+         
+function INT CheckInstalled(hMSI)
+    //STRING PC_DIR, WDE_DIR, KMC_DIR, LME_DIR, NE_DIR, SE_DIR, OE_DIR, OCE_DIR, RDE_DIR;
+    //STRING Version_PC, Version_WDE, Version_KMC, Version_LME, Version_NE, Version_SE, Version_OE, Version_OCE, Version_RDE;
+    //NUMBER nBuffer;
+    
+    INT nResult;
+begin                                    
+    
+    nResult = CheckEP(hMSI,"PC"); 
+    nResult = CheckEP(hMSI,"WDE");
+    nResult = CheckEP(hMSI,"KMC");
+    nResult = CheckEP(hMSI,"LME");
+    nResult = CheckEP(hMSI,"SE");
+    nResult = CheckEP(hMSI,"NE");
+    nResult = CheckEP(hMSI,"OE");
+    nResult = CheckEP(hMSI,"OCE");
+    nResult = CheckEP(hMSI,"RDE"); 
+    MsiSetProperty(hMSI, "checkedinstalled", "1");
+    return 0;
+    
+end;     
+
+function INT MCH_install(hMSI, command)
+ 	NUMBER nResult;     
+ 	INT pathSize;
+	STRING location;
+begin  
+	MsiGetProperty(hMSI, "CustomActionData",location, pathSize); 
+ 	WriteToLogFile(hMSI, "Processing "+location^"bin\\mch_install_test.exe "+command);  
+ 	//MsiGetProperty(hMSI,"PC_DIR_bin", location, nBufferSize);
+ 	nResult = LaunchAppAndWait(location^"bin\\mch_install_test.exe", command, WAIT | LAAW_OPTION_HIDDEN);	
+	return nResult;
+	
+end;
+
+function INT Uninstall_nlinjection(hMSI)                    
+begin
+	WriteToLogFile(hMSI, "Uninstalling nlinjection");     
+	return MCH_install(hMSI, "remove");
+end;
+
+function INT Install_nlinjection(hMSI)                    
+begin
+	WriteToLogFile(hMSI, "Installing nlinjection");     
+	return MCH_install(hMSI, "install");
+end;
+
+/*
+ * Stop the EDP Manager process
+ */                              
+function INT StopEDPManager(hMSI)
+  //string SYSTEMFOLDER;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ //MsiGetTargetPath(hMSI, "SystemFolder", System64Folder, pathSize);   
+
+ nResult = LaunchAppAndWait(System64Folder^"taskkill.exe", "/f /im edpmanager.exe", WAIT | LAAW_OPTION_HIDDEN); 
+ //MessageBox(SYSTEMFOLDER^"taskkill.exe /f /im edpmanager.exe",INFORMATION);
+ return nResult;
+end;
+
+/*
+ * Start the EDP Manager process 
+ */                              
+function INT StartEDPManager(hMSI)
+	STRING EDPManagerDir;                                           
+	NUMBER pathSize;
+	INT nResult;
+begin             
+	
+
+    MsiGetProperty(hMSI, "CustomActionData", EDPManagerDir, pathSize); 
+    WriteToLogFile(hMSI, "EDPMANAGERDIR:"+EDPManagerDir^"bin\\edpmanager.exe");
+    nResult = LaunchAppAndWait(EDPManagerDir^"bin\\edpmanager.exe", "", LAAW_OPTION_NOWAIT | LAAW_OPTION_HIDDEN);
+    return nResult; 
+end; 
+
+
+function INT DeleteProcDetectService(hMSI)
+  string szResult;  
+  INT nResult;
+begin                                   
+ if (ServiceExistsService("ProcDetect")) then
+ 	nResult = ServiceRemoveService("ProcDetect");
+ 	if(nResult <0) then
+    	NumToStr(szResult,nResult);
+    	MessageBox("Failed to delete ProcDetect service.("+szResult+") Please manually remove the service after uninstallation completes.",SEVERE);
+ 	endif;   
+ endif;
+ return ERROR_SUCCESS;
+end;       
+
+function INT StartProcDetect(hMSI)
+  string ProcDetect,szResult;  
+  INT nResult;
+begin      
+ if (ServiceExistsService("ProcDetect")) then  
+ 	ServiceGetServiceState ( "ProcDetect", nResult );
+ 	
+ 	CheckServiceByName(hMSI,"ProcDetect");
+ 	 
+    if ((nResult = SERVICE_STOP_PENDING) || (nResult = SERVICE_STOPPED)) then
+        nResult = ServiceStartService("ProcDetect","");        
+        
+        ServiceGetServiceState("ProcDetect", nResult);                      
+ 		if (nResult != SERVICE_RUNNING ) then
+ 		   	WriteToLogFile(hMSI,SystemFolder^"sc.exe start procdetect");
+ 			nResult = LaunchAppAndWait(SystemFolder^"sc.exe", "start procdetect", WAIT | LAAW_OPTION_HIDDEN);
+ 			if (LAAW_PARAMETERS.nLaunchResult  != 0) then
+    		    NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+     	   		WriteToLogFile(hMSI,"Error in starting procdetect! "+szResult);
+ 			endif;
+ 	
+ 		endif; 
+                                                                                                                                                   
+ 	endif;   
+ else
+ 	MessageBox("ProcDetect Service not found!!", SEVERE);
+ 	WriteToLogFile(hMSI,"ProcDetect service not found !!");
+ 	return -1;
+ endif;      
+ 
+ ServiceGetServiceState("ProcDetect", nResult);                      
+ if (nResult != SERVICE_RUNNING ) then
+ 	MessageBox("ProcDetect fails to start. Please manually launch the service after installation completes.", SEVERE);
+ 	WriteToLogFile(hMSI, "ProcDetect fails to start. Please manually launch the service after installation completes.");
+ endif;                   
+ 
+ 
+ 	
+ CheckServiceByName(hMSI,"ProcDetect");    
+ 
+ return ERROR_SUCCESS;
+end;                     
+
+function INT DisableProcDetect(hMSI)
+
+begin
+	DisableServiceStartByName(hMSI,"ProcDetect");
+end;  
+
+function INT CreateProcDetectService(hMSI)
+  string InstallDir,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ //MsiGetTargetPath(hMSI, "SystemFolder", SystemFolder, pathSize);
+ MsiGetProperty(hMSI, "CustomActionData", InstallDir, pathSize); 
+ WriteToLogFile(hMSI,"CustomActionData:"+InstallDir);
+ WriteToLogFile(hMSI,SystemFolder^"sc.exe create ProcDetect binPath= \""+InstallDir+"driver\\procdetect.sys\" type= kernel start= auto");
+ nResult = LaunchAppAndWait(SystemFolder^"sc.exe", "create ProcDetect binPath= \""+InstallDir+"driver\\procdetect.sys\" type= kernel start= auto", WAIT | LAAW_OPTION_HIDDEN);
+ if (LAAW_PARAMETERS.nLaunchResult  != 0) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"Fail SC create:"+szResult);
+ endif;
+ return nResult;
+end;         
+                                                             
+function INT EnableWDEProcDetect(hMSI)
+begin                                                            
+ EnableServiceStartByName(hMSI,"ProcDetect","auto");  
+ CheckServiceByName(hMSI,"ProcDetect");   
+end;
+
+function INT StartPCService(hMSI) 
+	number nResult; 
+	STRING sResult;
+begin  
+	ServiceStartService("nltamper","");
+	ServiceStartService("nlinjection","");   
+  	ServiceStartService("nlcc","");
+  	nResult=ServiceStartService("ComplianceEnforcerService","");  
+  	 
+ 	WriteToLogFile(hMSI,SystemFolder^"sc.exe start ComplianceEnforcerService");
+ 	nResult = LaunchAppAndWait(SystemFolder^"sc.exe", "start ComplianceEnforcerService", WAIT | LAAW_OPTION_HIDDEN);
+ 	if (LAAW_PARAMETERS.nLaunchResult  != 0) then
+        NumToStr(sResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"Error in starting PC ! "+sResult);
+ 	endif;
+  
+  	return nResult;
+end;                 
+                 
+function INT CreatePCService(hMSI)
+  string InstallDir,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ MsiGetProperty(hMSI, "CustomActionData", InstallDir, pathSize);
+ WriteToLogFile(hMSI,"CustomActionData:"+InstallDir);
+ WriteToLogFile(hMSI,SystemFolder^"sc.exe create ComplianceEnforcerService binPath= "+InstallDir+"bin\\cepdpman.exe type= kernel start= auto");
+ nResult = LaunchAppAndWait(SystemFolder^"sc.exe", "create ProcDetect binPath= \""+InstallDir+"driver\\procdetect.sys\" type= kernel start= auto", WAIT | LAAW_OPTION_HIDDEN);
+ if (LAAW_PARAMETERS.nLaunchResult  != 0) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"Fail SC create:"+szResult);
+ endif;
+ return nResult;
+end;       
+
+
+function INT RegisterPlugin(hMSI)
+	STRING WDE_DIR;
+	NUMBER nResult; 
+	NUMBER result;
+	STRING res_string;     
+	NUMBER pathSize; 
+	STRING INSTALLED_WDE;
+    STRING INSTALLED_OE;
+    STRING INSTALLED_SE;    
+    LIST customActionDataListId;     
+    STRING resultAsString;
+	
+begin
+    WriteToLogFile(hMSI, "Registering plugin ...");      
+    
+    customActionDataListId = ListCreate(STRINGLIST);
+    result = StrGetTokens(customActionDataListId, GetProperty(hMSI, "CustomActionData"), ";");   
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to retrieve custom action data in PostInstall.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+		return result;
+	endif;
+	
+	ListGetFirstString(customActionDataListId, WDE_DIR);         
+	ListGetNextString(customActionDataListId, INSTALLED_WDE);  
+	ListGetNextString(customActionDataListId, INSTALLED_OE);
+	ListGetNextString(customActionDataListId, INSTALLED_SE);
+  
+ 	//MsiGetProperty(hMSI, "CustomActionData",WDE_DIR, pathSize); 
+ 	
+    if (INSTALLED_WDE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --wde --register");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--wde --register", WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (WDE).", SEVERE);
+   			return nResult;	 
+ 		endif;
+ 	endif;	 
+ 	 
+ 	if (INSTALLED_OE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --oe --register");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--oe --register", WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (OE).", SEVERE);	
+   			return nResult; 
+ 		endif;
+ 	endif;	
+ 	
+ 	if (INSTALLED_SE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --se --register");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--se --register", WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (SE).", SEVERE);
+   			return nResult;	 
+ 		endif;
+ 	endif;	
+end;
+
+function INT UnregisterPlugin(hMSI)
+	STRING WDE_DIR;
+	NUMBER nResult;
+	STRING res_string; 
+	NUMBER pathSize;
+    STRING INSTALLED_WDE;
+    STRING INSTALLED_OE;
+    STRING INSTALLED_SE;
+    
+begin                 
+	WriteToLogFile(hMSI, "Unregistering plugin ...");
+ 	MsiGetProperty(hMSI, "WDE_DIR",WDE_DIR, pathSize); 
+ 	MsiGetProperty(hMSI, "INSTALLED_WDE", INSTALLED_WDE, pathSize);
+ 	MsiGetProperty(hMSI, "INSTALLED_OE", INSTALLED_OE, pathSize);
+ 	MsiGetProperty(hMSI, "INSTALLED_SE", INSTALLED_SE, pathSize);
+ 	          
+ 	if (INSTALLED_WDE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --wde --unregister");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--wde --unregister", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (WDE).", SEVERE);
+   			return nResult;	 
+ 		endif;
+ 	endif;	 
+ 	 
+ 	if (INSTALLED_OE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --oe --unregister");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--oe --unregister", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (OE).", SEVERE);
+   			return nResult;	 
+ 		endif;
+ 	endif;	
+ 	
+ 	if (INSTALLED_SE="1") then
+ 		WriteToLogFile(hMSI, WDE_DIR^"bin"^"NlRegisterPlugins.exe --se --unregister");
+ 		nResult = LaunchAppAndWait(WDE_DIR^"bin"^"NlRegisterPlugins.exe", "--se --unregister", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+ 		if(nResult<0) then
+   			NumToStr(res_string,nResult);
+   			WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   			MessageBox("Error! An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed (SE).", SEVERE);
+   			return nResult; 
+ 		endif;
+ 	endif;	
+ 	return nResult;
+end;
+        
+function INT RDE_uninstalldriver(hMSI)
+  	string RDE_DIR;
+  	string resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "RDE_DIR",RDE_DIR, pathSize); 
+ 	WriteToLogFile(hMSI, "Uninstalling device drivers :"+RDE_DIR^"driver"^"nldevcon.exe remove root\\NLDEVENF");
+ 	nResult = LaunchAppAndWait(RDE_DIR^"driver"^"nldevcon.exe", "remove root\\NLDEVENF", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;
+
+function INT RDE_installdriver(hMSI)
+  	STRING RDE_DIR;
+  	STRING resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",RDE_DIR, pathSize); 
+ 	WriteToLogFile(hMSI, "Installing device drivers :"+RDE_DIR^"driver"^"nldevcon.exe install root\\NLDEVENF");
+ 	nResult = LaunchAppAndWait(RDE_DIR^"driver"^"nldevcon.exe", "install root\\NLDEVENF", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;                
+
+
+function INT SE_unregisterIcon(hMSI)
+	STRING SE_DIR;
+	NUMBER nvBufferSize; 
+	NUMBER nResult;
+	STRING resString; 
+
+begin                                 
+	WriteToLogFile(hMSI,"SE: Unregistering icon...");
+    MsiGetProperty(hMSI,"SE_DIR", SE_DIR, nvBufferSize); 
+    //MsiGetProperty(hMSI,"SYSTEMFOLDER",SYSTEMFOLDER,nvBufferSize);
+    WriteToLogFile(hMSI,SystemFolder^"regsvr32.exe /u /s \""+SE_DIR^"bin\\iconBadging32.dll\"");
+    nResult = LaunchAppAndWait(SystemFolder^"regsvr32.exe","/u /s \""+SE_DIR^"bin\\iconBadging32.dll\"", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+    NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Unregister Icon:"+resString);  
+ 	
+ 	WriteToLogFile(hMSI,SystemFolder^"regsvr32.exe /u \""+SE_DIR^"bin\\iconBadging.dll\"");
+    nResult = LaunchAppAndWait(SystemFolder^"regsvr32.exe","/u /s \""+SE_DIR^"bin\\iconBadging.dll\"", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+    NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Unregister Icon:"+resString);
+                                   
+    return 0;
+end;        
+
+function INT SE_registerIcon(hMSI)
+	STRING SE_DIR;
+	NUMBER nvBufferSize; 
+	NUMBER nResult;
+	STRING resString; 
+
+begin                                 
+	WriteToLogFile(hMSI,"SE: registering icon...");  
+	MsiGetProperty(hMSI, "CustomActionData", SE_DIR, nvBufferSize);
+    WriteToLogFile(hMSI,SystemFolder^"regsvr32.exe /s \""+SE_DIR^"bin\\iconBadging32.dll\"");
+    nResult = LaunchAppAndWait(SystemFolder^"regsvr32.exe"," /s \""+SE_DIR^"bin\\iconBadging32.dll\"", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+    NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Register Icon:"+resString);  
+ 	
+ 	WriteToLogFile(hMSI,SystemFolder^"regsvr32.exe \""+SE_DIR^"bin\\iconBadging.dll\"");
+    nResult = LaunchAppAndWait(SystemFolder^"regsvr32.exe"," /s \""+SE_DIR^"bin\\iconBadging.dll\"", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN );
+    NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Register Icon:"+resString);
+                                   
+    return 0;
+end;  
+           
+function INT SE_startService(hMSI)
+	NUMBER nResult;
+
+begin
+    nResult = LaunchAppAndWait(SystemFolder^"sc.exe"," start NLSysEncryption", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+    nResult = LaunchAppAndWait(SystemFolder^"sc.exe"," start NLSysEncryptionFW", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+    return nResult;
+
+end;
+
+function INT WDE_disableEDP(hMSI)
+
+    NUMBER nReturn;  
+    STRING sReturn;
+begin 
+    RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE); 
+    nReturn = RegDBDeleteValue ("\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "EDPManager");             
+    NumToStr(sReturn,nReturn);
+    if (nReturn < 0) then                                 
+    	MessageBox("EDPManager registry delete failed "+sReturn,SEVERE);
+        WriteToLogFile (hMSI,"RegDBDeleteValue failed."); 
+    else 
+        WriteToLogFile(hMSI,"Registry delete success");
+         
+    endif; 
+    return nReturn;
+
+end;
+          
+function INT PC_deleteUnused(hMSI)
+    STRING PC_DIR;
+    NUMBER nResult;                                        
+    NUMBER nBuffer;
+begin                    
+	/*MsiGetProperty(hMSI, "CustomActionDate", PC_DIR, nBuffer);
+	nResult = DeleteDir(PC_DIR^"driver\nl_tamper", ROOT);
+	if ( nResult < 0 ) then
+		WriteToLogFile(hMSI, "Failed to delete nl_tamper !");  
+		return nResult;
+	endif;
+	*/
+	
+	//MessageBox("Temp="+PDP_STOP_DLL_FILE,INFORMATION);       
+	if (Is(FILE_EXISTS,PDP_STOP_DLL_FILE)) then
+		nResult = DeleteFile(PDP_STOP_DLL_FILE);     
+		if ( nResult < 0 ) then
+			WriteToLogFile(hMSI,PDP_STOP_DLL_FILE + " deletion failed !");  
+			return nResult;
+		endif;
+	endif;
+	
+	if (Is(FILE_EXISTS,COMMON_INSTALL_DLL_FILE)) then
+		nResult = DeleteFile(COMMON_INSTALL_DLL_FILE); 
+		if ( nResult < 0 ) then
+			WriteToLogFile(hMSI,COMMON_INSTALL_DLL_FILE + " deletion failed !");    
+			return nResult;      
+		endif;
+	endif; 
+	
+	nResult = DeleteFile(PC_DIR^"DRIVER\\devcon.exe");  
+	if ( nResult < 0 ) then
+		WriteToLogFile(hMSI, "devcon deletion failed !");  
+	endif;   
+	
+	nResult = DeleteFile(PC_DIR^"DRIVER\\nlcc.x86.cat");     
+	if ( nResult < 0 ) then
+		WriteToLogFile(hMSI, "nlccx86 deletion failed !");  
+	endif;         
+	
+	return 0;
+end;                   
+
+                  
+function INT StopPC(hMSI) 
+    NUMBER nSize;
+    NUMBER nResult;
+    STRING sResult;                         
+    STRING needstoppc;
+begin                               
+	WriteToLogFile(hMSI,"Stopping PC ...");             
+	RegDBSetDefaultRoot (HKEY_CURRENT_USER);
+	if (RegDBCreateKeyEx ("Software\\Sysinternals\\PsExec", "") < 0) then 
+        MessageBox ("Registry key creation failed.", SEVERE); 
+        return -1;
+    endif; 
+
+    if (RegDBSetKeyValueEx ("Software\\Sysinternals\\PsExec", "EulaAccepted", REGDB_NUMBER, "1",  nSize) < 0) then 
+        MessageBox ("Registry value set failed.", SEVERE); 
+        return -1;
+    endif; 
+    
+    
+    nResult = LaunchAppAndWait(FOLDER_TEMP^"psexec.exe", "-i -s "+FOLDER_TEMP^"nlquench.exe", WAIT | LAAW_OPTION_HIDDEN | LAAW_OPTION_MINIMIZED);
+    if (nResult < 0 ) then
+    	WriteToLogFile(hMSI, "Stopping PC failed ... !"); 	
+    endif;
+    
+    DeleteFile(FOLDER_TEMP^"psexec.exe");
+    DeleteFile(FOLDER_TEMP^"nlquench.exe");
+   
+    return nResult;
+end;   
+              
+function INT CheckServiceByName(hMSI, servicename)
+	NUMBER nvstate;
+    STRING svstate;    
+    STRING szMsg;
+begin   
+    ServiceGetServiceState(servicename, nvstate);                      
+    NumToStr(svstate,nvstate);     
+      switch (nvstate) 
+        case SERVICE_STOPPED: 
+            szMsg = "SERVICE_STOPPED"; 
+        case SERVICE_START_PENDING: 
+            szMsg = "SERVICE_START_PENDING"; 
+        case SERVICE_STOP_PENDING: 
+            szMsg = "SERVICE_STOP_PENDING"; 
+        case SERVICE_STOP_PENDING: 
+            szMsg = "SERVICE_STOP_PENDING"; 
+        case SERVICE_RUNNING: 
+            szMsg = "SERVICE_RUNNING"; 
+        case SERVICE_CONTINUE_PENDING: 
+            szMsg = "SERVICE_CONTINUE_PENDING";   
+        case SERVICE_CONTINUE_PENDING: 
+            szMsg = "SERVICE_CONTINUE_PENDING"; 
+        case SERVICE_PAUSE_PENDING: 
+            szMsg = "SERVICE_PAUSE_PENDING"; 
+        case SERVICE_PAUSED: 
+            szMsg = "SERVICE_PAUSED"; 
+        default: 
+            szMsg = "Error"; 
+    endswitch; 
+
+    WriteToLogFile(hMSI,"Service "+servicename + " state: " + svstate+" "+ szMsg);
+    return 0;
+end;      
+              
+function INT CheckService(hMSI)
+
+
+begin              
+
+	WriteToLogFile(hMSI, "Checking services ... ");
+ 	CheckServiceByName(hMSI,"nlinjection");
+ 	CheckServiceByName(hMSI,"nltamper");
+ 	CheckServiceByName(hMSI,"nlcc");
+ 	CheckServiceByName(hMSI,"ComplianceEnforcerService");    
+ 	CheckServiceByName(hMSI,"Procdetect");
+ 	CheckServiceByName(hMSI,"NLSysEncryption");            
+ 	CheckServiceByName(hMSI,"NLSysEncryptionFW");
+
+ return 0;
+end;

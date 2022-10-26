@@ -1,0 +1,27 @@
+HKCR
+{
+	msoPEP.msoObj.1 = s 'msoObj Class'
+	{
+		CLSID = s '{3BE44FEB-18B0-48C8-B71D-915A38D35612}'
+	}
+	msoPEP.msoObj = s 'msoObj Class'
+	{
+		CLSID = s '{3BE44FEB-18B0-48C8-B71D-915A38D35612}'
+		CurVer = s 'msoPEP.msoObj.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {3BE44FEB-18B0-48C8-B71D-915A38D35612} = s 'msoObj Class'
+		{
+			ProgID = s 'msoPEP.msoObj.1'
+			VersionIndependentProgID = s 'msoPEP.msoObj'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{CF63E1A8-F4CF-4E0A-AB37-3F68119D40E7}'
+		}
+	}
+}

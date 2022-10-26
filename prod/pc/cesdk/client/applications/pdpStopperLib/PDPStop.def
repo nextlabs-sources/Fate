@@ -1,0 +1,4 @@
+EXPORTS
+        stopAgentService
+        stopAgentServiceWithoutPassword
+        stopAgentServiceWithChallenge

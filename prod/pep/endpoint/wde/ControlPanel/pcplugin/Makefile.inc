@@ -1,0 +1,28 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_EDP)
+VERSION_MAJOR		= $(VERSION_MAJOR_EDP)
+VERSION_MINOR		= $(VERSION_MINOR_EDP)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_EDP)
+VERSION_PATCH		= $(VERSION_PATCH_EDP)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS   = 
+SUBTARGET = PCStatus
+
+SRC = \
+  src/dllmain.cpp \
+  src/PCStatus.cpp \
+  src/stdafx.cpp
+
+INCPATH += \
+  ./ \
+  include \
+  $(NLBUILDROOT)/prod/pep/common/eframework/eframework.R3.0/eframework/platform
+
+LIBPATH += 
+
+LIBS += 
+
+DFLAGS += -DPCSTATUS_EXPORTS

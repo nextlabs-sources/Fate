@@ -1,0 +1,4 @@
+
+TARGETS = \
+	prod/pep/common/nlcontextmanager/nlcontextmgr \
+	prod/pep/common/nlcontextmanager/nlcontextmgr_plugin

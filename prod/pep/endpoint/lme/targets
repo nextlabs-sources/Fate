@@ -1,0 +1,3 @@
+
+TARGETS = \
+	prod/pep/endpoint/lme

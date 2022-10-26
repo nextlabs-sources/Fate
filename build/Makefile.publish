@@ -1,0 +1,579 @@
+# Make file to publish pcv and release builds
+#
+# Installers and build artifacts are published to \\nextlabs.com\share\data\build\pcv
+# or \\nextlabs.com\share\data\build\release. Typically, \\nextlabs.com\share\data is mapped
+# to s:/.
+#
+# The following variables must be defined in commandline:
+#	VERSION_BUILD_SHORT
+#	BUILD_DATE
+#
+# Example:
+#	make -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=pcv
+#	make -k -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=pcv installer_local
+#	make -k -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=pcv installer_local
+#	make -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=release
+#	make -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=release wde_sync oe_sync ne_sync
+#	make -f Makefile.publish VERSION_BUILD_SHORT=2088 BUILD_DATE=20110501 TYPE=release archive_bin
+
+
+#
+# Check for errors
+#
+
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(VERSION_BUILD_SHORT),)
+  $(error VERSION_BUILD_SHORT undefined.)
+endif
+
+ifeq ($(BUILD_DATE),)
+  $(error BUILD_DATE undefined.)
+endif
+
+ifeq ($(TYPE),)
+  $(error TYPE undefined.)
+endif
+
+ifneq ($(TYPE), pcv)
+ifneq ($(TYPE), release)
+  $(error Invalid TYPE $(TYPE).)
+endif
+endif
+
+ifeq ($(REPOSITORY_ROOT),)
+  $(error REPOSITORY_ROOT undefined.)
+endif
+
+
+#
+# Constants
+#
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+VERSION_STR_EDP=$(VERSION_MAJOR_EDP).$(VERSION_MINOR_EDP).$(VERSION_MAINTENANCE_EDP).$(VERSION_PATCH_EDP)
+VERSION_STR_KMC=$(VERSION_MAJOR_KMC).$(VERSION_MINOR_KMC).$(VERSION_MAINTENANCE_KMC).$(VERSION_PATCH_KMC)
+VERSION_STR_LME=$(VERSION_MAJOR_LME).$(VERSION_MINOR_LME).$(VERSION_MAINTENANCE_LME).$(VERSION_PATCH_LME)
+VERSION_STR_NE=$(VERSION_MAJOR_NE).$(VERSION_MINOR_NE).$(VERSION_MAINTENANCE_NE).$(VERSION_PATCH_NE)
+VERSION_STR_OCE=$(VERSION_MAJOR_OCE).$(VERSION_MINOR_OCE).$(VERSION_MAINTENANCE_OCE).$(VERSION_PATCH_OCE)
+VERSION_STR_OE=$(VERSION_MAJOR_OE).$(VERSION_MINOR_OE).$(VERSION_MAINTENANCE_OE).$(VERSION_PATCH_OE)
+VERSION_STR_PC=$(VERSION_MAJOR_PC).$(VERSION_MINOR_PC).$(VERSION_MAINTENANCE_PC).$(VERSION_PATCH_PC)
+VERSION_STR_PCOE=$(VERSION_MAJOR_PCOE).$(VERSION_MINOR_PCOE).$(VERSION_MAINTENANCE_PCOE).$(VERSION_PATCH_PCOE)
+VERSION_STR_RDE=$(VERSION_MAJOR_RDE).$(VERSION_MINOR_RDE).$(VERSION_MAINTENANCE_RDE).$(VERSION_PATCH_RDE)
+VERSION_STR_NLE=$(VERSION_MAJOR_NLE).$(VERSION_MINOR_NLE).$(VERSION_MAINTENANCE_NLE).$(VERSION_PATCH_NLE)
+VERSION_STR_WDE=$(VERSION_MAJOR_WDE).$(VERSION_MINOR_WDE).$(VERSION_MAINTENANCE_WDE).$(VERSION_PATCH_WDE)
+VERSION_STR_UPDATER=$(VERSION_MAJOR_UPDATER).$(VERSION_MINOR_UPDATER).$(VERSION_MAINTENANCE_UPDATER).$(VERSION_PATCH_UPDATER)
+VERSION_STR_CESDK=$(VERSION_STR_PC)
+VERSION_STR_NXLFILTER=$(VERSION_STR_NLE)
+VERSION_STR_RESKIT=$(VERSION_STR_EDP)
+VERSION_STR_DEVTOOL=$(VERSION_STR_EDP)
+
+PUBLISH_LOCAL_KMC_DIR=$(REPOSITORY_ROOT)/KeyManagementService/$(VERSION_STR_KMC)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_LME_DIR=$(REPOSITORY_ROOT)/LiveMeetingEnforcer/$(VERSION_STR_LME)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_NE_DIR=$(REPOSITORY_ROOT)/NetworkEnforcer/$(VERSION_STR_NE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_OCE_DIR=$(REPOSITORY_ROOT)/OfficeCommunicatorEnforcer/$(VERSION_STR_OCE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_OE_DIR=$(REPOSITORY_ROOT)/OutlookEnforcer/$(VERSION_STR_OE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_PC_DIR=$(REPOSITORY_ROOT)/PolicyController/$(VERSION_STR_PC)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_PCOE_DIR=$(REPOSITORY_ROOT)/PCOE_CombinedInstaller/$(VERSION_STR_PCOE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_RDE_DIR=$(REPOSITORY_ROOT)/RemovableDeviceEnforcer/$(VERSION_STR_RDE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_NLE_DIR=$(REPOSITORY_ROOT)/SystemEncryption/$(VERSION_STR_NLE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_WDE_DIR=$(REPOSITORY_ROOT)/WindowsDesktopEnforcer/$(VERSION_STR_WDE)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_UPDATER_DIR=$(REPOSITORY_ROOT)/NextLabsDataProtection/$(VERSION_STR_UPDATER)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_CESDK_DIR=$(REPOSITORY_ROOT)/PolicyAdapterSDK/$(VERSION_STR_CESDK)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_NXLFILTER_DIR=$(REPOSITORY_ROOT)/NXLFilter/$(VERSION_STR_NXLFILTER)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_RESKIT_DIR=$(REPOSITORY_ROOT)/ResourceKit/$(VERSION_STR_RESKIT)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_DEVTOOL_DIR=$(REPOSITORY_ROOT)/DeveloperToolkit/$(VERSION_STR_DEVTOOL)/$(VERSION_BUILD_SHORT)
+PUBLISH_LOCAL_ARTIFACT_DIR=$(REPOSITORY_ROOT)/artifacts/Fate/$(VERSION_STR_EDP)/$(VERSION_BUILD_SHORT)
+
+ZIP_FILE_NAME_BIN=fate-$(VERSION_STR_EDP)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-bin.zip
+ZIP_FILE_NAME_XLIB=fate-$(VERSION_STR_EDP)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-xlib.zip
+ZIP_FILE_NAME_INSTALL=fate-$(VERSION_STR_EDP)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-install.zip
+ZIP_FILE_NAME_INSTALL_SMALL=fate-$(VERSION_STR_EDP)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-install-small.zip
+ZIP_FILE_NAME_PC_INSTALL=pc-$(VERSION_STR_PC)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-install.zip
+ZIP_FILE_NAME_PCOE_INSTALL=pc-$(VERSION_STR_PCOE)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-install.zip
+ZIP_FILE_NAME_UPDATER_INSTALL=updater-$(VERSION_STR_UPDATER)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-install.zip
+ZIP_FILE_NAME_SYMBOL=fate-$(VERSION_STR_EDP)-$(VERSION_BUILD_SHORT)-$(TYPE)-$(BUILD_DATE)-symbol.zip
+BUILD_MANIFEST_FILE_NAME=build.manifest
+
+TOP_BIN_DIR=$(NLBUILDROOT)/bin
+XLIB_DIR=$(NLBUILDROOT)/xlib
+INSTALL_DIR=$(NLBUILDROOT)/install
+
+INSTALL_BUILD_KMC_DIR=$(INSTALL_DIR)/KMService/build
+INSTALL_BUILD_LME_DIR=$(INSTALL_DIR)/lme/build
+INSTALL_BUILD_NE_DIR=$(INSTALL_DIR)/ne/build
+INSTALL_BUILD_OCE_DIR=$(INSTALL_DIR)/oce/build
+INSTALL_BUILD_OE_DIR=$(INSTALL_DIR)/oe/build
+INSTALL_BUILD_PC_DIR=$(INSTALL_DIR)/pc/build
+INSTALL_BUILD_PCOE_DIR=$(INSTALL_DIR)/pcoe/build
+INSTALL_BUILD_RDE_DIR=$(INSTALL_DIR)/rde/build
+INSTALL_BUILD_NLE_DIR=$(INSTALL_DIR)/se/build
+INSTALL_BUILD_WDE_DIR=$(INSTALL_DIR)/wde/build
+INSTALL_BUILD_UPDATER_DIR=$(INSTALL_DIR)/updater/build
+INSTALL_BUILD_CESDK_DIR=$(INSTALL_DIR)/cesdk/build
+INSTALL_BUILD_NXLFILTER_DIR=$(INSTALL_DIR)/nxlfilter/build
+INSTALL_BUILD_RESKIT_DIR=$(INSTALL_DIR)/reskit/build
+INSTALL_BUILD_DEVTOOL_DIR=$(INSTALL_DIR)/devtool/build
+
+
+#
+# Info
+#
+
+$(info --------------------------------------------------------------)
+$(info [Build])
+$(info TYPE                          = $(TYPE))
+$(info VERSION_BUILD_SHORT           = $(VERSION_BUILD_SHORT))
+$(info BUILD_DATE                    = $(BUILD_DATE))
+$(info [Path])
+$(info PUBLISH_LOCAL_KMC_DIR         = $(PUBLISH_LOCAL_KMC_DIR))
+$(info PUBLISH_LOCAL_LME_DIR         = $(PUBLISH_LOCAL_LME_DIR))
+$(info PUBLISH_LOCAL_NE_DIR          = $(PUBLISH_LOCAL_NE_DIR))
+$(info PUBLISH_LOCAL_OCE_DIR         = $(PUBLISH_LOCAL_OCE_DIR))
+$(info PUBLISH_LOCAL_OE_DIR          = $(PUBLISH_LOCAL_OE_DIR))
+$(info PUBLISH_LOCAL_PC_DIR          = $(PUBLISH_LOCAL_PC_DIR))
+$(info PUBLISH_LOCAL_PCOE_DIR        = $(PUBLISH_LOCAL_PCOE_DIR))
+$(info PUBLISH_LOCAL_RDE_DIR         = $(PUBLISH_LOCAL_RDE_DIR))
+$(info PUBLISH_LOCAL_NLE_DIR         = $(PUBLISH_LOCAL_NLE_DIR))
+$(info PUBLISH_LOCAL_WDE_DIR         = $(PUBLISH_LOCAL_WDE_DIR))
+$(info PUBLISH_LOCAL_UPDATER_DIR     = $(PUBLISH_LOCAL_UPDATER_DIR))
+$(info PUBLISH_LOCAL_CESDK_DIR       = $(PUBLISH_LOCAL_CESDK_DIR))
+$(info PUBLISH_LOCAL_RESKIT_DIR      = $(PUBLISH_LOCAL_RESKIT_DIR))
+$(info PUBLISH_LOCAL_DEVTOOL_DIR     = $(PUBLISH_LOCAL_DEVTOOL_DIR))
+$(info PUBLISH_LOCAL_ARTIFACT_DIR    = $(PUBLISH_LOCAL_ARTIFACT_DIR))
+$(info TOP_BIN_DIR                   = $(TOP_BIN_DIR))
+$(info XLIB_DIR                      = $(XLIB_DIR))
+$(info INSTALL_DIR                   = $(INSTALL_DIR))
+$(info [File])
+$(info ZIP_FILE_NAME_BIN             = $(ZIP_FILE_NAME_BIN))
+$(info ZIP_FILE_NAME_XLIB            = $(ZIP_FILE_NAME_XLIB))
+$(info ZIP_FILE_NAME_INSTALL         = $(ZIP_FILE_NAME_INSTALL))
+$(info ZIP_FILE_NAME_INSTALL_SMALL   = $(ZIP_FILE_NAME_INSTALL_SMALL))
+$(info ZIP_FILE_NAME_PC_INSTALL      = $(ZIP_FILE_NAME_PC_INSTALL))
+$(info ZIP_FILE_NAME_PCOE_INSTALL    = $(ZIP_FILE_NAME_PCOE_INSTALL))
+$(info ZIP_FILE_NAME_UPDATER_INSTALL = $(ZIP_FILE_NAME_UPDATER_INSTALL))
+$(info ZIP_FILE_NAME_SYMBOL          = $(ZIP_FILE_NAME_SYMBOL))
+$(info --------------------------------------------------------------)
+$(info )
+
+
+#
+# Targets
+#
+
+.PHONY: all
+all: product support archive
+
+.PHONY: product
+product: kmc lme ne oce oe rde se wde pc updater
+
+.PHONY: kmc
+kmc: kmc_local
+
+.PHONY: kmc_local
+kmc_local:
+	@echo "Publishing KMC-32 and KMC-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_KMC_DIR) ]; then \
+		echo "$(INSTALL_BUILD_KMC_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_KMC_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_KMC_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_KMC_DIR)/*.zip $(PUBLISH_LOCAL_KMC_DIR)
+	ls -l $(PUBLISH_LOCAL_KMC_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Key Management Client"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_KMC_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_KMC_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: lme
+lme: lme_local
+
+.PHONY: lme_local
+lme_local:
+	@echo "Publishing LME-32 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_LME_DIR) ]; then \
+		echo "$(INSTALL_BUILD_LME_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_LME_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_LME_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_LME_DIR)/*.zip $(PUBLISH_LOCAL_LME_DIR)
+	ls -l $(PUBLISH_LOCAL_LME_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Live Meeting Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_LME_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_LME_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: ne
+ne: ne_local
+
+.PHONY: ne_local
+ne_local:
+	@echo "Publishing NE-32 and NE-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_NE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_NE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_NE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_NE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_NE_DIR)/*.zip $(PUBLISH_LOCAL_NE_DIR)
+	ls -l $(PUBLISH_LOCAL_NE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Network Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_NE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_NE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: oce
+oce: oce_local
+
+.PHONY: oce_local
+oce_local:
+	@echo "Publishing OCE-32 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_OCE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_OCE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_OCE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_OCE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_OCE_DIR)/*.zip $(PUBLISH_LOCAL_OCE_DIR)
+	ls -l $(PUBLISH_LOCAL_OCE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Office Communicator Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_OCE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_OCE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: oe
+oe: oe_local
+
+.PHONY: oe_local
+oe_local:
+	@echo "Publishing OE-32 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_OE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_OE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_OE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_OE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_OE_DIR)/*.zip $(PUBLISH_LOCAL_OE_DIR)
+	ls -l $(PUBLISH_LOCAL_OE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Outlook Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_OE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_OE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: pc
+pc: pc_local
+
+.PHONY: pc_local
+pc_local:
+	@echo "Publishing PC-32 and PC-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_PC_DIR) ]; then \
+		echo "$(INSTALL_BUILD_PC_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_PC_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_PC_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_PC_DIR)/*.zip $(PUBLISH_LOCAL_PC_DIR)
+	ls -l $(PUBLISH_LOCAL_PC_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Policy Controller"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_PC_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_PC_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: pcoe
+pcoe: pcoe_local
+
+.PHONY: pcoe_local
+pcoe_local:
+	@echo "Publishing PCOE-32 and PCOE-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_PCOE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_PCOE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_PCOE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_PCOE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_PCOE_DIR)/*.zip $(PUBLISH_LOCAL_PCOE_DIR)
+	ls -l $(PUBLISH_LOCAL_PCOE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Enforcer for Microsoft Outlook"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_PCOE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_PCOE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: rde
+rde: rde_local
+
+.PHONY: rde_local
+rde_local:
+	@echo "Publishing RDE-32 and RDE-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_RDE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_RDE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_RDE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_RDE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_RDE_DIR)/*.zip $(PUBLISH_LOCAL_RDE_DIR)
+	ls -l $(PUBLISH_LOCAL_RDE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Removable Device Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_RDE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_RDE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: se
+se: se_local nxlfilter_local
+
+.PHONY: se_local
+se_local:
+	@echo "Publishing SE-32 and SE-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_NLE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_NLE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_NLE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_NLE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_NLE_DIR)/*.zip $(PUBLISH_LOCAL_NLE_DIR)
+	ls -l $(PUBLISH_LOCAL_NLE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : System Encryption"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_NLE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_NLE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: wde
+wde: wde_local
+
+.PHONY: wde_local
+wde_local:
+	@echo "Publishing WDE-32 and WDE-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_WDE_DIR) ]; then \
+		echo "$(INSTALL_BUILD_WDE_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_WDE_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_WDE_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_WDE_DIR)/*.zip $(PUBLISH_LOCAL_WDE_DIR)
+	ls -l $(PUBLISH_LOCAL_WDE_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Windows Desktop Enforcer"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_WDE_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_WDE_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: updater
+updater: updater_local
+
+.PHONY: updater_local
+updater_local:
+	@echo "Publishing Updater-64 MSI file 	(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_UPDATER_DIR) ]; then \
+		echo "$(INSTALL_BUILD_UPDATER_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_UPDATER_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_UPDATER_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_UPDATER_DIR)/*.zip $(PUBLISH_LOCAL_UPDATER_DIR)
+	ls -l $(PUBLISH_LOCAL_UPDATER_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : NextLabs Data Protection"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_UPDATER_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_UPDATER_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: support
+support: devtool
+
+.PHONY: cesdk
+cesdk: cesdk_local
+
+.PHONY: cesdk_local
+cesdk_local:
+	@echo "Publishing CESDK to local file system"
+	@if [ ! -d $(INSTALL_BUILD_CESDK_DIR) ]; then \
+		echo "$(INSTALL_BUILD_CESDK_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_CESDK_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_CESDK_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_CESDK_DIR)/*.zip $(PUBLISH_LOCAL_CESDK_DIR)
+	ls -l $(PUBLISH_LOCAL_CESDK_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : Policy Adapter SDK"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_CESDK_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_CESDK_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: nxlfilter
+nxlfilter: nxlfilter_local
+
+.PHONY: nxlfilter_local
+nxlfilter_local:
+	@echo "Publishing NXLFilter to local file system"
+	@if [ ! -d $(INSTALL_BUILD_NXLFILTER_DIR) ]; then \
+		echo "$(INSTALL_BUILD_NXLFILTER_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_NXLFILTER_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_NXLFILTER_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_NXLFILTER_DIR)/*.zip $(PUBLISH_LOCAL_NXLFILTER_DIR)
+	ls -l $(PUBLISH_LOCAL_NXLFILTER_DIR)
+	@echo "[BUILD MANIFEST] Product Name         : NXLFilter"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_NXLFILTER_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_NXLFILTER_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: reskit
+reskit: reskit_local
+
+.PHONY: reskit_local
+reskit_local:
+	@echo "Publishing RESKIT-32 and RESKIT-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_RESKIT_DIR) ]; then \
+		echo "$(INSTALL_BUILD_RESKIT_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_RESKIT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_RESKIT_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_RESKIT_DIR)/*.zip $(PUBLISH_LOCAL_RESKIT_DIR)
+	ls -l $(PUBLISH_LOCAL_RESKIT_DIR)
+	@echo "[BUILD MANIFEST] Tool Name            : Resource Kit"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_RESKIT_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_RESKIT_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: devtool
+devtool: devtool_local
+
+.PHONY: devtool_local
+devtool_local:
+	@echo "Publishing DEVTOOL-32 and DEVTOOL-64 MSI file(s) to local file system"
+	@if [ ! -d $(INSTALL_BUILD_DEVTOOL_DIR) ]; then \
+		echo "$(INSTALL_BUILD_DEVTOOL_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_DEVTOOL_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_DEVTOOL_DIR) ; \
+	fi
+	cp -f $(INSTALL_BUILD_DEVTOOL_DIR)/*.zip $(PUBLISH_LOCAL_DEVTOOL_DIR)
+	ls -l $(PUBLISH_LOCAL_DEVTOOL_DIR)
+	@echo "[BUILD MANIFEST] Tool Name            : Developer Toolkit"
+	@echo "[BUILD MANIFEST]   Installer Location : $(PUBLISH_LOCAL_DEVTOOL_DIR)"
+	@echo "[BUILD MANIFEST]   Installer Package  : $$(cd $(INSTALL_BUILD_DEVTOOL_DIR); ls -1 *.zip | tr '\n' ' ')"
+
+.PHONY: archive
+archive: archive_bin archive_install
+
+# Notes: Backup build binaries and symbols. We need symbol files (.pdb) to analyze dump
+# file.
+
+.PHONY: archive_bin
+archive_bin:
+	@echo "Archiving top-level bin directory"
+	@if [ ! -d $(TOP_BIN_DIR) ]; then \
+		echo "$(TOP_BIN_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	cp -f $(NLBUILDROOT)/build.config* $(NLBUILDROOT)/bin
+	cp -f $(NLBUILDROOT)/build*.log $(NLBUILDROOT)/bin
+	cd $(NLBUILDROOT); zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_BIN) bin -x bin/installer/*.zip
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	@echo "[BUILD MANIFEST] Archive: $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_BIN)"
+
+# Notes: Backup external libraries we used in a build so that we can always repeat a
+# build at a later time. Notice that externals are not versioned and build scripts always
+# use the latest externals. As a result, we will not be able to gaurantee a build can
+# be repeated with the same externals without backing up xlib.
+
+.PHONY: archive_xlib
+archive_xlib:
+	@echo "Archiving build tree xlib directory"
+	@if [ ! -d $(XLIB_DIR) ]; then \
+		echo "$(XLIB_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	cd $(NLBUILDROOT); zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_XLIB) xlib
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	@echo "[BUILD MANIFEST] Archive: $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_XLIB)"
+
+# Notes: Backup installer build artifacts so that we can patch installers without rebuilding.
+# All Fate intstallers are in /install directory.
+
+.PHONY: archive_install
+archive_install:
+	@echo "Archiving installer build directory"
+	@if [ ! -d $(INSTALL_DIR) ]; then \
+		echo "$(INSTALL_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	rm -f $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL)
+
+	# Only add release.log and sometime donot find any files to zip
+	# cd $(NLBUILDROOT); find . -maxdepth 1 -type f -print0 | xargs -0 git status -s | sed -e 's@^ M @@' -e 's@^?? @@' | zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL) -@
+	cd $(NLBUILDROOT); zip -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL) *.log
+	cd $(NLBUILDROOT); git status -s build install | sed -e 's@^ M @@' -e 's@^?? @@' | zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL) -@ -x install/\*/\*/*.zip install/\*/\*/*.msi \*setup\*.zip \*/PolicyController-\*-\*-\*-\*.zip
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	@echo "[BUILD MANIFEST] Archive: $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL)"
+
+# Notes: A smaller backup of installer build artifacts.  This is useful for
+# transferring installer build artifacts to off-site installer developer via a
+# slow connection.
+# .msi, .pdb and .o files are excluded.
+
+.PHONY: archive_install_small
+archive_install_small:
+	@echo "Archiving installer build directory (smaller version)"
+	@if [ ! -d $(INSTALL_DIR) ]; then \
+		echo "$(INSTALL_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	rm -f $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL_SMALL)
+	
+	# Only add release.log and sometime donot find any files to zip
+	# cd $(NLBUILDROOT); find . -maxdepth 1 -type f -print0 | xargs -0 git status -s | sed -e 's@^ M @@' -e 's@^?? @@' | zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL_SMALL) -@
+	cd $(NLBUILDROOT); zip -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL_SMALL) *.log
+	cd $(NLBUILDROOT); git status -s build install | sed -e 's@^ M @@' -e 's@^?? @@' | zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL_SMALL) -@ -x install/\*/\*/*.zip install/\*/\*/*.msi \*setup\*.zip \*/PolicyController-\*-\*-\*-\*.zip \*.msi \*.pdb \*.o
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	@echo "[BUILD MANIFEST] Archive: $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_INSTALL_SMALL)"
+
+# Notes: Because updater is a combo installer. It is built after all other installers
+# are built and published. Other installer build artifacts has  already been packaged
+# in a zip file. All we need to do to backup updater build artifacts is to zip up
+# install/updater directory.
+
+.PHONY: archive_updater_install
+archive_updater_install:
+	@echo "Archiving updater installer build directory"
+	@if [ ! -d $(INSTALL_DIR) ]; then \
+		echo "$(INSTALL_DIR) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	cd $(NLBUILDROOT); zip -r -b . $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_UPDATER_INSTALL) install/updater \
+		-x install/updater/build/output\* -x install/updater/build/package\*
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	@echo "[BUILD MANIFEST] Archive: $(PUBLISH_LOCAL_ARTIFACT_DIR)/$(ZIP_FILE_NAME_UPDATER_INSTALL)"
+
+.PHONY: manifest
+manifest:
+	@echo "Publish build manifest to artifacts directory"
+	@if [ ! -f $(BUILD_MANIFEST_FILE_NAME) ]; then \
+		echo "$(BUILD_MANIFEST_FILE_NAME) does not exist" ; \
+		exit 1 ; \
+	fi
+	@if [ ! -d $(PUBLISH_LOCAL_ARTIFACT_DIR) ]; then \
+		mkdir -p $(PUBLISH_LOCAL_ARTIFACT_DIR) ; \
+	fi
+	cp -f $(NLBUILDROOT)/$(BUILD_MANIFEST_FILE_NAME) $(PUBLISH_LOCAL_ARTIFACT_DIR)
+	ls -l $(PUBLISH_LOCAL_ARTIFACT_DIR)

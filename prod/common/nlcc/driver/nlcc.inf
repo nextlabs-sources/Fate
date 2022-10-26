@@ -1,0 +1,83 @@
+;;;
+;;; Copyright (c) NextLabs, Inc. All rights reserved
+;;;
+;;; Abstract:
+;;; NextLabs Encrypting File System driver install configuration.
+;;;
+
+[Version]
+Signature			=	"$WINDOWS NT$"
+Class=NextLabs
+ClassGuid={ECE4B676-CA05-40d8-99C2-67B97A83C2D8}
+Provider			=	%NextLabs%
+DriverPackageType	=	KernelService
+DriverVer=03/30/2011,6.0.6000.16386
+
+CatalogFile.NTx86=nlcc.x86.cat
+CatalogFile.NTamd64=nlcc.x64.cat
+
+[DestinationDirs]
+DefaultDestDir	        = 12
+NLCC.DriverFiles	= 12 			;%windir%\system32\drivers
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall]
+OptionDesc          = %NLCCServiceDesc%
+CopyFiles           = NLCC.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %NLCCServiceName%,,NLCC.Service
+
+;;
+;; Default uninstall sections
+;;
+
+[DefaultUninstall]
+DelFiles   = NLCC.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = nlcc,0x200		; Flags note to stop service first
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles.x86]
+nlcc.sys  = 1,i386
+
+[SourceDisksFiles.amd64]
+nlcc.sys  = 1,amd64
+
+;
+; Services Section
+;
+
+[NLCC.Service]
+DisplayName		= %NLCCServiceName%
+Description		= %NLCCServiceDesc%
+ServiceBinary	= %12%\nlcc.sys  	;%windir%\system32\drivers\nlcc.sys
+ServiceType     = 1               			;SERVICE_KERNEL_DRIVER
+StartType		= 1							;SERVICE_SYSTEM_START
+ErrorControl	= 1							;SERVICE_ERROR_NORMAL
+LoadOrderGroup = Extended Base
+
+;
+; Copy Files
+;
+
+[NLCC.DriverFiles]
+nlcc.sys
+
+;;
+;; String Section
+;;
+
+[Strings]
+NextLabs            	= "NextLabs, Inc."
+NLCCServiceDesc	= "NextLabs NLCC Driver"
+NLCCServiceName 	= "nlcc"
+NLCCRegistry    	= "SYSTEM\CurrentControlSet\services\nlcc"
+
+

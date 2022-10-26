@@ -1,0 +1,15 @@
+; cbPep.def : Declares the module parameters.
+
+LIBRARY      "cbPep.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllInstall		PRIVATE
+	
+	DoInit
+	DoUninit
+	DoLoad
+	DoUnLoad

@@ -1,0 +1,11 @@
+LIBRARY	"FileTagging"
+
+EXPORTS
+	DoPolicyAssistant @ 1
+	ShowResetPanel    @ 2
+	DoPolicyAssistant2 @ 3
+	ReleaseTagBuf @ 4
+	DoPolicyAssistant_OE @ 5
+	DeleteLastModifyTimeTag @ 6
+	TaggingOnFile @ 7
+	ShowTagErrorBlockMessage @ 8

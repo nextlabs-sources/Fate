@@ -1,0 +1,4 @@
+EXPORTS
+	CELOGGING_LogDecision
+	CELOGGING_LogObligationData
+	CSCINVOKE_CELOGGING_LogObligationData

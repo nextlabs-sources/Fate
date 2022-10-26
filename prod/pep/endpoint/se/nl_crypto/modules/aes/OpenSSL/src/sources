@@ -1,0 +1,16 @@
+TARGETNAME=nl_crypto
+TARGETTYPE=EXPORT_DRIVER
+DLLDEF=nl_crypto.def
+INCLUDES=$(INCLUDES);		\
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\modules\aes\OpenSSL\include;			\
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\modules\aes\OpenSSL\include\openssl;	\
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\include
+
+TARGETLIBS=$(TARGETLIBS)
+
+C_DEFINES=$(C_DEFINES)
+
+SOURCES = nl_aes_crypto.c	\
+		aes_x86core.c		\
+		aes_cbc.c			\
+		cbc128.c

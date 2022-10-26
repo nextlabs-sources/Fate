@@ -1,0 +1,199 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "../include/resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "../include/targetver.h"
+#endif
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5, 5, 4, 0
+ PRODUCTVERSION 5, 5, 4, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "Desktop Enforcer for Microsoft Windows (x86)"
+            VALUE "FileVersion", "5.5.4.0 (11.332.1817DX/v200-kzhou-kzhou-2011.11.28-18:17)"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "Desktop Enforcer for Microsoft Windows"
+            VALUE "ProductVersion", "5.5.4.0 (11.332.1817DX/v200-kzhou-kzhou-2011.11.28-18:17)"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_ADDTAGS             REGISTRY                "addTags.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ADDTAGSDLG DIALOGEX 0, 0, 278, 219
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | DS_CENTER | WS_SYSMENU
+CAPTION "Enterprise Data Protection - Policy Assistant"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Ok",IDC_NEXT,172,202,44,14
+    CONTROL         "",IDC_FILELIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,12,66,228,65
+    PUSHBUTTON      "Cancel",IDC_CANCEL,227,202,47,14
+    CONTROL         "",IDC_TAGLIST,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_TABSTOP,12,134,228,57
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,12,6,256,1
+    LTEXT           "Files:",IDC_STATIC,12,56,16,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,12,194,256,1
+    LTEXT           "Classification",IDC_TITLE,12,9,100,12
+    LTEXT           "",IDC_OURLOGO,187,9,79,18
+	EDITTEXT        IDC_PROMPT,12,29,252,25,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_PROMPT DIALOGEX 0, 0, 197, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Policy Assistant"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Processing...",IDC_STATIC,7,11,92,8
+    CONTROL         "Custom1",IDC_CUSTOM1,"gs_nonprogressbar",WS_TABSTOP,7,46,183,14
+    EDITTEXT        IDC_FILEPATH,7,26,183,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_NXT_LOGO            ICON                    "..\\res\\dlp.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PROMPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_LOGO                PNG                     "..\\res\\logo_edp_small.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_PROJNAME            "addTags"
+    IDS_NEXT                "Next"
+    IDS_OK                  "OK"
+    IDS_PROMPT              "The following file needs to be tagged: "
+    IDS_NO_FILE             "The tagging operation has failed. The file was moved or deleted as the tagging operation was being carried out."
+    IDS_READONLY            "The tagging operation has failed. This file is read-only."
+    IDS_NOT_WRITABLE        "The tagging operation has failed. The file is not writable."
+    IDS_TAGGING_ERROR       "The tagging operation has failed due to some unknown error."
+    IDS_ERROR_CAPTION       "Warning"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

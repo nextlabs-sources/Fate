@@ -1,0 +1,76 @@
+#!/bin/sh --debug
+
+# History of this script: 
+#
+# Originally we simply call ant, but since our system has spawned to support multiple
+# projects, which different projects use different JDK/JRE, and Ant only looks at
+# JAVA_HOME and path to javac, it becomes an impossible mission to modify the *RUNNING*
+# process environment, particularly inside Ant/Java (An attempt to run an Ant task, but
+# Java doesn't have the environment setting capability, so it failed).
+# Thus we have to set the environment PRIOR to run Ant. 
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR, which is the root of the Enforcers";
+    exit;
+fi
+
+if [ $# -lt 1 ] ; then
+    echo
+    echo "Usage: $0 product [targets]"
+    echo
+    exit 1;
+fi
+
+product=$1;
+
+if [ ! -d ${NLENFORCERSDIR}/prods/$product ]; then
+   echo "Invalid product : $product"
+   echo "Usage: $0 product [targets]"
+   echo
+   exit 1;
+fi 
+
+shift 1;
+
+target=$1;
+
+configfile=${NLENFORCERSDIR}/prods/$product/$product.cfg;
+
+# You can customize here
+function process_key_value() {
+  if [ "$key" == "JAVA_HOME" ] ; then
+      export JAVA_HOME=${value};
+      export PATH=${value}/bin:$PATH;
+  fi
+}
+
+
+# Not using the cat and pipe since it will create a 
+# subshell
+exec<$configfile
+  while read line
+    do
+      # Strip out the comment
+      line=`echo $line | grep -v "^#"`;
+      # Strip out empty lines
+      if [ -n "$line" ]; then 
+        key=`echo $line   | cut -d'=' -f1`
+        value=`echo $line | cut -d'=' -f2`
+        key=`echo $key    | sed "s/[:space:]*$//g"`
+        key=`echo $key    | sed "s/^[:space:]*//g"`
+        value=`echo $value| sed "s/[:space:]*$//g"`
+        value=`echo $value| sed "s/^[:space:]*//g"`
+        # Get the key value pair for each setting
+        if [ -n "key" ] && [ -n "$value" ] ; then
+           process_key_value "$key" "$value"
+        fi 
+      fi
+    done
+
+# Run the ant
+
+cd ${NLENFORCERSDIR}/prods/$product/ ;
+ant $target
+cd - >/dev/null
+
+

@@ -1,0 +1,442 @@
+# This script is included by driver Makefiles
+
+
+#
+# Check for errors
+#
+
+ifeq ($(ProgramW6432), )
+	ENV_OS=x86
+	PROGRAM_FILES_X86=C:/Program Files
+else
+	ENV_OS=x64
+	PROGRAM_FILES_X86=C:/Program Files (x86)
+endif
+
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(DRIVER_NAME),)
+  $(error DRIVER_NAME undefined.)
+endif
+
+ifeq ($(DRIVER_TYPE),)
+  $(error DRIVER_TYPE undefined.)
+endif
+
+ifeq ($(CAT_FILE),)
+  CAT_FILE=no
+endif
+
+ifeq ($(DRIVER_TYPE), "sys")
+ifeq ($(INF_FILE),)
+  $(error INF_FILE undefined.)
+endif
+ifeq ($(RC_FILE),)
+  $(error RC_FILE undefined.)
+endif
+endif
+
+ifeq ($(DRIVER_TYPE), "lib")
+ifeq ($(CAT_FILE),)
+  $(error CAT_FILE should not be defined for kernel library.)
+endif
+endif
+
+ifeq ($(VERSION_STR),)
+  $(error VERSION_STR undefined.)
+endif
+
+ifeq ($(VERSION_PRODUCT),)
+  $(error VERSION_PRODUCT undefined.)
+endif
+
+ifeq ($(TARGETS_DRIVER),)
+  $(error TARGETS_DRIVER undefined.)
+endif
+
+ifeq ($(NLCERTDIR),)
+  NLCERTDIR=C:\\release\\bin
+endif
+
+ifeq ($(NLCERTDIR),)
+  NLCERTDIR=C:\\release\\bin
+endif
+
+#
+# Common variables
+#
+
+DATE_STR=$(shell date +"%m/%d/%Y")
+ifeq ($(VERSION_BUILD),)
+  VERSION_BUILD=$(DATE_STR)
+endif
+NLBUILDROOT_DOS=$(subst /,\\,$(NLBUILDROOT))
+WDKDIR=C:\\WinDDK\\7600.16385.1
+WDKDIR_CYGWIN=$(subst \\,/,$(WDKDIR))
+DIST_BINDIR_X86_FRE=$(NLBUILDROOT)/bin/release_win_x86
+DIST_BINDIR_X64_FRE=$(NLBUILDROOT)/bin/release_win_x64
+DIST_BINDIR_X86_CHK=$(NLBUILDROOT)/bin/debug_win_x86
+DIST_BINDIR_X64_CHK=$(NLBUILDROOT)/bin/debug_win_x64
+LOCAL_BINDIR_X86_FRE=src/objfre_wxp_x86/i386
+LOCAL_BINDIR_X64_FRE=src/objfre_win7_amd64/amd64
+LOCAL_BINDIR_X86_CHK=src/objchk_wxp_x86/i386
+LOCAL_BINDIR_X64_CHK=src/objchk_win7_amd64/amd64
+
+LOCAL_INSTALL_DISC_ROOT=installdisc
+LOCAL_INSTALL_DISC_I386=installdisc\i386
+LOCAL_INSTALL_DISC_AMD64=installdisc\amd64
+
+SIGNTOOL=$(PROGRAM_FILES_X86)/Windows Kits/8.0/bin/x64/signtool.exe
+INFOTOOL=$(WDKDIR_CYGWIN)/bin/selfsign/Inf2Cat.exe
+NLCERT_FILE=$(NLCERTDIR)\\NextLabs.pfx
+NLCERT_SHA1_FILE=$(NLCERTDIR)\\NextLabs-sha1.pfx
+NLCERT_FILE_CYGWIN=$(subst \\,/,$(NLCERT_FILE))
+NLCERT_SHA1_FILE_CYGWIN=$(subst \\,/,$(NLCERT_SHA1_FILE))
+SUPPORTOS=XP_X86,XP_X64,Vista_X86,Vista_X64,7_X86,7_X64,Server2003_X86,Server2003_X64,Server2008_X86,Server2008_X64,Server2008R2_X64
+
+#
+#  Setup sign command
+#
+
+# By default, we use the real certificate
+SIGN256CMD='$(SIGNTOOL)' sign /ac "$(NLCERTDIR)\\DigiCertAssuredIDRootCA.cer" /f "$(NLCERTDIR)\\NextLabs.pfx" /p IiVf1itvOrqJ /n "NextLabs Inc." /fd sha256 /tr http://timestamp.digicert.com
+# If the real certificate doesn't exist, use NextLabs debug certificate
+DEVSIGNCMD='$(SIGNTOOL)' sign /f "$(NLBUILDROOT_DOS)\\build\\certificates\\NextLabsDebug.pfx" /p 123blue! /n "NextLabsDebug" /fd sha256
+
+#
+# Show environment
+#
+
+$(info --------------------------------------------------------------------------)
+$(info --- Makefile.driver ---)
+$(info [PARAMETERS])
+$(info CROSSCERT=$(CROSSCERT))
+$(info DRIVER_NAME=$(DRIVER_NAME))
+$(info DRIVER_TYPE=$(DRIVER_TYPE))
+$(info INFOTOOL=$(INFOTOOL))
+$(info INF_FILE=$(INF_FILE))
+$(info LOCAL_INSTALL_DISC_AMD64=$(LOCAL_INSTALL_DISC_AMD64))
+$(info LOCAL_INSTALL_DISC_I386=$(LOCAL_INSTALL_DISC_I386))
+$(info LOCAL_INSTALL_DISC_ROOT=$(LOCAL_INSTALL_DISC_ROOT))
+$(info NEXTLABSCERT=$(NEXTLABSCERT))
+$(info NLBUILDROOT=$(NLBUILDROOT))
+$(info RC_FILE=$(RC_FILE))
+$(info SIGN256CMD=$(SIGN256CMD))
+$(info DEVSIGNCMD=$(DEVSIGNCMD))
+$(info SIGNTOOL=$(SIGNTOOL))
+$(info SUPPORTOS=$(SUPPORTOS))
+$(info TARGETS_DRIVER=$(TARGETS_DRIVER))
+$(info VERSION_ARCHITECTURE=$(VERSION_ARCHITECTURE))
+$(info VERSION_BUILD=$(VERSION_BUILD))
+$(info VERSION_PRODUCT=$(VERSION_PRODUCT))
+$(info VERSION_STR=$(VERSION_STR))
+$(info ---------------------------------------------------------------------------)
+
+
+#
+# Common targets
+#
+
+.PHONY: all
+all: $(TARGETS_DRIVER)
+
+
+.PHONY: update_version
+update_version:
+	@if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi
+
+# Notes: Add TEMP environment variable is a workaround for running drvBuild.bat in Cygwin.
+# The problem does not occur when drvBuild.bat is run in DOS.
+.PHONY: compile_wxp_x86_free
+compile_wxp_x86_free:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objfre_wxp_x86
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x86" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x86 free	
+	@if [ ! -d "$(DIST_BINDIR_X86_FRE)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X86_FRE)" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_wxp_x86_free: $(SIGN256CMD) $(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_wxp_x86_free: $(DEVSIGNCMD) $(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X86_FRE)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X86_FRE)/"	
+	@if [ -a "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X86_FRE)/" ; \
+	fi
+
+.PHONY: compile_wxp_x86_checked
+compile_wxp_x86_checked:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objchk_wxp_x86
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x86" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x86 checked	
+	@if [ ! -d "$(DIST_BINDIR_X86_CHK)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X86_CHK)" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_wxp_x86_checked: $(SIGN256CMD) $(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_wxp_x86_checked: $(DEVSIGNCMD) $(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X86_CHK)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X86_CHK)/"	
+	@if [ -a "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X86_CHK)/" ; \
+	fi
+
+.PHONY: compile_win7_amd64_free
+compile_win7_amd64_free:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objfre_win7_amd64
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x64" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x64 free	
+	@if [ ! -d "$(DIST_BINDIR_X64_FRE)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X64_FRE)" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_win7_amd64_free: $(SIGN256CMD) $(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_win7_amd64_free: $(DEVSIGNCMD) $(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X64_FRE)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X64_FRE)/"	
+	@if [ -a "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X64_FRE)/" ; \
+	fi
+
+.PHONY: compile_win7_amd64_checked
+compile_win7_amd64_checked:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objchk_win7_amd64
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x64" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x64 checked	
+	@if [ ! -d "$(DIST_BINDIR_X64_CHK)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X64_CHK)" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_win7_amd64_checked: $(SIGN256CMD) $(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_win7_amd64_checked: $(DEVSIGNCMD) $(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X64_CHK)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X64_CHK)/"	
+	@if [ -a "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X64_CHK)/" ; \
+	fi
+
+# Notes: Compile both x86 and x64 drivers
+.PHONY: compile_free
+compile_free:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objfre_wxp_x86 ./src/objfre_win7_amd64
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x86" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x86 free
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS) ; \
+	export WDKDIR=$(WDKDIR) ; \
+	if [ "$(DRIVER_TYPE)" == "sys" ] && [ $(INF_FILE) != "" ]; then \
+		$(PERL) $(NLBUILDROOT)/build/updateVersionInfo_driver.pl "$(INF_FILE)" "src/$(RC_FILE)" "$(DATE_STR)" "$(VERSION_STR)" "x64" "$(VERSION_BUILD)" "$(VERSION_PRODUCT)" ; \
+	fi ; \
+	$(NLBUILDROOT)/build/Makefile.driver.bat x64 free
+	@if [ ! -d "$(DIST_BINDIR_X86_FRE)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X86_FRE)" ; \
+	fi
+	@if [ ! -d "$(DIST_BINDIR_X64_FRE)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X64_FRE)" ; \
+	fi
+	@if [ ! -d "$(LOCAL_INSTALL_DISC_ROOT)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_ROOT)" ; \
+	fi
+	@if [ ! -d "$(LOCAL_INSTALL_DISC_I386)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_I386)" ; \
+	fi
+	if [ ! -d "$(LOCAL_INSTALL_DISC_AMD64)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_AMD64)" ; \
+	fi
+	@if [ "$(COINSTALLER_FILE)" == "yes" ]; then \
+		cp -f "$(WDKDIR_CYGWIN)/redist/wdf/x86/WdfCoInstaller01009.dll" "$(LOCAL_INSTALL_DISC_I386)/" ; \
+		cp -f "$(WDKDIR_CYGWIN)/redist/wdf/amd64/WdfCoInstaller01009.dll" "$(LOCAL_INSTALL_DISC_AMD64)/" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_free: $(SIGN256CMD) $(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_free: $(DEVSIGNCMD) $(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X86_FRE)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X86_FRE)/"	
+	@if [ -a "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X86_FRE)/" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_free: $(SIGN256CMD) $(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_free: $(DEVSIGNCMD) $(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X64_FRE)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X64_FRE)/"	
+	@if [ -a "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X64_FRE)/" ; \
+	fi
+	@if [ "$(CAT_FILE)" == "yes" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(LOCAL_INSTALL_DISC_I386)/" ; \
+		cp -f "$(LOCAL_BINDIR_X64_FRE)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(LOCAL_INSTALL_DISC_AMD64)/" ; \
+		cp -f "$(INF_FILE)" "$(LOCAL_INSTALL_DISC_ROOT)/" ; \
+		"$(INFOTOOL)" /driver:"$(LOCAL_INSTALL_DISC_ROOT)" /os:$(SUPPORTOS) ; \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_free: $(SIGN256CMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+			$(SIGN256CMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+		else \
+			echo "compile_free: $(DEVSIGNCMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+			$(DEVSIGNCMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+		fi ; \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_free: $(SIGN256CMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+			$(SIGN256CMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+		else \
+			echo "compile_free: $(DEVSIGNCMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+			$(DEVSIGNCMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+		fi ; \
+		cp -f "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" "$(DIST_BINDIR_X86_FRE)/" ; \
+		cp -f "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" "$(DIST_BINDIR_X64_FRE)/" ; \
+	fi
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT)
+
+# Notes: Compile both x86 and x64 drivers check version
+.PHONY: compile_checked
+compile_checked:
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT) ./src/objchk_wxp_x86 ./src/objchk_win7_amd64
+	@export NLBUILDROOT_DOS=$(NLBUILDROOT_DOS); \
+	export WDKDIR=$(WDKDIR)
+	@if [ "$(TEMP)" == "" ]; then \
+		export TEMP=. ; \
+	fi
+	$(NLBUILDROOT)/build/Makefile.driver.bat x86 checked
+	$(NLBUILDROOT)/build/Makefile.driver.bat x64 checked
+	@if [ ! -d "$(DIST_BINDIR_X86_CHK)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X86_CHK)" ; \
+	fi
+	@if [ ! -d "$(DIST_BINDIR_X64_CHK)" ]; then \
+		mkdir -p "$(DIST_BINDIR_X64_CHK)" ; \
+	fi
+	@if [ ! -d "$(LOCAL_INSTALL_DISC_ROOT)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_ROOT)" ; \
+	fi
+	@if [ ! -d "$(LOCAL_INSTALL_DISC_I386)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_I386)" ; \
+	fi
+	@if [ ! -d "$(LOCAL_INSTALL_DISC_AMD64)" ]; then \
+		mkdir -p "$(LOCAL_INSTALL_DISC_AMD64)" ; \
+	fi
+	@if [ "$(COINSTALLER_FILE)" == "yes" ]; then \
+		cp -f "$(WDKDIR_CYGWIN)/redist/wdf/x86/WdfCoInstaller01009.dll" "$(LOCAL_INSTALL_DISC_I386)/" ; \
+		cp -f "$(WDKDIR_CYGWIN)/redist/wdf/amd64/WdfCoInstaller01009.dll" "$(LOCAL_INSTALL_DISC_AMD64)/" ; \
+	fi
+	@if [ "$(DRIVER_TYPE)" == "sys" ]; then \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_checked: $(SIGN256CMD) $(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_checked: $(DEVSIGNCMD) $(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_checked: $(SIGN256CMD) $(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(SIGN256CMD) "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		else \
+			echo "compile_checked: $(DEVSIGNCMD) $(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+			$(DEVSIGNCMD) "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" ; \
+		fi ; \
+		cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X86_CHK)/" ; \
+		cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).pdb" "$(DIST_BINDIR_X64_CHK)/" ; \
+	fi
+	cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X86_CHK)/"
+	@if [ -a "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X86_CHK)/" ; \
+	fi	
+	cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(DIST_BINDIR_X64_CHK)/"
+	@if [ -a "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).lib" ]; then \
+		cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).lib" "$(DIST_BINDIR_X64_CHK)/" ; \
+	fi
+	@if [ "$(CAT_FILE)" == "yes" ]; then \
+		cp -f "$(LOCAL_BINDIR_X86_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(LOCAL_INSTALL_DISC_I386)/" ; \
+		cp -f "$(LOCAL_BINDIR_X64_CHK)/$(DRIVER_NAME).$(DRIVER_TYPE)" "$(LOCAL_INSTALL_DISC_AMD64)/" ; \
+		cp -f "$(INF_FILE)" "$(LOCAL_INSTALL_DISC_ROOT)/" ; \
+		"$(INFOTOOL)" /driver:"$(LOCAL_INSTALL_DISC_ROOT)" /os:$(SUPPORTOS)	; \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_checked: $(SIGN256CMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+			$(SIGN256CMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+		else \
+			echo "compile_checked: $(DEVSIGNCMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+			$(DEVSIGNCMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" ; \
+		fi ; \
+		if [ -f "$(NLCERT_SHA1_FILE_CYGWIN)" -a -f "$(NLCERT_FILE_CYGWIN)" ]; then \
+			echo "compile_checked: $(SIGN256CMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+			$(SIGN256CMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+		else \
+			echo "compile_checked: $(DEVSIGNCMD) $(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+			$(DEVSIGNCMD) "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" ; \
+		fi ; \
+		cp -f "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x86.cat" "$(DIST_BINDIR_X86_CHK)/" ; \
+		cp -f "$(LOCAL_INSTALL_DISC_ROOT)/$(DRIVER_NAME).x64.cat" "$(DIST_BINDIR_X64_CHK)/" ; \
+	fi
+	rm -rf ./$(LOCAL_INSTALL_DISC_ROOT)

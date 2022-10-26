@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DB7B1F5A-4AB6-4DAC-A65A-5F84B2A18820}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>basepep</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Perforce\oye\external\boost\boost_1_43_0;C:\Perforce\oye\Fate\main\prod\pep\endpoint\wde\BasePEP\include;C:\Perforce\oye\Fate\main\prod\common\lib\mch\3.0\inc;C:\Perforce\oye\Fate\main\prod\pep\common\eframework\eframework.R4.0;C:\Perforce\oye\Fate\main\prod\common\include;C:\Perforce\oye\Fate\main\prod\common\celog2\include;..\..\..\..\..\..\..\external\boost\boost_1_43_0;include;..\..\..\..\common\lib\mch\3.0\inc;..\..\..\..\pep\common\eframework\eframework.R4.0;..\..\..\..\common\include;..\..\..\..\common\celog2\include;..\..\..\..\common\nlcommonlib\include;..\..\..\..\..\prod\pa\paf\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Perforce\oye\Fate\main\prod\common\lib\mch\3.0\lib\free;C:\Perforce\oye\Fate\main\prod\common\celog2\debug_win_x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Perforce\oye\Fate\main\prod\common\lib\mch\3.0\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Perforce\oye\Fate\main\prod\common\lib\mch\3.0\lib\free;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;BASEPEP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>madCHook32.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;BASEPEP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\baseeventprovidercontext.h" />
+    <ClInclude Include="include\basepep.h" />
+    <ClInclude Include="include\commonutils.hpp" />
+    <ClInclude Include="include\contentstorage.h" />
+    <ClInclude Include="include\droptargetproxy.h" />
+    <ClInclude Include="include\eventhander.h" />
+    <ClInclude Include="include\eventparser.h" />
+    <ClInclude Include="include\fileoperationdlg.h" />
+    <ClInclude Include="include\funcsignatures.hpp" />
+    <ClInclude Include="include\genericcontext.h" />
+    <ClInclude Include="include\iecontext.h" />
+    <ClInclude Include="include\oledragndrop.h" />
+    <ClInclude Include="include\runtimecontext.h" />
+    <ClInclude Include="include\shellexplorercontext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\baseeventprovidercontext.cpp" />
+    <ClCompile Include="src\basepep.cpp" />
+    <ClCompile Include="src\commonutils.cpp" />
+    <ClCompile Include="src\contentstorage.cpp" />
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\droptargetproxy.cpp" />
+    <ClCompile Include="src\eventhander.cpp" />
+    <ClCompile Include="src\eventparser.cpp" />
+    <ClCompile Include="src\fileoperationdlg.cpp" />
+    <ClCompile Include="src\genericcontext.cpp" />
+    <ClCompile Include="src\iecontext.cpp" />
+    <ClCompile Include="src\runtimecontext.cpp" />
+    <ClCompile Include="src\shellexplorercontext.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram2.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

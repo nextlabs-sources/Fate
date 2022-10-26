@@ -1,0 +1,45 @@
+<mapping>
+  	<class name="com.bluejungle.destiny.services.management.types.AgentProfileDTO" auto-complete="true" verify-constructable="false">
+          <field name="createdDate" type="java.util.Calendar">
+                    <bind-xml name="created-date" node="element"/>
+          </field>
+          <field name="modifiedDate" type="java.util.Calendar">
+                    <bind-xml name="modified-date" node="element"/>
+          </field>
+      </class>
+  	<class name="com.bluejungle.destiny.services.management.types.CommProfileDTO" auto-complete="true" verify-constructable="false">
+          <field name="createdDate" type="java.util.Calendar">
+                    <bind-xml name="created-date" node="element"/>
+          </field>
+          <field name="modifiedDate" type="java.util.Calendar">
+                    <bind-xml name="modified-date" node="element"/>
+          </field>
+      </class>
+	<class name="org.apache.axis.types.UnsignedShort" verify-constructable="false">
+		<field name="value" set-method="setValue" get-method="longValue" type="long">
+                  <bind-xml node="attribute"/>
+        </field>
+   </class>
+	<class name="org.apache.axis.types.Token" verify-constructable="false">
+		<field name="value" set-method="setValue" get-method="toString" type="string">
+                  <bind-xml node="attribute"/>
+        </field>
+   </class>
+	<class name="java.util.GregorianCalendar" verify-constructable="false">
+		<field name="time" type="date">
+                  <bind-xml node="attribute"/>
+        </field>
+   </class>
+	<class name="org.apache.axis.types.URI" verify-constructable="false">
+		<field name="value" set-method="%1" get-method="toString" type="string">
+                  <bind-xml node="attribute"/>
+        </field>
+   </class>   
+	<class name="com.bluejungle.destiny.framework.types.TimeIntervalDTO" verify-constructable="false" auto-complete="true" >
+		<field name="timeUnit" type="string" handler="com.bluejungle.destiny.agent.profile.TimeUnitCastorHandler"/>
+   </class>
+	<class name="com.bluejungle.domain.types.ActionTypeDTOList" verify-constructable="false" auto-complete="true" >
+		<field name="action" type="string" handler="com.bluejungle.destiny.agent.profile.ActionTypeCastorHandler"/>
+   </class>
+</mapping>
+

@@ -1,0 +1,36 @@
+/////////////////////////////////////////////////////////////////////////////
+//                                                                            
+//  File Name:    Setup.rul                                                   
+//                                                                            
+//  Description:  InstallShield script                                          
+//                                                                            
+//                                                                                                               
+/////////////////////////////////////////////////////////////////////////////
+
+// Include header files /////////////////////////////////////////////////////
+#include "ifx.h"
+#include "policycontroller.rul"
+#include "include/servicecontrol.h"
+#include "setupfiles.rul"
+#include "include/logging.h"           
+         
+function OnFilesInUse(szMessage)
+begin
+return IDIGNORE;
+end;
+
+function OnRMFilesInUse(szMessage)
+begin
+return IDIGNORE;
+end;       
+
+function OnEnd()
+
+begin  
+	MessageBox("debug: deleting uninstall",INFORMATION);
+     if ( !BATCH_INSTALL ) then
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+        RegDBDeleteKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + PRODUCT_GUID);
+        DeleteDir( DISK1TARGET, ALLCONTENTS );
+    endif; 
+end;

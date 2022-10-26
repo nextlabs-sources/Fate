@@ -1,0 +1,51 @@
+HKCR
+{
+	IconBadging.SeIconOverlay.1 = s 'SeIconOverlay Class'
+	{
+		CLSID = s '{B7B41182-895A-4936-AECF-B4180C66614F}'
+	}
+	IconBadging.SeIconOverlay = s 'SeIconOverlay Class'
+	{
+		CLSID = s '{B7B41182-895A-4936-AECF-B4180C66614F}'
+		CurVer = s 'IconBadging.SeIconOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B7B41182-895A-4936-AECF-B4180C66614F} = s 'SeIconOverlay Class'
+		{
+			ProgID = s 'IconBadging.SeIconOverlay.1'
+			VersionIndependentProgID = s 'IconBadging.SeIconOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{C63410A4-B195-436F-91E2-357045BA641E}'
+		}
+	}
+}
+
+HKLM
+{
+    NoRemove SOFTWARE
+    {
+        NoRemove Microsoft
+        {
+            NoRemove Windows
+            {
+                NoRemove CurrentVersion
+                {
+                    NoRemove Explorer
+                    {
+                        NoRemove ShellIconOverlayIdentifiers
+                        {
+                            ForceRemove A_SeIconOverlay = s '{B7B41182-895A-4936-AECF-B4180C66614F}'
+                            {
+                            }           
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

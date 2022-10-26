@@ -1,0 +1,4 @@
+LIBRARY	"vibe_adapter"
+
+EXPORTS
+	Encrypt

@@ -1,0 +1,8 @@
+NOTE:
+
+You have to copy in podofo, zlib, freetype, resattrmgr, and resattrlib
+dlls yourself.  New MS conventions mean that C++ code can not be mixed
+debug and release, so if you build this code debug you must use podofo
+debug code and if you build release you must use release.  This also
+holds for resattrlib and resattrmgr.  zlib and freetype don't have
+this restriction.

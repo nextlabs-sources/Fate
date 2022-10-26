@@ -1,0 +1,417 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1 TYPELIB ""msoPEP.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5, 5, 1, 0
+ PRODUCTVERSION 5, 5, 1, 0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "NextLabs Microsoft Outlook Enforcer (Win32)"
+            VALUE "FileVersion", "5.5.4.0"
+            VALUE "InternalName", "msoPEP.dll"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "OriginalFilename", "msoPEP.dll"
+            VALUE "ProductName", "NextLabs Microsoft Outlook Enforcer"
+            VALUE "ProductVersion", "5.5.4.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_MSOPEP              REGISTRY                "msoPEP.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_PROJNAME            "msoPEP"
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_MSOOBJ              REGISTRY                "msoObj.rgs"
+IDR_INSPSEVENTDISP      REGISTRY                "InspsEventDisp.rgs"
+IDR_INSPEVENTDISP       REGISTRY                "InspEventDisp.rgs"
+IDR_ITEMEVENTDISP       REGISTRY                "ItemEventDisp.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DENYLISTDLG DIALOGEX 0, 0, 236, 193
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Policy Assistant"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,175,167,46,14
+    LTEXT           "The following external recipient(s) will receive this email and any attachments.Click Remove to remove them from the recipient list.",IDC_STATIC,47,4,162,28
+    LISTBOX         IDC_LIST_DENY,7,66,214,91,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         219,IDC_STATIC,"Static",SS_BITMAP | WS_GROUP,7,4,23,19
+    PUSHBUTTON      "Send Email",IDC_SENDEMAIL,117,167,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE,17,168,54,14
+END
+
+IDD_HDRDLG DIALOGEX 0, 0, 321, 250
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Policy Assistant"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Send Mail",IDOK,184,227,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,264,227,50,16
+    CONTROL         "",IDC_HDAREA,"Static",SS_BLACKFRAME | SS_SUNKEN,227,177,49,37
+    LTEXT           "Attachment:",IDC_FILEPATH,47,128,39,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "The following hidden information is found. Click Remove All under each type to remove the hidden information from the attachment.",IDC_DESC,7,149,307,24,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    CONTROL         207,IDC_CELLICON1,"Static",SS_BITMAP | NOT WS_VISIBLE,7,7,11,10
+    CONTROL         208,IDC_ICONWRONG1,"Static",SS_BITMAP | NOT WS_VISIBLE,23,7,11,10
+    LTEXT           "TITLE 1",IDC_TITLE1,44,7,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 1",IDC_RESULT1,101,7,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA1,264,7,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON2,"Static",SS_BITMAP | NOT WS_VISIBLE,7,22,11,10
+    CONTROL         208,IDC_ICONWRONG2,"Static",SS_BITMAP | NOT WS_VISIBLE,23,23,11,10
+    LTEXT           "TITLE 2",IDC_TITLE2,44,19,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 2",IDC_RESULT2,101,20,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA2,264,25,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON3,"Static",SS_BITMAP | NOT WS_VISIBLE,7,38,11,10
+    CONTROL         208,IDC_ICONWRONG3,"Static",SS_BITMAP | NOT WS_VISIBLE,23,39,11,10
+    LTEXT           "TITLE 3",IDC_TITLE3,43,34,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 3",IDC_RESULT3,101,36,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA3,264,46,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON4,"Static",SS_BITMAP | NOT WS_VISIBLE,7,54,11,10
+    CONTROL         208,IDC_ICONWRONG4,"Static",SS_BITMAP | NOT WS_VISIBLE,23,54,11,10
+    LTEXT           "TITLE 4",IDC_TITLE4,44,47,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 4",IDC_RESULT4,99,50,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA4,264,66,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON5,"Static",SS_BITMAP | NOT WS_VISIBLE,7,70,11,10
+    CONTROL         208,IDC_ICONWRONG5,"Static",SS_BITMAP | NOT WS_VISIBLE,21,69,11,10
+    LTEXT           "TITLE 5",IDC_TITLE5,44,61,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 5",IDC_RESULT5,101,62,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA5,264,86,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON6,"Static",SS_BITMAP | NOT WS_VISIBLE,7,87,11,10
+    CONTROL         208,IDC_ICONWRONG6,"Static",SS_BITMAP | NOT WS_VISIBLE,23,86,11,10
+    LTEXT           "TITLE 6",IDC_TITLE6,43,72,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 6",IDC_RESULT6,99,73,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA6,264,106,50,14,NOT WS_VISIBLE
+    CONTROL         207,IDC_CELLICON7,"Static",SS_BITMAP | NOT WS_VISIBLE,7,100,11,10
+    CONTROL         208,IDC_ICONWRONG7,"Static",SS_BITMAP | NOT WS_VISIBLE,23,100,11,10
+    LTEXT           "TITLE 7",IDC_TITLE7,42,84,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Result 7",IDC_RESULT7,100,86,27,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove All",IDC_BTN_RMA7,264,124,50,14,NOT WS_VISIBLE
+    CONTROL         206,IDC_ICONINFO,"Static",SS_BITMAP | NOT WS_VISIBLE,15,198,13,12
+    LTEXT           "NOTE: Some changes cannot be undone!",IDC_WARNING,73,200,134,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    CONTROL         254,IDC_ICONFAIL1,"Static",SS_BITMAP,149,7,11,10
+    CONTROL         254,IDC_ICONFAIL2,"Static",SS_BITMAP,150,18,11,10
+    CONTROL         254,IDC_ICONFAIL3,"Static",SS_BITMAP,149,30,11,10
+    CONTROL         254,IDC_ICONFAIL4,"Static",SS_BITMAP,148,44,11,10
+    CONTROL         254,IDC_ICONFAIL5,"Static",SS_BITMAP,149,56,11,10
+    CONTROL         254,IDC_ICONFAIL6,"Static",SS_BITMAP,149,71,11,10
+    CONTROL         254,IDC_ICONFAIL7,"Static",SS_BITMAP,149,84,11,10
+END
+
+IDD_PROGRESSDLG DIALOGEX 0, 0, 242, 78
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Document Inspector"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Running Document Inspector.",IDC_DIPTITLE,7,7,228,22
+    CONTROL         "",IDC_DIPPROG,"msctls_progress32",WS_BORDER,7,30,228,14
+    PUSHBUTTON      "Cancel",IDC_DIPCANCEL,185,57,50,14
+END
+
+IDD_DI2K3DLG DIALOGEX 0, 0, 243, 209
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Document Inspect"
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Send Email",IDOK,132,188,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,186,188,50,14
+    PUSHBUTTON      "Remove All",IDC_BTN_REMOVEALL,7,188,50,14
+    LTEXT           "The following attachments may contain hidden data.\nClick on Remove to remove it from each attachment.",IDC_STATIC,7,7,229,20
+    CONTROL         "",IDC_INSPECTLIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,26,229,152
+END
+
+IDD_PADLG DIALOGEX 0, 0, 363, 290
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Policy Assistant"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Send Email",IDOK,85,246,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,167,244,50,14
+    ICON            IDI_EXTERNALMAIL,IDC_EXTMAIL,10,19,18,17,SS_REALSIZEIMAGE
+    LTEXT           "Verify following external recipients. Select checkbox for each recipient for confirmed.",IDC_NOTIFY,56,22,260,8
+    CONTROL         "",IDC_HORZETCHED,"Static",SS_ETCHEDHORZ,32,50,303,1
+    ICON            IDI_CROSSARROW,IDC_MULTICLIENT,18,56,20,20,SS_REALSIZEIMAGE,WS_EX_TRANSPARENT
+    ICON            IDI_USERSGROUP,IDC_MULTIUSER,17,83,20,20,SS_REALSIZEIMAGE,WS_EX_TRANSPARENT
+    LTEXT           "Indicates a file send to a inappropiate client.",IDC_MULTICLIENTDESC,58,58,138,8,0,WS_EX_TRANSPARENT
+    LTEXT           "Indicates sending email to multiple clients.",IDC_MULTIUSERDESC,66,83,135,8,0,WS_EX_TRANSPARENT
+END
+
+IDD_PAVIEWDLG DIALOGEX 0, 0, 303, 223
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VSCROLL | WS_HSCROLL
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_PAVIEWITEM DIALOGEX 0, 0, 154, 107
+STYLE DS_SETFONT | WS_CHILD
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    ICON            IDI_USERSGROUP,IDC_ITEMMULTIUSER,14,9,20,20,SS_REALSIZEIMAGE | NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    ICON            IDI_CROSSARROW,IDC_ITEMMULTICLIENT,9,28,20,20,SS_REALSIZEIMAGE | NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    LTEXT           "Recipient",IDC_ITEMRECIPIENT,63,16,31,8,NOT WS_VISIBLE,WS_EX_TRANSPARENT
+    CONTROL         267,IDC_ITEMFILEICON,"Static",SS_BITMAP | SS_REALSIZEIMAGE | NOT WS_VISIBLE,17,54,9,9,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Detail",IDC_ITEMHIDESHOW,74,28,34,10,BS_FLAT | NOT WS_VISIBLE | NOT WS_TABSTOP
+    CONTROL         "",IDC_ITEMCHECK,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE,63,48,8,10
+    COMBOBOX        IDC_ITEMCOMBO,99,49,48,121,CBS_DROPDOWNLIST | CBS_AUTOHSCROLL | NOT WS_VISIBLE | WS_VSCROLL,WS_EX_TRANSPARENT
+    PUSHBUTTON      "Remove",IDC_ITEMREMOVE,47,85,50,14,BS_FLAT | NOT WS_VISIBLE | NOT WS_TABSTOP
+END
+
+IDD_DLGYELED DIALOGEX 0, 0, 363, 290
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Policy Assistant"
+FONT 9, "Arial", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Accept and Send",IDOK,147,264,70,14
+    DEFPUSHBUTTON   "Cancel",IDCANCEL,255,264,70,14
+    LTEXT           "",IDC_VIOSTATIC,45,15,298,8,SS_NOTIFY
+    ICON            IDI_EXTERNALMAIL,IDC_YMAIL,12,10,20,20,SS_REALSIZEIMAGE,WS_EX_TRANSPARENT
+    CONTROL         "",IDC_YHORZETCHED,"Static",SS_ETCHEDHORZ,12,34,340,1
+    LTEXT           "Warning Message defined in Policy",IDC_SYELED4,17,39,307,10
+    EDITTEXT        IDC_WMSG,14,53,333,93,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY
+    LTEXT           "Please input Justification",IDC_JSTATIC,15,150,331,8
+    EDITTEXT        IDC_WJUST,13,162,333,99,ES_MULTILINE | ES_AUTOVSCROLL
+END
+
+IDD_OE_WARNING_BOX DIALOGEX 0, 0, 265, 151
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Nextlabs Enforcer for Microsoft Outlook"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,144,128,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,208,127,50,14
+    LTEXT           "Static",IDC_STATIC_ACTION_DESC,58,5,200,39
+    LISTBOX         IDC_LIST_MESSAGE,55,45,203,74,LBS_OWNERDRAWVARIABLE | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    ICON            "",IDC_TIP_ICON,19,8,20,20,SS_CENTERIMAGE,WS_EX_TRANSPARENT
+END
+
+IDD_ALERT_MESSAGE_BOX DIALOGEX 0, 0, 265, 190
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enterprise Data Protection"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Static",IDC_STATIC_HEADER,7,7,250,20
+    DEFPUSHBUTTON   "OK",IDOK,207,169,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,146,169,50,14
+    LTEXT           "Static",IDC_STATIC_TIP,7,146,219,22
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_TABSTOP,7,30,250,111
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DENYLISTDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 221
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 185
+    END
+
+    IDD_HDRDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 314
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 243
+    END
+
+    IDD_PROGRESSDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 71
+    END
+
+    IDD_DI2K3DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 236
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 202
+    END
+
+    IDD_PADLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 356
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 283
+    END
+
+    IDD_PAVIEWDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+    END
+
+    IDD_PAVIEWITEM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 147
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 100
+    END
+
+    IDD_DLGYELED, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 356
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 283
+    END
+
+    IDD_ALERT_MESSAGE_BOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 183
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_CROSSARROW          BITMAP                  "UILIB\\import\\crossarrows16-256.bmp"
+IDB_USERSGROUP          BITMAP                  "UILIB\\import\\usergroup.bmp"
+IDB_WORDICON            BITMAP                  "UILIB\\import\\word.bmp"
+IDB_EXECICON            BITMAP                  "UILIB\\import\\exec.bmp"
+IDB_PWPTICON            BITMAP                  "UILIB\\import\\pwpt.bmp"
+IDB_PDFICON             BITMAP                  "UILIB\\import\\pdf.bmp"
+IDB_UNKNOWN             BITMAP                  "UILIB\\import\\unknown.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MAIN                ICON                    "UILIB\\import\\dlp.ico"
+IDI_CROSSARROW          ICON                    "UILIB\\import\\crossarrows16-256.ico"
+IDI_EXTERNALMAIL        ICON                    "UILIB\\import\\externalemail32.ico"
+IDI_USERSGROUP          ICON                    "UILIB\\import\\usergroup.ico"
+IDB_ALERT_CROSS         ICON                    "import\\NotAllowed.ico"
+IDB_ALERT_WARN			ICON                    "import\\exclamation.ico"
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "idlgen\msoPEP.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,120 @@
+<!-- build_compile.xml
+
+Description:
+	This ANT script compiles JavaSDK.
+	
+	To use this script, you must update properties in build_compile.properties or overide 
+	them from commandline (using -D option). For example:
+		
+		set PATH=%NLEXTERNALDIR%\apache-ant\apache-ant-1.7.0\bin;%PATH%
+		ant -XX:MaxPermSize=512m -Dnlbuildroot=%NLBUILDROOT% -Dbuild_number=10001 -f build_compile.xml
+		
+	or
+		
+		set PATH=%NLEXTERNALDIR%\apache-ant\apache-ant-1.7.0\bin;%PATH%
+		set ANT_OPTS=-XX:MaxPermSize=512m -Dnlbuildroot=%NLBUILDROOT% -Dbuild_number=10001 
+		ant -f build_compile.xml -v
+-->
+<project name="build_compile" default="all" basedir=".">
+
+	<!-- Propery files -->
+	<property file="${basedir}/build_compile.properties" />
+	
+	<!-- Global properties -->
+	<property name="xlib_dir" location="${nlbuildroot}/xlib" />
+	<property name="xlib_jar_dir" location="${xlib_dir}/java" />
+	<property name="bin_dir" location="${nlbuildroot}/bin" />
+	<property name="bin_jar_dir" location="${bin_dir}/java" />
+	<property name="build_dir" location="${basedir}/build" />
+	<property name="classes_dir" value="${build_dir}/classes" />
+	<property name="javasdk_jar_name" value="nlJavaSDK2.jar" />
+	<property name="test_javasdk_jar_name" value="test_nlJavaSDK2.jar" />
+	<property name="javasdk_javadoc_jar_name" value="nlJavaSDK2-doc.jar" />
+	<property name="doc.dest" value="${build_dir}/doc" />	
+	<property name="java5.boot.classpath" value="${nlexternaldir2}/j2sdk/jdk1.5.0_09/jre/lib/rt.jar" />	
+	<!-- Dump properties -->
+	<echoproperties />
+
+	<echo message="INFO: Dump properties completed" />
+	
+	<!-- Sanity checks -->
+	<fail message="nlbuildroot is not set" unless="nlbuildroot" />
+	<fail message="nlbuildroot is empty">
+		<condition>
+			<equals arg1="${nlbuildroot}" arg2="" trim="true" />
+		</condition>
+	</fail>
+	<available file="${nlbuildroot}" type="dir" property="local.nlbuildroot_exists" />
+	<fail message="nlbuildroot directory does not exist - ${nlbuildroot}" unless="local.nlbuildroot_exists" />
+
+	<echo message="INFO: Sanity check completed (no error)" />
+	
+	<!-- Class path -->
+	<path id="compile.classpath">
+		<fileset dir="${xlib_jar_dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- Global tasks -->
+	<tstamp>
+		<format property="local.now" pattern="EEE, d MMM yyyy HH:mm:ss Z" />
+	</tstamp>
+
+	<echo message="version_str = ${version_str}" />
+	<echo message="time = ${local.now}" />
+	
+	<!-- Targets -->
+	<target name="all" depends="compile" />
+
+	<target name="compile" depends="doc" >
+		<mkdir dir="${classes_dir}" />
+		<javac srcdir="${basedir}/src" destdir="${classes_dir}" source="1.5" target ="1.5" bootclasspath="${java5.boot.classpath}" extdirs="" debug="true"> 
+			<classpath refid="compile.classpath"/>
+			<include name="**/*.java" />
+		</javac>
+		<jar destfile="${build_dir}/${javasdk_jar_name}" basedir="${classes_dir}" excludes="**/SDKTest.class">
+			<manifest>
+				<attribute name="Implementation-Vendor" value="NextLabs, Inc."/>
+				<attribute name="Implementation-Title" value="${product_name}"/>
+				<attribute name="Implementation-Version" value="${version_str} (${build_number})"/>
+				<attribute name="Implementation-Time" value="${local.now}"/>
+		      	<attribute name="Provider-Class" value="com.nextlabs.remote.sdk.RemoteSDKServer"/>
+			</manifest>
+		</jar>
+		<jar destfile="${build_dir}/${test_javasdk_jar_name}" basedir="${classes_dir}" excludes="**/com/**/**.class"/>
+		<mkdir dir="${bin_jar_dir}" />
+		<copy file="${build_dir}/${javasdk_jar_name}"         todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+		<copy file="${basedir}/src/SDKTest.java"              todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+		<copy file="${build_dir}/${javasdk_javadoc_jar_name}" todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+		<copy file="${basedir}/JavaSDKService.properties" 	  todir="${bin_jar_dir}" preservelastmodified="true" overwrite="true" />
+	</target>
+	
+    <target name="doc">
+       <mkdir dir="${doc.dest}" />
+       <javadoc sourcepath="${basedir}/src" destdir="${doc.dest}" 
+				linksource="no" classpathref="compile.classpath" 
+				source="${compile.source}" 
+				excludepackagenames="com.nextlabs.remote.sdk.*">
+            <packageset dir="${basedir}/src" defaultexcludes="yes">
+                <include name="com/nextlabs/destiny/sdk/**" />
+            </packageset>
+            <tag name="requires" description="Requires: " scope="methods" />
+            <tag name="modifies" description="Modifies: " scope="methods" />
+            <tag name="effects"  description="Effects: "  scope="methods" />
+       </javadoc>
+		<jar destfile="${build_dir}/${javasdk_javadoc_jar_name}" basedir="${doc.dest}">
+			<manifest>
+				<attribute name="Implementation-Vendor" value="NextLabs, Inc."/>
+				<attribute name="Implementation-Title" value="${product_name}"/>
+				<attribute name="Implementation-Version" value="${version_str} (${build_number})"/>
+				<attribute name="Implementation-Time" value="${local.now}"/>
+			</manifest>
+		</jar>
+    </target>
+	
+	<target name="clean">
+		<delete includeemptydirs="true" dir="${build_dir}" />
+	</target>
+
+</project>

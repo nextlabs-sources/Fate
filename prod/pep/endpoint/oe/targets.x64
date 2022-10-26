@@ -1,0 +1,6 @@
+
+TARGETS = \
+	prod/pep/endpoint/oe/msoPEP/sendto/CE_Explorer \
+	prod/pep/endpoint/oe/msoPEP/sendto/InjectExp \
+	prod/pep/endpoint/oe/msoPEP/sendto/OEService
+	

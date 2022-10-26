@@ -1,0 +1,27 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_EDP)
+VERSION_MAJOR		= $(VERSION_MAJOR_EDP)
+VERSION_MINOR		= $(VERSION_MINOR_EDP)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_EDP)
+VERSION_PATCH		= $(VERSION_PATCH_EDP)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS = 
+
+WINDDK = C:/WinDDK/7600.16385.1
+
+SUBTARGET = nlcc_ulib
+SUBTARGET_STATIC = yes
+
+SRC = src/nlcc_ulib.cpp
+
+INCPATH = \
+  $(WINSDK_ROOT)/include \
+  $(MSVC_ROOT)/VC/include \
+  $(MSVC_ROOT)/VC/atlmfc/Include \
+  $(WINDDK)/inc/api \
+  $(WINDDK)/inc/ddk \
+  $(NLBUILDROOT)/prod/common/nlcc \
+  $(NLBUILDROOT)/prod/common/nlcc/ulib

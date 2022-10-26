@@ -1,0 +1,3 @@
+EXPORTS
+	CEPROTECT_LockKey
+	CEPROTECT_UnlockKey

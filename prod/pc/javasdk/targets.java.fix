@@ -1,0 +1,4 @@
+# Ordering of the following targets is important.
+
+TARGETS = \
+	prod/pc/javasdk

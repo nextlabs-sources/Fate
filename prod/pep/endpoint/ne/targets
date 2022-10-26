@@ -1,0 +1,6 @@
+
+TARGETS = \
+	prod/pep/endpoint/ne/FTPE \
+	prod/pep/endpoint/ne/HPE \
+	prod/pep/endpoint/ne/HTTPE \
+	prod/pep/endpoint/ne/InstallSPICaller 

@@ -1,0 +1,177 @@
+#pragma once
+#include <string>
+#include <vector>
+using namespace std;
+
+#include "nltag.h"
+#include "MenuItem.h"
+#include "Encrypt.h"
+#include "celog.h"
+
+#pragma warning(push)
+#pragma warning(disable:6334 6011 4996 4189 4100 4819)
+#include "boost\format.hpp"
+#pragma warning(pop)
+
+#define CELOG_CUR_MODULE L"ADOBEPEP"
+#undef CELOG_CUR_FILE
+#define CELOG_CUR_FILE   CELOG_FILEPATH_PROD_PEP_ENDPOINT_ADOBEPEP_PLUGIN_SAMPLESADOBEPEP_INCLUDE_SAVEASOBLIGATION_H
+
+class CDoTag_SaveAs
+{
+public:
+
+	static CDoTag_SaveAs* GetInstance()
+	{
+		static CDoTag_SaveAs ins;
+		return &ins;
+	}
+
+
+	void set_closed_flag()
+	{
+		//表明，要被打tag的文件，已经被close了
+		m_b_closed=true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//设置要打tag的标志，同时保存tag
+	void setFlagAndObligationTags(const vector<pair<wstring,wstring>>& tags);
+	//判断要不要打tag
+	bool getFlag();
+
+
+
+
+	
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//我们有时候不能打tag，比如有的COPY的时候，因为当时文件的handle被adobe own了，我们只能等到adobe release掉这个handle的时候才能打tag
+	//所以我们提供这个接口，让用户来设置文件的handle，以后用户可以取这个handle，用于匹配发现该handle是否被adobe release了
+	void setFileHandle(ASFile handle);
+
+	//取file handle
+	ASFile getFileHandle();
+
+	//取文件路径
+	const string& GetFilePath();
+
+
+	//设置文件路径
+	void SetFilePath(const string& file_path);
+
+	//用tag lib打tag
+	void DoTag_TagLib();
+
+	void SetType(const string& strType)
+	{
+		CELOG_LOGA(CELOG_DEBUG, "CDoTag_SaveAs::SetType: %s\n", strType.c_str());
+		m_strType=strType;
+	}
+
+	void execute_pddocdidsave(PDDoc doc);
+
+
+	void execute_avappsavedialog(DWORD dwPageNum);
+	
+	void execute_avappendsave();
+
+	void SetSEFlag()
+	{
+		m_SE_Flag=true;
+	}
+
+	//用tag lib来打tag，和上面函数不同之处在于提供了一个参数，而且不会重置
+	void DoTag_TagLib_2(const string& strPath);
+
+	//重置所有的成员
+	virtual void reset();
+	
+protected://子类可以访问
+	CDoTag_SaveAs::CDoTag_SaveAs()
+	{
+		reset();
+	}
+	CDoTag_SaveAs::~CDoTag_SaveAs()
+	{
+
+	}
+	
+
+
+private://只有自己才能访问
+
+
+
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+
+	//对已经打开了的pdf打tag，acrobat和reader的实现不同
+	void DoTag_On_Opened_PDF(PDDoc doc);
+
+
+
+	//设置文件路径--不一样的--这是jpg类似的专用
+	void AddFiles_WithPostFix(const string& file_path)
+	{
+		CELOG_LOGA(CELOG_DEBUG, "CDoTagBase::AddFilePath_with_PostFix,%s\n", file_path.c_str());
+
+
+		m_files_with_postfix.push_back(file_path);
+	}
+	void DoTag_On_Files_WithPostFix()
+	{
+		CELOG_LOG(CELOG_DEBUG, L"CDoTagBase::DoTag_On_FilesWithPostFix\n");
+
+		for (DWORD i=0;i<m_files_with_postfix.size();i++)
+		{
+			DoTag_TagLib_2(m_files_with_postfix[i]);
+		}
+		reset();
+	}
+
+
+	void tag_opened_pdf_with_resattrmgr(PDDoc doc);
+
+	//要不要打tag的标志
+	bool m_bNeedDoTag;
+	//要打的tag
+	vector<pair<wstring,wstring>> m_tags;
+
+	ASFile m_handle;//file handle of file to be tagged
+	string m_file;//file path of file to be tagged
+
+	vector<string> m_files_with_postfix;
+
+	
+	string m_strType;
+
+	bool m_SE_Flag;
+
+	bool m_b_closed;
+};
+

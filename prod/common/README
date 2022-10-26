@@ -1,0 +1,11 @@
+The directory hold all the primitives that are common between
+native code (C++) and Java code.
+
+Namely: 
+- Constants that are used across the JNI interface
+- IPC memory layout definition
+
+Stuffs under common should be OS-neutral whereas stuffs
+under brain is OS-dependent.  In that sense, the programming 
+types (dstypes.h) should be moved to brain eventually.
+

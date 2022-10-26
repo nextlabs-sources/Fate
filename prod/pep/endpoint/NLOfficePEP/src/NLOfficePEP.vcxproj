@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ABF5DB1E-3CDB-467F-A738-D62BA4101452}</ProjectGuid>
+    <RootNamespace>NxtOfficePEP</RootNamespace>
+    <Keyword>AtlProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfAtl>Dynamic</UseOfAtl>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <UseOfAtl>Dynamic</UseOfAtl>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\p4v\osmond\external\boost\boost_1_43_0;C:\p4v\osmond\Fate\main\prod\common\celog2\include;C:\p4v\osmond\Fate\main\prod\pep\endpoint\wde\NLVisualLabelingPA\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)NxtOfficePEP.tlb</TypeLibraryName>
+      <HeaderFileName>NxtOfficePEP_i.h</HeaderFileName>
+      <DllDataFileName />
+      <InterfaceIdentifierFileName>NxtOfficePEP_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>NxtOfficePEP_p.c</ProxyFileName>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include;.\YLib;..\..\..\..\..\prod\pc\cesdk\client\stub\service\include;E:\Perforce\external\boost\boost_1_45_0;..\..\..\..\pc\cesdk\include;..\..\..\..\common\nlcc\ulib;..\..\..\..\common\nlcc;..\..\..\..\..\prod\pep\common\eframework\eframework.R4.0\eframework\platform;..\..\..\..\..\prod\pep\common\eframework\eframework.R4.0;..\..\..\..\..\prod\common\include;..\..\..\..\..\prod\common\resattrmgr\include;..\..\..\..\..\prod\common\resattrlib\include;..\..\..\..\..\prod\pep\endpoint\se\nl_sysenc_lib\include;..\..\..\..\..\prod\pep\common\eframework\eframework.R4.0\eframework\policy;..\..\..\..\..\prod\pa\paf\include;..\..\..\..\..\prod\common\lib\mch\3.0\inc;..\..\..\..\..\..\Roubaix_saveAs_1201\prod\common\nlcommonlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>true</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;comctl32.lib;nlcc_ulib_static32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\bin32;c:\winddk\7600.16385.1\lib\wnet\i386;..\..\..\..\..\prod\common\lib\mch\3.0\lib\checked;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <ModuleDefinitionFile>..\NLOfficePEP.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)NxtOfficePEP.tlb</TypeLibraryName>
+      <HeaderFileName>NxtOfficePEP_i.h</HeaderFileName>
+      <DllDataFileName />
+      <InterfaceIdentifierFileName>NxtOfficePEP_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>NxtOfficePEP_p.c</ProxyFileName>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\include;.\YLib;..\..\..\..\..\prod\pc\cesdk\client\stub\service\include;E:\Perforce\external\boost\boost_1_45_0;..\..\..\..\..\prod\pc\cesdk\include;..\..\..\..\..\prod\common\nlcc\ulib;..\..\..\..\..\prod\common\nlcc;..\..\..\..\..\..\Roubaix_saveAs_1201\prod\pep\common\eframework\eframework.R4.0\eframework\platform;..\..\..\..\..\..\Roubaix_saveAs_1201\prod\pep\common\eframework\eframework.R4.0;..\..\..\..\..\prod\common\include;..\..\..\..\..\prod\common\resattrmgr\include;..\..\..\..\..\prod\common\resattrlib\include;..\..\..\..\..\prod\pep\endpoint\se\nl_sysenc_lib\include;..\..\..\..\..\..\Roubaix_saveAs_1201\prod\pep\common\eframework\eframework.R4.0\eframework\policy;..\..\..\..\..\prod\pa\paf\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>true</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;nlcc_ulib_static32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\bin32;c:\winddk\7600.16385.1\lib\wnet\i386;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>.\NxtOfficePEP.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="NLAction.cpp" />
+    <ClCompile Include="NLHookAPI.cpp" />
+    <ClCompile Include="NLInsertAndDataAction.cpp" />
+    <ClCompile Include="NLObMgr.cpp" />
+    <ClCompile Include="NLOfficePEP_Comm.cpp" />
+    <ClCompile Include="NLOfficeSink.cpp" />
+    <ClCompile Include="NLProcess.cpp" />
+    <ClCompile Include="NLSecondaryThreadForPDFMaker.cpp" />
+    <ClCompile Include="obligations.cpp" />
+    <ClCompile Include="officelistener.cpp" />
+    <ClCompile Include="officepep.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TalkWithSCE.cpp" />
+    <ClCompile Include="NxtOfficePEP_i.c" />
+    <ClCompile Include="utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NLOfficePEP.def" />
+    <None Include="..\Makefile.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="NLOfficePEP.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\dllmain.h" />
+    <ClInclude Include="..\include\EnumWnd.h" />
+    <ClInclude Include="..\include\Itemmanager.h" />
+    <ClInclude Include="..\include\NLAction.h" />
+    <ClInclude Include="..\include\NLHookAPI.h" />
+    <ClInclude Include="..\include\NLInsertAndDataAction.h" />
+    <ClInclude Include="..\include\NLObMgr.h" />
+    <ClInclude Include="..\include\NLOfficePEP.h" />
+    <ClInclude Include="..\include\NLOfficePEP_Comm.h" />
+    <ClInclude Include="..\include\NLOfficeSink.h" />
+    <ClInclude Include="..\include\NLProcess.h" />
+    <ClInclude Include="..\include\NLSecondaryThreadForPDFMaker.h" />
+    <ClInclude Include="..\include\obligations.h" />
+    <ClInclude Include="..\include\officelistener.h" />
+    <ClInclude Include="..\include\resource.h" />
+    <ClInclude Include="..\include\stdafx.h" />
+    <ClInclude Include="..\include\SvrAgent.h" />
+    <ClInclude Include="..\include\TalkWithSCE.h" />
+    <ClInclude Include="..\include\utils.h" />
+    <ClInclude Include="NxtOfficePEP_i.h" />
+    <ClInclude Include="..\..\..\..\..\pa\NLClassificationOb\Common\AlgorithmForTags.hpp" />
+    <ClInclude Include="..\..\..\..\..\pa\NLClassificationOb\Common\EvaLogID.hpp" />
+    <ClInclude Include="..\..\..\..\..\pa\NLClassificationOb\Common\NLClassificationLoader.hpp" />
+    <ClInclude Include="..\..\..\..\..\pa\NLClassificationOb\Common\NLTagErrHandling.hpp" />
+    <ClInclude Include="..\..\..\..\..\pa\NLClassificationOb\Common\SyncTag.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Classificatioin.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NLOfficePEP.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

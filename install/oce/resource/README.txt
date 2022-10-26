@@ -1,0 +1,1 @@
+Enforcer for Microsoft Office Communicator v{MAJOR.VERSION}.{MINOR.VERSION}.{MAINTENANCE.VERSION}.{PATCH.VERSION} ({BUILD}) 

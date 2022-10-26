@@ -1,0 +1,5 @@
+EXPORTS
+	NL_TRANSCTRL_Serv_Initialize
+	NL_TRANSCTRL_Serv_GetNextRequest
+	NL_TRANSCTRL_MemoryFree
+	NL_TRANSCTRL_Shutdown

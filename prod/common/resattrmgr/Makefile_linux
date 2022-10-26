@@ -1,0 +1,11 @@
+all: ./src/libresattrmgr.so ./test/nltag
+
+
+./test/nltag:
+	@cd test;make -f Makefile_linux
+./src/libresattrmgr.so:
+	@cd src;make -f Makefile_linux
+clean:
+	@cd test;make -f Makefile_linux clean
+	@cd src;make -f Makefile_linux clean
+

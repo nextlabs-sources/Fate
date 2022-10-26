@@ -1,0 +1,634 @@
+
+#include "ifx.h"
+
+
+export prototype CleanUp(HWND);   
+export prototype DeleteServices(HWND);
+export prototype DeleteKernelDriver(HWND, STRING, STRING, STRING);  
+export prototype Delete1KernelDriver(HWND, STRING, STRING);
+export prototype DeleteOneService(HWND, STRING); 
+export prototype DeleteDeviceDriver(HWND, STRING);   
+export prototype Remove1RegistryKey(HWND, STRING);
+export prototype Remove1RegistryValue(HWND, STRING); 
+export prototype RemoveDeviceDriver(HWND, STRING, STRING);
+export prototype RemoveRegistryKey(HWND);  
+export prototype Remove1SharedDll(HWND,STRING);      
+export prototype RemoveSharedDll(HWND);            
+export prototype RemoveDir(HWND,STRING,STRING);     
+export prototype InsertDeleteInRunonce(HWND,STRING);     
+export prototype RemoveRDEKey(HWND);
+
+function CleanUp(hMSI)                                             
+ 	STRING NEXTLABSINSTALLDIR;                    
+ 	STRING OEBITNESS;
+	NUMBER nResult;                       
+	STRING BITNESS;
+	STRING CAprop;
+	NUMBER nvBuffer;                                                        
+    LIST tokString; 
+    STRING installdir;     
+    STRING szProgram;
+                                                        
+begin
+    MsiGetProperty(hMSI,"CustomActionData",CAprop,nvBuffer);
+    SprintfMsiLog("NextLabs: Cleaning up ...");              
+    
+    if (SYSINFO.bIsWow64 != 0) then //OS is a 64-bit platform
+		MsiSetProperty(hMSI,"bitness","x64");         
+		BITNESS = "x64";
+	else
+		MsiSetProperty(hMSI,"bitness","x86");     
+		BITNESS = "x86";
+	endif;  
+    
+    tokString=ListCreate(STRINGLIST);
+    StrGetTokens(tokString,CAprop,";");
+    
+    ListGetFirstString(tokString, NEXTLABSINSTALLDIR);
+    ListGetNextString(tokString, OEBITNESS); 
+    ListGetNextString(tokString, installdir);
+    
+    SprintfMsiLog("NextLabs install dir = %s", NEXTLABSINSTALLDIR);        
+    SprintfMsiLog("Install dir = %s", installdir);
+    SprintfMsiLog("OE Bitness = %s", OEBITNESS); 
+    SprintfMsiLog("Architecture = %s",BITNESS);   
+                                                                           
+	if BITNESS=="x64" then 
+		szProgram = "nlQuench.exe";
+	else
+		szProgram = "nlQuench32.exe";
+	endif;                                                                           
+                                                                           
+    LaunchAppAndWait(installdir^szProgram, "", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);  
+    
+    LaunchAppAndWait("taskkill.exe", "/im edpmanager.exe", LAAW_OPTION_WAIT | LAAW_OPTION_HIDDEN);
+    
+                                               
+    nResult = DeleteServices(hMSI);
+    nResult = DeleteKernelDriver(hMSI, BITNESS, OEBITNESS, installdir);
+    nResult = RemoveDeviceDriver(hMSI, BITNESS, installdir);   
+    nResult = RemoveRegistryKey(hMSI);   
+    nResult = RemoveSharedDll(hMSI);                             
+    nResult = RemoveRDEKey(hMSI);
+    nResult = RemoveDir(hMSI,NEXTLABSINSTALLDIR,installdir);        
+    
+    nResult = RegDBDeleteValue("software\\microsoft\\windows\\currentversion\\run\\edpmanager","EDPmanager");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: EDPManager removal fails!");
+    endif;             
+    
+    //Delete the whole folder
+    nResult = DeleteDir(installdir,ALLCONTENTS);
+    if nResult < 0 then
+     	SprintfMsiLog("Nextlabs: Folder deletion not cleaned!!");
+    endif;
+    
+	return nResult;
+    
+end;                           
+
+function DeleteOneService(hMSI, service)
+    NUMBER nResult;
+begin
+    if ServiceExistsService(service) then
+    	nResult = ServiceRemoveService(service);     
+    	if nResult < 0 then
+    		SprintfMsiLog("Delete "+service+" service fails!!"); 
+    	else
+    		SprintfMsiLog("Delete "+service+" service success!!");  
+    	endif;
+    endif;                                            
+    return nResult;
+end;
+ 
+
+function DeleteServices(hMSI)
+	NUMBER nResult;
+
+begin
+	DeleteOneService(hMSI,"nltamper");                                            
+    DeleteOneService(hMSI,"nlcc"); 
+    DeleteOneService(hMSI,"nlinjection"); 
+    DeleteOneService(hMSI,"procdetect"); 
+    DeleteOneService(hMSI,"nlSysEncryption"); 
+    DeleteOneService(hMSI,"nlSysEncryptionFW"); 
+    DeleteOneService(hMSI,"nldevenf"); 
+    DeleteOneService(hMSI,"complianceenforcerservice"); 
+    return 0;
+  
+end;                    
+
+function Delete1KernelDriver(hMSI,driver,installdir)
+	NUMBER nResult;
+begin
+	nResult = LaunchAppAndWait("regsvr32.exe", "/u "+installdir^driver, LAAW_OPTION_NOWAIT|LAAW_OPTION_HIDDEN);
+	if nResult<0 then
+		SprintfMsiLog("Nextlabs: unregister %s fails!!", driver);
+	else
+		SprintfMsiLog("Nextlabs: unregister %s success!!", driver);
+	endif;
+	
+end;
+
+                                          
+function DeleteKernelDriver(hMSI, bitness, oebitness, installdir)
+ 	STRING szProgram;
+
+begin                      
+ 	if (bitness=="x86") then
+	 	Delete1KernelDriver(hMSI,"enhancement32.dll",installdir); 
+		Delete1KernelDriver(hMSI,"iepep32.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlofficepep32.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlvlofficeenforcer200332.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlvlofficeenforcer200732.dll",installdir);
+		Delete1KernelDriver(hMSI,"outlookaddin32.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlportableencryptionctx32.dll",installdir);
+		Delete1KernelDriver(hMSI,"ce_explorer32.dll,installdir",installdir);
+	else
+		Delete1KernelDriver(hMSI,"enhancement.dll",installdir);
+		Delete1KernelDriver(hMSI,"iepep.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlofficepep.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlvlofficeenforcer2003.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlvlofficeenforcer2007.dll",installdir);
+		Delete1KernelDriver(hMSI,"outlookaddin.dll",installdir);
+		Delete1KernelDriver(hMSI,"nlportableencryptionctx.dll",installdir);
+		Delete1KernelDriver(hMSI,"ce_explorer.dll",installdir);
+		endif;
+	
+	if (oebitness=="x86") then
+	 	Delete1KernelDriver(hMSI,"mso2k7pep32.dll",installdir);
+		Delete1KernelDriver(hMSI,"mso2k3pep32.dll",installdir);
+		Delete1KernelDriver(hMSI,"mso2010pep32.dll",installdir);
+		Delete1KernelDriver(hMSI,"ceoffice32.dll",installdir);
+	else
+	 	Delete1KernelDriver(hMSI,"mso2010pep.dll",installdir);
+		Delete1KernelDriver(hMSI,"ceoffice.dll",installdir);
+	
+	endif;
+	
+	return 0;
+end;                                      
+
+function RemoveDeviceDriver(hMSI, bitness, installdir)       
+	STRING szProgram;
+
+begin
+	if (bitness="x64") then
+		szProgram = installdir^"nldevcon.exe";
+	else
+		szProgram = installdir^"nldevcon32.exe";
+	endif; 
+	                                              
+	LaunchAppAndWait(szProgram, "remove root\nlcc", LAAW_OPTION_NOWAIT | LAAW_OPTION_HIDDEN);
+	LaunchAppAndWait(szProgram, "remove root\nldevenf", LAAW_OPTION_NOWAIT | LAAW_OPTION_HIDDEN);
+	
+	return 0;
+end;
+ 
+function Remove1RegistryKey(hMSI, sKey)
+    NUMBER nResult;
+begin
+    nResult = RegDBDeleteKey(sKey);
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;
+end;           
+
+function Remove1RegistryValue(hMSI, sKey)
+    NUMBER nResult;
+begin
+    nResult = RegDBDeleteValue("system\\currentcontrolset\\control\\class"^sKey,"UpperFilters");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;    
+    nResult = RegDBDeleteValue("system\\controlset001\\control\\class"^sKey,"UpperFilters");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;
+    nResult = RegDBDeleteValue("system\\controlset002\\control\\class"^sKey,"UpperFilters");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;
+    nResult = RegDBDeleteValue("system\\controlset003\\control\\class"^sKey,"UpperFilters");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;
+    nResult = RegDBDeleteValue("system\\controlset004\\control\\class"^sKey,"UpperFilters");  
+    if (nResult < 0) then
+       SprintfMsiLog("Nextlabs: %s removal fails!",sKey);
+    endif;
+    return 0;
+end; 
+ 
+function RemoveRegistryKey(hMSI)
+	string sKey;                         
+                         
+begin        
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    Remove1RegistryKey(hMSI,"software\\nextlabs\\enterprise dlp\\system encryption");
+    Remove1RegistryKey(hMSI,"software\\nextlabs\\compliant enterprise\\outlook enforcer");
+    Remove1RegistryKey(hMSI,"software\\nextlabs\\compliant enterprise\\desktop enforcer");
+    Remove1RegistryKey(hMSI,"system\\currentcontrolset\\services\\eventlog\\application\\compliant enterprise");       	   
+	Remove1RegistryKey(hMSI,"SYSTEM\\CurrentControlSet\\Services\\ProcDetect");
+	Remove1RegistryKey(hMSI,"SYSTEM\\CurrentControlSet\\services\\ComplianceEnforcerService");
+	Remove1RegistryKey(hMSI,"SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Minimal\\ComplianceEnforcerService");
+	Remove1RegistryKey(hMSI,"SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Network\\ComplianceEnforcerService");
+	Remove1RegistryKey(hMSI,"SYSTEM\\ControlSet001\\services\\eventlog\\Application\\Compliant Enterprise");
+	Remove1RegistryKey(hMSI,"SYSTEM\\ControlSet002\\services\\eventlog\\Application\\Compliant Enterprise");
+	Remove1RegistryKey(hMSI,"SYSTEM\\ControlSet003\\services\\eventlog\\Application\\Compliant Enterprise");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects\\{FB159F40-0C40-4480-9A72-71C1D07606B7}");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Classes\\AppID\\{2A9EAF67-12C2-4655-A2DD-E7D988A3AE59}");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Word\\Addins\\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Excel\\Addins\\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\PowerPoint\\Addins\\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Outlook\\Addins\\\msoPEP.msoObj.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Excel\\Addins\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\PowerPoint\\Addins\\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Word\\Addins\\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Word\\Addins\\OutlookAddin.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Microsoft\\Office\\Word\\Addins\\NlPortableEncryptionCtx.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects\\{FB159F40-0C40-4480-9A72-71C1D07606B7}");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Classes\\AppID\\{2A9EAF67-12C2-4655-A2DD-E7D988A3AE59}");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Word\\Addins\\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Excel\\Addins\\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\PowerPoint\\Addins\NLVLOfficeEnforcer.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Outlook\\Addins\\msoPEP.msoObj.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Excel\Addins\\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\PowerPoint\\Addins\\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Word\\Addins\\CEOffice.Office");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Word\\Addins\\OutlookAddin.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\wow6432node\\Microsoft\Office\\Word\\Addins\\NlPortableEncryptionCtx.1");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Classes\\.nxl");
+	Remove1RegistryKey(hMSI,"SOFTWARE\\Classes\\nxlfile");
+ 	Remove1RegistryKey(hMSI,"software\\nextlabs");
+ 	Remove1RegistryKey(hMSI,"software\\wow6432\\nextlabs");  
+ 	
+ 
+    RegDBSetDefaultRoot(HKEY_CURRENT_USER);
+    Remove1RegistryKey(hMSI,".nxl");
+    Remove1RegistryKey(hMSI,"nxlfile"); 
+    
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    
+    
+    return 0;
+    
+end;
+	
+   
+function Remove1SharedDll(hMSI, value)
+    NUMBER nresult;
+begin
+    nresult=RegDBDeleteValue("Software\\microsoft\\windows\\currentversion\\shareddlls",value);
+    if nresult<0 then
+    	SprintfMsiLog("Nextlabs: Shareddll %s is not found or failed to remove!!!",value);      
+    else
+    	SprintfMsiLog("Nextlabs: Shareddll %s is removed.",value);      
+    endif;
+    return 0;
+    
+end;         
+
+
+function RemoveSharedDll(hMSI)
+
+begin
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\nextlabs.cscinvoke.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\nextlabstagginglib32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\podofolib.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\tagviewmenu32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cebrain32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cecem32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\ceconn32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\ceeval32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\celog32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\celogging32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cemarshal5032.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cepepman32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\ceprivate32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cesdk32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cesec32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\ceservice32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\cetransport32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\config\\encryption_adapters32.conf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\freetype6.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\libtiff.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\nl_sysenc_lib32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\nlcc_ulib32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pa_encrypt32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pa_filetagging32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pa_pe32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pafui32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pdflib32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\pgp_adapter32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\resattrlib32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\resattrmgr32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\tag_office2k732.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\zip_adapter32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\zlib1.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\nlca_tamper.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\help\\images\\greyinfo.gif");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jlib\\dnsjava.jar");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\cepdpman.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\amd64\\nlcc.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nlcc.inf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\jar\\nlcc\\nlcc_dispatcher.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\mfc90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\mfc90u.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\mfcm90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\mfcm90u.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\msvcm90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\msvcp90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\msvcr90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\microsoft.vc90.atl.manifest");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\common\\bin32\\vcomp90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\x86\\wdfcoinstaller01009.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\podofolib.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\cetamperproof32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\cepdpgeneric32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nltamperproofconfig32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nl_tamper_plugin32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nlca_client32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nlca_framework32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nlca_plugin32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\nlca_service.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\policycontroller_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nl_tamper\\objfre_wxp_x86\\i386\\nl_tamper.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nlca_plugin32.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nlcc.inf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nlccx86.cat");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nldevcon.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\microsoft.vc90.atl\\atl90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\microsoft.vc90.crt\\msvcm90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\microsoft.vc90.mfc\\mfc90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\microsoft.vc90.openmp\\vcomp90.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\mch_install_test.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\config\\keymanagementservice.properties");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\cesdk32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\ceservice32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\jar\\keymanagementservice.jar");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\keymanagementconsumer32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\keyutil.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\basepep32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ce_deny.gif");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ce_deny.html");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\enhancement32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\iepep32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlscekeeper32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlregisterplugins.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\windowsdesktopenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nl_screencap_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\diagnostic32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmanager.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmgrutility32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmdlg32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ipcproxy32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ipcstub32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlsce.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\notification32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\pcstatus32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\wdeaddtags.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\wde_base_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlvlofficeenforcer200332.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlvlofficeenforcer200732.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlvlviewprint32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlvisuallabelingpa200332.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlvisuallabelingpa200732.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\dialog.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\notify.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\status_plugin.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\menu_l.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\installspicaller32.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\networkenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\ftpe32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\config\\ftpe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\service\\injection\\ftpte.exe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\service\\injection\\smartftp.exe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\httpe32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\config\\httpe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\hpe32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\config\\hpe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\installoex64.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\approvaladapter.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\mso2k3pep32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\mso2k7pep32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\odhd2k332.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\odhd2k732.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\outlookenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\readme.txt");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\ce_explorer.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\injectexp.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\oeservice.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\ceoffice32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\ce_explorer32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\injectexp32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\nlregisterplugins.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\oeservice32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\windowblocker32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\adaptercomm32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\adaptermanager32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\approvaladapter32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\boost_regex-vc90-mt-1_43.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\mso2010pep32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\odhd201032.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nl_oe_plugin32.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\live meeting enforcer\\bin\\nllme32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\livemeetingenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\service\\injection\\pwconsole.exe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\removabledeviceenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\driver\\i386\\wdfcoinstaller01009.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\bin\\nextlabscredentialprovider.dll"); 
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\bin\\logon_detection_win7.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\driver\\nl_devenf.x86.cat");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\driver\\nldevcon.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\rde_plugin32.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\office communicator enforcer\\bin\\ipcproxy.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\office communicator enforcer\\readme.txt");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\service\\injection\\communicator.exe.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\officecommunicatorenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\windows\\system32\\drivers\\nl_crypto.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\iconbadging32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\driver\\nlsefw.inf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\systemencryption\\systemencryptionservice.jar");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\systemencryption_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlportableencryption.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlportableencryptionctx32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsysencryption.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsysencryptionobligation.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\driver\\objfre_wxp_x86\\i386\\nl_sysencryption.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\driver\\objfre_wxp_x86\\i386\\nl_sysencryptionfw.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nl_autounwrapper.exe");
+	Remove1SharedDll(hMSI, "c:\\windows\\system32\\drivers\\nl_klog.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlregisterplugins.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlse_plugin32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsefw_plugin32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nlse_plugin32.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nlsefw_plugin32.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\systemencryption\\pcs_server32.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmanager.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\network enforcer\\bin\\installspicaller.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\cepdpman.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nlcc.inf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\amd64\\nlcc.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\jar\\nlcc\\nlcc_dispatcher.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\service\\injection\\taskkill.exe.ini");
+	Remove1SharedDll(hMSI, "c:\\windows\\system32\\drivers\\nlinjection64.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\basepep.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\cesdk.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\ceservice.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\keymanagement\\bin\\keymanagementconsumer.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlregisterplugins.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\pcstatus.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\wdeaddtags.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\basepepplugin.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\outlookaddin.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\diagnostic.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmdlg.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\edpmgrutility.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\enhancement.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\iepep.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ipcproxy.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\ipcstub.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlsce.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\nlscekeeper.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\notification.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\wde_base_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\dialog.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\menu_l.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\menu_r.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\notify.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop enforcer\\bin\\status_plugin.ini");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\tamper_resistance\\windowsdesktopenforcer_tamperresistance.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nl_screencap_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\iconbadging.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlportableencryption.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlportableencryptionctx.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsysencryptionobligation.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\driver\\objfre_win7_amd64\\amd64\\nl_sysencryption.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\driver\\objfre_win7_amd64\\amd64\\nl_sysencryptionfw.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nl_autounwrapper.exe");
+	Remove1SharedDll(hMSI, "c:\\windows\\system32\\drivers\\nl_crypto.dll");
+	Remove1SharedDll(hMSI, "c:\\windows\\system32\\drivers\\nl_klog.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlse_plugin.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsefw_plugin.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\system encryption\\bin\\nlsysencryption.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nlse_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\nlsefw_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\systemencryption\\pcs_server.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\ceoffice.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\nlregisterplugins.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\windowblocker.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\adaptercomm.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\adaptermanager.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\approvaladapter.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\boost_regex-vc90-mt-1_43.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\mso2010pep.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\outlook enforcer\\bin\\odhd2010.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\bin\\nextlabscredentialprovider.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\bin\\logon_detection_win7.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\bin\\nl_devenf_plugin.dll");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\removable device enforcer\\driver\\nldevcon.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\config\\plugin\\rde_plugin.cfg");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\bin\\cepdpman.exe");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\nlcc.inf");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\driver\\amd64\\nlcc.sys");
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\policy controller\\jservice\\jar\\nlcc\\nlcc_dispatcher.dll");  
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\desktop\\enforcer\\bin\\basepep.dll"); 
+	Remove1SharedDll(hMSI, "c:\\program files\\nextlabs\\office communicator enforcer\\bin\\ipcproxy.dll"); 
+	    
+	
+
+end; 
+   
+function InsertDeleteInRunonce(hMSI,ddir)
+
+  	NUMBER pathSize;  
+  	INT nResult;   
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+
+begin               
+  
+	szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+	if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        MessageBox ("RegDBCreateKeyEx failed.", SEVERE); 
+    endif; 
+    szNumName  = "ddir"; 
+    szNumValue = "cmd /c rmdir \""+ddir + "\" /s /q";  
+    SprintfMsiLog("Nextlabs: Creating runonce key %s", szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, ddir, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		SprintfMsiLog("Nextlabs: Unable to create registry %s!", szKey);
+		
+	endif;  
+	
+
+	
+	return nResult;
+
+end; 
+
+
+   
+   
+function RemoveDir(hMSI, NEXTLABSINSTALLDIR, installdir) 
+	NUMBER nResult;
+
+begin
+   	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+	SprintfMsiLog("Nextlabs: Writing runonce registry");                          
+ 	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Desktop Enforcer");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"common");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"live meeting Enforcer");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"network Enforcer");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"office communicator Enforcer");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"outlook Enforcer");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"removable device Enforcer"); 
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\bin");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\driver");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\help");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\jlib");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\jservice");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\license");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\public_bin");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"Policy Controller\\service");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"software*.dat");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"clsid*.dat"); 
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"system*.dat");     
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"*.info");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"*.xml");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"logging.properties");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"type*.dat");
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"config"^"directory*.dat");     
+ 	nResult = DeleteFile(NEXTLABSINSTALLDIR^"Policy Controller"^"*.*");   
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"System Encryption\\bin");
+ 	nResult = InsertDeleteInRunonce(hMSI, NEXTLABSINSTALLDIR+"System Encryption\\diags");
+ 	
+ 	nResult = InsertDeleteInRunonce(hMSI, installdir);
+ 	return 0;
+ 	
+end; 
+
+
+function RemoveRDEKey(hMSI)
+
+
+begin    
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);                      
+	Remove1RegistryValue(hMSI,"{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}");
+	Remove1RegistryValue(hMSI,"{d48179be-ec20-11d1-b6b8-00c04fa372a7}");
+	Remove1RegistryValue(hMSI,"{c06ff265-ae09-48f0-812c-16753d7cba83}");
+	Remove1RegistryValue(hMSI,"{7ebefbc0-3200-11d2-b4c2-00a0c9697d07}");
+	Remove1RegistryValue(hMSI,"{6bdd1fc6-810f-11d0-bec7-08002be2092f}");
+	Remove1RegistryValue(hMSI,"{4d36e972-e325-11ce-bfc1-08002be10318}");
+	Remove1RegistryValue(hMSI,"{36fc9e60-c465-11cf-8056-444553540000}");
+ 	return 0;
+
+end;                  

@@ -1,0 +1,4 @@
+EXPORTS
+	nextlabs_install
+	nextlabs_uninstall
+

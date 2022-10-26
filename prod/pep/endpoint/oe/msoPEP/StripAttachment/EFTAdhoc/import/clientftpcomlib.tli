@@ -1,0 +1,18 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 15.00.21022.08 (801f18a5).
+//
+// c:\source\import\debug\clientftpcomlib.tli
+//
+// Wrapper implementations for Win32 type library ClientFTPCOMLib.tlb
+// compiler-generated file created 06/29/11 at 17:39:23 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface IClientFTPEngine wrapper method implementations
+//
+
+inline HRESULT IClientFTPEngine::Upload ( _bstr_t strLocalPath, ProtocolEnum nProtocol, _bstr_t strUser, _bstr_t strPassword, _bstr_t strHost, long nPort, _bstr_t strRemotePath ) {
+    HRESULT _hr = raw_Upload(strLocalPath, nProtocol, strUser, strPassword, strHost, nPort, strRemotePath);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}

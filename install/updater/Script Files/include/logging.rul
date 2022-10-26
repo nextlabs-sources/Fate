@@ -1,0 +1,47 @@
+/*
+ * Created on Sep 21, 2005
+ * 
+ * All sources, binaries and HTML pages (C) copyright 2004 by Blue Jungle Inc.,
+ * Redwood City CA, Ownership remains with Blue Jungle Inc, All rights reserved
+ * worldwide.
+ */
+
+
+////////////////////////////////////////////////////////////////////////////
+// Writes a message to the installer log file
+////////////////////////////////////////////////////////////////////////////
+function void WriteToLogFile(hInstall, szMessage)
+	NUMBER hRec;                                      
+	NUMBER lCount;  
+	WSTRING szOutput;
+begin
+
+	//Validate the passed-in string
+	lCount = StrLength(szMessage);
+	if (lCount = 0) then
+		return;
+	endif;
+                
+	//Create a record with only one field
+	hRec = MsiCreateRecord(1);                  
+	
+	//Handle problem creating record
+	if (hRec = 0) then 
+		return;
+	endif;
+	
+	//Set that one field to the passed-in string
+	MsiRecordSetString(hRec, 1, szMessage);        
+	
+	//Set the formatting string to NULL
+	MsiRecordSetString(hRec, 0, "[1]");       
+		
+	//Format the record to get rid of the '1.'
+	MsiFormatRecord(hInstall, hRec, szOutput, lCount); 
+	
+	//Handle processing the message
+	MsiProcessMessage(hInstall,INSTALLMESSAGE_INFO, hRec);                 
+
+end;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

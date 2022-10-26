@@ -1,0 +1,26 @@
+HKCR
+{
+	OutlookAddin.outlookImpl.1 = s 'outlookImpl Class'
+	{
+		CLSID = s '{09C3BB91-4D93-471F-AB17-8CF422D48156}'
+	}
+	OutlookAddin.outlookImpl = s 'outlookImpl Class'
+	{
+		CLSID = s '{09C3BB91-4D93-471F-AB17-8CF422D48156}'
+		CurVer = s 'OutlookAddin.outlookImpl.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {09C3BB91-4D93-471F-AB17-8CF422D48156} = s 'outlookImpl Class'
+		{
+			ProgID = s 'OutlookAddin.outlookImpl.1'
+			VersionIndependentProgID = s 'OutlookAddin.outlookImpl'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1B8B9D15-4578-4BAB-9662-A025E8CC05D2}'
+		}
+	}
+}

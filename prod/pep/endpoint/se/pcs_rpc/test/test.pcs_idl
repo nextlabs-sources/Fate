@@ -1,0 +1,30 @@
+@idl header
+{
+#include <cstdio>
+#include <cstdlib>
+#include <windows.h>
+
+#include "CEsdk.h"
+#include "ceservice.h"
+
+}
+
+@idl method TEST_StringCopy( @idl param [out,alloc,size*my_out_string_size] (char*) my_out_string ,
+			     @idl param [in] (char*) my_in_string ,
+	                     @idl param [out] (int) my_out_string_size )
+
+@idl method TEST_StringCopyFail( @idl param [out,alloc,size*my_out_string_size] (char*) my_out_string ,
+			         @idl param [in] (char*) my_in_string ,
+	                         @idl param [out] (int) my_out_string_size )
+
+@idl method TEST_StringLength( @idl param [in] (char*) my_in_string ,
+	                       @idl param [out] (int) my_out_string_size )
+
+@idl method TEST_Add( @idl param [in] (int*) x ,
+                      @idl param [in] (int*) y ,
+	              @idl param [out] (int) result )
+
+@idl method TEST_ReturnError( @idl param [in] (CEResult_t*) x )
+
+@idl method TEST_Assert( @idl param [in] (int*) x ,
+                         @idl param [in] (int*) y )

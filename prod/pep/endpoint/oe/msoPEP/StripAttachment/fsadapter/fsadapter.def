@@ -1,0 +1,10 @@
+; fsadapter.def : Declares the module parameters.
+
+LIBRARY      "fsadapter.DLL"
+
+EXPORTS
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer PRIVATE
+	RepositoryUpload
+	RepositoryUploadEx
+	ReleaseRepositoryUploadExPWCH

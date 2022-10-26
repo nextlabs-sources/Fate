@@ -1,0 +1,227 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 15.00.21022.08 (024c6661).
+//
+// C:\DOCUME~1\JOHN~1.TYL\LOCALS~1\Temp\uploadsp.tlh
+//
+// C++ source equivalent of Win32 type library ../uploadSP/bin/Debug/uploadSP.tlb
+// compiler-generated file created 07/08/10 at 23:49:37 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace uploadSP {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("d96b1d40-da81-4452-8888-fe1769e8a035"))
+/* LIBID */ __uploadSP;
+struct /* coclass */ DocUpload;
+struct /* coclass */ IsDocLibCompletedEventHandler;
+struct /* coclass */ IsDocLibCompletedEventArgs;
+struct /* coclass */ UploadDocumentCompletedEventHandler;
+struct /* coclass */ UploadDocumentCompletedEventArgs;
+struct /* coclass */ SetColumnsCompletedEventHandler;
+struct /* coclass */ SetColumnsCompletedEventArgs;
+struct /* coclass */ IfInAssociationTemplatesCompletedEventHandler;
+struct /* coclass */ IfInAssociationTemplatesCompletedEventArgs;
+struct /* coclass */ StartWorkFlowCompletedEventHandler;
+struct /* coclass */ StartWorkFlowCompletedEventArgs;
+struct __declspec(uuid("d8b34c15-13bf-37ff-8dfb-628611f6a8c9"))
+/* dual interface */ ISPUpload;
+struct /* coclass */ ManagedClass;
+struct __declspec(uuid("fb631ab5-14ea-39ac-a683-779401b302f8"))
+/* dual interface */ _DocUpload;
+struct __declspec(uuid("5824c55f-39a6-3d42-a019-231ca53a90f5"))
+/* dual interface */ _IsDocLibCompletedEventHandler;
+struct __declspec(uuid("1bb2e045-d97e-3a83-b3b0-6563f73e9cd8"))
+/* dual interface */ _IsDocLibCompletedEventArgs;
+struct __declspec(uuid("e13d1766-10cc-302c-80a3-159c18124597"))
+/* dual interface */ _UploadDocumentCompletedEventHandler;
+struct __declspec(uuid("f9e120ef-ffe1-3ab9-a664-e21719d56005"))
+/* dual interface */ _UploadDocumentCompletedEventArgs;
+struct __declspec(uuid("5e97d70f-057b-368e-89dd-bc22500b7dea"))
+/* dual interface */ _SetColumnsCompletedEventHandler;
+struct __declspec(uuid("6636139e-c423-316b-b708-23d2d68a7269"))
+/* dual interface */ _SetColumnsCompletedEventArgs;
+struct __declspec(uuid("aae85548-5a05-311e-b2ce-5f0de87bc665"))
+/* dual interface */ _IfInAssociationTemplatesCompletedEventHandler;
+struct __declspec(uuid("2c581211-c6a1-31c3-9bde-66f40c2822a3"))
+/* dual interface */ _IfInAssociationTemplatesCompletedEventArgs;
+struct __declspec(uuid("737c42cc-59ac-3280-a834-20c06341bc78"))
+/* dual interface */ _StartWorkFlowCompletedEventHandler;
+struct __declspec(uuid("013107b5-cd50-38aa-9e43-71b43c311839"))
+/* dual interface */ _StartWorkFlowCompletedEventArgs;
+struct __declspec(uuid("70a21998-9628-3cb7-a75e-501832e94cf6"))
+/* dual interface */ _ManagedClass;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(ISPUpload, __uuidof(ISPUpload));
+_COM_SMARTPTR_TYPEDEF(_DocUpload, __uuidof(_DocUpload));
+_COM_SMARTPTR_TYPEDEF(_IsDocLibCompletedEventHandler, __uuidof(_IsDocLibCompletedEventHandler));
+_COM_SMARTPTR_TYPEDEF(_IsDocLibCompletedEventArgs, __uuidof(_IsDocLibCompletedEventArgs));
+_COM_SMARTPTR_TYPEDEF(_UploadDocumentCompletedEventHandler, __uuidof(_UploadDocumentCompletedEventHandler));
+_COM_SMARTPTR_TYPEDEF(_UploadDocumentCompletedEventArgs, __uuidof(_UploadDocumentCompletedEventArgs));
+_COM_SMARTPTR_TYPEDEF(_SetColumnsCompletedEventHandler, __uuidof(_SetColumnsCompletedEventHandler));
+_COM_SMARTPTR_TYPEDEF(_SetColumnsCompletedEventArgs, __uuidof(_SetColumnsCompletedEventArgs));
+_COM_SMARTPTR_TYPEDEF(_IfInAssociationTemplatesCompletedEventHandler, __uuidof(_IfInAssociationTemplatesCompletedEventHandler));
+_COM_SMARTPTR_TYPEDEF(_IfInAssociationTemplatesCompletedEventArgs, __uuidof(_IfInAssociationTemplatesCompletedEventArgs));
+_COM_SMARTPTR_TYPEDEF(_StartWorkFlowCompletedEventHandler, __uuidof(_StartWorkFlowCompletedEventHandler));
+_COM_SMARTPTR_TYPEDEF(_StartWorkFlowCompletedEventArgs, __uuidof(_StartWorkFlowCompletedEventArgs));
+_COM_SMARTPTR_TYPEDEF(_ManagedClass, __uuidof(_ManagedClass));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("0ac26efb-457b-3788-b168-32bcefdf6cf9"))
+DocUpload;
+    // [ default ] interface _DocUpload
+    // interface _Object
+    // interface IComponent
+    // interface IDisposable
+
+struct __declspec(uuid("6bd31199-b081-3b6f-a5d8-08054374baa0"))
+IsDocLibCompletedEventHandler;
+    // [ default ] interface _IsDocLibCompletedEventHandler
+    // interface _Delegate
+    // interface _Object
+    // interface ICloneable
+    // interface ISerializable
+
+struct __declspec(uuid("67378446-0bb1-3d5a-9b23-3f8fe202c6fb"))
+IsDocLibCompletedEventArgs;
+    // [ default ] interface _IsDocLibCompletedEventArgs
+    // interface _Object
+
+struct __declspec(uuid("e910ff50-d0a4-34b9-a2ca-69f50b3d883e"))
+UploadDocumentCompletedEventHandler;
+    // [ default ] interface _UploadDocumentCompletedEventHandler
+    // interface _Delegate
+    // interface _Object
+    // interface ICloneable
+    // interface ISerializable
+
+struct __declspec(uuid("4319cd55-5b85-3f16-8973-a9016e651603"))
+UploadDocumentCompletedEventArgs;
+    // [ default ] interface _UploadDocumentCompletedEventArgs
+    // interface _Object
+
+struct __declspec(uuid("443a23fd-5b41-31e1-bc00-3485aef9db4a"))
+SetColumnsCompletedEventHandler;
+    // [ default ] interface _SetColumnsCompletedEventHandler
+    // interface _Delegate
+    // interface _Object
+    // interface ICloneable
+    // interface ISerializable
+
+struct __declspec(uuid("db62dee4-6b57-3ede-a571-aae850f13226"))
+SetColumnsCompletedEventArgs;
+    // [ default ] interface _SetColumnsCompletedEventArgs
+    // interface _Object
+
+struct __declspec(uuid("aee32ca4-7489-39c7-9908-0e3c05843e31"))
+IfInAssociationTemplatesCompletedEventHandler;
+    // [ default ] interface _IfInAssociationTemplatesCompletedEventHandler
+    // interface _Delegate
+    // interface _Object
+    // interface ICloneable
+    // interface ISerializable
+
+struct __declspec(uuid("22bfd8da-66bd-3dd2-a6d7-7cb96dc1759e"))
+IfInAssociationTemplatesCompletedEventArgs;
+    // [ default ] interface _IfInAssociationTemplatesCompletedEventArgs
+    // interface _Object
+
+struct __declspec(uuid("30a06ed7-35dc-3f0f-ae38-c0a08335d7eb"))
+StartWorkFlowCompletedEventHandler;
+    // [ default ] interface _StartWorkFlowCompletedEventHandler
+    // interface _Delegate
+    // interface _Object
+    // interface ICloneable
+    // interface ISerializable
+
+struct __declspec(uuid("0aa25db1-881a-3a07-9002-bcbbdf5a6777"))
+StartWorkFlowCompletedEventArgs;
+    // [ default ] interface _StartWorkFlowCompletedEventArgs
+    // interface _Object
+
+struct __declspec(uuid("d8b34c15-13bf-37ff-8dfb-628611f6a8c9"))
+ISPUpload : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall Upload (
+        /*[in]*/ BSTR filePath,
+        /*[in]*/ BSTR url,
+        /*[in]*/ BSTR username,
+        /*[in]*/ BSTR password,
+        /*[in]*/ BSTR domain,
+        /*[in,out]*/ BSTR * itemPath,
+        /*[out,retval]*/ long * pRetVal ) = 0;
+};
+
+struct __declspec(uuid("f0603e83-60df-30dc-b012-c284daa372d9"))
+ManagedClass;
+    // [ default ] interface _ManagedClass
+    // interface _Object
+    // interface ISPUpload
+
+struct __declspec(uuid("fb631ab5-14ea-39ac-a683-779401b302f8"))
+_DocUpload : IDispatch
+{};
+
+struct __declspec(uuid("5824c55f-39a6-3d42-a019-231ca53a90f5"))
+_IsDocLibCompletedEventHandler : IDispatch
+{};
+
+struct __declspec(uuid("1bb2e045-d97e-3a83-b3b0-6563f73e9cd8"))
+_IsDocLibCompletedEventArgs : IDispatch
+{};
+
+struct __declspec(uuid("e13d1766-10cc-302c-80a3-159c18124597"))
+_UploadDocumentCompletedEventHandler : IDispatch
+{};
+
+struct __declspec(uuid("f9e120ef-ffe1-3ab9-a664-e21719d56005"))
+_UploadDocumentCompletedEventArgs : IDispatch
+{};
+
+struct __declspec(uuid("5e97d70f-057b-368e-89dd-bc22500b7dea"))
+_SetColumnsCompletedEventHandler : IDispatch
+{};
+
+struct __declspec(uuid("6636139e-c423-316b-b708-23d2d68a7269"))
+_SetColumnsCompletedEventArgs : IDispatch
+{};
+
+struct __declspec(uuid("aae85548-5a05-311e-b2ce-5f0de87bc665"))
+_IfInAssociationTemplatesCompletedEventHandler : IDispatch
+{};
+
+struct __declspec(uuid("2c581211-c6a1-31c3-9bde-66f40c2822a3"))
+_IfInAssociationTemplatesCompletedEventArgs : IDispatch
+{};
+
+struct __declspec(uuid("737c42cc-59ac-3280-a834-20c06341bc78"))
+_StartWorkFlowCompletedEventHandler : IDispatch
+{};
+
+struct __declspec(uuid("013107b5-cd50-38aa-9e43-71b43c311839"))
+_StartWorkFlowCompletedEventArgs : IDispatch
+{};
+
+struct __declspec(uuid("70a21998-9628-3cb7-a75e-501832e94cf6"))
+_ManagedClass : IDispatch
+{};
+
+} // namespace uploadSP
+
+#pragma pack(pop)

@@ -1,0 +1,4 @@
+LIBRARY	"AcrobatPEP"
+
+EXPORTS
+	PlugInMain @ 1

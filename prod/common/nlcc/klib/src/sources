@@ -1,0 +1,23 @@
+TARGETNAME=nlcc_klib
+TARGETTYPE=DRIVER_LIBRARY
+DRIVERTYPE=WDM
+
+KMDF_VERSION_MAJOR=1
+KMDF_VERSION_MINOR=9
+UMDF_MINOR_VERSION=9
+
+WINDDK=c:\winddk\7600.16385.0
+
+TARGETLIBS= $(DDK_LIB_PATH)\Rtlver.lib	\
+            $(DDK_LIB_PATH)\Wdmsec.lib	\
+            $(DDK_LIB_PATH)\Ksecdd.lib
+
+#C_DEFINES=$(C_DEFINES)
+
+INCLUDES=$(INCLUDES);..\include;..\..\;$(WINDDK)\inc\wdf\kmdf\$(KMDF_VERSION_MAJOR)$(KMDF_VERSION_MINOR);
+
+SOURCES = \
+	nlcc_klib.c
+
+
+

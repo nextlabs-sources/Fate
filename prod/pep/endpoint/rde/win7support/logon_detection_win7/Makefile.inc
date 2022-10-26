@@ -1,0 +1,21 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_RDE)
+VERSION_MAJOR		= $(VERSION_MAJOR_RDE)
+VERSION_MINOR		= $(VERSION_MINOR_RDE)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_RDE)
+VERSION_PATCH		= $(VERSION_PATCH_RDE)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS   = 
+TARGET = logon_detection_win7
+
+SRC = \
+  src/stdafx.cpp \
+  src/logon_detection_win7.cpp 
+
+INCPATH += \
+  include 
+
+LIBS += mpr advapi32 

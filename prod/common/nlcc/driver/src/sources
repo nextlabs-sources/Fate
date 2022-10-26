@@ -1,0 +1,21 @@
+TARGETNAME=nlcc
+TARGETTYPE=DRIVER
+
+KMDF_VERSION_MAJOR=1
+KMDF_VERSION_MINOR=9
+UMDF_MINOR_VERSION=9
+
+
+TARGETLIBS= $(DDK_LIB_PATH)\Rtlver.lib \
+            $(DDK_LIB_PATH)\Wdmsec.lib
+
+#C_DEFINES=$(C_DEFINES)
+
+INCLUDES=$(INCLUDES);	\
+			..\include;	\
+			..\..;		\
+			$(WDKDIR)\inc\wdf\kmdf\$(KMDF_VERSION_MAJOR)$(KMDF_VERSION_MINOR);
+
+SOURCES=nlcc.c		\
+		nlcc.rc
+

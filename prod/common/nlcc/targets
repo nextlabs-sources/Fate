@@ -1,0 +1,7 @@
+
+
+TARGETS = \
+	prod/common/nlcc/ulib \
+	prod/common/nlcc/service/java \
+	prod/common/nlcc/service \
+	prod/common/nlcc/test

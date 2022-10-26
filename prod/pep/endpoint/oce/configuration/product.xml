@@ -1,0 +1,24 @@
+<Obligation>
+  <DisplayName>Participant Limit</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>CE::Warn</Name>
+  <Arguments>
+    <Argument usereditable="true">
+      <Name>Warn Message</Name>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Participant Limit</Name>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Append Disclaimer</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>CE: isclaimer</Name>
+  <Arguments>
+    <Argument usereditable="true">
+      <Name>Disclaimer Message</Name>
+    </Argument>
+  </Arguments>
+</Obligation>

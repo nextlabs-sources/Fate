@@ -1,0 +1,277 @@
+#include "Setup.h"  
+#include "ifx.h" 
+#include "include/servicecontrol.h" 
+#include "include/logging.h"
+#include "include/common.h"
+#include "setupfiles.rul"
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateAdministrationPassword(hMSI)
+	INT result; 
+    STRING resultAsString;  
+    STRING UNINSTALL_PASSWORD;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateAdministrationPassword()");  
+	UNINSTALL_PASSWORD=GetProperty(hMSI,"UNINSTALL_PASSWORD");
+	if (UNINSTALL_PASSWORD = "") then
+		MessageBox("Please input password !!", INFORMATION);
+	    DenyNextDialog(hMSI);
+	    return ERROR_SUCCESS;
+	endif;
+	
+ 	result = StopService(hMSI);             
+
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password!\nThe password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("Error !! An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("Error !! An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	                                            				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end;
+
+/*
+ * Install driver
+ */              
+function INT InstallEnforcerDeviceDriver(hMSI)
+  	string Installdir;
+  	string resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "Installing device drivers :"+Installdir^"driver"^"nldevcon.exe install \""+Installdir^"driver"^"nl_devenf.inf\" root\\NLDEVENF");
+ 	nResult = LaunchAppAndWait(Installdir^"driver"^"nldevcon.exe", "install \""+Installdir^"driver"^"nl_devenf.inf\" root\\NLDEVENF", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;
+	
+/*
+ * Uninstall driver
+ */
+function INT UninstallEnforcerDeviceDriver(hMSI)
+  	string Installdir;
+  	string resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "Uninstalling device drivers :"+Installdir^"driver"^"nldevcon.exe remove root\\NLDEVENF");
+ 	nResult = LaunchAppAndWait(Installdir^"driver"^"nldevcon.exe", "remove root\\NLDEVENF", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;  
+
+/**
+ * Load enforcerDeviceDriverInstall DLL
+ */
+function INT LoadEnforcerDeviceDriverInstaller(hMSI)
+	WSTRING dllName;
+	INT result;
+begin   
+	dllName = FOLDER_TEMP ^ ENFORCER_DEVICE_DRIVER_INSTALLER_DLL_NAME;
+		WriteToLogFile(hMSI, "Begin to load DLL : " + dllName);
+	result = UseDLL(dllName);
+	if (result != ERROR_SUCCESS) then		
+		WriteToLogFile(hMSI, "Unable to load DLL : " + dllName);
+	endif;                                                  
+	
+	WriteToLogFile(hMSI, "End to load DLL : " + dllName);
+	
+    return result;
+end;
+
+/**
+ * Unload enforcerDeviceDriverInstall DLL
+ */
+function INT UnloadEnforcerDeviceDriverInstaller(hMSI)
+	WSTRING dllName;
+begin         
+	dllName = FOLDER_TEMP ^ ENFORCER_DEVICE_DRIVER_INSTALLER_DLL_NAME;
+    UnUseDLL(dllName);
+    return ERROR_SUCCESS;  
+end;
+                         
+function INT DeleteKeyByControl(hMSI, sControl, sKey)
+    NUMBER nvType;
+    STRING svValue;
+    NUMBER nvSize;
+    NUMBER nResult;
+begin
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+  	//if (RegDBKeyExist("System\\" + sControl + "\\Control\\Class\\{" + sKey + "}") = 0) then
+  		
+  		nResult = RegDBGetKeyValueEx("System\\"+sControl+"\\Control\\Class\\{"+sKey+"}","UpperFilters",nvType,svValue,nvSize);      
+  		//MessageBox(sKey+" exists " + svValue,INFORMATION);      
+  		nResult = StrReplace ( svValue, "NLDevEnf", "", 0 );
+  		if ( nResult > 0) then  		
+  			nResult = RegDBSetKeyValueEx ( "System\\"+sControl+"\\Control\\Class\\{"+sKey+"}", "UpperFilters", nvType, svValue, -1 ); 
+        	if (nResult < 0) then
+            	MessageBox ("registry set fail for " + sControl + " " + sKey, INFORMATION);
+            	WriteToLogFile(hMSI, "Registry set fail for " + sControl + " " + sKey);
+        	endif;
+        	return nResult; 
+        endif;
+    //else       
+    	//MessageBox(sKey + " not found!", INFORMATION);
+    //	WriteToLogFile(hMSI, "System\\" + sControl + "\\Control\\Class\\{" + sKey + "}" + " not found!");
+    //	return 0;    
+  	//endif;	
+
+end;           
+
+
+               
+function INT deleteKey(hMSI, sKey)
+	NUMBER nResult;    
+begin                                                       
+    nResult = DeleteKeyByControl(hMSI,"CurrentControlSet",sKey);  
+    nResult = DeleteKeyByControl(hMSI,"ControlSet001",sKey);
+    nResult = DeleteKeyByControl(hMSI,"ControlSet002",sKey);
+    nResult = DeleteKeyByControl(hMSI,"ControlSet003",sKey);
+    nResult = DeleteKeyByControl(hMSI,"ControlSet004",sKey);
+                    
+    return 0;                                                                                              
+end;                     
+                   
+function INT clearRegistry(hMSI)
+    NUMBER nResult;
+begin   
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    if (deleteKey(hMSI, "36fc9e60-c465-11cf-8056-444553540000") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "6bdd1fc6-810f-11d0-bec7-08002be2092f") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "e0cbf06c-cd8b-4647-bb8a-263b43f0f974") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "7ebefbc0-3200-11d2-b4c2-00a0C9697d07") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "c06ff265-ae09-48f0-812c-16753d7cba83") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "d48179be-ec20-11d1-b6b8-00c04fa372a7") < 0 ) then
+    	return -1;
+    endif;
+    if (deleteKey(hMSI, "4d36e972-e325-11ce-bfc1-08002be10318") < 0 ) then
+    	return -1;
+    endif;
+    if ( Is(FILE_EXISTS, WindowsFolder ^ "System32\\drivers\\nl_devenf.sys") ) then
+        if (DeleteFile(WindowsFolder ^ "system32\\drivers\\nl_devenf.sys") < 0 ) then
+        	WriteToLogFile(hMSI, "nl_devenf.sys delete failed");
+        	MessageBox("nl_devenf.sys delete failed", INFORMATION);
+        	return -1;	
+        endif;
+    endif;
+    
+    return 0;
+end;       
+
+
+
+
+function INT InsertDeleteInRunonce(hMSI)
+
+  	string Installdir;
+  	NUMBER pathSize;  
+  	INT nResult;   
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+
+begin               
+	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+	WriteToLogFile(hMSI, "Writing runonce registry");                          
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);  
+	szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+	if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        MessageBox ("RegDBCreateKeyEx failed.", SEVERE); 
+    endif; 
+    szNumName  = "DeleteOE"; 
+    szNumValue = "cmd /c rmdir \""+Installdir + "\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;  
+	
+
+	
+	return nResult;
+
+end; 
+
+
+
+function INT InsertDateToRegistry(hMSI)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;
+    
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else    
+ 		ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\Compliant Enterprise\\Removable Device Enforcer";
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif;
+    	
+    endif; 
+    return ERROR_SUCCESS;
+
+end;      

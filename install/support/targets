@@ -1,0 +1,8 @@
+
+TARGETS = \
+	install/support/PluginInstallerSDK \
+	install/support/InstallOEX64 \
+	install/support/PolicyControllerGPOPrep \
+	install/support/EnforcerGPOPrep	\
+	install/support/NlUninstallCleanup
+	

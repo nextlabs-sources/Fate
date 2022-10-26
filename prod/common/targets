@@ -1,0 +1,16 @@
+
+TARGETS = \
+	prod/common/brain \
+	prod/common/celog \
+	prod/common/celog2 \
+	prod/common/celog3 \
+	prod/common/nlcc/ulib \
+	prod/pep/endpoint/se/pcs_rpc \
+	prod/pep/endpoint/se/service \
+	prod/pep/endpoint/se/nl_sysenc_lib \
+ 	prod/common/pdflib/pdflib \
+ 	prod/common/pdflib/PDFLibTool \
+ 	prod/common/NextLabsTaggingLib \
+ 	prod/common/resattrlib \
+	prod/common/resattrmgr \
+	prod/common/nlcommonlib

@@ -1,0 +1,77 @@
+<!-- Interactive Tag on Usage -->
+<Obligation>
+  <DisplayName>Interactive TagOnUsage</DisplayName>
+  <RunAt>PDP</RunAt>
+  <RunBy>User</RunBy> 
+  <ExecPath>C:\Program Files\NextLabs\Desktop Enforcer\bin\WdeAddTags.exe</ExecPath>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+      <Value>$ResourceAttribute.Name</Value>
+    </Argument>
+    <Argument>
+      <Name>Tag Value</Name>
+      <Value>$ResourceAttribute.Values</Value>
+    </Argument>
+
+    <Argument usereditable="false">
+      <Name>Optional</Name>
+      <Value>Yes</Value>
+      <Value default="true">No</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+      <Value>The following file needs to be tagged:</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-file</Name>
+      <Value>$CESource</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-app</Name>
+      <Value>$CEApplication</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-action</Name>
+      <Value>$CEAction</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<!-- Automatic Tag on Usage -->
+<Obligation>
+  <DisplayName>Automatic TagOnUsage</DisplayName>
+  <RunAt>PDP</RunAt>
+  <RunBy>User</RunBy> 
+  <ExecPath>C:\Program Files\NextLabs\Desktop Enforcer\bin\WdeAddTags.exe</ExecPath>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+      <Value>$ResourceAttribute.Name</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Tag Value</Name>
+      <Value>$ResourceAttribute.Values</Value>
+     </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+      <Value>The following file needs to be tagged:</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-file</Name>
+      <Value>$CESource</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-app</Name>
+      <Value>$CEApplication</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-action</Name>
+      <Value>$CEAction</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-auto</Name>
+      <Value default="true">Yes</Value>
+    </Argument>
+   </Arguments>
+</Obligation>

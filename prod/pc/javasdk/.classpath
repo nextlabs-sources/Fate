@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/p4/main/Destiny/build/agent-controlmanager.jar"/>
+	<classpathentry kind="lib" path="C:/p4/main/Destiny/build/client-pf.jar"/>
+	<classpathentry kind="lib" path="C:/p4/main/Destiny/build/common-pf.jar"/>
+	<classpathentry kind="lib" path="C:/p4/external/commons-logging/commons-logging-1.0.4/commons-logging.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

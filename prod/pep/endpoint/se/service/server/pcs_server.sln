@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pcs_server", "pcs_server.vcproj", "{5854A1DF-495A-4BB4-A597-2B40136E192F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5854A1DF-495A-4BB4-A597-2B40136E192F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5854A1DF-495A-4BB4-A597-2B40136E192F}.Debug|Win32.Build.0 = Debug|Win32
+		{5854A1DF-495A-4BB4-A597-2B40136E192F}.Release|Win32.ActiveCfg = Release|Win32
+		{5854A1DF-495A-4BB4-A597-2B40136E192F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,27 @@
+HKCR
+{
+	approver.approverobj.1 = s 'approverobj Class'
+	{
+		CLSID = s '{D0543C0E-0C21-42D6-83D5-F193B1BB66BA}'
+	}
+	approver.approverobj = s 'approverobj Class'
+	{
+		CLSID = s '{D0543C0E-0C21-42D6-83D5-F193B1BB66BA}'
+		CurVer = s 'approver.approverobj.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D0543C0E-0C21-42D6-83D5-F193B1BB66BA} = s 'approverobj Class'
+		{
+			ProgID = s 'approver.approverobj.1'
+			VersionIndependentProgID = s 'approver.approverobj'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{F6E616EE-8246-40FD-8EBF-B0C11EF9DFBC}'
+		}
+	}
+}

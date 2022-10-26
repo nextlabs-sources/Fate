@@ -1,0 +1,200 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1 TYPELIB ""PA_Test.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0, 0, 0, 0
+ PRODUCTVERSION 0, 0, 0, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "VERSION_PRODUCT (VERSION_ARCHITECTURE)"
+            VALUE "FileVersion", "VERSION_MAJOR.VERSION_MINOR.VERSION_MAINTENANCE.VERSION_PATCH (VERSION_BUILD)"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "VERSION_PRODUCT"
+            VALUE "ProductVersion", "VERSION_MAJOR.VERSION_MINOR.VERSION_MAINTENANCE.VERSION_PATCH (VERSION_BUILD)"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_PA_TEST             REGISTRY                "PA_Test.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_PROJNAME            "PA_Test"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PA_DEMO DIALOGEX 0, 0, 419, 286
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Test driver for PA"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "TestCopy",IDOK,21,51,59,17
+    EDITTEXT        IDC_EDIT_SOURCE_FILE_NAME,164,51,249,17,ES_AUTOHSCROLL,WS_EX_ACCEPTFILES
+    GROUPBOX        "Action",IDC_STATIC,5,35,91,244
+    GROUPBOX        "File",IDC_STATIC,101,35,312,88
+    PUSHBUTTON      "Source",IDC_BUTTON_GET_SOURCE,109,51,51,17
+    PUSHBUTTON      "Destination",IDC_BUTTON_GET_DESTINATION,109,82,51,18
+    EDITTEXT        IDC_EDIT_DEST_FILE_NAME,164,82,249,18,ES_AUTOHSCROLL,WS_EX_ACCEPTFILES
+    PUSHBUTTON      "TestMove",IDC_BUTTON3,20,82,60,18
+    LTEXT           "Please make sure: This module is the same to the PA's version.(Release => Release; Debug=>Debug);Otherwise it will meet the exception problem",IDC_STATIC,21,11,376,21
+    LISTBOX         IDC_LIST_OUTPUT,114,137,304,149,LBS_USETABSTOPS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Stub",IDC_BUTTON_STUB,21,156,59,17
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PA_DEMO, DIALOG
+    BEGIN
+        RIGHTMARGIN, 418
+        VERTGUIDE, 5
+        VERTGUIDE, 21
+        VERTGUIDE, 80
+        VERTGUIDE, 96
+        VERTGUIDE, 101
+        VERTGUIDE, 109
+        VERTGUIDE, 160
+        VERTGUIDE, 164
+        VERTGUIDE, 397
+        VERTGUIDE, 413
+        HORZGUIDE, 11
+        HORZGUIDE, 32
+        HORZGUIDE, 35
+        HORZGUIDE, 51
+        HORZGUIDE, 68
+        HORZGUIDE, 82
+        HORZGUIDE, 100
+        HORZGUIDE, 123
+        HORZGUIDE, 130
+        HORZGUIDE, 156
+        HORZGUIDE, 173
+        HORZGUIDE, 279
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_MAIN           ICON                    "res\\dlp.ico"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "PA_Test.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

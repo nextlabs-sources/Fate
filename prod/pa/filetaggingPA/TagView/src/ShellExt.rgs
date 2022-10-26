@@ -1,0 +1,27 @@
+HKCR
+{
+	TagView.ShellExt.1 = s 'ShellExt Class'
+	{
+		CLSID = s '{E7F164F5-8E7C-4AAB-BC8D-96A396661BFA}'
+	}
+	TagView.ShellExt = s 'ShellExt Class'
+	{
+		CLSID = s '{E7F164F5-8E7C-4AAB-BC8D-96A396661BFA}'
+		CurVer = s 'TagView.ShellExt.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E7F164F5-8E7C-4AAB-BC8D-96A396661BFA} = s 'ShellExt Class'
+		{
+			ProgID = s 'TagView.ShellExt.1'
+			VersionIndependentProgID = s 'TagView.ShellExt'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{841E6D40-DBFD-47F2-8756-999F952E6C56}'
+		}
+	}
+}

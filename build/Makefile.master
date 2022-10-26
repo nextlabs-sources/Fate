@@ -1,0 +1,477 @@
+# Make file to build different product binaries and installers
+#
+# USAGE
+#	You must run ./configure to generate build.config and source build.config before
+#	running this script. You can also edit build.config if desired. You may refer to 
+#	./buildPcv or ./buildRelease on how to run this script.
+#
+# IMPORTANT: 
+#	In general, we should compile Java projects first because C projects 
+#	often depend on JNI header files.install_support_dep
+#
+#	We need to force build 32-bit version of prod/pep/endpoint/se/pcs_rpc so that
+#	prod/pep/endpoint/se/service/Makefile can call it on a 32-bit build machine.
+#
+# Example:
+#	make -f build/Makefile.master
+#	make -f build/Makefile.master compile_product_dep
+#	make -f build/Makefile.master compile_pc compile_kmc compile_lme compile_ne compile_oce compile_oe compile_rde compile_se compile_wde
+#	make -f build/Makefile.master compile_pc compile_cesdk
+#	make -f build/Makefile.master compile_wde
+#	make -f build/Makefile.master compile_devtool
+#	make -f build/Makefile.master compile_common compile_nlcc compile_cesdk compile_pa compile_pcs_rpc
+#	make -f build/Makefile.master install
+#	make -f build/Makefile.master install_product_dep
+#	make -f build/Makefile.master install_support_dep
+#	make -f build/Makefile.master clean
+#	make -f build/Makefile.master clean_wde clean_oe
+#	make -f build/Makefile.master clean_devtools
+#	make -f build/Makefile.master clean_install
+
+
+#
+# Check for errors
+#
+
+ifeq ($(CONFIG_TYPE),)
+  $(error CONFIG_TYPE undefined.)
+endif
+
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+
+#
+# Show variables
+#
+
+$(info --------------------------------------------------------------)
+$(info [Build Configuration])
+$(info CONFIG_TYPE                = $(CONFIG_TYPE)) 
+$(info VERSION_BUILD              = $(VERSION_BUILD)) 
+$(info VERSION_BUILD_SHORT        = $(VERSION_BUILD_SHORT)) 
+$(info BUILDTYPE                  = $(BUILDTYPE)) 
+$(info BUILD_DATE                 = $(BUILD_DATE)) 
+$(info BUILD_DATE_LONG            = $(BUILD_DATE_LONG)) 
+$(info PREFAST                    = $(PREFAST)) 
+$(info OFFICIALCERT               = $(OFFICIALCERT)) 
+$(info NLBUILDROOT                = $(NLBUILDROOT)) 
+$(info NLEXTERNALDIR              = $(NLEXTERNALDIR)) 
+$(info MAKE_CFLAGS_32             = $(MAKE_CFLAGS_32)) 
+$(info MAKE_CFLAGS_64             = $(MAKE_CFLAGS_64)) 
+$(info MAKE_CSFLAGS               = $(MAKE_CSFLAGS)) 
+$(info MAKE_INSTALLFLAGS          = $(MAKE_INSTALLFLAGS)) 
+$(info --------------------------------------------------------------)
+
+
+#
+# Targets
+#
+
+.PHONY: all
+all: compile install
+
+.PHONY: compile
+compile: compile_product_dep compile_devtool_dep
+
+.PHONY: compile_product_dep
+compile_product_dep: compile_pc_dep compile_kmc_dep compile_lme_dep compile_ne_dep compile_oce_dep compile_oe_dep compile_rde_dep compile_se_dep compile_wde_dep
+
+.PHONY: compile_common_dep
+compile_common_dep: compile_pcs_rpc_dep compile_common
+
+.PHONY: compile_common
+compile_common:
+	@echo "INFO: Compile common"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/common/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/common/targets
+
+.PHONY: compile_nlcc_dep
+compile_nlcc_dep: compile_nlcc
+
+.PHONY: compile_nlcc
+compile_nlcc:
+	@echo "INFO: Compile NLCC"
+	cd $(NLBUILDROOT); make TARGETSFILE=prod/common/nlcc/targets.java
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/common/nlcc/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/common/nlcc/targets
+
+.PHONY: compile_cesdk_dep
+compile_cesdk_dep: compile_common_dep compile_cesdk compile_javasdk
+
+.PHONY: compile_cesdk
+compile_cesdk:
+	@echo "INFO: Compile CESDK"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/cesdk/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/cesdk/targets
+	cd $(NLBUILDROOT); make $(MAKE_CSFLAGS) TARGETSFILE=prod/pc/cesdk/targets.cs
+
+.PHONY: compile_javasdk
+compile_javasdk:
+	@echo "INFO: Compile JavaSDK"
+	cd $(NLBUILDROOT); make TARGETSFILE=prod/pc/javasdk/targets.java.fix
+
+.PHONY: compile_pc_dep
+compile_pc_dep: compile_common_dep compile_nlcc_dep compile_cesdk_dep compile_pc
+
+.PHONY: compile_pc
+compile_pc:
+	@echo "INFO: Compile PC"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/targets
+
+.PHONY: compile_kmc_dep
+compile_kmc_dep: compile_pc_dep compile_kmc
+
+.PHONY: compile_kmc
+compile_kmc:
+	@echo "INFO: Compile KMC"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/key_management/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/key_management/targets
+
+.PHONY: compile_pa_dep
+compile_pa_dep: compile_common_dep compile_pa
+
+.PHONY: compile_pa
+compile_pa:
+	@echo "INFO: Compile policy assistants"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pa/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pa/targets
+
+.PHONY: compile_lme_dep
+compile_lme_dep: compile_common_dep compile_cesdk_dep compile_lme
+
+.PHONY: compile_lme
+compile_lme: 
+	@echo "INFO: Compile LME"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/lme/targets
+
+.PHONY: compile_ne_dep
+compile_ne_dep: compile_common_dep compile_cesdk_dep compile_ne
+
+.PHONY: compile_ne
+compile_ne: 
+	@echo "INFO: Compile NE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/ne/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/ne/targets
+
+.PHONY: compile_oce_dep
+compile_oce_dep: compile_common_dep compile_cesdk_dep compile_oce
+
+.PHONY: compile_oce
+compile_oce:
+	@echo "INFO: Compile OCE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/oce/targets
+
+.PHONY: compile_oe_dep
+compile_oe_dep: compile_common_dep compile_cesdk_dep compile_oe
+
+.PHONY: compile_oe
+compile_oe: 
+	@echo "INFO: Compile OE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/oe/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/oe/targets
+
+.PHONY: compile_rde_dep
+compile_rde_dep: compile_common_dep compile_cesdk_dep compile_rde
+
+# Notes: To build driver using build/drvBuild.bat, we need to clear MAKEFLAGS=.
+#	cd $(NLBUILDROOT)/prod/pep/endpoint/rde/driver; make -f Makefile.local MAKEFLAGS=
+.PHONY: compile_rde
+compile_rde: 
+	@echo "INFO: Compile RDE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/rde/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/rde/targets
+	cd $(NLBUILDROOT)/prod/pep/endpoint/rde/driver; make -f Makefile.local MAKEFLAGS=
+
+# IMPORTANT: 32-bit pcs_rpc must be build before any target that includes se/service 
+# and nl_sysenc_lib
+.PHONY: compile_pcs_rpc_dep
+compile_pcs_rpc_dep: compile_pcs_rpc
+
+.PHONY: compile_pcs_rpc
+compile_pcs_rpc:
+	@echo "INFO: Compile pcs_rpc"
+	cd $(NLBUILDROOT)/prod/pep/endpoint/se/pcs_rpc; make $(MAKE_CFLAGS_32)
+
+.PHONY: compile_se_dep
+compile_se_dep: compile_common_dep compile_cesdk_dep compile_kmc_dep compile_se
+
+.PHONY: compile_se
+compile_se:
+	@echo "INFO: Compile SE"
+	cd $(NLBUILDROOT); make TARGETSFILE=prod/pep/endpoint/se/targets.java
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/se/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/se/targets
+
+.PHONY: compile_se_devtool_dep
+compile_se_devtool_dep: compile_se_devtool
+
+.PHONY: compile_se_devtool
+compile_se_devtool:
+	@echo "INFO: Compile SE Development Tools"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/se/targets.devtool
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/se/targets.devtool
+
+.PHONY: compile_wde_dep
+compile_wde_dep: compile_common_dep compile_cesdk_dep compile_wde
+
+.PHONY: compile_wde
+compile_wde: 
+	@echo "INFO: Compile WDE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/wde/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/wde/targets
+
+.PHONY: compile_devtool_dep
+compile_devtool_dep: compile_common_dep compile_devtool
+
+.PHONY: compile_devtool
+compile_devtool: 
+	@echo "INFO: Compile devtools"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=devtools/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=devtools/targets
+
+.PHONY: install
+install: install_product_dep install_support_dep
+
+.PHONY: compile_install_lib_dep
+compile_install_lib_dep: compile_install_lib 
+
+.PHONY: compile_install_lib
+compile_install_lib: 
+	@echo "INFO: Compile installer support libraries"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=install/support/targets
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=install/support/targets
+
+.PHONY: install_product_dep
+install_product_dep: install_pc_dep install_kmc_dep install_lme_dep install_ne_dep install_oce_dep install_oe_dep install_rde_dep install_se_dep install_wde_dep
+
+.PHONY: install_pc_dep
+install_pc_dep: compile_pc_dep compile_install_lib_dep compile_devtool_dep install_pc
+
+.PHONY: install_pc
+install_pc:
+	@echo "INFO: Create PC installer"
+#	cd $(NLBUILDROOT)/install/pc; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_kmc_dep
+install_kmc_dep: compile_kmc_dep compile_install_lib_dep compile_devtool_dep install_kmc
+
+.PHONY: install_kmc
+install_kmc:
+	@echo "INFO: Create KMC installer"
+	cd $(NLBUILDROOT)/install/KMService; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_lme_dep
+install_lme_dep: compile_lme_dep compile_install_lib_dep compile_devtool_dep install_lme
+
+.PHONY: install_lme
+install_lme:
+	@echo "INFO: Create LME installer"
+	cd $(NLBUILDROOT)/install/lme; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_ne_dep
+install_ne_dep: compile_ne_dep compile_install_lib_dep compile_devtool_dep install_ne
+
+.PHONY: install_ne
+install_ne:
+	@echo "INFO: Create NE installer"
+	cd $(NLBUILDROOT)/install/ne; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_oce_dep
+install_oce_dep: compile_oce_dep compile_install_lib_dep compile_devtool_dep install_oce
+
+.PHONY: install_oce
+install_oce: 
+	@echo "INFO: Create OCE installer"
+	cd $(NLBUILDROOT)/install/oce; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_oe_dep
+install_oe_dep: compile_oe_dep compile_pa_dep compile_install_lib_dep compile_devtool_dep install_oe
+
+.PHONY: install_oe
+install_oe: 
+	@echo "INFO: Create OE installer"
+	cd $(NLBUILDROOT)/install/oe; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_rde_dep
+install_rde_dep: compile_rde_dep compile_install_lib_dep compile_devtool_dep install_rde
+
+.PHONY: install_rde
+install_rde: 
+	@echo "INFO: Create RDE installer"
+	cd $(NLBUILDROOT)/install/rde; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_se_dep
+install_se_dep: compile_se_dep compile_install_lib_dep compile_devtool_dep install_se
+
+.PHONY: install_se
+install_se: 
+	@echo "INFO: Create SE installer"
+	cd $(NLBUILDROOT)/install/se; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_wde_dep
+install_wde_dep: compile_wde_dep compile_pa_dep compile_install_lib_dep compile_devtool_dep install_wde
+
+.PHONY: install_wde
+install_wde: 
+	@echo "INFO: Create WDE installer"
+	cd $(NLBUILDROOT)/install/wde; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_support_dep
+install_support_dep: install_cesdk_dep install_reskit_dep install_devtool_dep
+
+.PHONY: install_support
+install_support: install_cesdk install_reskit install_devtool
+
+.PHONY: install_cesdk_dep
+install_cesdk_dep: compile_common_dep compile_cesdk_dep compile_javasdk compile_install_lib_dep install_cesdk
+
+.PHONY: install_cesdk
+install_cesdk: 
+	@echo "INFO: Create CESDK"
+	cd $(NLBUILDROOT)/install/cesdk; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_reskit_dep
+install_reskit_dep: compile_common_dep compile_devtool_dep compile_install_lib_dep install_reskit
+
+.PHONY: install_reskit
+install_reskit: 
+	@echo "INFO: Create resource kit"
+	cd $(NLBUILDROOT)/install/reskit; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: install_devtool_dep
+install_devtool_dep: compile_common_dep compile_se_devtool_dep compile_devtool_dep compile_install_lib_dep install_devtool
+
+.PHONY: install_devtool
+install_devtool: 
+	@echo "INFO: Create developer toolkit"
+	cd $(NLBUILDROOT)/install/devtool; make $(MAKE_INSTALLFLAGS)
+
+.PHONY: clean
+clean: clean_output clean_product clean_devtools clean_install clean_find_leftover
+
+.PHONY: clean_output
+clean_output:
+	@echo "INFO: Clean log files and top-level bin directories"
+	rm -f $(NLBUILDROOT)/build.config $(NLBUILDROOT)/*.log
+	if [ -d $(NLBUILDROOT)/bin/release_win_x86 ] || [ -d $(NLBUILDROOT)/bin/debug_win_x86 ]		\
+		|| [ -d $(NLBUILDROOT)/bin/release_win_x64 ] || [ -d $(NLBUILDROOT)/bin/debug_win_x64 ]		\
+		|| [ -d $(NLBUILDROOT)/bin/dotnet ] || [ -d $(NLBUILDROOT)/bin/java ]						\
+		|| [ -d $(NLBUILDROOT)/bin/installer ]; then												\
+		rm -rf $(NLBUILDROOT)/bin ;																	\
+	fi
+
+.PHONY: clean_product
+clean_product: clean_common clean_nlcc clean_cesdk clean_javasdk clean_pc clean_kmc clean_pa clean_lme clean_oce clean_oe clean_rde clean_se clean_wde
+
+.PHONY: clean_common
+clean_common:
+	@echo "INFO: Clean common"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/common/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/common/targets clean
+
+.PHONY: clean_nlcc
+clean_nlcc:
+	@echo "INFO: Clean NLCC"
+	cd $(NLBUILDROOT); make TARGETSFILE=prod/common/nlcc/targets.java clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/common/nlcc/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/common/nlcc/targets clean
+
+.PHONY: clean_cesdk
+clean_cesdk:
+	@echo "INFO: Clean CESDK"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/cesdk/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/cesdk/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CSFLAGS) TARGETSFILE=prod/pc/cesdk/targets.cs clean
+
+.PHONY: clean_javasdk
+clean_javasdk:
+	@echo "INFO: Clean JavaSDK"
+	cd $(NLBUILDROOT); TARGETSFILE=prod/pc/javasdk/targets.java clean
+
+.PHONY: clean_pc
+clean_pc:
+	@echo "INFO: Clean PC"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/targets clean
+
+.PHONY: clean_kmc
+clean_kmc:
+	@echo "INFO: Clean KMC"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pc/key_management/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pc/key_management/targets clean
+
+.PHONY: clean_pa
+clean_pa:
+	@echo "INFO: Clean policy assistants"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pa/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pa/targets clean
+
+.PHONY: clean_lme
+clean_lme:
+	@echo "INFO: Clean LME"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/lme/targets clean
+
+.PHONY: clean_ne
+clean_ne:
+	@echo "INFO: Clean NE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/ne/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/ne/targets clean
+
+.PHONY: clean_oce
+clean_oce:
+	@echo "INFO: Clean OCE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/oce/targets clean
+
+.PHONY: clean_oe
+clean_oe:
+	@echo "INFO: Clean OE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/oe/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/oe/targets clean
+
+.PHONY: clean_rde
+clean_rde:
+	@echo "INFO: Clean RDE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/rde/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/rde/targets clean
+
+.PHONY: clean_se
+clean_se:
+	@echo "INFO: Clean SE"
+	cd $(NLBUILDROOT); make TARGETSFILE=prod/pep/endpoint/se/targets.java clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/se/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/se/targets clean
+
+.PHONY: clean_wde
+clean_wde:
+	@echo "INFO: Clean WDE"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=prod/pep/endpoint/wde/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=prod/pep/endpoint/wde/targets clean
+
+.PHONY: clean_devtools
+clean_devtools:
+	@echo "INFO: Clean devtools"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=devtools/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=devtools/targets clean
+
+.PHONY: clean_install
+clean_install: clean_install_lib clean_install_product
+
+.PHONY: clean_install_lib
+clean_install_lib:
+	@echo "INFO: Clean installer support libraries"
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_64) TARGETSFILE=install/support/targets clean
+	cd $(NLBUILDROOT); make $(MAKE_CFLAGS_32) TARGETSFILE=install/support/targets clean
+
+.PHONY: clean_install_product
+clean_install_product:
+	@echo "INFO: Clean installers"
+	cd $(NLBUILDROOT); make $(MAKE_INSTALLFLAGS) TARGETSFILE=install/targets clean
+
+.PHONY: clean_find_leftover
+clean_find_leftover:
+	@echo "INFO: Check for leftovers"
+	find $(NLBUILDROOT) -name "*.exe" -o -name "*.dll" -o -name "*.msi" -o -name "*.o" -o -name "*.obj" \
+		-o -name "*.pdb" -o -name "*.ncb" -o -name "*.suo"

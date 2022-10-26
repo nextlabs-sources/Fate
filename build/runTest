@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	Run a test.
+
+
+# Check for errors
+if [ $# -eq 0 ]; then
+	echo "usage: runTest <test-name>"
+	exit 0
+fi
+
+# Run test
+if [ "$1" == "updateVersionInfo_vsproj" ]; then
+	perl ./updateVersionInfo_vsproj.pl C:/nightly/current/D_SiriusR2/prod/pep/endpoint/oe/msoPEP/src/msoPEP.rc \
+		C:/nightly/current/D_SiriusR2/prod/pep/endpoint/oe/msoPEP/Makefile.inc dev "x86"
+elif [ "$1" == "tbd" ]; then
+	echo "TBD"
+fi

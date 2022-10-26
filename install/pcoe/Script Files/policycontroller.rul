@@ -1,0 +1,334 @@
+#include "include/common.h"  
+#include "include/logging.h"
+#include "policycontroller.h"
+#include "include/servicecontrol.h"
+#include "setupfiles.h"
+#include "ShutDownRunningApp.rul"
+ 
+/*
+ *  Validate specified ICENet Server Location
+ */
+function INT ValidateIcenetServerLocation(hMSI)
+	WSTRING icenetServerLocation;
+	WSTRING label;
+	WSTRING invalidHostMessage;
+	WSTRING invliadPortMessage;
+	INT result;	
+begin          
+	 WriteToLogFile(hMSI, "Begin ValidateIcenetServerLocation()");
+	 
+	 icenetServerLocation = GetProperty(hMSI, ICENET_SERVER_LOCATION_PROP_NAME);
+	 label = IDS_ICENET_LOCATION_LABEL;
+	 invalidHostMessage = ERR_INVALID_ICENET_SERVER_LOCATION_MESSAGE;
+	 invliadPortMessage = ERR_INVALID_PORT_NUMBER_MESSAGE;
+	 result = ValidateLocationInput(hMSI, label, icenetServerLocation, invalidHostMessage, DEFAULT_WEB_SERVICE_PORT, invliadPortMessage, TRUE);
+	 if (result == 0) then
+	 	SetProperty(hMSI, ICENET_SERVER_LOCATION_PROP_NAME, icenetServerLocation);
+	 endif;                
+	 
+	 WriteToLogFile(hMSI, "End ValidateIcenetServerLocation()");
+	  
+	 return ERROR_SUCCESS;
+end;   
+
+/*
+ * Discover and populate the ICEnet server dropdown control
+ */
+function INT DiscoverIcenetServers(hMSI)
+    WSTRING firstServer;
+    INT result;
+    LIST serverList;
+begin  
+  
+	WriteToLogFile(hMSI, "Begin DiscoverIcenetServers()");
+           
+	if (GetProperty(hMSI, NEED_DISCOVERY_PROP_NAME) == "1") then   
+ 
+		WriteToLogFile(hMSI, "Discovery Required");
+		   
+		serverList = ListCreate(STRINGLIST);  		
+
+		result = DiscoverIcenetServersLocations(hMSI, ICENET_SERVER_LOCATION_PROP_NAME, serverList);
+		if (result != ERROR_SUCCESS) then    
+			WriteToLogFile(hMSI, "Warning - Failed to discover ICENet servers.  ICENet server dropdown will be blank.");
+		else      
+			//Sets the first item in the list
+			result = ListGetFirstString (serverList, firstServer); 
+			if (result != 0) then                                   
+				NumToStr(firstServer, result);
+				WriteToLogFile(hMSI, "Warning - Failed to retrieve first ICENet server from server list.  Dropdown will not be set with first item.");	
+			else     
+				SetProperty(hMSI, ICENET_SERVER_LOCATION_PROP_NAME, firstServer);
+			endif; 
+			SetProperty(hMSI, NEED_DISCOVERY_PROP_NAME, "0");			
+		endif;   
+
+		ListDestroy(serverList);
+	endif;         
+	  
+	WriteToLogFile(hMSI, "End DiscoverIcenetServers()");
+
+	return ERROR_SUCCESS;
+end;
+
+/*
+* Create and configure the logging.properties file
+*/
+function INT CreateLoggingPropertiesFile(hMSI, installDir)
+	INT result;
+	STRING resultAsString;
+	STRING loggingPropertiesFile;
+	STRING installDirModified;	
+begin
+	loggingPropertiesFile = installDir ^ LOGGING_PROPERTIES_FILE;
+	result = CopyFile(LOGGING_PROPERTIES_TEMPLATE_FILE, loggingPropertiesFile);
+    	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+ 		WriteToLogFile(hMSI, "Error copying file " + LOGGING_PROPERTIES_TEMPLATE_FILE + " to " + loggingPropertiesFile + ". Error code: " + resultAsString);
+ 		return result;
+    endif;
+      
+    installDirModified = installDir;
+    StrRemoveLastSlash(installDirModified);
+    StrReplace(installDirModified, '\\', '/', 0);
+	ReplaceInFile(hMSI, loggingPropertiesFile, BLUEJUNGLE_HOME_TOKEN, installDirModified, FALSE);
+    
+	// Set Permissions on config directory and logging.properties for EDP Manager
+	SetObjectPermissions(installDir, IS_PERMISSIONS_TYPE_FOLDER, "", "Power Users", FILE_ADD_FILE | FILE_APPEND_DATA | FILE_LIST_DIRECTORY | GENERIC_READ | GENERIC_WRITE, 0);
+	SetObjectPermissions(installDir ^ CONFIG_PATH, IS_PERMISSIONS_TYPE_FOLDER, "", "Power Users", FILE_LIST_DIRECTORY | GENERIC_READ | GENERIC_WRITE, IS_PERMISSIONS_OPTION_NO_APPLYDOWN);
+	SetObjectPermissions(loggingPropertiesFile, IS_PERMISSIONS_TYPE_FILE, "", "Power Users", DELETE | GENERIC_READ | GENERIC_WRITE, 0);
+
+    //Create an empty log directory
+    CreateDir(installDir ^ "agentLog");
+    
+    return ERROR_SUCCESS;	
+end;
+
+          
+/*
+ * Create a configure the comm profile
+ */
+function INT CreateCommProfile(hMSI, installDir, icenetLocation)
+	INT result; 
+	STRING resultAsString;      
+	STRING icenetLocationPort;   
+	STRING commProfileFile;
+begin                          
+	NumToStr(icenetLocationPort, GetPortNumber(hMSI, icenetLocation, DEFAULT_WEB_SERVICE_PORT));
+
+    commProfileFile = installDir ^ COMM_PROFILE_FILE;
+	result = CopyFile(COMM_PROFILE_TEMPLATE_FILE, commProfileFile);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+ 		WriteToLogFile(hMSI, "Error copying file " + COMM_PROFILE_TEMPLATE_FILE + " to " + commProfileFile + ". Error code: " + resultAsString);
+ 		return result;
+    endif;
+	ReplaceInFile(hMSI, commProfileFile, ICENET_HOST_TOKEN, GetHostName(hMSI, icenetLocation), FALSE);
+	ReplaceInFile(hMSI, commProfileFile, ICENET_PORT_TOKEN, icenetLocationPort, FALSE);
+ 
+    return ERROR_SUCCESS;
+end;
+
+
+/*
+ * Create and configure the online help file
+ */
+function INT CreateOnlineHelp(hMSI, installDir, icenetLocation)
+	INT result;    
+	INT finalResult;
+	STRING resultAsString;         
+	STRING onlineHelpIndexFile;
+	STRING onlineHelpInformationFile;
+	STRING onlineHelpNotificationsFile;
+begin               
+	finalResult = ERROR_SUCCESS;
+	           
+	onlineHelpIndexFile = installDir ^ ONLINE_HELP_INDEX_FILE;
+	result = CopyFile(ONLINE_HELP_INDEX_TEMPLATE_FILE, onlineHelpIndexFile);
+	if (result == ERROR_SUCCESS) then         
+		ReplaceInFile(hMSI, onlineHelpIndexFile, ICENET_HOST_TOKEN, GetHostName(hMSI, icenetLocation), FALSE);
+	else
+		NumToStr(resultAsString, result);
+ 		WriteToLogFile(hMSI, "Error copying file " + ONLINE_HELP_INDEX_TEMPLATE_FILE + " to " + onlineHelpIndexFile + ". Error code: " + resultAsString);
+ 		finalResult = result;
+    endif;  
+    
+	onlineHelpInformationFile = installDir ^ ONLINE_HELP_INFORMATION_FILE;
+	result = CopyFile(ONLINE_HELP_INFORMATION_TEMPLATE_FILE, onlineHelpInformationFile);
+	if (result == ERROR_SUCCESS) then         
+		ReplaceInFile(hMSI, onlineHelpInformationFile, ICENET_HOST_TOKEN, GetHostName(hMSI, icenetLocation), FALSE);
+	else
+		NumToStr(resultAsString, result);
+ 		WriteToLogFile(hMSI, "Error copying file " + ONLINE_HELP_INFORMATION_TEMPLATE_FILE + " to " + onlineHelpInformationFile + ". Error code: " + resultAsString);
+ 		finalResult = result;
+    endif;
+    
+	onlineHelpNotificationsFile = installDir ^ ONLINE_HELP_NOTIFICATIONS_FILE;
+	result = CopyFile(ONLINE_HELP_NOTIFICATIONS_TEMPLATE_FILE, onlineHelpNotificationsFile);
+	if (result == ERROR_SUCCESS) then         
+		ReplaceInFile(hMSI, onlineHelpNotificationsFile, ICENET_HOST_TOKEN, GetHostName(hMSI, icenetLocation), FALSE);
+	else
+		NumToStr(resultAsString, result);
+ 		WriteToLogFile(hMSI, "Error copying file " + ONLINE_HELP_NOTIFICATIONS_TEMPLATE_FILE + " to " + onlineHelpNotificationsFile + ". Error code: " + resultAsString);
+ 		finalResult = result;
+    endif;        
+	                     
+	// We may have lot an error or 2, but that's not vital for online help.  The log is available with all errors if necessary                     
+    return finalResult;
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateUninstallPassword(hMSI)
+	INT result; 
+    STRING resultAsString;  
+    STRING UNINSTALL_PASSWORD;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateAdministrationPassword()");  
+	UNINSTALL_PASSWORD=GetProperty(hMSI,"UNINSTALL_PASSWORD");
+	if (UNINSTALL_PASSWORD = "") then
+		MessageBox("Please input password !!", INFORMATION);
+	    DenyNextDialog(hMSI);
+	    return ERROR_SUCCESS;
+	endif;
+	
+ 	result = StopService(hMSI);             
+    
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password ! \nThe password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);
+	 		return result;	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	  
+	 		return result;                                          				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end;   
+         
+/*
+* Note that all files created here are listed in the RemoveFile table for removal on uninstall
+*/
+function INT PostInstall(hMSI)
+	INT result;           
+	INT customActionDataListId;
+	STRING resultAsString;
+	STRING installDirRoot;  
+	STRING installDir; 
+	STRING icenetLocation;  
+begin
+  
+    customActionDataListId = ListCreate(STRINGLIST);
+
+    result = StrGetTokens(customActionDataListId, GetProperty(hMSI, "CustomActionData"), ";");   
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to retrieve custom action data in PostInstall.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+		return result;
+	endif;
+	
+	ListGetFirstString(customActionDataListId, installDirRoot);         
+	ListGetNextString(customActionDataListId, icenetLocation);
+	           
+	installDir = getPolicyControllerDirectory(installDirRoot);
+		
+	result = CreateCommProfile(hMSI, installDir, icenetLocation);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to create initial communication profile.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+		return result;
+	endif; 
+	        
+	result = CreateOnlineHelp(hMSI, installDir, icenetLocation);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to create Online Help File.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+		// If Online Help Creation Fails, don't fail install
+		result = ERROR_SUCCESS;
+	endif; 
+	
+	result = CreateLoggingPropertiesFile(hMSI, installDir);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to create logging properties file.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+		return result;
+	endif;   
+	        
+	return result;
+end;            
+
+/*
+ * Start the Obligation Manager process
+ */                              
+function INT StartObligationManager(hMSI)
+	STRING obligationManagerDir;                                           
+	STRING obligationManagerPath;
+	NUMBER pathSize;
+begin  
+	if (!ProcessRunning("ObligationManager")) then
+		MsiGetTargetPath(hMSI, "BIN", obligationManagerDir, pathSize);
+		obligationManagerPath = obligationManagerDir ^ "ObligationManager.exe";
+		LongPathToQuote(obligationManagerPath, TRUE);
+		LaunchApplication(obligationManagerPath, "", "", SW_HIDE, 0, LAAW_OPTION_NOWAIT); 
+	endif;
+end;
+                                  
+/*
+ * Stop tye Obligation Manager process
+ */                              
+function INT StopObligationManager(hMSI)
+begin       
+	if (ProcessRunning("ObligationManager")) then  
+		ProcessEnd("ObligationManager");  
+	endif;    
+end;
+     
+/*
+ *  Retrieve the Policy Controller Directory
+ */                                         
+function STRING getPolicyControllerDirectory(installDir)
+begin    
+	return installDir ^ "Policy Controller";
+end;   
+
+/* Remove the files which are used for registration
+ *
+ */
+ function INT RemoveRegsitrationFiles(hMSI)
+ WSTRING installDir;
+ WSTRING configDir; 
+ WSTRING securityDir;
+ WSTRING file;
+ begin
+ 	installDir = getPolicyControllerDirectory(INSTALLDIR);
+ 	configDir = installDir ^ "config";  
+ 	securityDir = configDir ^ "security";
+ 	file = configDir ^ "registration.info";
+ 	DeleteFile(file);
+ 	file = installDir ^ "bundle.bin";
+ 	DeleteFile(file); 
+ 	file = securityDir ^ "agent-keystore.jks";
+ 	DeleteFile(file); 
+ 	file = securityDir ^ "agent-truststore.jks";
+ 	DeleteFile(file); 
+ 	file = securityDir ^ "agent-secret-keystore.jks";
+ 	DeleteFile(file); 
+ end;
+ 

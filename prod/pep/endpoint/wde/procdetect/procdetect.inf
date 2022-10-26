@@ -1,0 +1,77 @@
+;;;
+;;; Copyright (c) NextLabs, Inc. All rights reserved
+;;;
+;;; Abstract:
+;;; NextLabs Encrypting File System driver install configuration.
+;;;
+
+[Version]
+signature			=	"$Windows NT$"
+Provider			=	%NextLabs%
+DriverPackageType	=	KernelService
+DriverVer			=	12/05/2013,1.0.0.1000
+
+[DestinationDirs]
+DefaultDestDir	        = 12
+PROCDETECT.DriverFiles	= 12 			;%windir%\system32\drivers
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall]
+OptionDesc          = %PROCDETECTServiceDesc%
+CopyFiles           = PROCDETECT.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %PROCDETECTServiceName%,,PROCDETECT.Service
+
+;;
+;; Default uninstall sections
+;;
+
+[DefaultUninstall]
+DelFiles   = PROCDETECT.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = procdetect,0x200		; Flags note to stop service first
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles.x86]
+procdetect.sys  = 1
+
+[SourceDisksFiles.AMD64]
+procdetect.sys  = 1
+
+;
+; Services Section
+;
+
+[PROCDETECT.Service]
+DisplayName		= %PROCDETECTServiceName%
+Description		= %PROCDETECTServiceDesc%
+ServiceBinary	= %12%\procdetect.sys  	;%windir%\system32\drivers\procdetect.sys
+ServiceType     = 2               			;SERVICE_KERNEL_DRIVER
+StartType		= 2							;SERVICE_SYSTEM_START
+ErrorControl	= 1							;SERVICE_ERROR_NORMAL
+
+;
+; Copy Files
+;
+
+[PROCDETECT.DriverFiles]
+procdetect.sys
+
+;;
+;; String Section
+;;
+
+[Strings]
+NextLabs            	= "NextLabs, Inc."
+PROCDETECTServiceDesc	= "NextLabs Procdetect Driver"
+PROCDETECTServiceName 	= "procdetect"
+PROCDETECTRegistry    	= "SYSTEM\CurrentControlSet\services\procdetect"
+
+

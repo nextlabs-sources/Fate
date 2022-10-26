@@ -1,0 +1,5 @@
+EXPORTS
+	nl_crypto_initialize
+	nl_crypto_shutdown
+	DllInitialize PRIVATE
+	DllUnload PRIVATE

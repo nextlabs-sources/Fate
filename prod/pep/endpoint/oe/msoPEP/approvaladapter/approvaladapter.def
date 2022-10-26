@@ -1,0 +1,8 @@
+; approvaladapter.def : Declares the module parameters.
+
+LIBRARY      "approvaladapter.DLL"
+
+EXPORTS
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer PRIVATE
+	RepositoryUpload

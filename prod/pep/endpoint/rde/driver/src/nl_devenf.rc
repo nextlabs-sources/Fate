@@ -1,0 +1,30 @@
+#include <windows.h>
+#include <ntverp.h>
+
+#define VER_FILETYPE                    VFT_DRV
+#define VER_FILESUBTYPE                 VFT2_DRV_SYSTEM
+#define VER_FILEDESCRIPTION_STR "Removable Device Enforcer for Microsoft Windows"
+#define VER_INTERNALNAME_STR            "nl_devenf.sys"
+#define VER_ORIGINALFILENAME_STR        "nl_devenf.sys"
+
+#define VER_FILEVERSION 6,2,0,0
+#define VER_FILEVERSION_STR "6.2.0.0 (03/11/2013)"
+
+#undef VER_PRODUCTVERSION
+#define VER_PRODUCTVERSION              VER_FILEVERSION
+
+#undef VER_PRODUCTVERSION_STR
+#define VER_PRODUCTVERSION_STR          VER_FILEVERSION_STR
+
+#define VER_LEGALCOPYRIGHT_STR          "Copyright (C) 2012 NextLabs, Inc. All rights reserved."
+
+#undef VER_COMPANYNAME_STR
+#define VER_COMPANYNAME_STR             "NextLabs, Inc."
+
+#undef VER_PRODUCTNAME_STR
+#define VER_PRODUCTNAME_STR "Removable Device Enforcer for Microsoft Windows"
+
+#if defined(__BUILDMACHINE_LEN__)
+#undef __BUILDMACHINE_LEN__
+#endif
+#include "common.ver"

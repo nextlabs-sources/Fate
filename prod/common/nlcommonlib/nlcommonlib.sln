@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nlcommonlib", "nlcommonlib.vcproj", "{5BE7FA70-884A-42D8-8B18-8BB6D0603958}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcproj", "{79F93673-C830-4936-98B2-7C130F044752}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nlstorage_service", "..\..\pep\common\nlstorage_service\nlstorage_service.vcproj", "{D2941514-152B-4027-A8DD-B620B934A860}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BE7FA70-884A-42D8-8B18-8BB6D0603958}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5BE7FA70-884A-42D8-8B18-8BB6D0603958}.Debug|Win32.Build.0 = Debug|Win32
+		{5BE7FA70-884A-42D8-8B18-8BB6D0603958}.Release|Win32.ActiveCfg = Release|Win32
+		{5BE7FA70-884A-42D8-8B18-8BB6D0603958}.Release|Win32.Build.0 = Release|Win32
+		{79F93673-C830-4936-98B2-7C130F044752}.Debug|Win32.ActiveCfg = Debug|Win32
+		{79F93673-C830-4936-98B2-7C130F044752}.Debug|Win32.Build.0 = Debug|Win32
+		{79F93673-C830-4936-98B2-7C130F044752}.Release|Win32.ActiveCfg = Release|Win32
+		{79F93673-C830-4936-98B2-7C130F044752}.Release|Win32.Build.0 = Release|Win32
+		{D2941514-152B-4027-A8DD-B620B934A860}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2941514-152B-4027-A8DD-B620B934A860}.Debug|Win32.Build.0 = Debug|Win32
+		{D2941514-152B-4027-A8DD-B620B934A860}.Release|Win32.ActiveCfg = Release|Win32
+		{D2941514-152B-4027-A8DD-B620B934A860}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

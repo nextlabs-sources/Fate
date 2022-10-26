@@ -1,0 +1,7 @@
+; adaptermanager.def : Declares the module parameters.
+
+LIBRARY    
+EXPORTS
+	RepositoryAdaptersManager
+	RepositoryAdaptersManagerEx
+	ReleaseRepositoryAdaptersResource

@@ -1,0 +1,13 @@
+<mso:customUI xmlns:x1="NxtOfficePEP.NxtOfficeSink.1" xmlns:mso="http://schemas.microsoft.com/office/2006/01/customui"><mso:ribbon><mso:qat><mso:sharedControls>
+  <mso:control idQ="mso:FileNewDefault" visible="false"/>
+  <mso:control idQ="mso:FileOpen" visible="false"/>
+  <mso:control idQ="mso:FileSave" visible="true"/>
+  <mso:control idQ="mso:FileSendAsAttachment" visible="false"/>
+  <mso:control idQ="mso:FilePrintQuick" visible="false"/>
+  <mso:control idQ="mso:FilePrintPreview" visible="false"/>
+  <mso:control idQ="mso:SpellingAndGrammar" visible="false"/>
+  <mso:control idQ="mso:Undo" visible="true"/>
+  <mso:control idQ="mso:RedoOrRepeat" visible="true"/>
+  <mso:control idQ="mso:TableDrawTable" visible="false"/>
+  <mso:control idQ="x1:NextLabsButton" visible="true"/>
+</mso:sharedControls></mso:qat></mso:ribbon></mso:customUI>

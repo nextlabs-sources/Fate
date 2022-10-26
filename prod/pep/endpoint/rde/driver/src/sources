@@ -1,0 +1,30 @@
+TARGETNAME=nl_devenf
+TARGETTYPE=DRIVER
+DRIVERTYPE=FS
+LINKER_FLAGS=/map
+
+KMDF_VERSION_MAJOR=1
+KMDF_VERSION_MINOR=9
+UMDF_MINOR_VERSION=9
+
+
+#if $(PROCESSOR_ARCHITECTURE)=="x86"
+KMDFLIB_PATH=$(BASEDIR)\lib\wdf\kmdf\i386\$(KMDF_VERSION_MAJOR).$(KMDF_VERSION_MINOR)
+#else
+KMDFLIB_PATH=$(BASEDIR)\lib\wdf\kmdf\amd64\$(KMDF_VERSION_MAJOR).$(KMDF_VERSION_MINOR)
+#endif
+
+
+INCLUDES=$(INCLUDES);..\..\inc;$(KMDF_INC_PATH)\$(KMDF_VERSION_MAJOR).$(KMDF_VERSION_MINOR)
+
+TARGETLIBS=$(TARGETLIBS) 						\
+           $(KMDFLIB_PATH)\WdfDriverEntry.lib 	\
+           $(KMDFLIB_PATH)\WdfLdr.lib 			\
+           $(DDK_LIB_PATH)\Rtlver.lib 			\
+           $(DDK_LIB_PATH)\Wdmsec.lib
+
+C_DEFINES=$(C_DEFINES)
+
+SOURCES =	nl_devenf.c		\
+			nl_devenf.rc
+			

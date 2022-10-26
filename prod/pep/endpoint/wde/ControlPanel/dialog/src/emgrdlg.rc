@@ -1,0 +1,360 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "..\include\resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "..\\include\\resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5, 5, 1, 0
+ PRODUCTVERSION 5, 5, 1, 0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "NextLabs, Inc."
+            VALUE "FileDescription", "Desktop Enforcer for Microsoft Windows (x86)"
+            VALUE "FileVersion", "5.5.1.0 (11.160.1338DX/v200-kzhou-kzhou-2011.06.09-13:38)"
+            VALUE "LegalCopyright", "Copyright (C) 2019 NextLabs, Inc. All rights reserved."
+            VALUE "ProductName", "Desktop Enforcer for Microsoft Windows"
+            VALUE "ProductVersion", "5.5.1.0 (11.160.1338DX/v200-kzhou-kzhou-2011.06.09-13:38)"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_NOTIFICATIONS DIALOGEX 0, 2, 294, 228
+STYLE DS_SETFONT | WS_CHILD | WS_SYSMENU | DS_CONTROL
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST_NOTIFICATIONS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,24,275,106
+    PUSHBUTTON      "Refresh",IDC_REFRESH,244,8,40,11
+    LTEXT           "Notifications",IDC_NOTIFICATIONS_LABEL,9,7,90,12
+    LTEXT           "Notification detail",IDC_NOTIFICATIONDETAIL,9,137,58,8
+    LTEXT           "Description:",IDC_STATIC,9,151,40,8
+    LTEXT           "Enforcement:",IDC_STATIC,9,170,45,8
+    LTEXT           "Action:",IDC_STATIC,9,182,24,8
+    LTEXT           "static",IDC_DESCRIPTION,60,151,222,16
+    LTEXT           "static",IDC_ENFORCEMENT,60,170,176,8
+    LTEXT           "static",IDC_ACTION,60,182,117,8
+    LTEXT           "File:",IDC_STATIC,9,194,15,8
+    EDITTEXT        IDC_FILEPATH,60,194,223,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+END
+
+IDD_SUMMARY DIALOGEX 0, 2, 294, 228
+STYLE DS_SETFONT | WS_CHILD | WS_SYSMENU | DS_CONTROL
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST_INSTALLED_COMPONENT,"SysListView32",LVS_REPORT | LVS_OWNERDRAWFIXED | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,22,275,127
+    LTEXT           "Last Policy or Enrollment Update:",IDC_STATIC,9,173,129,18
+    LTEXT           "Retrieving...",IDC_STATIC_LAST_BUNDLE_TIME,147,173,112,14
+    LTEXT           "Installed Components",IDC_INSTALLEDCOMPONENTS,9,5,202,12
+    LTEXT           "Heartbeat",IDC_HEARTBEAT,9,160,33,8
+    CONTROL         "",IDC_HEARTBEATLINE,"Static",SS_ETCHEDVERT,50,168,232,1
+END
+
+IDD_SETTING DIALOGEX 0, 2, 294, 228
+STYLE DS_SETFONT | WS_CHILD | WS_SYSMENU | DS_CONTROL
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    CONTROL         "Enable Logging",IDC_CHECK_ENABLE_LOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,26,88,10
+    EDITTEXT        IDC_EDIT_PWD,151,27,65,11,ES_PASSWORD | ES_AUTOHSCROLL | WS_DISABLED
+    CONTROL         "Show all",IDC_RADIO_ALL,"Button",BS_AUTORADIOBUTTON | WS_GROUP,9,76,128,10
+    CONTROL         "Show only policy blocking",IDC_RADIO_ONLY_BLOCK,"Button",BS_AUTORADIOBUTTON,9,86,145,10
+    CONTROL         "Don't show notifications",IDC_RADIO_SUPRESS,"Button",BS_AUTORADIOBUTTON,9,96,146,10
+    CONTROL         "Show notification until closed",IDC_RADIO_REQUIRE_USER_CLOSE,
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP,9,138,162,10
+    CONTROL         "Show notification for:",IDC_RADIO_DISPLAY_DURATION,
+                    "Button",BS_AUTORADIOBUTTON,9,148,91,10
+    CONTROL         "Revert to default",IDC_RADIO_DEFAULT_DURATION,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,9,174,69,10
+    COMBOBOX        IDC_COMBO_DISPLAY_DURATION,105,148,64,47,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Password:",IDC_STATIC_PWD,104,28,44,9,WS_DISABLED
+    LTEXT           "Logging",IDC_LOGGINGLABEL,9,11,27,8
+    LTEXT           "Notifications",IDC_NOTIFICATIONSLABEL,9,60,42,8
+    LTEXT           "Duration",IDC_DURATIONLABEL,9,122,28,8
+END
+
+IDD_MAINDLG DIALOGEX 0, 0, 302, 247
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enterprise Data Protection - Control Panel"
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_FEATURES_TAB,"SysTabControl32",TCS_OWNERDRAWFIXED,4,2,295,225
+    DEFPUSHBUTTON   "OK",IDOK,208,231,40,11
+    PUSHBUTTON      "Cancel",IDC_CANCEL,259,231,40,11
+END
+
+IDD_HELP DIALOGEX 0, 0, 234, 127
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Help About"
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,172,108,46,12
+    LTEXT           "NextLabs EDP Control Panel is an application for managing Enterprise Data Protection.",IDC_STATIC,16,11,203,27
+    LTEXT           "Name: EDP Control Panel",IDC_STATIC,16,41,206,8
+    LTEXT           "Version:",IDC_STATIC_VERSION,16,56,202,8
+    LTEXT           "Date Installed:",IDC_STATIC_DATE,16,71,206,8
+    LTEXT           "Visit NextLabs on the web at: ",IDC_STATIC,16,89,119,8
+    LTEXT           "www.nextlabs.com",IDC_WEBLINK,143,89,82,8
+END
+
+IDD_HELP_MODALESS DIALOGEX 0, 0, 234, 127
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Help About"
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,172,108,46,12
+    LTEXT           "NextLabs EDP Control Panel is an application for managing Enterprise Data Protection.",IDC_STATIC,16,11,203,27
+    LTEXT           "Name: EDP Control Panel",IDC_STATIC,16,41,206,8
+    LTEXT           "Version:",IDC_STATIC_VERSION,16,56,202,8
+    LTEXT           "Date Installed:",IDC_STATIC_DATE,16,71,206,8
+    LTEXT           "Visit NextLabs on the web at: ",IDC_STATIC,16,89,119,8
+    LTEXT           "www.nextlabs.com",IDC_WEBLINK,143,89,82,8
+END
+
+IDD_STOPENFORCER DIALOGEX 0, 0, 221, 77
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enterprise Data Protection - Stop Enforcer"
+FONT 10, "Arial", 400, 0, 0x0
+BEGIN
+    LTEXT           "Please provide the Enterprise Data Protection password.",IDC_STOPPC_TITLE,15,14,189,8
+    LTEXT           "Password:",IDC_STOPPC_PASSWORD,15,31,37,8
+    EDITTEXT        IDC_EDIT_STOP_ENF_PWD,60,30,62,12,ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "Cancel",IDC_BUTTON_CANCEL_STOPENF,176,56,39,14
+    DEFPUSHBUTTON   "OK",IDC_BUTTON_SUBMIT_STOPENF,128,56,39,14
+    LTEXT           "Stopping Policy Controller...",IDC_STOPPINGPC_HINT,15,14,189,8,NOT WS_VISIBLE | WS_TABSTOP
+    CONTROL         "",IDC_STOPPINGPC_PROGRESS,"msctls_progress32",PBS_MARQUEE | NOT WS_VISIBLE | WS_BORDER,15,30,188,14
+END
+
+IDD_PCPWD DIALOGEX 0, 0, 178, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Warning"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDC_CLOSE,120,69,50,14
+    LTEXT           "The password you entered is not valid.",IDC_ERROR_TEXT,13,14,150,46
+END
+
+IDD_PCUNEXPECT DIALOGEX 0, 0, 179, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "EDP Control Panel Warning"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDC_CLOSE,122,68,50,14
+    LTEXT           "An unexpected error occurred. Please try again later.",IDC_STATIC,10,14,155,25
+END
+
+IDD_PROGRESSDLG DIALOGEX 0, 0, 189, 76
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enterprise Data Protection - Control Panel"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Show status",IDC_SHOWSTATUS,7,17,175,14
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",PBS_MARQUEE | WS_BORDER,7,38,175,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SUMMARY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        TOPMARGIN, 7
+    END
+
+    IDD_SETTING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        TOPMARGIN, 7
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 298
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 244
+    END
+
+    IDD_HELP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 227
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 120
+    END
+
+    IDD_STOPENFORCER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 214
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 70
+    END
+
+    IDD_PCPWD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_PCUNEXPECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 172
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_PROGRESSDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 182
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_SHRUNK              BITMAP                  "..\\res\\expand.bmp"
+IDB_EXPANDED            BITMAP                  "..\\res\\shrink.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_LOGO                ICON                    "..\\res\\dlp.ico"
+IDI_EDPMHELP            ICON                    "..\\res\\help.ico"
+IDI_SHRUNK              ICON                    "..\\res\\tri2.ico"
+IDI_EXPAND              ICON                    "..\\res\\tri3.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_SAVESETTINGS        "Start to saving settings..."
+    IDS_SAVEDISPLAYLEVEL    "Saving display level setting..."
+    IDS_SAVEDURATION        "Saving bubble duration setting..."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CONNECTPC           "Connecting Policy Controller..."
+    IDS_STOPPC              "Stopping Policy Controller..."
+    IDS_SAVEVERBOSELOGGING  "Saving verbose log setting..."
+    IDS_STARTPC             "Starting Policy Controller..."
+    IDS_STOPPC_NOPERMISSION "The current account does not have sufficient privilege to stop PC."
+    IDS_EMPTYPASSWORD       "The password must not be empty."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

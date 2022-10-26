@@ -1,0 +1,318 @@
+#!/bin/sh
+
+# Look at the targets file and build everything
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR, which is the root of the Enforcers";
+    exit;
+fi
+
+what="-a";                      # i.e. compile all
+product=
+type=
+kver=
+
+while getopts "vukap" o; 
+do
+    case "$o" in
+    k)    what="-"$o;;
+    u)    what="-"$o;;
+    v)    what="-"$o;;
+    a)    what="-"$o;;
+    p)    what="-"$o;;
+    esac
+done
+
+numopts=$(($OPTIND-1));
+numargs=$(($#-$numopts));
+
+
+if [ $numargs -lt 2 ] || [ $numargs -gt 3 ] ; then
+  echo "$0 [-ukv] product release|debug [kernel-version]"
+  echo
+  echo "   -u                compile user modules only for product"
+  echo "   -k                compile kernel modules only for product"
+  echo "   -v                compile Visual Studio modules only for product"
+  echo "   -p                compile specific platform (OS) modules only for product"
+  echo "   product        :  name under Enforcers/prods/<product>"
+  echo "   release|debug  :  desirable build mode "
+  echo "   kernel-version :  name of kernel under /usr/src/kernels" 
+  echo
+  echo " default compile all user, kernel, VS, and OS-specific modules for product"
+  echo
+  exit 1;
+fi
+
+
+
+shift $numopts
+
+product=$1;
+
+if [ ! -d ${NLENFORCERSDIR}/prods/$product ]; then
+   echo "Invalid product : $product"
+   exit 1;
+fi 
+
+
+
+shift 1;
+
+type=$1;
+
+if [ $type != "release" ] && [ $type != "debug" ]; then
+    echo "Please enter the release|debug for build type"
+    exit 1;
+fi
+
+shift 1;
+
+
+
+if [ "$1". != . ] ; then
+    kver=$1;
+fi
+
+# echo $product;
+# echo $what;
+# echo $type
+# echo $kver
+os_name_map=";Darwin=Darwin;CYGWIN_NT-5.1=CYGWIN_NT-5.1;CYGWIN_NT-5.2=CYGWIN_NT-5.1;CYGWIN_NT-5.2-WOW64=CYGWIN_NT-5.2-WOW64;Linux=Linux;";
+uname=`uname -s`;
+os=`echo ${os_name_map} | sed "s/.*;${uname}=\([^;]*\);.*/\1/"`;
+
+# Read the targetenv.list variable from the build.properties file
+targetenvlist=`sed '/^\#/d' ${PRODUCTDIR}/build.properties | grep "targetenv"  | tail -n 1 | sed 's/^.*=//'` 
+
+# echo targetenvlist
+
+if [ -n $targetenvlist ]; then
+   echo "Variable targetenvlist not found in ${PRODUCTDIR}/build.properties"
+fi 
+
+# Replace semicolons to spaces in targetenvlist
+targetenvlist=`echo $targetenvlist | sed -e 's/;/\ /g'`
+
+for targetenv in $targetenvlist ; do
+   
+    echo "Building for target environment: $targetenv"
+
+	targetenvos=${targetenv%_*}
+	targetenvarch=${targetenv#*_}
+
+    targetlist=
+
+    if [ $what == "-a" ] || [ $what == "-u" ] ; then
+	if [ -f ${NLENFORCERSDIR}/prods/$product/targets ] ; then
+	    targetlist=${targetlist}" "${NLENFORCERSDIR}/prods/$product/targets
+	fi
+    fi
+
+    if [ $what == "-a" ] || [ $what == "-p" ] ; then
+	if [ -f ${NLENFORCERSDIR}/prods/$product/${targetenvos}_targets ] ; then
+	    targetlist=${targetlist}" "${NLENFORCERSDIR}/prods/$product/${targetenvos}_targets
+	fi
+    fi
+
+    if [ $what == "-a" ] || [ $what == "-p" ] ; then
+	if [ -f ${NLENFORCERSDIR}/prods/$product/${targetenvarch}_targets ] ; then
+	    targetlist=${targetlist}" "${NLENFORCERSDIR}/prods/$product/${targetenvarch}_targets
+	fi
+    fi
+
+    if [ $what == "-a" ] || [ $what == "-p" ] ; then
+	if [ -f ${NLENFORCERSDIR}/prods/$product/${targetenv}_targets ] ; then
+	    targetlist=${targetlist}" "${NLENFORCERSDIR}/prods/$product/${targetenv}_targets
+	fi
+    fi
+
+	echo "Building targets in $targetlist"
+
+    # Clean ALL the modules first before building them
+    # This can catch some dependency problems.
+    for t in $targetlist ; do 
+	cat $t | \
+	while read line
+	do
+	  echo "[ ----- Cleaning ${NLENFORCERSDIR}/$line ----- ]"
+	  cd ${NLENFORCERSDIR}/$line;
+	  make PRODUCT=$product BUILDTYPE=$type TARGETENV=$targetenv clean;
+	  cd - >/dev/null
+	  echo
+	done
+    done
+
+    for t in $targetlist ; do 
+	cat $t | \
+	while read line
+	do
+	  echo "[ ----- Going to ${NLENFORCERSDIR}/$line ----- ]"
+          cd ${NLENFORCERSDIR}/$line;
+          make PRODUCT=$product BUILDTYPE=$type TARGETENV=$targetenv;
+          if [ $? -ne 0 ] ; then
+	      echo
+              echo "***  Fail building at ${NLENFORCERSDIR}/$line ***"
+              echo
+	      cd - >/dev/null
+              exit 2;
+	  fi
+          cd - >/dev/null
+          echo
+        done
+    done
+
+done
+
+ktargetlist=
+kversionlist=
+
+#jzhang 022807  build kernel drivers seperately 
+if [ $what == "-a" ] || [ $what == "-k" ] ; then
+  if [ -f ${NLENFORCERSDIR}/prods/$product/kernel_targets ] ; then
+    ktargetlist=${NLENFORCERSDIR}/prods/$product/kernel_targets
+    kversionlist=${NLENFORCERSDIR}/prods/$product/kversion_list
+  fi
+fi
+
+#jzhang 022807  build kernel drivers seperately 
+for v in $kversionlist ; do
+    cat $v | \
+    while read kversion
+        do
+            echo "[ ----- Building kernel drivers for kernel version $kversion -------  ]"
+	    for t in $ktargetlist ; do 
+		cat $t | \
+		while read line
+		    do
+		    echo "[ ----- Going to ${NLENFORCERSDIR}/$line ----- ]"
+		    cd ${NLENFORCERSDIR}/$line;
+		    make PRODUCT=$product BUILDTYPE=$type KVERSION=$kversion clean;
+		    make PRODUCT=$product BUILDTYPE=$type KVERSION=$kversion ;
+		    if [ $? -ne 0 ] ; then
+			echo
+			echo "***  Fail building at ${NLENFORCERSDIR}/$line ***"
+			echo
+			cd - >/dev/null
+			exit 2;
+		    fi
+		    cd - >/dev/null
+		    echo
+		done
+	    done
+       done
+done
+#####
+
+
+
+vs_version_drive_map="7=w 8=v 9=x"
+source c:/setHostEnv.sh
+for vs_version_drive in $vs_version_drive_map; do
+    vs_version=${vs_version_drive:0:(${#vs_version_drive}-2)}
+    vs_drive=${vs_version_drive:(-1)}
+    ext_targetlist=
+
+    # Extra Visual Studio targets that's outside this build system
+
+    if [ $what == "-a" ] || [ $what == "-v" ] ; then
+      if [ -f ${NLENFORCERSDIR}/prods/$product/vs${vs_version}_targets ] ; then
+        ext_targetlist=${ext_targetlist}" "${NLENFORCERSDIR}/prods/$product/vs${vs_version}_targets
+      fi
+    fi
+
+    # Don't build this if it's a linux (or platform other than Window)
+    if [ $os == "Linux" ] || [ $os == "Darwin" ] ; then
+        ext_targetlist=
+    fi
+
+    for t in $ext_targetlist ; do 
+        cat $t | \
+        while read line
+            do
+                echo "[ ----- Going to ${NLENFORCERSDIR}/$line ----- ]"
+                cd ${NLENFORCERSDIR}/$line;
+
+                # Use .sln file instead of .vcproj file when both exist in a
+                # module, so that when multiple .vcproj files exist in the module,
+                # it won't compile with the wrong .vcproj file.
+                if [ -f *.sln ] ; then
+                    proj_file=*.sln
+                else
+                    proj_file=*.*proj
+                fi
+
+		# The format of the lines in vs_custom_configuration is:
+		#     release|debug <configuration name>
+		# For example:
+		#     debug:2K3Debug
+		#     debug:2K7Debug
+		#     release:2K3Release
+		#     release:2K7Release
+                if [ -f vs_custom_configurations ] ; then
+                    cat vs_custom_configurations | \
+                    while read config
+                        do
+                            if [ ${config:0:(${#type}+1)} == $type":" ] ; then
+                                $vs_drive:/Common7/IDE/devenv.com /rebuild ${config:(${#type}+1)} $proj_file;
+                            fi
+                        done
+                else
+                    $vs_drive:/Common7/IDE/devenv.com /rebuild $type $proj_file;
+                fi
+
+                if [ $? -ne 0 ] ; then
+                    echo
+                    echo "***  Fail building at ${NLENFORCERSDIR}/$line ***"
+                    echo
+                    cd - >/dev/null
+                    exit 2;
+                fi
+                if [ $type == "release" ] ; then 
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/release_lib_win32 ] ; then 
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/release_lib_win32 ;
+                    fi
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/release_bin_win32 ] ; then 
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/release_bin_win32 ;
+                    fi
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/release_drivers_win32 ] ; then 
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/release_drivers_win32 ;
+                    fi
+					for t in dll sys exe; do
+						for n in $(ls bin/release/*.${t}); do 
+							echo "Signing ${n}";
+							'C:/Program Files/Microsoft SDKs/Windows/v7.0/Bin/signtool' ${SIGNTOOLARGS} ${n};
+						done
+					done
+                    cp -rf bin/Release/*.lib ${NLENFORCERSDIR}/prods/$product/build.output/release_lib_win32
+                    cp -rf bin/Release/*.dll ${NLENFORCERSDIR}/prods/$product/build.output/release_lib_win32
+                    cp -rf bin/Release/*.pdb ${NLENFORCERSDIR}/prods/$product/build.output/release_lib_win32
+                    cp -rf bin/Release/*.exe ${NLENFORCERSDIR}/prods/$product/build.output/release_bin_win32
+                    cp -rf bin/Release/*.sys ${NLENFORCERSDIR}/prods/$product/build.output/release_drivers_win32
+                fi
+                if [ $type == "debug" ] ; then 
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/lib_win32 ] ; then
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/lib_win32 ;
+                    fi
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/bin_win32 ] ; then
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/bin_win32 ;
+                    fi
+                    if [ ! -d ${NLENFORCERSDIR}/prods/$product/build.output/drivers_win32 ] ; then
+                        mkdir -p ${NLENFORCERSDIR}/prods/$product/build.output/drivers_win32 ;
+                    fi
+					for t in dll sys exe; do
+						for n in $(ls bin/Debug/*.${t}); do 
+							echo "Signing ${n}";
+							'C:/Program Files/Microsoft SDKs/Windows/v7.0/Bin/signtool' ${SIGNTOOLARGS} ${n};
+						done
+					done
+                    cp -rf bin/Debug/*.lib ${NLENFORCERSDIR}/prods/$product/build.output/lib_win32
+                    cp -rf bin/Debug/*.pdb ${NLENFORCERSDIR}/prods/$product/build.output/lib_win32
+                    cp -rf bin/Debug/*.dll ${NLENFORCERSDIR}/prods/$product/build.output/lib_win32
+                    cp -rf bin/Debug/*.exe ${NLENFORCERSDIR}/prods/$product/build.output/bin_win32
+                    cp -rf bin/Debug/*.sys ${NLENFORCERSDIR}/prods/$product/build.output/drivers_win32
+                fi
+                cd - >/dev/null
+                echo
+            done
+    done
+done

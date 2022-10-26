@@ -1,0 +1,12 @@
+
+test:
+	@echo Compiling the IDL
+	@../pcs_rpc --prefix=test --service=TEST --z < test.pcs_idl
+	@cp test_client.* src/
+	@cp test_server.* src/
+
+idl:
+	@echo Building the IDL compiler
+	@cd .. ; make -f Makefile.pcs_rpc -B
+
+all: idl test

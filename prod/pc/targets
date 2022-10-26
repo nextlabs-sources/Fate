@@ -1,0 +1,44 @@
+
+TARGETS = \
+	prod/common/lib/mch/3.0/src/install \
+	prod/common/lib/mch/3.0/src/install/test \
+	prod/common/nlcc/service/java \
+	prod/common/nlcc/ulib \
+	prod/common/nlcc/service \
+	prod/common/celog \
+	prod/common/celog2 \
+	prod/common/celog3 \
+	prod/pc/ceInjection \
+	prod/pc/bundleDecrypt \
+	prod/pc/cesdk/client/applications/pdpStopperLib \
+	prod/pc/enforcerStopper \
+	prod/pc/quenchhash \
+	prod/pc/cesdk/client/applications/nlQuench \
+	prod/pc/IPCproxy \
+	prod/pc/IPCstub \
+	prod/pc/tamper/TamperproofConfig \
+	prod/pc/tamper/fs/user \
+	prod/pc/tamper/CEProtect \
+	prod/pc/transport \
+    prod/pc/kif \
+	prod/pc/TransCtrl \
+	prod/pc/resourcePathDiscovery \
+	prod/pc/service/CONN \
+	prod/pc/service/CEPrivate \
+	prod/pc/service/EVAL \
+	prod/pc/service/LOG \
+	prod/pc/service/SEC \
+	prod/pc/service/Generic \
+	prod/pc/service/PDPJni \
+	prod/pc/service/PDPMan \
+	prod/pc/service/IPC/Shared \
+	prod/pc/service/IPC/IPCJNI \
+	prod/pc/service/NetworkUtils/JavaClassLoader \
+	prod/pc/service/NetworkUtils/NetworkUtils \
+	prod/pc/content/client \
+	prod/pc/content/framework \
+	prod/pc/content/plugin \
+	prod/pc/content/service \
+	prod/pc/content/analyze \
+	prod/pc/key_management/KeyManagementConsumer
+	

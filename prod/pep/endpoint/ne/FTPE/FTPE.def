@@ -1,0 +1,5 @@
+LIBRARY	"FTPE"
+EXPORTS
+	WSPStartup		@1
+	InstallSPI		@2
+	UninstallSPI	@3

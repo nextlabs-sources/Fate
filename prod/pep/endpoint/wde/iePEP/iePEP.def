@@ -1,0 +1,9 @@
+; iePEP.def : Declares the module parameters.
+
+LIBRARY      "iePEP.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE

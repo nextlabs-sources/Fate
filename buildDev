@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# DESCRIPTION
+#	Invoke developer build
+#
+# USAGE:
+#	Steps to invoke this script.
+#		export NLEXTERNALDIR=<path>
+#		./setEnv
+#		./buildDev
+#
+# Build Options:
+#	make -f build/Makefile.compile || exit $?
+#	make -f build/Makefile.compile compile_pc compile_kmc compile_lme compile_ne compile_oce compile_oe compile_rde compile_se compile_wde compile_devtool install_pc install_kmc install_lme install_ne install_oce install_oe install_rde install_se install_wde install_support || exit $?
+
+
+#
+# Check for errors
+#
+
+if [ ! -d ./xlib ]; then
+	echo "### ERROR: Missing xlib directory ./xlib"
+	exit 1
+fi
+
+
+#
+# Compile
+#
+
+LOG_FILE=buildDev.log
+
+(
+set -x
+# Prepare environment
+./configure --type=dev || exit $?
+source build.config
+
+# Compile code and build installers
+make -f build/Makefile.compile install_pcoewde || exit $?
+build/checkBuildLog.pl $LOG_FILE || exit $?
+set +x
+) 2>&1 | tee $LOG_FILE
+
+exit ${PIPESTATUS[0]}

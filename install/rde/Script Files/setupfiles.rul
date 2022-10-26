@@ -1,0 +1,127 @@
+#include "setupfiles.h" 
+#include "include/logging.h"   
+    
+function INT ExtractSetupFiles(hMSI)
+	STRING resultAsString;
+	INT result;
+begin
+	WriteToLogFile(hMSI, "Begin ExtractSetupFiles()."); 
+
+	//  We currently hard code the list of setup files - Find a way to put this in a list or map
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_INSTALLER_DLL_KEY, ENFORCER_DEVICE_DRIVER_INSTALLER_DLL_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required dll.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_COINSTALLER_DLL_KEY, ENFORCER_DEVICE_DRIVER_COINSTALLER_DLL_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required coinstaller dll.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_SYS_KEY, ENFORCER_DEVICE_DRIVER_SYS_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required driver.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_INF_KEY, ENFORCER_DEVICE_DRIVER_INF_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required driver inf.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+	
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_CAT_KEY, ENFORCER_DEVICE_DRIVER_CAT_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required driver cat.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+	
+	WriteToLogFile(hMSI, "End ExtractSetupFiles()."); 
+
+	return result;
+end;
+  
+function INT AddLicenseToPC(hMSI)
+
+    NUMBER nvFileHandle;
+    INT nvResult; 
+    string installPClicenseDir;     
+    STRING token;   
+    STRING svReturnLine;
+    NUMBER nvLineNumber;     
+    STRING svString;   
+    LIST listID;  
+    NUMBER iCount;
+    STRING svLine;     
+    NUMBER pathSize;
+    
+begin
+	WriteToLogFile (hMSI,"Entering: AddLicenseToPC");  	            
+	MsiGetProperty(hMSI, "CustomActionData",installPClicenseDir, pathSize);           
+	installPClicenseDir = installPClicenseDir ^ "license";
+    //installPClicenseDir = GetProperty(hMSI,"POLICY_CONTROLLER_DIR_TEMP")^ "license";   
+    WriteToLogFile(hMSI, "PClicenseDir=" + installPClicenseDir);
+    
+    OpenFileMode (FILE_MODE_APPEND);     
+    
+     
+	if (SetFileInfo (installPClicenseDir^"license.cfg", FILE_ATTRIBUTE, FILE_ATTR_NORMAL, "") < 0) then 
+    	WriteToLogFile(hMSI,"File attribute changes failed");
+    	//return 3;
+   	endif; 	
+   	
+   	token = "NEXTLABS_FEATURE_REMOVABLE_DEVICE = TRUE";
+   	
+    nvResult = FileGrep(installPClicenseDir^"license.cfg",token,svReturnLine,nvLineNumber,RESTART);
+    if (nvResult = 0) then  
+    	WriteToLogFile(hMSI, "RDE license found, no need to add.");
+    	return 0;
+    elseif (nvResult < 0) then
+    	token = "NEXTLABS_FEATURE_REMOVABLE_DEVICE";
+    	nvResult = FileGrep(installPClicenseDir^"license.cfg",token,svReturnLine,nvLineNumber,RESTART);
+        
+        if (nvResult = 0) then
+		    
+		    nvResult = OpenFile (nvFileHandle, installPClicenseDir, "license.cfg");
+		    listID = ListCreate(STRINGLIST); 
+		    for iCount = 1 to nvLineNumber 
+		    	GetLine(nvFileHandle,svLine); 
+		    	ListAddString(listID,svLine,AFTER);
+		    endfor;
+		    GetLine(nvFileHandle,svLine);
+		    while (GetLine(nvFileHandle,svLine) = 0)
+		    	ListAddString(listID,svLine,AFTER);
+		    endwhile;
+		    CloseFile(nvFileHandle);
+		    
+		    nvResult = ListWriteToFile(listID,installPClicenseDir^"license.cfg");
+		    NumToStr(svString,nvResult);
+		    if (nvResult < 0) then
+		    	WriteToLogFile(hMSI, "ListWrite Failed "+svString);  
+		    	return nvResult;
+		    endif;
+		endif;                          
+		
+		WriteToLogFile(hMSI,"Adding RDE license.");
+    	nvResult = OpenFile (nvFileHandle, installPClicenseDir, "license.cfg");
+    	if ( nvResult < 0) then 
+			WriteToLogFile (hMSI, "OpenFile failed.");  
+    		return nvResult;
+    	endif;
+    	
+    	WriteLine(nvFileHandle, "NEXTLABS_FEATURE_REMOVABLE_DEVICE = TRUE");
+    
+    	if (CloseFile (nvFileHandle) < 0) then 
+    		WriteToLogFile (hMSI, "CloseFile failed.");
+    	return -1; 
+    	endif;       
+    
+    	SetFileInfo (installPClicenseDir^"license.cfg", FILE_ATTRIBUTE,FILE_ATTR_READONLY,"");     
+    	
+    	WriteToLogFile(hMSI,"Exiting: AddLicenseToPC");
+    endif;
+    return ERROR_SUCCESS;
+end;
+

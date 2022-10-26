@@ -1,0 +1,90 @@
+// msoPEP.idl : IDL source for msoPEP
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (msoPEP.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(27A2BF6D-F6C1-456B-A237-6A57E08B24E9),
+	dual,
+	nonextensible,
+	helpstring("ImsoObj Interface"),
+	pointer_default(unique)
+]
+interface ImsoObj : IDispatch{
+};
+[
+	object,
+	uuid(64C5E44B-2708-43AA-9A99-64EE66352DB1),
+	dual,
+	nonextensible,
+	helpstring("IInspsEventDisp Interface"),
+	pointer_default(unique)
+]
+interface IInspsEventDisp : IDispatch{
+};
+[
+	object,
+	uuid(DAFF7596-EE11-4A87-A003-27D26D633B49),
+	dual,
+	nonextensible,
+	helpstring("IInspEventDisp Interface"),
+	pointer_default(unique)
+]
+interface IInspEventDisp : IDispatch{
+};
+[
+	object,
+	uuid(C4A41BD5-2DE2-4E74-9004-E1338587046F),
+	dual,
+	nonextensible,
+	helpstring("IItemEventDisp Interface"),
+	pointer_default(unique)
+]
+interface IItemEventDisp : IDispatch{
+};
+[
+	uuid(CF63E1A8-F4CF-4E0A-AB37-3F68119D40E7),
+	version(1.0),
+	helpstring("msoPEP 1.0 Type Library")
+]
+library msoPEPLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(3BE44FEB-18B0-48C8-B71D-915A38D35612),
+		helpstring("msoObj Class")
+	]
+	coclass msoObj
+	{
+		[default] interface ImsoObj;
+	};
+	[
+		uuid(C70AD675-998A-43FB-AEA8-247A29EF6495),
+		helpstring("InspsEventDisp Class")
+	]
+	coclass InspsEventDisp
+	{
+		[default] interface IInspsEventDisp;
+	};
+	[
+		uuid(B7B085B6-90D9-4C6E-BCF0-A69553ABAD95),
+		helpstring("InspEventDisp Class")
+	]
+	coclass InspEventDisp
+	{
+		[default] interface IInspEventDisp;
+	};
+	[
+		uuid(7B05732C-EC67-40FD-9D0F-2E10DB970B4B),
+		helpstring("ItemEventDisp Class")
+	]
+	coclass ItemEventDisp
+	{
+		[default] interface IItemEventDisp;
+	};
+};

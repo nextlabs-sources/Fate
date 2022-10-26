@@ -1,0 +1,6 @@
+EXPORTS
+        PEPMAN_RPCCall
+	PEPMAN_Init
+	PEPMAN_Close
+	PEPMAN_IsRunning
+	PEPMAN_GetUniqueRequestID

@@ -1,0 +1,468 @@
+#include "Setup.h"  
+#include "ifx.h" 
+#include "include/servicecontrol.h" 
+#include "include/logging.h"
+#include "include/common.h"  
+#include "setupfiles.rul"
+
+     prototype BOOL kernel32.CreateProcessA(POINTER, BYVAL STRING, POINTER, 
+              POINTER, BOOL, NUMBER, POINTER, POINTER, POINTER, 
+            POINTER);
+     prototype BOOL kernel32.GetExitCodeProcess(NUMBER, POINTER);
+     prototype NUMBER kernel32.WaitForSingleObject(NUMBER, NUMBER);
+     prototype BOOL kernel32.CloseHandle(HWND);
+     
+     export prototype INT keyUtil_createflow(HWND);  
+     export prototype INT keyUtil_exportflow(HWND);
+     export prototype INT keyUtil_MoveBackup(HWND);
+     prototype STRING  GetCompName();
+     prototype STRING keyUtil_hash(STRING);          
+     export prototype determineWin7OrWinXP(HWND);
+
+
+function STRING  GetCompName()
+       STRING szKey, szName, svValue;
+       NUMBER nvSize, nvType;
+begin
+      szKey = "System\\CurrentControlSet\\Control\\ComputerName\\ComputerName";
+      szName = "ComputerName";
+      // Set the default root.
+      RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+      // Retrieve the registry key value.
+      RegDBGetKeyValueEx(szKey, szName, nvType, svValue, nvSize);
+   return svValue;
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateAdministrationPassword(hMSI)
+	INT result; 
+    STRING resultAsString;  
+    STRING UNINSTALL_PASSWORD;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateAdministrationPassword()");  
+	UNINSTALL_PASSWORD=GetProperty(hMSI,"UNINSTALL_PASSWORD");
+	if (UNINSTALL_PASSWORD = "") then
+		MessageBox("Please input password !!", INFORMATION);
+	    DenyNextDialog(hMSI);
+	    return ERROR_SUCCESS;
+	endif;
+	
+ 	result = StopService(hMSI);             
+    
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password ! \nThe password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);
+	 		return result;	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	  
+	 		return result;                                          				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end;  
+
+function INT ModifyRegistry(hMSI)
+	STRING szKey, szNumName, szNumValue; 
+	NUMBER nType, nSize;
+begin 
+           
+   WriteToLogFile(hMSI, "Begin ModifyRegistry()");
+   
+   RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+   
+   szKey="SYSTEM\\CurrentControlSet\\Services\\NLSysEncryption";
+   // Set up parameters for call to RegDBSetKeyValueEx. 
+   szNumName  = "Start"; 
+   szNumValue = "4"; 
+   nType      = REGDB_NUMBER; 
+   nSize      = -1; 
+    // Set a key name and a value associated with it. 
+    if (RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue,nSize) < 0) then 
+       MessageBox ("Failed to set then registry key to stop the driver.", SEVERE); 
+       abort; 
+    else 
+      szNumName = "UninstallSystemEncryptionDriver";
+      szNumValue = "rundll32.exe SETUPAPI.DLL,InstallHinfSection DefaultUninstall 128 " + FOLDER_TEMP ^ "NLSE.inf";
+      nType = REGDB_STRING;
+      if (RegDBSetKeyValueEx (REGDB_KEYPATH_RUNONCE, szNumName, nType, szNumValue,nSize) < 0) then 
+       MessageBox ("Failed to set the registry key to start the uninstallation after reboot", SEVERE); 
+       abort; 
+      endif;
+    endif; 
+end;    
+             
+function INT StartSEServices(hMSI)
+	STRING szKey, szNumName, szNumValue; 
+	NUMBER nType, nSize;
+begin 
+           
+   WriteToLogFile(hMSI, "Begin ModifyRegistry()");
+   
+   RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+   
+   szKey="SYSTEM\\CurrentControlSet\\Services\\NLSysEncryption";
+   // Set up parameters for call to RegDBSetKeyValueEx. 
+   szNumName  = "Start"; 
+   szNumValue = "0"; 
+   nType      = REGDB_NUMBER; 
+   nSize      = -1; 
+    // Set a key name and a value associated with it. 
+    if (RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue,nSize) < 0) then 
+       MessageBox ("Failed to set the registry key to start the driver.", SEVERE);  
+       WriteToLogFile(hMSI,"Failed to set the registry key to start the driver");
+       return -1;
+    endif;       
+    
+    szKey="SYSTEM\\CurrentControlSet\\Services\\NLSysEncryptionFW";
+   // Set up parameters for call to RegDBSetKeyValueEx. 
+   szNumName  = "Start"; 
+   szNumValue = "0"; 
+   nType      = REGDB_NUMBER; 
+   nSize      = -1; 
+    // Set a key name and a value associated with it. 
+    if (RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue,nSize) < 0) then 
+       MessageBox ("Failed to set the registry key to start the FW driver.", SEVERE);  
+       WriteToLogFile(hMSI,"Failed to set the registry key to start the FW driver");
+       return -1;
+    endif;
+    
+    
+    
+    
+     
+end;                 
+             
+             
+function INT RemoveRunOnceRegistry(hMSI)
+   INT result;		 
+   STRING resultAsString;
+begin 
+           
+   WriteToLogFile(hMSI, "Begin RemoveRunOnceRegistry()");
+   
+   RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+   result = RegDBDeleteValue(REGDB_KEYPATH_RUNONCE, "UninstallSystemEncryptionDriver");
+   if (result != ERROR_SUCCESS) then
+        NumToStr(resultAsString, result);   
+   	  	WriteToLogFile(hMSI, "Failed to remove RunOnce Registry Key: " + resultAsString);
+		WriteToLogFile(hMSI, "Additional message: " + FormatMessage(result));
+   endif;
+
+   return ERROR_SUCCESS;
+end;   
+
+function INT keyUtil_createflow(hMSI)
+   //         szProgram, szCmdLine, nvExitCode                                   
+   
+    STARTUPINFO siData;
+    PROCESS_INFORMATION piData;
+    INT nvExitCode;
+    STRING szProgram;
+    STRING szCmdLine;
+    STRING PASSWORD;
+    STRING INSTALLPATH;
+    STRING resultAsString;
+    NUMBER nBuffer;
+    POINTER nFile;
+begin
+	                      
+    nBuffer = 256;
+    MsiGetProperty(hMSI, "UNINSTALL_PASSWORD", PASSWORD, nBuffer);
+    MsiGetProperty(hMSI, "POLICYCONTROLLERPATH", INSTALLPATH, nBuffer);
+            
+    szProgram = INSTALLPATH + "jservice\\KeyManagement\\bin\\keyUtil.exe";
+    szCmdLine = "-p " + PASSWORD + " -t 60000 ckr NL_LOCAL";                             
+
+    nvExitCode=LaunchApplication( szProgram, szCmdLine, "",SW_HIDE, 60000, LAAW_OPTION_FIXUP_PROGRAM | LAAW_OPTION_WAIT );
+  
+    NumToStr(resultAsString,LAAW_PARAMETERS.nLaunchResult);          
+
+    if (LAAW_PARAMETERS.nLaunchResult == -29) then
+       WriteToLogFile(hMSI, "KMC:Key Ring exists, skipping generation");
+       return 0;
+    endif;
+    if (LAAW_PARAMETERS.nLaunchResult < 0) then
+       WriteToLogFile(hMSI, "KMC:Failed to create key ring(" + resultAsString+")"); 
+       return LAAW_PARAMETERS.nLaunchResult;
+    endif;
+
+    MsiSetProperty(hMSI, "KEYGEN", "1");
+    
+    szCmdLine = "-p " + PASSWORD + " -t 60000 gk NL_LOCAL";    
+    nvExitCode=LaunchApplication( szProgram, szCmdLine, "",SW_HIDE, 60000, LAAW_OPTION_FIXUP_PROGRAM | LAAW_OPTION_WAIT );
+
+    NumToStr(resultAsString,nvExitCode);          
+
+    if (LAAW_PARAMETERS.nLaunchResult < 0) then
+       WriteToLogFile(hMSI, "KMC:Failed to generate key(" + resultAsString+")"); 
+       return LAAW_PARAMETERS.nLaunchResult;
+    endif;         
+          
+    nvExitCode=keyUtil_exportflow(hMSI);
+           
+    return nvExitCode;    
+    
+end;
+
+function INT keyUtil_exportflow(hMSI)
+   //         szProgram, szCmdLine, nvExitCode                                   
+   
+    INT nvExitCode;
+    STRING szProgram;
+    STRING szCmdLine;
+    STRING PASSWORD;
+    STRING INSTALLPATH;
+    STRING resultAsString;
+    NUMBER nBuffer;
+    POINTER nFile;
+begin
+
+ 	                      
+    nBuffer = 256;
+    MsiGetProperty(hMSI, "UNINSTALL_PASSWORD", PASSWORD, nBuffer);
+    MsiGetProperty(hMSI, "POLICYCONTROLLERPATH", INSTALLPATH, nBuffer);
+                
+    szProgram = INSTALLPATH + "jservice\\KeyManagement\\bin\\keyUtil.exe";
+    szCmdLine = " -p " + PASSWORD + " -k " + keyUtil_hash(GetCompName()) + " -y ekr NL_LOCAL \""+INSTALLPATH+"..\\local_"+GetCompName()+".nkr\"";
+    nvExitCode=LaunchApplication( szProgram, szCmdLine, "",SW_HIDE, 60000, LAAW_OPTION_FIXUP_PROGRAM | LAAW_OPTION_WAIT );
+    if (nvExitCode < 0) then
+       WriteToLogFile(hMSI, "KMC:Failed to LaunchApplication(" + resultAsString+")"); 
+       WriteToLogFile(hMSI, "KMC:"+szProgram+" "+szCmdLine); 
+       return nvExitCode;
+    endif;         
+          
+    NumToStr(resultAsString,LAAW_PARAMETERS.nLaunchResult);          
+      
+    if (LAAW_PARAMETERS.nLaunchResult != 0) then
+       WriteToLogFile(hMSI, "KMC:Failed to export key ring(" + resultAsString+")");     
+       return (LAAW_PARAMETERS.nLaunchResult);
+    endif;  
+    return 0;    
+    
+end;      
+
+function INT backupFiles(hMSI)        
+	NUMBER result; 
+    STRING NextlabsDir;                                     
+    NUMBER pathSize;   
+    STRING sDir; 
+    STRING dDir;  
+    STRING sResult;                                   
+begin
+ 
+	MsiGetProperty(hMSI, "CustomActionData",NextlabsDir, pathSize);
+                  
+    if ( ExistsDir(NextlabsDir) != EXISTS ) then
+		WriteToLogFile(hMSI, "Nextlabs Dir= "+NextlabsDir+". backupFiles failed because Nextlabs Dir does not exist");
+		return -1;
+	endif;
+                  
+	WriteToLogFile(hMSI, "Entering BackupFiles with source installation folder = "+NextlabsDir^"System Encryption");       
+	
+	dDir=NextlabsDir^"System Encryption\\backup";   
+	sDir=NextlabsDir^"System Encryption\\config"; 
+	
+	if ( ExistsDir(dDir) != EXISTS ) then
+		CreateDir(dDir);
+	endif;   
+	
+	if ( ExistsDir(dDir) != EXISTS ) then
+		WriteToLogFile(hMSI, "Destination Dir= "+dDir+". Destiniation dir doesn't exist");
+	endif; 
+	
+	result=XCopyFile(sDir^"SystemEncryption.cfg",dDir,COMP_NORMAL );
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy SystemEncryption.cfg");  
+		return result;
+	endif; 
+    result = DeleteDir(sDir,ALLCONTENTS);     
+    return 0;
+    end;  
+  
+         
+function INT keyUtil_MoveBackup(hMSI)
+  
+    STRING INSTALLPATH;
+    STRING filename,svResult;
+    int result;
+    NUMBER nBuffer;
+
+begin
+    nBuffer = 256;
+    filename="local_"+GetCompName()+".nkr";
+    MsiGetProperty(hMSI, "POLICYCONTROLLERPATH", INSTALLPATH, nBuffer); 
+    result=FindFile ( INSTALLPATH+"..\\", filename, svResult );
+     if( result < 0) then   
+       WriteToLogFile(hMSI, "SE: Failed to find key file.");
+       return ERROR_SUCCESS;    
+    endif;           
+    result=XCopyFile ( INSTALLPATH+"..\\"+filename, INSTALLDIR+"backup/RMC", COMP_NORMAL );
+    if( result != 0) then   
+       WriteToLogFile(hMSI, "SE: Failed to backup key file.");
+       return result;    
+    endif;
+    result=DeleteFile ( INSTALLPATH+"..\\"+filename );
+    return result;    
+end;
+
+function STRING keyUtil_hash(szString)
+     INT iVal;
+     INT iLength;
+     INT nLength;
+     STRING nextlabs;
+begin
+    
+    iVal = 0;
+    iLength = StrLength (szString); 
+    nextlabs="NextLabs,Inc.";
+    nLength= StrLength (nextlabs);
+    while (iVal <= iLength)
+       if((iVal%2) ==1) then
+          szString[iVal] = szString[iVal];
+       else
+          szString[iVal] = nextlabs[iVal % nLength];
+       endif;
+       iVal++;
+    endwhile;
+    //MessageBox ("HASHWORD:"+szString, SEVERE);
+    return szString;
+
+end;
+
+function INT RestoreBackup(hMSI)
+    STRING NextlabsDir;
+    NUMBER pathSize;
+    STRING sDir;
+    STRING dDir;    
+    NUMBER result;
+begin            
+	
+	MsiGetProperty(hMSI, "CustomActionData",NextlabsDir, pathSize);
+                  
+    if ( ExistsDir(NextlabsDir) != EXISTS ) then
+		WriteToLogFile(hMSI, "BackupDir= "+NextlabsDir+". RestoreBackup failed because backup dir does not exist");
+		return 0;
+	endif; 
+	
+    WriteToLogFile(hMSI,"Retrieving backup files from "+NextlabsDir+" backup folders...");  
+      
+	sDir=NextlabsDir^"System Encryption\\backup";   
+	dDir=NextlabsDir^"System Encryption\\config"; 
+	
+	if ( ExistsDir(sDir) = EXISTS ) then      
+	    result=XCopyFile(sDir^"SystemEncryption.cfg",dDir,COMP_NORMAL);
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy files");  
+			return result;
+		endif;
+		DeleteDir(sDir,ALLCONTENTS); 
+	endif;
+	return ERROR_SUCCESS;
+end;                               
+
+function determineWin7OrWinXP(hMSI)
+    // To Do:  Declare local variables.
+begin      
+        
+    if ( SYSINFO.WINNT.bWinXP || SYSINFO.WINNT.bWinServer2003  ) then
+       MsiSetProperty(hMSI,"ISWIN7","False");       
+    else
+       MsiSetProperty(hMSI,"ISWIN7","TRUE");
+    endif;
+
+
+    // To Do:  Write script that will be executed when MyFunction is called.
+end;
+
+
+function INT ConfigureNLSE(hMSI)
+  string Installdir,res_string;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ WriteToLogFile(hMSI, "NLSE:"+Installdir^"bin"^"NlRegisterPlugins.exe --se --register");
+ nResult = LaunchAppAndWait(Installdir^"bin"^"NlRegisterPlugins.exe", "--se --register", WAIT | LAAW_OPTION_HIDDEN);
+ if(nResult<0) then
+   NumToStr(res_string,nResult);
+   WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   ShowModalDialog(hMSI, "Error", "An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed.", SEVERE);	 
+ endif;	
+ return nResult;
+end;   
+
+function INT UnconfigureNLSE(hMSI)
+  string Installdir,res_string;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                   
+ MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ WriteToLogFile(hMSI, "NLSE:"+Installdir^"bin"^"NlRegisterPlugins.exe --se --unregister");
+ nResult = LaunchAppAndWait(Installdir^"bin"^"NlRegisterPlugins.exe", "--se --unregister", WAIT | LAAW_OPTION_HIDDEN);
+ if(nResult<0) then
+   NumToStr(res_string,nResult);
+   WriteToLogFile(hMSI, "WDE Result:"+res_string);  
+   ShowModalDialog(hMSI, "Error", "An unexpected error occured.("+res_string+") NlRegisterPlugins.exe could not be executed.", SEVERE);	 
+ endif;	
+ return nResult;
+end;
+ 
+
+function INT InsertDateToRegistry(hMSI)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;
+    
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else    
+ 		ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\Enterprise DLP\\System Encryption";
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif;
+    	
+    endif; 
+    return ERROR_SUCCESS;
+end;

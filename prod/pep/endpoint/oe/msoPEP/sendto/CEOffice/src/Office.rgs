@@ -1,0 +1,27 @@
+HKCR
+{
+	OEOffice.Office.1 = s 'Office Class'
+	{
+		CLSID = s '{22151926-4D7F-4452-8A2E-9B4AE4BE8108}'
+	}
+	OEOffice.Office = s 'Office Class'
+	{
+		CLSID = s '{22151926-4D7F-4452-8A2E-9B4AE4BE8108}'
+		CurVer = s 'OEOffice.Office.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {22151926-4D7F-4452-8A2E-9B4AE4BE8108} = s 'Office Class'
+		{
+			ProgID = s 'OEOffice.Office.1'
+			VersionIndependentProgID = s 'OEOffice.Office'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{A7FC3CDC-20C3-4439-A571-4D7AB809A3FA}'
+		}
+	}
+}

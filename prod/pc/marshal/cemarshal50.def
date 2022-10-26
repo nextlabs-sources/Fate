@@ -1,0 +1,16 @@
+EXPORTS
+	Marshal_AllocateCEString
+	Marshal_FreeCEString
+        Marshal_FreeGeneric
+        Marshal_FreeGenericExplicitFormat
+        Marshal_PackReqFunc
+        Marshal_PackReqFuncAndFormat
+        Marshal_PackFuncReply
+        Marshal_PackFuncAndFormatReply
+        Marshal_PackReqGeneric
+        Marshal_PackReplyGeneric
+        Marshal_PackFree
+        Marshal_UnPackReqFunc
+        Marshal_UnPackFuncReply
+        Marshal_UnPackFree
+        Marsh_GetFuncSignature

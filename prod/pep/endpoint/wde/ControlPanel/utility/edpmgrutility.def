@@ -1,0 +1,9 @@
+LIBRARY   edpmgrutility
+
+
+EXPORTS
+	GetLogMgr			@1 
+	GetPCStatusMgr			@2 
+	GetInstalledComptMgr		@3
+	GetNotifyMgr		@4
+	GetDlgMgr		@5

@@ -1,0 +1,18 @@
+# IMPORTANT: Resource kit must be built after all enforcer installers so that GPO transform
+# PC target currently generates SDK only
+
+TARGETS = \
+	install/wde \
+	install/ne \
+	install/oe \
+	install/KMService \
+	install/se \
+	install/cesdk \
+	install/reskit \
+	install/devtool
+
+# Take out targets not in this release
+#	install/oce \
+#	install/lme \
+#	install/rde \
+#	install/pc \

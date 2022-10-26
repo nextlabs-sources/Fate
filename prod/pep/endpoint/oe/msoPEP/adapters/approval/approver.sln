@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "approver", "approver\approver.vcproj", "{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F} = {AE48EED1-E6EF-4642-B685-189A25ABCA8F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftpcli", "ftpcli\ftpcli.vcproj", "{AE48EED1-E6EF-4642-B685-189A25ABCA8F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Obligation", "Obligation\Obligation.vcproj", "{2F477B12-8042-4F5C-91D3-F8122C962231}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		outlook2003_debug|Win32 = outlook2003_debug|Win32
+		outlook2003_release|Win32 = outlook2003_release|Win32
+		outlook2007_debug|Win32 = outlook2007_debug|Win32
+		outlook2007_release|Win32 = outlook2007_release|Win32
+		debug|Win32 = debug|Win32
+		release|Win32 = release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2003_debug|Win32.ActiveCfg = outlook2003_debug|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2003_debug|Win32.Build.0 = outlook2003_debug|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2003_release|Win32.ActiveCfg = outlook2003_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2003_release|Win32.Build.0 = outlook2003_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2007_debug|Win32.ActiveCfg = outlook2007_debug|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2007_debug|Win32.Build.0 = outlook2007_debug|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2007_release|Win32.ActiveCfg = outlook2007_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.outlook2007_release|Win32.Build.0 = outlook2007_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.debug|Win32.ActiveCfg = outlook2007_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.debug|Win32.Build.0 = outlook2007_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.release|Win32.ActiveCfg = outlook2007_release|Win32
+		{EE99D8C5-2E0D-4BBE-9F3A-500783505F15}.release|Win32.Build.0 = outlook2007_release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2003_debug|Win32.ActiveCfg = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2003_debug|Win32.Build.0 = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2003_release|Win32.ActiveCfg = release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2003_release|Win32.Build.0 = release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2007_debug|Win32.ActiveCfg = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2007_debug|Win32.Build.0 = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2007_release|Win32.ActiveCfg = release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.outlook2007_release|Win32.Build.0 = release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.debug|Win32.ActiveCfg = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.debug|Win32.Build.0 = debug|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.release|Win32.ActiveCfg = release|Win32
+		{AE48EED1-E6EF-4642-B685-189A25ABCA8F}.release|Win32.Build.0 = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2003_debug|Win32.ActiveCfg = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2003_debug|Win32.Build.0 = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2003_release|Win32.ActiveCfg = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2003_release|Win32.Build.0 = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2007_debug|Win32.ActiveCfg = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2007_debug|Win32.Build.0 = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2007_release|Win32.ActiveCfg = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.outlook2007_release|Win32.Build.0 = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.debug|Win32.ActiveCfg = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.debug|Win32.Build.0 = debug|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.release|Win32.ActiveCfg = release|Win32
+		{2F477B12-8042-4F5C-91D3-F8122C962231}.release|Win32.Build.0 = release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

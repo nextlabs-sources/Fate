@@ -1,0 +1,23 @@
+########################################################################
+#
+# Build target version information.
+#
+# These define the defaults for build version information.  They may be
+# override by the Makefile.inc of any module.
+#
+########################################################################
+
+#H
+VERSION_PRODUCT		= NextLabs Application
+
+VERSION_MAJOR		= 8
+
+VERSION_MINOR		= 3
+VERSION_MAINTENANCE = 0
+VERSION_PATCH		= 1000
+
+# Release or nightly build should set VERSION_BUILD environment variable before starting make.
+# Release: VERSION_BUILD=
+ifneq ($(VERSION_BUILD), )
+	VERSION_BUILD = $HOSTNAME-$USERNAME-time
+endif

@@ -1,0 +1,75 @@
+#include "setupfiles.h" 
+#include "include/logging.h"
+    
+function INT ExtractSetupFiles(hMSI)
+	STRING resultAsString;
+	INT result;
+begin
+	WriteToLogFile(hMSI, "Begin ExtractSetupFiles()."); 
+
+	//  We currently hard code the list of setup files - Find a way to put this in a list or map
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_SYS_KEY, ENFORCER_DEVICE_DRIVER_SYS_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required driver.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+
+	result = StreamFileFromBinary(hMSI, ENFORCER_DEVICE_DRIVER_INF_KEY, ENFORCER_DEVICE_DRIVER_INF_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required driver inf.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+	
+	WriteToLogFile(hMSI, "End ExtractSetupFiles()."); 
+
+	return result;
+end;    
+
+function INT InsertDeleteInRunonce(hMSI)
+
+  	string Installdir;
+  	NUMBER pathSize;  
+  	INT nResult;   
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+
+begin               
+	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+	WriteToLogFile(hMSI, "Writing runonce registry");                          
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);  
+	szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+	if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        MessageBox ("RegDBCreateKeyEx failed.", SEVERE); 
+    endif; 
+    szNumName  = "DeleteSElogs"; 
+    szNumValue = "cmd /c rmdir \""+Installdir + "diags\logs\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;  
+	
+	szNumName  = "DeleteSEdiags"; 
+    szNumValue = "cmd /c rmdir \""+Installdir + "diags\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif; 
+	
+	
+	return nResult;
+
+end;               

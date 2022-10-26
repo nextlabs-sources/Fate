@@ -1,0 +1,6 @@
+LIBRARY	"NLVisualLabelingPA2003"
+
+EXPORTS
+	DoPolicyAssistant	@1
+	AddVisualLabeling	@2
+	MoveVisualLabeling	@3

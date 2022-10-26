@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="javasdk2.makejar" default="makejar" basedir=".">
+
+	<target name ="makejar" description="Create a jar for the javasdk2 project">
+		<jar jarfile="nlJavaSDK2.jar" includes="**/*.class"  basedir="bin">
+		    <manifest>
+		      	<attribute name="Main-Class" 
+		      			   value="com.nextlabs.remote.sdk.RemoteSDKServer"/>
+		      	<attribute name="Provider-Class" 
+		      			   value="com.nextlabs.remote.sdk.RemoteSDKServer"/>
+		    	<attribute name="Implementation-Version" value="1.0"/>
+		    </manifest>
+		</jar>
+	</target>
+
+</project>

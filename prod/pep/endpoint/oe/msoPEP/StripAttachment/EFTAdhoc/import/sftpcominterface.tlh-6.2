@@ -1,0 +1,4753 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.00.50727.42 (dde92a62).
+//
+// c:\derek\sftp\eftadhoc\eftadhoc\debug\sftpcominterface.tlh
+//
+// C++ source equivalent of Win32 type library C:\Derek\SFTP\DLL\SFTPCOMInterface.dll
+// compiler-generated file created 07/02/10 at 00:45:39 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace SFTPCOMINTERFACELib {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("5873fc2d-be4a-4f01-8d66-4eaa337046ee"))
+/* LIBID */ __SFTPCOMINTERFACELib;
+struct /* coclass */ CIServer;
+struct __declspec(uuid("2518c8c6-d5b8-44bb-bdc4-1513da9ad8bc"))
+/* dual interface */ ICIServer;
+struct __declspec(uuid("93e30fb4-41fd-4fa3-807b-9eb6a50779a1"))
+/* dual interface */ ICISites;
+struct __declspec(uuid("3eece91b-7f0f-4745-8144-e3b47a71b663"))
+/* dual interface */ ICISite;
+struct __declspec(uuid("fb2d04f0-5842-4568-8637-d30e3e42c86d"))
+/* dual interface */ IPermission;
+struct __declspec(uuid("5d0ece92-ae7b-4076-99bf-361d423d3c51"))
+/* dual interface */ ICIClientSettings;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0004_0001;
+struct __declspec(uuid("86fd1ebe-92e2-40f3-9c03-e5f0ca55f8ab"))
+/* dual interface */ ICICommandSettings;
+struct __declspec(uuid("b8562c98-012e-4fef-9732-33a34aa01a18"))
+/* dual interface */ ICICertInfo;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0002;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0003;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0004;
+struct __declspec(uuid("af5973bf-eed9-4941-8671-625c062b8975"))
+/* dual interface */ ICIAudit;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0001;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0002;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0003;
+struct /* coclass */ CISites;
+struct /* coclass */ CISite;
+struct /* coclass */ Permission;
+struct /* coclass */ CIClientSettings;
+struct /* coclass */ CICommandSettings;
+struct /* coclass */ CICertInfo;
+struct /* coclass */ CIPgpActionParams;
+struct __declspec(uuid("88cd614d-5467-460c-9885-cd6c5064a325"))
+/* dual interface */ ICIPgpActionParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0001;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0002;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0003;
+struct /* coclass */ CIMailActionParams;
+struct __declspec(uuid("7cee64b2-4c60-4fe0-8ddb-aaf31e59e24a"))
+/* dual interface */ ICIMailActionParams;
+struct /* coclass */ CIUploadActionParams;
+struct __declspec(uuid("0f141c5f-7bab-4fea-bd22-d91170304ed3"))
+/* dual interface */ ICIUploadActionParams;
+struct __declspec(uuid("43c12faf-8c8f-4b1a-934c-8ebae708b83c"))
+/* dual interface */ ICITransferActionParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0006;
+struct /* coclass */ CIDownloadActionParams;
+struct __declspec(uuid("1a5d0780-694f-4bed-a2ec-5ce9c58d2876"))
+/* dual interface */ ICIDownloadActionParams;
+struct /* coclass */ CICleanupActionParams;
+struct __declspec(uuid("c4b3c609-9488-41a5-b895-def37000fe06"))
+/* dual interface */ ICICleanupActionParams;
+struct /* coclass */ CIReportActionParams;
+struct __declspec(uuid("c9d24368-c4de-442f-9961-4014ff442698"))
+/* dual interface */ ICIReportActionParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0013;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0014;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0015;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0016;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0017;
+struct /* coclass */ CICommandActionParams;
+struct __declspec(uuid("7b4a979f-f9d7-413c-8ecd-7a5ce4b2aa3e"))
+/* dual interface */ ICICommandActionParams;
+struct /* coclass */ CIStopActionParams;
+struct __declspec(uuid("d302ccd1-447c-4256-8957-c97aae42914c"))
+/* dual interface */ ICIStopActionParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0011;
+struct /* coclass */ CIBackupActionParams;
+struct __declspec(uuid("763d7a3d-acbe-41d5-a866-5a211847fd9c"))
+/* dual interface */ ICIBackupActionParams;
+struct /* coclass */ CIAWTaskActionParams;
+struct __declspec(uuid("12799f36-fb77-4244-bf0e-fac73113a049"))
+/* dual interface */ ICIAWTaskActionParams;
+struct /* coclass */ CIAS2SendActionParams;
+struct __declspec(uuid("a1a482f7-a86c-4805-8179-5e585320c96b"))
+/* dual interface */ ICIAS2SendActionParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0018;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0019;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0020;
+struct /* coclass */ CIEventRules;
+struct __declspec(uuid("46cc85df-420f-4586-a68b-a3f92cb353ab"))
+/* dual interface */ ICIEventRules;
+struct /* coclass */ CIEventRule;
+struct __declspec(uuid("1dda5e8d-ec07-413b-8c49-db5ccc46f0ea"))
+/* dual interface */ ICIEventRule;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0010;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0007;
+struct /* coclass */ CIIfStatement;
+struct __declspec(uuid("42679a64-3760-4943-9bc3-dc2a42842e98"))
+/* dual interface */ ICIIfStatement;
+struct __declspec(uuid("98e28e5e-332b-40f5-b840-48f9bfe5e153"))
+/* dual interface */ ICIEventRuleStatement;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0004;
+struct /* coclass */ CIActionStatement;
+struct __declspec(uuid("3d8aabc7-0729-4868-8428-3d2c447ec3bf"))
+/* dual interface */ ICIActionStatement;
+struct /* coclass */ CIActionStatements;
+struct __declspec(uuid("7bf321ce-b641-4d57-a109-76edc8708c4c"))
+/* dual interface */ ICIActionStatements;
+struct /* coclass */ CIEventAction;
+struct __declspec(uuid("5c38f400-cee1-4cef-ae27-db1f6a8dccd7"))
+/* dual interface */ ICIEventAction;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0005;
+struct /* coclass */ CIEventActions;
+struct __declspec(uuid("1e7376d6-5003-47fe-ada7-9b0a6bfbf888"))
+/* dual interface */ ICIEventActions;
+struct /* coclass */ CICompoundCondition;
+struct __declspec(uuid("f649f52b-6923-40a3-86f2-50c9e5986f32"))
+/* dual interface */ ICICompoundCondition;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0008;
+struct /* coclass */ CISimpleCondition;
+struct __declspec(uuid("68d1009e-a670-4d46-bb0b-b034ccd870f5"))
+/* dual interface */ ICISimpleCondition;
+struct /* coclass */ CIEventRuleParams;
+struct __declspec(uuid("71ba2e98-c6ff-4e8e-9dcb-ec45cf674b68"))
+/* dual interface */ ICIEventRuleParams;
+struct /* coclass */ CITimerEventRuleParams;
+struct __declspec(uuid("b8b64b3c-7b5c-4324-acd6-99622da0f411"))
+/* dual interface */ ICITimerEventRuleParams;
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0009;
+struct /* coclass */ CIFolderMonitorEventRuleParams;
+struct __declspec(uuid("5dff0c88-9ffa-4946-b088-199cbad101ba"))
+/* dual interface */ ICIFolderMonitorEventRuleParams;
+struct /* coclass */ CIAudit;
+struct /* coclass */ CIPGPKeyInfo;
+struct __declspec(uuid("5704f3a9-73f9-4f0b-9676-77b9cb2c00f2"))
+/* dual interface */ ICIPGPKeyInfo;
+struct /* coclass */ CIReportInfo;
+struct __declspec(uuid("835c05c4-47c2-4d57-bf62-ae4b02db3dd3"))
+/* dual interface */ ICIReportInfo;
+struct /* coclass */ CIEventInfo;
+struct __declspec(uuid("7f60dc98-112e-413e-8ebc-4889cb55c2ca"))
+/* dual interface */ ICIEventInfo;
+struct /* coclass */ CISSHKeyInfo;
+struct __declspec(uuid("f5a7c625-31f8-4d32-94e8-49cbbd4e3bb4"))
+/* dual interface */ ICISSHKeyInfo;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0004_0001 SFTPAdvBool;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0002 EventType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0003 AutobanSensitivity;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0004 AdminAccountType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0001 ServerModule;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0002 RegistrationState;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0003 AdminLoginType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0001 PGPOperation;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0002 PGPCompressionLevel;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0003 PGPSigningHash;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0006 NetworkProtocol;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0013 ReportPeriodType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0014 PredefinedReportPeriod;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0015 ReportFormat;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0016 ReportFilterOperator;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0017 ReportFiltersCombiningOperator;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0011 StopType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0018 AS2ContentType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0019 AS2ReceiptPolicy;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0020 AS2ReceiptDelivery;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0010 EventProperty;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0007 ConditionOperator;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0004 EventRuleStatementType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0005 EventActionType;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0008 LogicalOperator;
+typedef enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0009 Recurrence;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(IPermission, __uuidof(IPermission));
+_COM_SMARTPTR_TYPEDEF(ICIClientSettings, __uuidof(ICIClientSettings));
+_COM_SMARTPTR_TYPEDEF(ICICommandSettings, __uuidof(ICICommandSettings));
+_COM_SMARTPTR_TYPEDEF(ICICertInfo, __uuidof(ICICertInfo));
+_COM_SMARTPTR_TYPEDEF(ICISite, __uuidof(ICISite));
+_COM_SMARTPTR_TYPEDEF(ICISites, __uuidof(ICISites));
+_COM_SMARTPTR_TYPEDEF(ICIAudit, __uuidof(ICIAudit));
+_COM_SMARTPTR_TYPEDEF(ICIServer, __uuidof(ICIServer));
+_COM_SMARTPTR_TYPEDEF(ICIPgpActionParams, __uuidof(ICIPgpActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIMailActionParams, __uuidof(ICIMailActionParams));
+_COM_SMARTPTR_TYPEDEF(ICITransferActionParams, __uuidof(ICITransferActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIUploadActionParams, __uuidof(ICIUploadActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIDownloadActionParams, __uuidof(ICIDownloadActionParams));
+_COM_SMARTPTR_TYPEDEF(ICICleanupActionParams, __uuidof(ICICleanupActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIReportActionParams, __uuidof(ICIReportActionParams));
+_COM_SMARTPTR_TYPEDEF(ICICommandActionParams, __uuidof(ICICommandActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIStopActionParams, __uuidof(ICIStopActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIBackupActionParams, __uuidof(ICIBackupActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIAWTaskActionParams, __uuidof(ICIAWTaskActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIAS2SendActionParams, __uuidof(ICIAS2SendActionParams));
+_COM_SMARTPTR_TYPEDEF(ICIEventRules, __uuidof(ICIEventRules));
+_COM_SMARTPTR_TYPEDEF(ICIEventRule, __uuidof(ICIEventRule));
+_COM_SMARTPTR_TYPEDEF(ICIEventRuleStatement, __uuidof(ICIEventRuleStatement));
+_COM_SMARTPTR_TYPEDEF(ICIIfStatement, __uuidof(ICIIfStatement));
+_COM_SMARTPTR_TYPEDEF(ICIActionStatement, __uuidof(ICIActionStatement));
+_COM_SMARTPTR_TYPEDEF(ICIActionStatements, __uuidof(ICIActionStatements));
+_COM_SMARTPTR_TYPEDEF(ICIEventAction, __uuidof(ICIEventAction));
+_COM_SMARTPTR_TYPEDEF(ICIEventActions, __uuidof(ICIEventActions));
+_COM_SMARTPTR_TYPEDEF(ICICompoundCondition, __uuidof(ICICompoundCondition));
+_COM_SMARTPTR_TYPEDEF(ICISimpleCondition, __uuidof(ICISimpleCondition));
+_COM_SMARTPTR_TYPEDEF(ICIEventRuleParams, __uuidof(ICIEventRuleParams));
+_COM_SMARTPTR_TYPEDEF(ICITimerEventRuleParams, __uuidof(ICITimerEventRuleParams));
+_COM_SMARTPTR_TYPEDEF(ICIFolderMonitorEventRuleParams, __uuidof(ICIFolderMonitorEventRuleParams));
+_COM_SMARTPTR_TYPEDEF(ICIPGPKeyInfo, __uuidof(ICIPGPKeyInfo));
+_COM_SMARTPTR_TYPEDEF(ICIReportInfo, __uuidof(ICIReportInfo));
+_COM_SMARTPTR_TYPEDEF(ICIEventInfo, __uuidof(ICIEventInfo));
+_COM_SMARTPTR_TYPEDEF(ICISSHKeyInfo, __uuidof(ICISSHKeyInfo));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("a59e7747-3284-435b-8947-4e004361a6ac"))
+CIServer;
+    // [ default ] interface ICIServer
+
+struct __declspec(uuid("fb2d04f0-5842-4568-8637-d30e3e42c86d"))
+IPermission : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetFileUpload,put=PutFileUpload))
+    VARIANT_BOOL FileUpload;
+    __declspec(property(get=GetFileDelete,put=PutFileDelete))
+    VARIANT_BOOL FileDelete;
+    __declspec(property(get=GetFileRename,put=PutFileRename))
+    VARIANT_BOOL FileRename;
+    __declspec(property(get=GetFileAppend,put=PutFileAppend))
+    VARIANT_BOOL FileAppend;
+    __declspec(property(get=GetFileDownload,put=PutFileDownload))
+    VARIANT_BOOL FileDownload;
+    __declspec(property(get=GetDirCreate,put=PutDirCreate))
+    VARIANT_BOOL DirCreate;
+    __declspec(property(get=GetDirDelete,put=PutDirDelete))
+    VARIANT_BOOL DirDelete;
+    __declspec(property(get=GetDirList,put=PutDirList))
+    VARIANT_BOOL DirList;
+    __declspec(property(get=GetDirShowHidden,put=PutDirShowHidden))
+    VARIANT_BOOL DirShowHidden;
+    __declspec(property(get=GetDirShowReadOnly,put=PutDirShowReadOnly))
+    VARIANT_BOOL DirShowReadOnly;
+    __declspec(property(get=GetDirShowInList,put=PutDirShowInList))
+    VARIANT_BOOL DirShowInList;
+    __declspec(property(get=GetFolder))
+    _bstr_t Folder;
+    __declspec(property(get=GetClient))
+    _bstr_t Client;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    VARIANT_BOOL GetFileUpload ( );
+    void PutFileUpload (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetFileDelete ( );
+    void PutFileDelete (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetFileRename ( );
+    void PutFileRename (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetFileAppend ( );
+    void PutFileAppend (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetFileDownload ( );
+    void PutFileDownload (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirCreate ( );
+    void PutDirCreate (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirDelete ( );
+    void PutDirDelete (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirList ( );
+    void PutDirList (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirShowHidden ( );
+    void PutDirShowHidden (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirShowReadOnly ( );
+    void PutDirShowReadOnly (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDirShowInList ( );
+    void PutDirShowInList (
+        VARIANT_BOOL pVal );
+    _bstr_t GetFolder ( );
+    _bstr_t GetClient ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_FileUpload (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileUpload (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_FileDelete (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileDelete (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_FileRename (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileRename (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_FileAppend (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileAppend (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_FileDownload (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileDownload (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirCreate (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirCreate (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirDelete (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirDelete (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirList (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirList (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirShowHidden (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirShowHidden (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirShowReadOnly (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirShowReadOnly (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DirShowInList (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DirShowInList (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Folder (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_Client (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+};
+
+struct __declspec(uuid("5d0ece92-ae7b-4076-99bf-361d423d3c51"))
+ICIClientSettings : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetCustom2,put=PutCustom2))
+    _bstr_t Custom2;
+    __declspec(property(get=GetCustom3,put=PutCustom3))
+    _bstr_t Custom3;
+    __declspec(property(get=GetFullName,put=PutFullName))
+    _bstr_t FullName;
+    __declspec(property(get=GetComment,put=PutComment))
+    _bstr_t Comment;
+    __declspec(property(get=GetEmail,put=PutEmail))
+    _bstr_t Email;
+    __declspec(property(get=GetFax,put=PutFax))
+    _bstr_t Fax;
+    __declspec(property(get=GetPhone,put=PutPhone))
+    _bstr_t Phone;
+    __declspec(property(get=GetPager,put=PutPager))
+    _bstr_t Pager;
+    __declspec(property(get=GetIPAccessAllowedDefault,put=PutIPAccessAllowedDefault))
+    VARIANT_BOOL IPAccessAllowedDefault;
+    __declspec(property(get=GetMaxInvalidLoginAttempts,put=PutMaxInvalidLoginAttempts))
+    long MaxInvalidLoginAttempts;
+    __declspec(property(get=GetLockoutPeriod,put=PutLockoutPeriod))
+    long LockoutPeriod;
+    __declspec(property(get=GetInvalidAttemptsPeriod,put=PutInvalidAttemptsPeriod))
+    long InvalidAttemptsPeriod;
+    __declspec(property(get=GetCustom1,put=PutCustom1))
+    _bstr_t Custom1;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    VARIANT_BOOL GetEnableAccount (
+        VARIANT * pInherited );
+    HRESULT SetEnableAccount (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHomeDirIsRoot (
+        VARIANT * pInherited );
+    HRESULT SetHomeDirIsRoot (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetAllowNoop (
+        VARIANT * pInherited );
+    HRESULT SetAllowNoop (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetAllowXCRC (
+        VARIANT * pInherited );
+    HRESULT SetAllowXCRC (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetChangePwd (
+        VARIANT * pInherited );
+    HRESULT SetChangePwd (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetEnableTimeOut (
+        VARIANT * pInherited );
+    HRESULT SetEnableTimeOut (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasMaxSpeed (
+        VARIANT * pInherited );
+    HRESULT SetHasMaxSpeed (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasMaxUsers (
+        VARIANT * pInherited );
+    HRESULT SetHasMaxUsers (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasPwdRetries (
+        VARIANT * pInherited );
+    HRESULT SetHasPwdRetries (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetClearFTP (
+        VARIANT * pInherited );
+    HRESULT SetClearFTP (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetEnableDiskQuota (
+        VARIANT * pInherited );
+    HRESULT SetEnableDiskQuota (
+        SFTPAdvBool val );
+    long GetMaxIPs (
+        VARIANT * pInherited );
+    HRESULT SetMaxIPs (
+        long val );
+    long GetMaxSpeed (
+        VARIANT * pInherited );
+    HRESULT SetMaxSpeed (
+        long val );
+    long GetMaxUsers (
+        VARIANT * pInherited );
+    HRESULT SetMaxUsers (
+        long val );
+    long GetPwdRetries (
+        VARIANT * pInherited );
+    HRESULT SetPwdRetries (
+        long val );
+    long GetTimeOut (
+        VARIANT * pInherited );
+    HRESULT SetTimeOut (
+        long val );
+    long GetDownloadsPerSession (
+        VARIANT * pInherited );
+    HRESULT SetDownloadsPerSession (
+        long val );
+    long GetUploadsPerSession (
+        VARIANT * pInherited );
+    HRESULT SetUploadsPerSession (
+        long val );
+    long GetLoginMsg ( );
+    HRESULT SetLoginMsg (
+        long val );
+    VARIANT_BOOL GetHomeDir (
+        VARIANT * pInherited );
+    HRESULT SetHomeDir (
+        SFTPAdvBool val );
+    long GetIncorrectPasswordAttempts ( );
+    long GetMaxDownloadSize (
+        VARIANT * pInherited );
+    HRESULT SetMaxDownloadSize (
+        long val );
+    long GetMaxSpace (
+        VARIANT * pInherited );
+    HRESULT SetMaxSpace (
+        long val );
+    long GetMaxUploadSize (
+        VARIANT * pInherited );
+    HRESULT SetMaxUploadSize (
+        long val );
+    long GetUsedSpace ( );
+    _bstr_t GetDescription ( );
+    HRESULT SetDescription (
+        _bstr_t bstrVal );
+    _bstr_t GetHomeDirString ( );
+    HRESULT SetHomeDirString (
+        _bstr_t bstrVal );
+    _bstr_t GetLoginMsgString ( );
+    HRESULT SetLoginMsgString (
+        _bstr_t bstrVal );
+    _bstr_t GetFullName ( );
+    void PutFullName (
+        _bstr_t pVal );
+    _bstr_t GetComment ( );
+    void PutComment (
+        _bstr_t pVal );
+    _bstr_t GetEmail ( );
+    void PutEmail (
+        _bstr_t pVal );
+    _bstr_t GetFax ( );
+    void PutFax (
+        _bstr_t pVal );
+    _bstr_t GetPhone ( );
+    void PutPhone (
+        _bstr_t pVal );
+    _bstr_t GetPager ( );
+    void PutPager (
+        _bstr_t pVal );
+    _bstr_t GetSftpAuthenticationType (
+        VARIANT * pInherited );
+    HRESULT SetSftpAuthenticationType (
+        _bstr_t val );
+    long GetSSHKeyID (
+        VARIANT * pInherited );
+    HRESULT SetSSHKeyID (
+        long val );
+    VARIANT_BOOL GetExpirationDate (
+        VARIANT * dDate );
+    HRESULT SetExpirationDate (
+        VARIANT * dDate,
+        VARIANT_BOOL bEnable );
+    VARIANT_BOOL GetHasMaxIPs (
+        VARIANT * pInherited );
+    HRESULT SetHasMaxIPs (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasDownloadsPerSession (
+        VARIANT * pInherited );
+    HRESULT SetHasDownloadsPerSession (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasUploadsPerSession (
+        VARIANT * pInherited );
+    HRESULT SetHasUploadsPerSession (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasMaxDownloadSize (
+        VARIANT * pInherited );
+    HRESULT SetHasMaxDownloadSize (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHasMaxUploadSize (
+        VARIANT * pInherited );
+    HRESULT SetHasMaxUploadSize (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetSFTP (
+        VARIANT * pInherited );
+    HRESULT SetSFTP (
+        SFTPAdvBool val );
+    HRESULT SetAllowMODEZ (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetAllowMODEZ (
+        VARIANT * pInherited );
+    VARIANT_BOOL GetAppletEnabled (
+        VARIANT * pInherited );
+    HRESULT SetAppletEnabled (
+        SFTPAdvBool val );
+    _bstr_t GetCustom1 ( );
+    void PutCustom1 (
+        _bstr_t pVal );
+    _bstr_t GetCustom2 ( );
+    void PutCustom2 (
+        _bstr_t pVal );
+    _bstr_t GetCustom3 ( );
+    void PutCustom3 (
+        _bstr_t pVal );
+    _variant_t GetExpirationDateAsVariant ( );
+    _bstr_t GetSSLAuthenticationType (
+        VARIANT * pInherited );
+    HRESULT SetSSLAuthenticationType (
+        _bstr_t val );
+    long GetSSLKeyID (
+        VARIANT * pInherited );
+    HRESULT SetSSLKeyID (
+        long val );
+    VARIANT_BOOL GetClearHTTP (
+        VARIANT * pInherited );
+    HRESULT SetClearHTTP (
+        SFTPAdvBool val );
+    _variant_t GetAllowedMasks ( );
+    _variant_t GetDeniedMasks ( );
+    HRESULT AddIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    HRESULT RemoveIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    VARIANT_BOOL GetIPAccessAllowedDefault ( );
+    void PutIPAccessAllowedDefault (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetLimitLoginAttempts (
+        VARIANT * pInherited );
+    HRESULT SetLimitLoginAttempts (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetLockoutNotDisable (
+        VARIANT * pInherited );
+    HRESULT SetLockoutNotDisable (
+        VARIANT_BOOL val );
+    long GetMaxInvalidLoginAttempts ( );
+    void PutMaxInvalidLoginAttempts (
+        long pVal );
+    long GetLockoutPeriod ( );
+    void PutLockoutPeriod (
+        long pVal );
+    long GetInvalidAttemptsPeriod ( );
+    void PutInvalidAttemptsPeriod (
+        long pVal );
+    VARIANT_BOOL GetFTPS (
+        VARIANT * pInherited );
+    HRESULT SetFTPS (
+        SFTPAdvBool val );
+    VARIANT_BOOL GetHTTPS (
+        VARIANT * pInherited );
+    HRESULT SetHTTPS (
+        SFTPAdvBool val );
+    HRESULT ForcePasswordChange ( );
+    VARIANT_BOOL GetLimitAccessByIP (
+        VARIANT * pInherited );
+    HRESULT SetLimitAccessByIP (
+        SFTPAdvBool val );
+    VARIANT_BOOL IsPasswordAgeLimited (
+        VARIANT * pDate );
+    VARIANT_BOOL IsInactivityPeriodLimited (
+        VARIANT * pDate );
+    VARIANT_BOOL GetForcePasswordResetOnInitialLogin (
+        VARIANT * pInherited );
+    HRESULT SetForcePasswordResetOnInitialLogin (
+        VARIANT_BOOL val );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_GetEnableAccount (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetEnableAccount (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHomeDirIsRoot (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHomeDirIsRoot (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowNoop (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetAllowNoop (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowXCRC (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetAllowXCRC (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetChangePwd (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetChangePwd (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetEnableTimeOut (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetEnableTimeOut (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasMaxSpeed (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasMaxSpeed (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasMaxUsers (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasMaxUsers (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasPwdRetries (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasPwdRetries (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetClearFTP (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetClearFTP (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetEnableDiskQuota (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetEnableDiskQuota (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxIPs (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxIPs (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxSpeed (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxSpeed (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxUsers (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxUsers (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetPwdRetries (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetPwdRetries (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetTimeOut (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetTimeOut (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetDownloadsPerSession (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetDownloadsPerSession (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetUploadsPerSession (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetUploadsPerSession (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetLoginMsg (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetLoginMsg (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetHomeDir (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHomeDir (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetIncorrectPasswordAttempts (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxDownloadSize (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxDownloadSize (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxSpace (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxSpace (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetMaxUploadSize (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetMaxUploadSize (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetUsedSpace (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetDescription (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetDescription (
+        /*[in]*/ BSTR bstrVal ) = 0;
+      virtual HRESULT __stdcall raw_GetHomeDirString (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetHomeDirString (
+        /*[in]*/ BSTR bstrVal ) = 0;
+      virtual HRESULT __stdcall raw_GetLoginMsgString (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetLoginMsgString (
+        /*[in]*/ BSTR bstrVal ) = 0;
+      virtual HRESULT __stdcall get_FullName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FullName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Comment (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Comment (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Email (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Email (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Fax (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Fax (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Phone (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Phone (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Pager (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Pager (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetSftpAuthenticationType (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetSftpAuthenticationType (
+        /*[in]*/ BSTR val ) = 0;
+      virtual HRESULT __stdcall raw_GetSSHKeyID (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetSSHKeyID (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetExpirationDate (
+        /*[out]*/ VARIANT * dDate,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetExpirationDate (
+        /*[in]*/ VARIANT * dDate,
+        /*[in]*/ VARIANT_BOOL bEnable ) = 0;
+      virtual HRESULT __stdcall raw_GetHasMaxIPs (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasMaxIPs (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasDownloadsPerSession (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasDownloadsPerSession (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasUploadsPerSession (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasUploadsPerSession (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasMaxDownloadSize (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasMaxDownloadSize (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHasMaxUploadSize (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHasMaxUploadSize (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetSFTP (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetSFTP (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_SetAllowMODEZ (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowMODEZ (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetAppletEnabled (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetAppletEnabled (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall get_Custom1 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Custom1 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Custom2 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Custom2 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Custom3 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Custom3 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetExpirationDateAsVariant (
+        /*[out,retval]*/ VARIANT * dDate ) = 0;
+      virtual HRESULT __stdcall raw_GetSSLAuthenticationType (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLAuthenticationType (
+        /*[in]*/ BSTR val ) = 0;
+      virtual HRESULT __stdcall raw_GetSSLKeyID (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLKeyID (
+        /*[in]*/ long val ) = 0;
+      virtual HRESULT __stdcall raw_GetClearHTTP (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetClearHTTP (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_GetDeniedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_AddIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall raw_RemoveIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall get_IPAccessAllowedDefault (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_IPAccessAllowedDefault (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetLimitLoginAttempts (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetLimitLoginAttempts (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetLockoutNotDisable (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetLockoutNotDisable (
+        /*[in]*/ VARIANT_BOOL val ) = 0;
+      virtual HRESULT __stdcall get_MaxInvalidLoginAttempts (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxInvalidLoginAttempts (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_LockoutPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_LockoutPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_InvalidAttemptsPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_InvalidAttemptsPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetFTPS (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetFTPS (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_GetHTTPS (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetHTTPS (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_ForcePasswordChange ( ) = 0;
+      virtual HRESULT __stdcall raw_GetLimitAccessByIP (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetLimitAccessByIP (
+        /*[in]*/ SFTPAdvBool val ) = 0;
+      virtual HRESULT __stdcall raw_IsPasswordAgeLimited (
+        /*[out]*/ VARIANT * pDate,
+        /*[out,retval]*/ VARIANT_BOOL * pLimited ) = 0;
+      virtual HRESULT __stdcall raw_IsInactivityPeriodLimited (
+        /*[out]*/ VARIANT * pDate,
+        /*[out,retval]*/ VARIANT_BOOL * pLimited ) = 0;
+      virtual HRESULT __stdcall raw_GetForcePasswordResetOnInitialLogin (
+        /*[out]*/ VARIANT * pInherited,
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetForcePasswordResetOnInitialLogin (
+        /*[in]*/ VARIANT_BOOL val ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0004_0001
+{
+    abFalse = 0,
+    abTrue = 1,
+    abInherited = -2
+};
+
+struct __declspec(uuid("86fd1ebe-92e2-40f3-9c03-e5f0ca55f8ab"))
+ICICommandSettings : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetName,put=PutName))
+    _bstr_t Name;
+    __declspec(property(get=GetDescription,put=PutDescription))
+    _bstr_t Description;
+    __declspec(property(get=GetExecutable,put=PutExecutable))
+    _bstr_t Executable;
+    __declspec(property(get=GetParameters,put=PutParameters))
+    _bstr_t Parameters;
+    __declspec(property(get=GetMinNumOfParamsMsg,put=PutMinNumOfParamsMsg))
+    _bstr_t MinNumOfParamsMsg;
+    __declspec(property(get=GetIsEnabled,put=PutIsEnabled))
+    VARIANT_BOOL IsEnabled;
+    __declspec(property(get=GetRequireParams,put=PutRequireParams))
+    VARIANT_BOOL RequireParams;
+    __declspec(property(get=GetRedirectOutputToClient,put=PutRedirectOutputToClient))
+    VARIANT_BOOL RedirectOutputToClient;
+    __declspec(property(get=GetRedirectOutputToLog,put=PutRedirectOutputToLog))
+    VARIANT_BOOL RedirectOutputToLog;
+    __declspec(property(get=GetLogPath,put=PutLogPath))
+    _bstr_t LogPath;
+    __declspec(property(get=GetEnableProcessTimeOut,put=PutEnableProcessTimeOut))
+    VARIANT_BOOL EnableProcessTimeOut;
+    __declspec(property(get=GetMinNumOfParams,put=PutMinNumOfParams))
+    long MinNumOfParams;
+    __declspec(property(get=GetProcessTimeOut,put=PutProcessTimeOut))
+    long ProcessTimeOut;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetName ( );
+    void PutName (
+        _bstr_t pVal );
+    _bstr_t GetDescription ( );
+    void PutDescription (
+        _bstr_t pVal );
+    _bstr_t GetExecutable ( );
+    void PutExecutable (
+        _bstr_t pVal );
+    _bstr_t GetParameters ( );
+    void PutParameters (
+        _bstr_t pVal );
+    _bstr_t GetMinNumOfParamsMsg ( );
+    void PutMinNumOfParamsMsg (
+        _bstr_t pVal );
+    VARIANT_BOOL GetIsEnabled ( );
+    void PutIsEnabled (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetRequireParams ( );
+    void PutRequireParams (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetRedirectOutputToClient ( );
+    void PutRedirectOutputToClient (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetRedirectOutputToLog ( );
+    void PutRedirectOutputToLog (
+        VARIANT_BOOL pVal );
+    _bstr_t GetLogPath ( );
+    void PutLogPath (
+        _bstr_t pVal );
+    VARIANT_BOOL GetEnableProcessTimeOut ( );
+    void PutEnableProcessTimeOut (
+        VARIANT_BOOL pVal );
+    long GetMinNumOfParams ( );
+    void PutMinNumOfParams (
+        long pVal );
+    long GetProcessTimeOut ( );
+    void PutProcessTimeOut (
+        long pVal );
+    _variant_t GetUserPermissions ( );
+    HRESULT AddUserPermission (
+        _bstr_t bstrUser );
+    HRESULT RemoveUserPermission (
+        _bstr_t bstrUser );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Name (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Description (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Description (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Executable (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Executable (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Parameters (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Parameters (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_MinNumOfParamsMsg (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_MinNumOfParamsMsg (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_IsEnabled (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_IsEnabled (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_RequireParams (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_RequireParams (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_RedirectOutputToClient (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_RedirectOutputToClient (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_RedirectOutputToLog (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_RedirectOutputToLog (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_LogPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_LogPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_EnableProcessTimeOut (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_EnableProcessTimeOut (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_MinNumOfParams (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MinNumOfParams (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_ProcessTimeOut (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_ProcessTimeOut (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetUserPermissions (
+        /*[out,retval]*/ VARIANT * aUsers ) = 0;
+      virtual HRESULT __stdcall raw_AddUserPermission (
+        /*[in]*/ BSTR bstrUser ) = 0;
+      virtual HRESULT __stdcall raw_RemoveUserPermission (
+        /*[in]*/ BSTR bstrUser ) = 0;
+};
+
+struct __declspec(uuid("b8562c98-012e-4fef-9732-33a34aa01a18"))
+ICICertInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetID))
+    long ID;
+    __declspec(property(get=GetDescription))
+    _bstr_t Description;
+    __declspec(property(get=GetIssuerOneLine))
+    _bstr_t IssuerOneLine;
+    __declspec(property(get=GetIssuerUnit))
+    _bstr_t IssuerUnit;
+    __declspec(property(get=GetIssuerOrg))
+    _bstr_t IssuerOrg;
+    __declspec(property(get=GetIssuerCountry))
+    _bstr_t IssuerCountry;
+    __declspec(property(get=GetIssuerCName))
+    _bstr_t IssuerCName;
+    __declspec(property(get=GetSubjectOneLine))
+    _bstr_t SubjectOneLine;
+    __declspec(property(get=GetSubjectUnit))
+    _bstr_t SubjectUnit;
+    __declspec(property(get=GetSubjectOrg))
+    _bstr_t SubjectOrg;
+    __declspec(property(get=GetSubjectCountry))
+    _bstr_t SubjectCountry;
+    __declspec(property(get=GetSubjectCName))
+    _bstr_t SubjectCName;
+    __declspec(property(get=GetNotBefore))
+    _bstr_t NotBefore;
+    __declspec(property(get=GetNotAfter))
+    _bstr_t NotAfter;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    long GetID ( );
+    _bstr_t GetDescription ( );
+    _bstr_t GetIssuerOneLine ( );
+    _bstr_t GetIssuerUnit ( );
+    _bstr_t GetIssuerOrg ( );
+    _bstr_t GetIssuerCountry ( );
+    _bstr_t GetIssuerCName ( );
+    _bstr_t GetSubjectOneLine ( );
+    _bstr_t GetSubjectUnit ( );
+    _bstr_t GetSubjectOrg ( );
+    _bstr_t GetSubjectCountry ( );
+    _bstr_t GetSubjectCName ( );
+    _bstr_t GetNotBefore ( );
+    _bstr_t GetNotAfter ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_ID (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall get_Description (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_IssuerOneLine (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_IssuerUnit (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_IssuerOrg (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_IssuerCountry (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_IssuerCName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_SubjectOneLine (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_SubjectUnit (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_SubjectOrg (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_SubjectCountry (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_SubjectCName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_NotBefore (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_NotAfter (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0002
+{
+    OnTimer = 4097,
+    OnLogRotate = 4098,
+    OnServiceStopped = 4099,
+    OnServiceStarted = 4100,
+    MonitorFolder = 4101,
+    OnMonitorFolderFailed = 4102,
+    OnSiteStarted = 8193,
+    OnSiteStopped = 8194,
+    OnClientConnected = 12289,
+    OnClientConnectionFailed = 12290,
+    OnClientDisconnected = 12291,
+    OnClientDisabled = 16385,
+    OnClientQuotaExceeded = 16386,
+    OnClientLoggedOut = 16387,
+    OnClientLoggedIn = 16388,
+    OnClientLoginFailed = 16389,
+    OnClientPasswordChanged = 16390,
+    OnClientCreated = 16391,
+    OnClientLocked = 16392,
+    OnFileDeleted = 20481,
+    OnFileUpload = 20482,
+    BeforeFileDownload = 20483,
+    OnFileDownload = 20484,
+    OnFileRenamed = 20485,
+    OnFolderCreated = 20486,
+    OnFolderDeleted = 20487,
+    OnUploadFailed = 20489,
+    OnDownloadFailed = 20490,
+    OnChangeFolder = 20491,
+    OnFileMoved = 20492,
+    OnVerifiedUploadSuccess = 20493,
+    OnVerifiedUploadFailure = 20494,
+    OnVerifiedDownloadSuccess = 20495,
+    OnVerifiedDownloadFailure = 20496
+};
+
+struct __declspec(uuid("3eece91b-7f0f-4745-8144-e3b47a71b663"))
+ICISite : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetName))
+    _bstr_t Name;
+    __declspec(property(get=GetID))
+    long ID;
+    __declspec(property(get=GetLimitLoginAttempts,put=PutLimitLoginAttempts))
+    VARIANT_BOOL LimitLoginAttempts;
+    __declspec(property(get=GetLockoutNotDisable,put=PutLockoutNotDisable))
+    VARIANT_BOOL LockoutNotDisable;
+    __declspec(property(get=GetMaxInvalidLoginAttempts,put=PutMaxInvalidLoginAttempts))
+    long MaxInvalidLoginAttempts;
+    __declspec(property(get=GetLockoutPeriod,put=PutLockoutPeriod))
+    long LockoutPeriod;
+    __declspec(property(get=GetInvalidAttemptsPeriod,put=PutInvalidAttemptsPeriod))
+    long InvalidAttemptsPeriod;
+    __declspec(property(get=GetUserLimitMessage,put=PutUserLimitMessage))
+    _bstr_t UserLimitMessage;
+    __declspec(property(get=GetExitMessage,put=PutExitMessage))
+    _bstr_t ExitMessage;
+    __declspec(property(get=GetVFSFilter,put=PutVFSFilter))
+    _bstr_t VFSFilter;
+    __declspec(property(get=GetBlockAntiTimeOut,put=PutBlockAntiTimeOut))
+    VARIANT_BOOL BlockAntiTimeOut;
+    __declspec(property(get=GetBlockSiteToSite,put=PutBlockSiteToSite))
+    VARIANT_BOOL BlockSiteToSite;
+    __declspec(property(get=GetAutoCreateHomeFolder,put=PutAutoCreateHomeFolder))
+    VARIANT_BOOL AutoCreateHomeFolder;
+    __declspec(property(get=GetAssignFullPermissionsForHomeFolder,put=PutAssignFullPermissionsForHomeFolder))
+    VARIANT_BOOL AssignFullPermissionsForHomeFolder;
+    __declspec(property(get=GetEnablePortRange,put=PutEnablePortRange))
+    VARIANT_BOOL EnablePortRange;
+    __declspec(property(get=GetHasMaxSpeed,put=PutHasMaxSpeed))
+    VARIANT_BOOL HasMaxSpeed;
+    __declspec(property(get=GetHasMaxUsers,put=PutHasMaxUsers))
+    VARIANT_BOOL HasMaxUsers;
+    __declspec(property(get=GetHasMaxConnectionsPerAccount,put=PutHasMaxConnectionsPerAccount))
+    VARIANT_BOOL HasMaxConnectionsPerAccount;
+    __declspec(property(get=GetHasMaxIPPerAccount,put=PutHasMaxIPPerAccount))
+    VARIANT_BOOL HasMaxIPPerAccount;
+    __declspec(property(get=GetDisconnectOnDOS,put=PutDisconnectOnDOS))
+    VARIANT_BOOL DisconnectOnDOS;
+    __declspec(property(get=GetBanIPOnDOS,put=PutBanIPOnDOS))
+    VARIANT_BOOL BanIPOnDOS;
+    __declspec(property(get=GetAutoBanIPsPermanently,put=PutAutoBanIPsPermanently))
+    VARIANT_BOOL AutoBanIPsPermanently;
+    __declspec(property(get=GetPASVListenIP,put=PutPASVListenIP))
+    long PASVListenIP;
+    __declspec(property(get=GetPASVPortMin,put=PutPASVPortMin))
+    long PASVPortMin;
+    __declspec(property(get=GetPASVPortMax,put=PutPASVPortMax))
+    long PASVPortMax;
+    __declspec(property(get=GetMaxTransferSpeed,put=PutMaxTransferSpeed))
+    long MaxTransferSpeed;
+    __declspec(property(get=GetMaxConcurrentConnections,put=PutMaxConcurrentConnections))
+    long MaxConcurrentConnections;
+    __declspec(property(get=GetMaxConnectionsPerUser,put=PutMaxConnectionsPerUser))
+    long MaxConnectionsPerUser;
+    __declspec(property(get=GetMaxConnectionsFromSameIP,put=PutMaxConnectionsFromSameIP))
+    long MaxConnectionsFromSameIP;
+    __declspec(property(get=GetDOSLimit,put=PutDOSLimit))
+    long DOSLimit;
+    __declspec(property(get=GetIsStarted))
+    VARIANT_BOOL IsStarted;
+    __declspec(property(get=GetAutobanSensitivity,put=PutAutobanSensitivity))
+    AutobanSensitivity _AutobanSensitivity;
+    __declspec(property(get=GetAllowChangePassword,put=PutAllowChangePassword))
+    VARIANT_BOOL AllowChangePassword;
+    __declspec(property(get=GetForcePasswordResetOnInitialLogin,put=PutForcePasswordResetOnInitialLogin))
+    VARIANT_BOOL ForcePasswordResetOnInitialLogin;
+    __declspec(property(get=GetIPAccessAllowedDefault,put=PutIPAccessAllowedDefault))
+    VARIANT_BOOL IPAccessAllowedDefault;
+    __declspec(property(get=GetConnectMessage,put=PutConnectMessage))
+    _bstr_t ConnectMessage;
+    __declspec(property(get=GetODBCSettings,put=PutODBCSettings))
+    _bstr_t ODBCSettings;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetName ( );
+    long GetID ( );
+    long GetConnectedCount ( );
+    HRESULT Start ( );
+    HRESULT Stop ( );
+    long GetAuthManagerID ( );
+    _bstr_t GetRootFolder ( );
+    VARIANT_BOOL SetRootFolder (
+        _bstr_t newVal );
+    long GetIP ( );
+    VARIANT_BOOL SetIP (
+        long newVal );
+    long GetPort ( );
+    VARIANT_BOOL SetPort (
+        long newVal );
+    VARIANT_BOOL GetFTPAccess ( );
+    VARIANT_BOOL SetFTPAccess (
+        VARIANT_BOOL newVal );
+    VARIANT_BOOL GetSSLAuth ( );
+    VARIANT_BOOL GetSSLImp ( );
+    VARIANT_BOOL SetSSLAuth (
+        VARIANT_BOOL newVal );
+    VARIANT_BOOL SetSSLImp (
+        VARIANT_BOOL newVal );
+    VARIANT_BOOL GetCheckClientCert ( );
+    VARIANT_BOOL SetCheckClientCert (
+        VARIANT_BOOL newVal );
+    _bstr_t GetCertFilePath ( );
+    _bstr_t GetKeyFilePath ( );
+    _bstr_t GetPassPhrase ( );
+    _bstr_t GetTrustedCertsPath ( );
+    _bstr_t GetAwaitingCertsPath ( );
+    VARIANT_BOOL SetCertFilePath (
+        _bstr_t newVal );
+    VARIANT_BOOL SetKeyFilePath (
+        _bstr_t newVal );
+    VARIANT_BOOL SetPassPhrase (
+        _bstr_t newVal );
+    VARIANT_BOOL GetIsStarted ( );
+    long GetDownloadSpeed ( );
+    long GetUploadSpeed ( );
+    long GetDownloadCount ( );
+    long GetUploadCount ( );
+    _bstr_t GetStartTime ( );
+    _bstr_t GetFolderList (
+        _bstr_t bstrFolderAlias );
+    _variant_t GetFolderPermissions (
+        _bstr_t bstrFolder );
+    HRESULT SetPermission (
+        struct IPermission * pPermission,
+        VARIANT_BOOL bRemoveOtherPermissions );
+    HRESULT RemovePermission (
+        _bstr_t bstrFolder,
+        _bstr_t bstrClient );
+    IPermissionPtr GetBlankPermission (
+        _bstr_t bstrFolder,
+        _bstr_t bstrClient );
+    HRESULT CreatePhysicalFolder (
+        _bstr_t bstrNewFolder );
+    HRESULT CreateVirtualFolder (
+        _bstr_t bstrNewFolder,
+        _bstr_t bstrTarget );
+    HRESULT RemoveFolder (
+        _bstr_t bstrFolder );
+    HRESULT RenameFolder (
+        _bstr_t bstrSrcFolder,
+        _bstr_t bstrDstFolder );
+    HRESULT CreatePermissionGroup (
+        _bstr_t bstrName );
+    _variant_t GetPermissionGroups ( );
+    HRESULT RemovePermissionGroup (
+        _bstr_t bstrName );
+    HRESULT RenamePermissionGroup (
+        _bstr_t bstrOldName,
+        _bstr_t bstrNewName );
+    HRESULT AddUserToPermissionGroup (
+        _bstr_t bstrUser,
+        _bstr_t bstrGroup );
+    HRESULT RemoveUserFromPermissionGroup (
+        _bstr_t bstrUser,
+        _bstr_t bstrGroup );
+    HRESULT CreateUser (
+        _bstr_t bstrLogin,
+        _bstr_t bstrPwd,
+        int nPwdType,
+        _bstr_t bstrDescription );
+    _variant_t GetUsers ( );
+    HRESULT RemoveUser (
+        _bstr_t bstrLogin );
+    HRESULT RenameUser (
+        _bstr_t bstrOldName,
+        _bstr_t bstrNewName );
+    _variant_t GetSettingsLevels ( );
+    _variant_t GetSettingsLevelUsers (
+        _bstr_t bstrGroup );
+    HRESULT CreateSettingsLevel (
+        _bstr_t bstrName,
+        _bstr_t bstrDescription );
+    HRESULT RemoveSettingsLevel (
+        _bstr_t bstrName );
+    HRESULT RenameSettingsLevel (
+        _bstr_t bstrOldName,
+        _bstr_t bstrNewName );
+    HRESULT MoveUserToSettingsLevel (
+        _bstr_t bstrUser,
+        _bstr_t bstrGroup );
+    _variant_t GetPermissionGroupsOfUser (
+        _bstr_t bstrUser );
+    HRESULT ChangeUserPassword (
+        _bstr_t bstrUser,
+        _bstr_t bstrPwd,
+        int nPwdType );
+    ICIClientSettingsPtr GetSettingsLevelSettings (
+        _bstr_t bstrGroup );
+    ICIClientSettingsPtr GetUserSettings (
+        _bstr_t bstrUser );
+    HRESULT Remove ( );
+    _variant_t GetCommands ( );
+    ICICommandSettingsPtr GetCommandSettings (
+        _bstr_t bstrCommand );
+    ICICommandSettingsPtr CreateCommand (
+        _bstr_t bstrName );
+    HRESULT RemoveCommand (
+        _bstr_t bstrName );
+    _variant_t GetTrustedCertificates ( );
+    ICICertInfoPtr GetTrustedCertificateInfo (
+        long lID );
+    _variant_t GetPendingCertificates ( );
+    ICICertInfoPtr GetPendingCertificateInfo (
+        long lID );
+    _bstr_t ExportTrustedCertificate (
+        long lID );
+    long ImportTrustedCertificate (
+        _bstr_t bstrCertPath );
+    HRESULT RemoveTrustedCertificate (
+        long lID );
+    HRESULT RemovePendingCertificate (
+        long lID );
+    long AddCertificateToTrusted (
+        long lID );
+    _bstr_t GetUserLimitMessage ( );
+    void PutUserLimitMessage (
+        _bstr_t pVal );
+    _bstr_t GetExitMessage ( );
+    void PutExitMessage (
+        _bstr_t pVal );
+    _bstr_t GetVFSFilter ( );
+    void PutVFSFilter (
+        _bstr_t pVal );
+    VARIANT_BOOL GetBlockAntiTimeOut ( );
+    void PutBlockAntiTimeOut (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetBlockSiteToSite ( );
+    void PutBlockSiteToSite (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetAutoCreateHomeFolder ( );
+    void PutAutoCreateHomeFolder (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetAssignFullPermissionsForHomeFolder ( );
+    void PutAssignFullPermissionsForHomeFolder (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetEnablePortRange ( );
+    void PutEnablePortRange (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetHasMaxSpeed ( );
+    void PutHasMaxSpeed (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetHasMaxUsers ( );
+    void PutHasMaxUsers (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetHasMaxConnectionsPerAccount ( );
+    void PutHasMaxConnectionsPerAccount (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetHasMaxIPPerAccount ( );
+    void PutHasMaxIPPerAccount (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetDisconnectOnDOS ( );
+    void PutDisconnectOnDOS (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetBanIPOnDOS ( );
+    void PutBanIPOnDOS (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetAutoBanIPsPermanently ( );
+    void PutAutoBanIPsPermanently (
+        VARIANT_BOOL pVal );
+    long GetPASVListenIP ( );
+    void PutPASVListenIP (
+        long pVal );
+    long GetPASVPortMin ( );
+    void PutPASVPortMin (
+        long pVal );
+    long GetPASVPortMax ( );
+    void PutPASVPortMax (
+        long pVal );
+    long GetMaxTransferSpeed ( );
+    void PutMaxTransferSpeed (
+        long pVal );
+    long GetMaxConcurrentConnections ( );
+    void PutMaxConcurrentConnections (
+        long pVal );
+    long GetMaxConnectionsPerUser ( );
+    void PutMaxConnectionsPerUser (
+        long pVal );
+    long GetMaxConnectionsFromSameIP ( );
+    void PutMaxConnectionsFromSameIP (
+        long pVal );
+    long GetDOSLimit ( );
+    void PutDOSLimit (
+        long pVal );
+    _variant_t GetAllowedMasks ( );
+    _variant_t GetDeniedMasks ( );
+    HRESULT AddIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    HRESULT RemoveIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    VARIANT_BOOL GetIPAccessAllowedDefault ( );
+    void PutIPAccessAllowedDefault (
+        VARIANT_BOOL pVal );
+    HRESULT CreateUserEx (
+        _bstr_t bstrLogin,
+        _bstr_t bstrPwd,
+        int nPwdType,
+        _bstr_t bstrDescription,
+        _bstr_t bstrFullName,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bFullPermissionsForHomeFolder,
+        _bstr_t bstrSettingsLevel );
+    _variant_t GetPermissionGroupList (
+        _bstr_t bstrGroup );
+    HRESULT ForceSynchronizeUserDatabase ( );
+    _bstr_t GetConnectMessage ( );
+    void PutConnectMessage (
+        _bstr_t pVal );
+    VARIANT_BOOL ValidatePassword (
+        _bstr_t bstrUser,
+        _bstr_t bstrPwd );
+    VARIANT_BOOL CancelTransfer (
+        _bstr_t bstrPath );
+    _bstr_t GetSSHKeyFilePath ( );
+    VARIANT_BOOL SetSSHKeyFilePath (
+        _bstr_t newVal );
+    _bstr_t GetODBCSettings ( );
+    void PutODBCSettings (
+        _bstr_t pVal );
+    HRESULT RemapVirtualFolder (
+        _bstr_t bstrVFSFolder,
+        _bstr_t bstrTarget );
+    HRESULT AssignEventRuleCustomCommandWorkingFolder (
+        _bstr_t bstrCustomCommandName,
+        _bstr_t bstrWorkingFolder );
+    _variant_t GetConnectedUsers ( );
+    VARIANT_BOOL KickUser (
+        long nUserID );
+    _bstr_t CreateComplexPassword (
+        const _variant_t & bstrUserName = vtMissing );
+    VARIANT_BOOL GetHTTPAccess ( );
+    VARIANT_BOOL SetHTTPAccess (
+        VARIANT_BOOL newVal );
+    VARIANT_BOOL GetHTTPSAccess ( );
+    VARIANT_BOOL SetHTTPSAccess (
+        VARIANT_BOOL newVal );
+    long GetHTTPPort ( );
+    VARIANT_BOOL SetHTTPPort (
+        long newVal );
+    long GetHTTPSPort ( );
+    VARIANT_BOOL SetHTTPSPort (
+        long newVal );
+    VARIANT_BOOL GetLimitLoginAttempts ( );
+    void PutLimitLoginAttempts (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetLockoutNotDisable ( );
+    void PutLockoutNotDisable (
+        VARIANT_BOOL pVal );
+    long GetMaxInvalidLoginAttempts ( );
+    void PutMaxInvalidLoginAttempts (
+        long pVal );
+    long GetLockoutPeriod ( );
+    void PutLockoutPeriod (
+        long pVal );
+    long GetInvalidAttemptsPeriod ( );
+    void PutInvalidAttemptsPeriod (
+        long pVal );
+    IDispatchPtr EventRules (
+        EventType type );
+    _bstr_t GetPhysicalPath (
+        _bstr_t bstrFolderAlias );
+    HRESULT EnableSFTP (
+        _bstr_t SFTPKeyFile,
+        _bstr_t SFTPKeyPassword );
+    HRESULT DisableSFTP ( );
+    HRESULT SetSSLCertificate (
+        _bstr_t bzCertFilePath,
+        _bstr_t bzKeyFilePath,
+        _bstr_t bzPassPhrase );
+    AutobanSensitivity GetAutobanSensitivity ( );
+    void PutAutobanSensitivity (
+        AutobanSensitivity pVal );
+    VARIANT_BOOL GetAllowChangePassword ( );
+    void PutAllowChangePassword (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetForcePasswordResetOnInitialLogin ( );
+    void PutForcePasswordResetOnInitialLogin (
+        VARIANT_BOOL pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_ID (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetConnectedCount (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_Start ( ) = 0;
+      virtual HRESULT __stdcall raw_Stop ( ) = 0;
+      virtual HRESULT __stdcall raw_GetAuthManagerID (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetRootFolder (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetRootFolder (
+        /*[in]*/ BSTR newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetIP (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetIP (
+        /*[in]*/ long newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetPort (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetPort (
+        /*[in]*/ long newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetFTPAccess (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetFTPAccess (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetSSLAuth (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetSSLImp (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLAuth (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLImp (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetCheckClientCert (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetCheckClientCert (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetCertFilePath (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetKeyFilePath (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetPassPhrase (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetTrustedCertsPath (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetAwaitingCertsPath (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetCertFilePath (
+        /*[in]*/ BSTR newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_SetKeyFilePath (
+        /*[in]*/ BSTR newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_SetPassPhrase (
+        /*[in]*/ BSTR newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall get_IsStarted (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetDownloadSpeed (
+        /*[out,retval]*/ long * pSpeed ) = 0;
+      virtual HRESULT __stdcall raw_GetUploadSpeed (
+        /*[out,retval]*/ long * pSpeed ) = 0;
+      virtual HRESULT __stdcall raw_GetDownloadCount (
+        /*[out,retval]*/ long * pCnt ) = 0;
+      virtual HRESULT __stdcall raw_GetUploadCount (
+        /*[out,retval]*/ long * pCnt ) = 0;
+      virtual HRESULT __stdcall raw_GetStartTime (
+        /*[out,retval]*/ BSTR * bstrStartTime ) = 0;
+      virtual HRESULT __stdcall raw_GetFolderList (
+        /*[in]*/ BSTR bstrFolderAlias,
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetFolderPermissions (
+        /*[in]*/ BSTR bstrFolder,
+        /*[out,retval]*/ VARIANT * aPermissions ) = 0;
+      virtual HRESULT __stdcall raw_SetPermission (
+        /*[in]*/ struct IPermission * pPermission,
+        /*[in]*/ VARIANT_BOOL bRemoveOtherPermissions ) = 0;
+      virtual HRESULT __stdcall raw_RemovePermission (
+        /*[in]*/ BSTR bstrFolder,
+        /*[in]*/ BSTR bstrClient ) = 0;
+      virtual HRESULT __stdcall raw_GetBlankPermission (
+        /*[in]*/ BSTR bstrFolder,
+        /*[in]*/ BSTR bstrClient,
+        /*[out,retval]*/ struct IPermission * * pPermission ) = 0;
+      virtual HRESULT __stdcall raw_CreatePhysicalFolder (
+        /*[in]*/ BSTR bstrNewFolder ) = 0;
+      virtual HRESULT __stdcall raw_CreateVirtualFolder (
+        /*[in]*/ BSTR bstrNewFolder,
+        /*[in]*/ BSTR bstrTarget ) = 0;
+      virtual HRESULT __stdcall raw_RemoveFolder (
+        /*[in]*/ BSTR bstrFolder ) = 0;
+      virtual HRESULT __stdcall raw_RenameFolder (
+        /*[in]*/ BSTR bstrSrcFolder,
+        /*[in]*/ BSTR bstrDstFolder ) = 0;
+      virtual HRESULT __stdcall raw_CreatePermissionGroup (
+        /*[in]*/ BSTR bstrName ) = 0;
+      virtual HRESULT __stdcall raw_GetPermissionGroups (
+        /*[out,retval]*/ VARIANT * aGroups ) = 0;
+      virtual HRESULT __stdcall raw_RemovePermissionGroup (
+        /*[in]*/ BSTR bstrName ) = 0;
+      virtual HRESULT __stdcall raw_RenamePermissionGroup (
+        /*[in]*/ BSTR bstrOldName,
+        /*[in]*/ BSTR bstrNewName ) = 0;
+      virtual HRESULT __stdcall raw_AddUserToPermissionGroup (
+        /*[in]*/ BSTR bstrUser,
+        /*[in]*/ BSTR bstrGroup ) = 0;
+      virtual HRESULT __stdcall raw_RemoveUserFromPermissionGroup (
+        /*[in]*/ BSTR bstrUser,
+        /*[in]*/ BSTR bstrGroup ) = 0;
+      virtual HRESULT __stdcall raw_CreateUser (
+        /*[in]*/ BSTR bstrLogin,
+        /*[in]*/ BSTR bstrPwd,
+        /*[in]*/ int nPwdType,
+        /*[in]*/ BSTR bstrDescription ) = 0;
+      virtual HRESULT __stdcall raw_GetUsers (
+        /*[out,retval]*/ VARIANT * aUsers ) = 0;
+      virtual HRESULT __stdcall raw_RemoveUser (
+        /*[in]*/ BSTR bstrLogin ) = 0;
+      virtual HRESULT __stdcall raw_RenameUser (
+        /*[in]*/ BSTR bstrOldName,
+        /*[in]*/ BSTR bstrNewName ) = 0;
+      virtual HRESULT __stdcall raw_GetSettingsLevels (
+        /*[out,retval]*/ VARIANT * aLevels ) = 0;
+      virtual HRESULT __stdcall raw_GetSettingsLevelUsers (
+        /*[in]*/ BSTR bstrGroup,
+        /*[out,retval]*/ VARIANT * aUsers ) = 0;
+      virtual HRESULT __stdcall raw_CreateSettingsLevel (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrDescription ) = 0;
+      virtual HRESULT __stdcall raw_RemoveSettingsLevel (
+        /*[in]*/ BSTR bstrName ) = 0;
+      virtual HRESULT __stdcall raw_RenameSettingsLevel (
+        /*[in]*/ BSTR bstrOldName,
+        /*[in]*/ BSTR bstrNewName ) = 0;
+      virtual HRESULT __stdcall raw_MoveUserToSettingsLevel (
+        /*[in]*/ BSTR bstrUser,
+        /*[in]*/ BSTR bstrGroup ) = 0;
+      virtual HRESULT __stdcall raw_GetPermissionGroupsOfUser (
+        /*[in]*/ BSTR bstrUser,
+        /*[out,retval]*/ VARIANT * aGroups ) = 0;
+      virtual HRESULT __stdcall raw_ChangeUserPassword (
+        /*[in]*/ BSTR bstrUser,
+        /*[in]*/ BSTR bstrPwd,
+        /*[in]*/ int nPwdType ) = 0;
+      virtual HRESULT __stdcall raw_GetSettingsLevelSettings (
+        /*[in]*/ BSTR bstrGroup,
+        /*[out,retval]*/ struct ICIClientSettings * * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetUserSettings (
+        /*[in]*/ BSTR bstrUser,
+        /*[out,retval]*/ struct ICIClientSettings * * prop ) = 0;
+      virtual HRESULT __stdcall raw_Remove ( ) = 0;
+      virtual HRESULT __stdcall raw_GetCommands (
+        /*[out,retval]*/ VARIANT * aCommands ) = 0;
+      virtual HRESULT __stdcall raw_GetCommandSettings (
+        /*[in]*/ BSTR bstrCommand,
+        /*[out,retval]*/ struct ICICommandSettings * * prop ) = 0;
+      virtual HRESULT __stdcall raw_CreateCommand (
+        /*[in]*/ BSTR bstrName,
+        /*[out,retval]*/ struct ICICommandSettings * * prop ) = 0;
+      virtual HRESULT __stdcall raw_RemoveCommand (
+        /*[in]*/ BSTR bstrName ) = 0;
+      virtual HRESULT __stdcall raw_GetTrustedCertificates (
+        /*[out,retval]*/ VARIANT * aCerts ) = 0;
+      virtual HRESULT __stdcall raw_GetTrustedCertificateInfo (
+        /*[in]*/ long lID,
+        /*[out,retval]*/ struct ICICertInfo * * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetPendingCertificates (
+        /*[out,retval]*/ VARIANT * aCerts ) = 0;
+      virtual HRESULT __stdcall raw_GetPendingCertificateInfo (
+        /*[in]*/ long lID,
+        /*[out,retval]*/ struct ICICertInfo * * prop ) = 0;
+      virtual HRESULT __stdcall raw_ExportTrustedCertificate (
+        /*[in]*/ long lID,
+        /*[out,retval]*/ BSTR * bstrCertData ) = 0;
+      virtual HRESULT __stdcall raw_ImportTrustedCertificate (
+        /*[in]*/ BSTR bstrCertPath,
+        /*[out,retval]*/ long * lID ) = 0;
+      virtual HRESULT __stdcall raw_RemoveTrustedCertificate (
+        /*[in]*/ long lID ) = 0;
+      virtual HRESULT __stdcall raw_RemovePendingCertificate (
+        /*[in]*/ long lID ) = 0;
+      virtual HRESULT __stdcall raw_AddCertificateToTrusted (
+        /*[in]*/ long lID,
+        /*[out,retval]*/ long * lNewID ) = 0;
+      virtual HRESULT __stdcall get_UserLimitMessage (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_UserLimitMessage (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ExitMessage (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ExitMessage (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_VFSFilter (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_VFSFilter (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_BlockAntiTimeOut (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_BlockAntiTimeOut (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_BlockSiteToSite (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_BlockSiteToSite (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_AutoCreateHomeFolder (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AutoCreateHomeFolder (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_AssignFullPermissionsForHomeFolder (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AssignFullPermissionsForHomeFolder (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_EnablePortRange (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_EnablePortRange (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_HasMaxSpeed (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_HasMaxSpeed (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_HasMaxUsers (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_HasMaxUsers (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_HasMaxConnectionsPerAccount (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_HasMaxConnectionsPerAccount (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_HasMaxIPPerAccount (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_HasMaxIPPerAccount (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DisconnectOnDOS (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DisconnectOnDOS (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_BanIPOnDOS (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_BanIPOnDOS (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_AutoBanIPsPermanently (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AutoBanIPsPermanently (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_PASVListenIP (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_PASVListenIP (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_PASVPortMin (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_PASVPortMin (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_PASVPortMax (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_PASVPortMax (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MaxTransferSpeed (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxTransferSpeed (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MaxConcurrentConnections (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxConcurrentConnections (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MaxConnectionsPerUser (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxConnectionsPerUser (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MaxConnectionsFromSameIP (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxConnectionsFromSameIP (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_DOSLimit (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_DOSLimit (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_GetDeniedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_AddIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall raw_RemoveIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall get_IPAccessAllowedDefault (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_IPAccessAllowedDefault (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall raw_CreateUserEx (
+        /*[in]*/ BSTR bstrLogin,
+        /*[in]*/ BSTR bstrPwd,
+        /*[in]*/ int nPwdType,
+        /*[in]*/ BSTR bstrDescription,
+        /*[in]*/ BSTR bstrFullName,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bFullPermissionsForHomeFolder,
+        /*[in]*/ BSTR bstrSettingsLevel ) = 0;
+      virtual HRESULT __stdcall raw_GetPermissionGroupList (
+        /*[in]*/ BSTR bstrGroup,
+        /*[out,retval]*/ VARIANT * aUsers ) = 0;
+      virtual HRESULT __stdcall raw_ForceSynchronizeUserDatabase ( ) = 0;
+      virtual HRESULT __stdcall get_ConnectMessage (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ConnectMessage (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_ValidatePassword (
+        /*[in]*/ BSTR bstrUser,
+        /*[in]*/ BSTR bstrPwd,
+        /*[out,retval]*/ VARIANT_BOOL * bValid ) = 0;
+      virtual HRESULT __stdcall raw_CancelTransfer (
+        /*[in]*/ BSTR bstrPath,
+        /*[out,retval]*/ VARIANT_BOOL * pSuccess ) = 0;
+      virtual HRESULT __stdcall raw_GetSSHKeyFilePath (
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetSSHKeyFilePath (
+        /*[in]*/ BSTR newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall get_ODBCSettings (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ODBCSettings (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_RemapVirtualFolder (
+        /*[in]*/ BSTR bstrVFSFolder,
+        /*[in]*/ BSTR bstrTarget ) = 0;
+      virtual HRESULT __stdcall raw_AssignEventRuleCustomCommandWorkingFolder (
+        /*[in]*/ BSTR bstrCustomCommandName,
+        /*[in]*/ BSTR bstrWorkingFolder ) = 0;
+      virtual HRESULT __stdcall raw_GetConnectedUsers (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall raw_KickUser (
+        /*[in]*/ long nUserID,
+        /*[out,retval]*/ VARIANT_BOOL * pSuccess ) = 0;
+      virtual HRESULT __stdcall raw_CreateComplexPassword (
+        /*[in]*/ VARIANT bstrUserName,
+        /*[out,retval]*/ BSTR * bstrPassword ) = 0;
+      virtual HRESULT __stdcall raw_GetHTTPAccess (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetHTTPAccess (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetHTTPSAccess (
+        /*[out,retval]*/ VARIANT_BOOL * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetHTTPSAccess (
+        /*[in]*/ VARIANT_BOOL newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetHTTPPort (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetHTTPPort (
+        /*[in]*/ long newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall raw_GetHTTPSPort (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_SetHTTPSPort (
+        /*[in]*/ long newVal,
+        /*[out,retval]*/ VARIANT_BOOL * pNeedRestart ) = 0;
+      virtual HRESULT __stdcall get_LimitLoginAttempts (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_LimitLoginAttempts (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_LockoutNotDisable (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_LockoutNotDisable (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_MaxInvalidLoginAttempts (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MaxInvalidLoginAttempts (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_LockoutPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_LockoutPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_InvalidAttemptsPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_InvalidAttemptsPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall raw_EventRules (
+        /*[in]*/ EventType type,
+        /*[out,retval]*/ IDispatch * * ppdispRules ) = 0;
+      virtual HRESULT __stdcall raw_GetPhysicalPath (
+        /*[in]*/ BSTR bstrFolderAlias,
+        /*[out,retval]*/ BSTR * pbstrPhysicalPath ) = 0;
+      virtual HRESULT __stdcall raw_EnableSFTP (
+        BSTR SFTPKeyFile,
+        BSTR SFTPKeyPassword ) = 0;
+      virtual HRESULT __stdcall raw_DisableSFTP ( ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLCertificate (
+        /*[in]*/ BSTR bzCertFilePath,
+        /*[in]*/ BSTR bzKeyFilePath,
+        /*[in]*/ BSTR bzPassPhrase ) = 0;
+      virtual HRESULT __stdcall get_AutobanSensitivity (
+        /*[out,retval]*/ AutobanSensitivity * pVal ) = 0;
+      virtual HRESULT __stdcall put_AutobanSensitivity (
+        /*[in]*/ AutobanSensitivity pVal ) = 0;
+      virtual HRESULT __stdcall get_AllowChangePassword (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AllowChangePassword (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_ForcePasswordResetOnInitialLogin (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_ForcePasswordResetOnInitialLogin (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+};
+
+struct __declspec(uuid("93e30fb4-41fd-4fa3-807b-9eb6a50779a1"))
+ICISites : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    ICISitePtr Item (
+        long nIndex );
+    long Count ( );
+    ICISitePtr SiteByID (
+        long ID );
+    ICISitePtr Add (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        int nAMID,
+        _bstr_t bstrAMDB,
+        VARIANT_BOOL bEncryptPasswords,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+    ICISitePtr AddNTLMSite (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        _bstr_t bstrDomainName,
+        _bstr_t bstrAllowGroup,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+    ICISitePtr AddADSite (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        _bstr_t bstrDomainContext,
+        _bstr_t bstrAllowGroup,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+    ICISitePtr AddODBCSite (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        _bstr_t bstrDSN,
+        VARIANT_BOOL bEncryptPasswords,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+    ICISitePtr AddLocalSite (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        _bstr_t bstrFilePath,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+    ICISitePtr AddLDAPSite (
+        _bstr_t bstrName,
+        _bstr_t bstrRootFolder,
+        _bstr_t bstrDomainContext,
+        int nIP,
+        long nPort,
+        VARIANT_BOOL bCreateHomeFolder,
+        VARIANT_BOOL bPermHomeFolder,
+        VARIANT_BOOL bAutoStart,
+        VARIANT_BOOL bCreateFTPFolders );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Item (
+        /*[in]*/ long nIndex,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_Count (
+        /*[out,retval]*/ long * prop ) = 0;
+      virtual HRESULT __stdcall raw_SiteByID (
+        /*[in]*/ long ID,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ int nAMID,
+        /*[in]*/ BSTR bstrAMDB,
+        /*[in]*/ VARIANT_BOOL bEncryptPasswords,
+        /*[in]*/ int nIP,
+        /*[in]*/ long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_AddNTLMSite (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ BSTR bstrDomainName,
+        /*[in]*/ BSTR bstrAllowGroup,
+        /*[in]*/ int nIP,
+        /*[in]*/ long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_AddADSite (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ BSTR bstrDomainContext,
+        /*[in]*/ BSTR bstrAllowGroup,
+        /*[in]*/ int nIP,
+        long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_AddODBCSite (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ BSTR bstrDSN,
+        /*[in]*/ VARIANT_BOOL bEncryptPasswords,
+        /*[in]*/ int nIP,
+        /*[in]*/ long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_AddLocalSite (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ BSTR bstrFilePath,
+        /*[in]*/ int nIP,
+        /*[in]*/ long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+      virtual HRESULT __stdcall raw_AddLDAPSite (
+        /*[in]*/ BSTR bstrName,
+        /*[in]*/ BSTR bstrRootFolder,
+        /*[in]*/ BSTR bstrDomainContext,
+        /*[in]*/ int nIP,
+        long nPort,
+        /*[in]*/ VARIANT_BOOL bCreateHomeFolder,
+        /*[in]*/ VARIANT_BOOL bPermHomeFolder,
+        /*[in]*/ VARIANT_BOOL bAutoStart,
+        /*[in]*/ VARIANT_BOOL bCreateFTPFolders,
+        /*[out,retval]*/ struct ICISite * * prop ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0002_0003
+{
+    SensitivityOff = 0,
+    SensitivityVeryLow = 1,
+    SensitivityLow = 2,
+    SensitivityMedium = 3,
+    SensitivityHigh = 4,
+    SensitivityVeryHigh = 5
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0004
+{
+    EFTAccount = 0,
+    LocalComputerAccount = 1,
+    ADAccount = 2
+};
+
+struct __declspec(uuid("af5973bf-eed9-4941-8671-625c062b8975"))
+ICIAudit : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    HRESULT AuditSATTransaction (
+        _bstr_t From,
+        _bstr_t Subject,
+        _bstr_t Body,
+        _bstr_t TempUserName,
+        _bstr_t TempPassword,
+        _bstr_t SiteName,
+        long ExpireDays,
+        _bstr_t TransGUID,
+        _bstr_t Reserved1,
+        _bstr_t Reserved2 );
+    HRESULT AuditSATEmail (
+        _bstr_t Email,
+        long EmailType,
+        _bstr_t TransGUID );
+    HRESULT AuditSATFile (
+        _bstr_t FileName,
+        __int64 FileSize,
+        _bstr_t TransGUID );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_AuditSATTransaction (
+        /*[in]*/ BSTR From,
+        /*[in]*/ BSTR Subject,
+        /*[in]*/ BSTR Body,
+        /*[in]*/ BSTR TempUserName,
+        /*[in]*/ BSTR TempPassword,
+        /*[in]*/ BSTR SiteName,
+        /*[in]*/ long ExpireDays,
+        /*[in]*/ BSTR TransGUID,
+        /*[in]*/ BSTR Reserved1,
+        /*[in]*/ BSTR Reserved2 ) = 0;
+      virtual HRESULT __stdcall raw_AuditSATEmail (
+        /*[in]*/ BSTR Email,
+        /*[in]*/ long EmailType,
+        /*[in]*/ BSTR TransGUID ) = 0;
+      virtual HRESULT __stdcall raw_AuditSATFile (
+        /*[in]*/ BSTR FileName,
+        /*[in]*/ __int64 FileSize,
+        /*[in]*/ BSTR TransGUID ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0001
+{
+    EFTServer = 0,
+    SSHModule = 1,
+    HTTPModule = 2,
+    WTCModule = 3,
+    ARModule = 4,
+    PGPModule = 5,
+    HSModule = 6,
+    AS2Module = 7,
+    AWModule = 8,
+    DMZGWModule = 9
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0002
+{
+    Registered = 0,
+    Evaluation = 1,
+    Expired = 2
+};
+
+struct __declspec(uuid("2518c8c6-d5b8-44bb-bdc4-1513da9ad8bc"))
+ICIServer : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetIPAccessAllowedDefault,put=PutIPAccessAllowedDefault))
+    VARIANT_BOOL IPAccessAllowedDefault;
+    __declspec(property(get=GetLogPath,put=PutLogPath))
+    _bstr_t LogPath;
+    __declspec(property(get=GetCertificateFilePath,put=PutCertificateFilePath))
+    _bstr_t CertificateFilePath;
+    __declspec(property(get=GetKeyFilePath,put=PutKeyFilePath))
+    _bstr_t KeyFilePath;
+    __declspec(property(get=GetPassPhrase,put=PutPassPhrase))
+    _bstr_t PassPhrase;
+    __declspec(property(get=GetLogType,put=PutLogType))
+    int LogType;
+    __declspec(property(get=GetLogRotation,put=PutLogRotation))
+    int LogRotation;
+    __declspec(property(get=GetAdminPort,put=PutAdminPort))
+    long AdminPort;
+    __declspec(property(get=GetListenIP,put=PutListenIP))
+    long ListenIP;
+    __declspec(property(get=GetAllowRemoteAdministration,put=PutAllowRemoteAdministration))
+    VARIANT_BOOL AllowRemoteAdministration;
+    __declspec(property(get=GetUseSSLForAdministration,put=PutUseSSLForAdministration))
+    VARIANT_BOOL UseSSLForAdministration;
+    __declspec(property(get=GetSMTPServer,put=PutSMTPServer))
+    _bstr_t SMTPServer;
+    __declspec(property(get=GetSMTPPort,put=PutSMTPPort))
+    long SMTPPort;
+    __declspec(property(get=GetSMTPLogin,put=PutSMTPLogin))
+    _bstr_t SMTPLogin;
+    __declspec(property(get=GetSMTPPassword,put=PutSMTPPassword))
+    _bstr_t SMTPPassword;
+    __declspec(property(get=GetSMTPSenderName,put=PutSMTPSenderName))
+    _bstr_t SMTPSenderName;
+    __declspec(property(get=GetSMTPSenderAddr,put=PutSMTPSenderAddr))
+    _bstr_t SMTPSenderAddr;
+    __declspec(property(get=GetSMTPRecipientName,put=PutSMTPRecipientName))
+    _bstr_t SMTPRecipientName;
+    __declspec(property(get=GetSMTPRecipientAddr,put=PutSMTPRecipientAddr))
+    _bstr_t SMTPRecipientAddr;
+    __declspec(property(get=GetConnectedUsersNumber))
+    long ConnectedUsersNumber;
+    __declspec(property(get=GetEnableARM,put=PutEnableARM))
+    VARIANT_BOOL EnableARM;
+    __declspec(property(get=GetARMServerName,put=PutARMServerName))
+    _bstr_t ARMServerName;
+    __declspec(property(get=GetARMDatabaseName,put=PutARMDatabaseName))
+    _bstr_t ARMDatabaseName;
+    __declspec(property(get=GetARMUserName,put=PutARMUserName))
+    _bstr_t ARMUserName;
+    __declspec(property(get=GetARMPassword,put=PutARMPassword))
+    _bstr_t ARMPassword;
+    __declspec(property(get=GetSSLVersionMask,put=PutSSLVersionMask))
+    int SSLVersionMask;
+    __declspec(property(get=GetAllowClearCommandChannel,put=PutAllowClearCommandChannel))
+    VARIANT_BOOL AllowClearCommandChannel;
+    __declspec(property(get=GetAllowUnprotectedDataChannel,put=PutAllowUnprotectedDataChannel))
+    VARIANT_BOOL AllowUnprotectedDataChannel;
+    __declspec(property(get=GetCipherList,put=PutCipherList))
+    _bstr_t CipherList;
+    __declspec(property(get=GetAvailableReports))
+    _variant_t AvailableReports;
+    __declspec(property(get=GetAvailablePGPKeys))
+    _variant_t AvailablePGPKeys;
+    __declspec(property(get=GetAvailableEvents))
+    _variant_t AvailableEvents;
+    __declspec(property(get=GetAvailableSSHKeys))
+    _variant_t AvailableSSHKeys;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    HRESULT Connect (
+        _bstr_t Host,
+        long nPort,
+        _bstr_t Login,
+        _bstr_t Password );
+    HRESULT Close ( );
+    ICISitesPtr Sites ( );
+    _bstr_t GetLocalIP (
+        long nIP );
+    _bstr_t GetLocalTime ( );
+    VARIANT_BOOL GetIPAccessAllowedDefault ( );
+    void PutIPAccessAllowedDefault (
+        VARIANT_BOOL pVal );
+    _bstr_t GetLogPath ( );
+    void PutLogPath (
+        _bstr_t pVal );
+    _bstr_t GetCertificateFilePath ( );
+    void PutCertificateFilePath (
+        _bstr_t pVal );
+    _bstr_t GetKeyFilePath ( );
+    void PutKeyFilePath (
+        _bstr_t pVal );
+    _bstr_t GetPassPhrase ( );
+    void PutPassPhrase (
+        _bstr_t pVal );
+    int GetLogType ( );
+    void PutLogType (
+        int pVal );
+    int GetLogRotation ( );
+    void PutLogRotation (
+        int pVal );
+    long GetAdminPort ( );
+    void PutAdminPort (
+        long pVal );
+    long GetListenIP ( );
+    void PutListenIP (
+        long pVal );
+    VARIANT_BOOL GetAllowRemoteAdministration ( );
+    void PutAllowRemoteAdministration (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetUseSSLForAdministration ( );
+    void PutUseSSLForAdministration (
+        VARIANT_BOOL pVal );
+    _bstr_t GetSMTPServer ( );
+    void PutSMTPServer (
+        _bstr_t pVal );
+    long GetSMTPPort ( );
+    void PutSMTPPort (
+        long pVal );
+    _bstr_t GetSMTPLogin ( );
+    void PutSMTPLogin (
+        _bstr_t pVal );
+    _bstr_t GetSMTPPassword ( );
+    void PutSMTPPassword (
+        _bstr_t pVal );
+    _bstr_t GetSMTPSenderName ( );
+    void PutSMTPSenderName (
+        _bstr_t pVal );
+    _bstr_t GetSMTPSenderAddr ( );
+    void PutSMTPSenderAddr (
+        _bstr_t pVal );
+    _bstr_t GetSMTPRecipientName ( );
+    void PutSMTPRecipientName (
+        _bstr_t pVal );
+    _bstr_t GetSMTPRecipientAddr ( );
+    void PutSMTPRecipientAddr (
+        _bstr_t pVal );
+    _variant_t GetAllowedMasks ( );
+    _variant_t GetDeniedMasks ( );
+    HRESULT AddIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    HRESULT RemoveIPAccessRule (
+        _bstr_t bstrMask,
+        VARIANT_BOOL bAllow );
+    HRESULT SetSSLCertificate (
+        _bstr_t bzCertFilePath,
+        _bstr_t bzKeyFilePath,
+        _bstr_t bzPassPhrase );
+    HRESULT ApplyChanges ( );
+    VARIANT_BOOL GetEnableARM ( );
+    void PutEnableARM (
+        VARIANT_BOOL pVal );
+    _bstr_t GetARMServerName ( );
+    void PutARMServerName (
+        _bstr_t pVal );
+    _bstr_t GetARMDatabaseName ( );
+    void PutARMDatabaseName (
+        _bstr_t pVal );
+    _bstr_t GetARMUserName ( );
+    void PutARMUserName (
+        _bstr_t pVal );
+    _bstr_t GetARMPassword ( );
+    void PutARMPassword (
+        _bstr_t pVal );
+    HRESULT RefreshSettings ( );
+    _variant_t GetAdminIPs ( );
+    long GetServerAdminCount ( );
+    HRESULT RemoveServerAdminAccount (
+        _bstr_t bstrAdminUser,
+        AdminAccountType accountType );
+    HRESULT ChangeAdminPassword (
+        _bstr_t bstrAdminUser,
+        _bstr_t bstrNewPassword );
+    long GetConnectedUsersNumber ( );
+    int GetSSLVersionMask ( );
+    void PutSSLVersionMask (
+        int pVal );
+    VARIANT_BOOL GetAllowClearCommandChannel ( );
+    void PutAllowClearCommandChannel (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetAllowUnprotectedDataChannel ( );
+    void PutAllowUnprotectedDataChannel (
+        VARIANT_BOOL pVal );
+    _bstr_t GetCipherList ( );
+    void PutCipherList (
+        _bstr_t pVal );
+    ICIAuditPtr Auditor ( );
+    RegistrationState ModuleRegistrationState (
+        ServerModule m );
+    _variant_t GetAvailableReports ( );
+    _variant_t GetAvailablePGPKeys ( );
+    HRESULT GenerateReport (
+        IDispatch * pdispReportParams,
+        _bstr_t bzReportPath );
+    _variant_t GetAvailableEvents ( );
+    _variant_t GetAvailableSSHKeys ( );
+    long ImportSSHKey (
+        _bstr_t bstrKeyPath );
+    HRESULT RemoveSSHKey (
+        long lID );
+    HRESULT ConnectEx (
+        _bstr_t Host,
+        long nPort,
+        AdminLoginType nLoginType,
+        _bstr_t Login,
+        _bstr_t Password );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Connect (
+        BSTR Host,
+        long nPort,
+        BSTR Login,
+        BSTR Password ) = 0;
+      virtual HRESULT __stdcall raw_Close ( ) = 0;
+      virtual HRESULT __stdcall raw_Sites (
+        /*[out,retval]*/ struct ICISites * * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetLocalIP (
+        /*[in]*/ long nIP,
+        /*[out,retval]*/ BSTR * prop ) = 0;
+      virtual HRESULT __stdcall raw_GetLocalTime (
+        /*[out,retval]*/ BSTR * pTime ) = 0;
+      virtual HRESULT __stdcall get_IPAccessAllowedDefault (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_IPAccessAllowedDefault (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_LogPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_LogPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_CertificateFilePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_CertificateFilePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_KeyFilePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_KeyFilePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_PassPhrase (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PassPhrase (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_LogType (
+        /*[out,retval]*/ int * pVal ) = 0;
+      virtual HRESULT __stdcall put_LogType (
+        /*[in]*/ int pVal ) = 0;
+      virtual HRESULT __stdcall get_LogRotation (
+        /*[out,retval]*/ int * pVal ) = 0;
+      virtual HRESULT __stdcall put_LogRotation (
+        /*[in]*/ int pVal ) = 0;
+      virtual HRESULT __stdcall get_AdminPort (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_AdminPort (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_ListenIP (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_ListenIP (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_AllowRemoteAdministration (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AllowRemoteAdministration (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_UseSSLForAdministration (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_UseSSLForAdministration (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPServer (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPServer (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPPort (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPPort (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPLogin (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPLogin (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPPassword (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPPassword (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPSenderName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPSenderName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPSenderAddr (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPSenderAddr (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPRecipientName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPRecipientName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SMTPRecipientAddr (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SMTPRecipientAddr (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetAllowedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_GetDeniedMasks (
+        /*[out,retval]*/ VARIANT * aMasks ) = 0;
+      virtual HRESULT __stdcall raw_AddIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall raw_RemoveIPAccessRule (
+        /*[in]*/ BSTR bstrMask,
+        /*[in]*/ VARIANT_BOOL bAllow ) = 0;
+      virtual HRESULT __stdcall raw_SetSSLCertificate (
+        /*[in]*/ BSTR bzCertFilePath,
+        /*[in]*/ BSTR bzKeyFilePath,
+        /*[in]*/ BSTR bzPassPhrase ) = 0;
+      virtual HRESULT __stdcall raw_ApplyChanges ( ) = 0;
+      virtual HRESULT __stdcall get_EnableARM (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_EnableARM (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_ARMServerName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ARMServerName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ARMDatabaseName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ARMDatabaseName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ARMUserName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ARMUserName (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ARMPassword (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ARMPassword (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_RefreshSettings ( ) = 0;
+      virtual HRESULT __stdcall raw_GetAdminIPs (
+        /*[out,retval]*/ VARIANT * pVar ) = 0;
+      virtual HRESULT __stdcall raw_GetServerAdminCount (
+        /*[out,retval]*/ long * lCount ) = 0;
+      virtual HRESULT __stdcall raw_RemoveServerAdminAccount (
+        /*[in]*/ BSTR bstrAdminUser,
+        /*[in]*/ AdminAccountType accountType ) = 0;
+      virtual HRESULT __stdcall raw_ChangeAdminPassword (
+        /*[in]*/ BSTR bstrAdminUser,
+        /*[in]*/ BSTR bstrNewPassword ) = 0;
+      virtual HRESULT __stdcall get_ConnectedUsersNumber (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall get_SSLVersionMask (
+        /*[out,retval]*/ int * pVal ) = 0;
+      virtual HRESULT __stdcall put_SSLVersionMask (
+        /*[in]*/ int pVal ) = 0;
+      virtual HRESULT __stdcall get_AllowClearCommandChannel (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AllowClearCommandChannel (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_AllowUnprotectedDataChannel (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AllowUnprotectedDataChannel (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_CipherList (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_CipherList (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall raw_Auditor (
+        /*[out,retval]*/ struct ICIAudit * * ppAuditor ) = 0;
+      virtual HRESULT __stdcall raw_ModuleRegistrationState (
+        /*[in]*/ ServerModule m,
+        /*[out,retval]*/ RegistrationState * pRS ) = 0;
+      virtual HRESULT __stdcall get_AvailableReports (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall get_AvailablePGPKeys (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GenerateReport (
+        /*[in]*/ IDispatch * pdispReportParams,
+        /*[in]*/ BSTR bzReportPath ) = 0;
+      virtual HRESULT __stdcall get_AvailableEvents (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall get_AvailableSSHKeys (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall raw_ImportSSHKey (
+        /*[in]*/ BSTR bstrKeyPath,
+        /*[out,retval]*/ long * plID ) = 0;
+      virtual HRESULT __stdcall raw_RemoveSSHKey (
+        /*[in]*/ long lID ) = 0;
+      virtual HRESULT __stdcall raw_ConnectEx (
+        BSTR Host,
+        long nPort,
+        AdminLoginType nLoginType,
+        BSTR Login,
+        BSTR Password ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0000_0003
+{
+    EFTLogin = 0,
+    IWALogin = 1,
+    NetLogon = 2
+};
+
+struct __declspec(uuid("697747aa-4e48-4eba-94a6-28bc88d47a4f"))
+CISites;
+    // [ default ] interface ICISites
+
+struct __declspec(uuid("44f772dd-d902-415d-bf46-46cd2d854f21"))
+CISite;
+    // [ default ] interface ICISite
+
+struct __declspec(uuid("e0fc19d1-ba9c-4eec-b6d7-9ed3ec8455f0"))
+Permission;
+    // [ default ] interface IPermission
+
+struct __declspec(uuid("08e790aa-19b0-4c2b-acb9-02a3eb289f97"))
+CIClientSettings;
+    // [ default ] interface ICIClientSettings
+
+struct __declspec(uuid("e9ab87e4-4d6d-41d1-9519-09945ac384e9"))
+CICommandSettings;
+    // [ default ] interface ICICommandSettings
+
+struct __declspec(uuid("d759f292-ec74-42bd-9a82-22a4e07969dd"))
+CICertInfo;
+    // [ default ] interface ICICertInfo
+
+struct __declspec(uuid("84d1bed2-d563-4832-a0be-51d073999948"))
+CIPgpActionParams;
+    // [ default ] interface ICIPgpActionParams
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0001
+{
+    Encrypt = 0,
+    EncryptAndSign = 1,
+    Sign = 2,
+    SDA = 3,
+    Decrypt = 4
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0002
+{
+    NoCompression = 0,
+    CompressionLevel1 = 1,
+    CompressionLevel2 = 2,
+    CompressionLevel3 = 3,
+    CompressionLevel4 = 4,
+    CompressionLevel5 = 5,
+    CompressionLevel6 = 6,
+    CompressionLevel7 = 7,
+    CompressionLevel8 = 8,
+    CompressionLevel9 = 9
+};
+
+struct __declspec(uuid("88cd614d-5467-460c-9885-cd6c5064a325"))
+ICIPgpActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetPassPhrase,put=PutPassPhrase))
+    _bstr_t PassPhrase;
+    __declspec(property(get=GetFilePath,put=PutFilePath))
+    _bstr_t FilePath;
+    __declspec(property(get=GetSignKeyID,put=PutSignKeyID))
+    _bstr_t SignKeyID;
+    __declspec(property(get=GetKeyIDs,put=PutKeyIDs))
+    _variant_t KeyIDs;
+    __declspec(property(get=GetOperation,put=PutOperation))
+    PGPOperation Operation;
+    __declspec(property(get=GetASCIIArmoredOutput,put=PutASCIIArmoredOutput))
+    VARIANT_BOOL ASCIIArmoredOutput;
+    __declspec(property(get=GetCompressionLevel,put=PutCompressionLevel))
+    PGPCompressionLevel CompressionLevel;
+    __declspec(property(get=GetSignatureInSeparateFile,put=PutSignatureInSeparateFile))
+    VARIANT_BOOL SignatureInSeparateFile;
+    __declspec(property(get=GetSigningHash,put=PutSigningHash))
+    PGPSigningHash SigningHash;
+    __declspec(property(get=GetSDAPassword,put=PutSDAPassword))
+    _bstr_t SDAPassword;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetPassPhrase ( );
+    void PutPassPhrase (
+        _bstr_t pVal );
+    _bstr_t GetFilePath ( );
+    void PutFilePath (
+        _bstr_t pVal );
+    _bstr_t GetSignKeyID ( );
+    void PutSignKeyID (
+        _bstr_t pVal );
+    _variant_t GetKeyIDs ( );
+    void PutKeyIDs (
+        const _variant_t & pVal );
+    PGPOperation GetOperation ( );
+    void PutOperation (
+        PGPOperation pVal );
+    VARIANT_BOOL GetASCIIArmoredOutput ( );
+    void PutASCIIArmoredOutput (
+        VARIANT_BOOL pVal );
+    PGPCompressionLevel GetCompressionLevel ( );
+    void PutCompressionLevel (
+        PGPCompressionLevel pVal );
+    VARIANT_BOOL GetSignatureInSeparateFile ( );
+    void PutSignatureInSeparateFile (
+        VARIANT_BOOL pVal );
+    PGPSigningHash GetSigningHash ( );
+    void PutSigningHash (
+        PGPSigningHash pVal );
+    _bstr_t GetSDAPassword ( );
+    void PutSDAPassword (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_PassPhrase (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PassPhrase (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_SignKeyID (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SignKeyID (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_KeyIDs (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall put_KeyIDs (
+        /*[in]*/ VARIANT pVal ) = 0;
+      virtual HRESULT __stdcall get_Operation (
+        /*[out,retval]*/ PGPOperation * pVal ) = 0;
+      virtual HRESULT __stdcall put_Operation (
+        /*[in]*/ PGPOperation pVal ) = 0;
+      virtual HRESULT __stdcall get_ASCIIArmoredOutput (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_ASCIIArmoredOutput (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_CompressionLevel (
+        /*[out,retval]*/ PGPCompressionLevel * pVal ) = 0;
+      virtual HRESULT __stdcall put_CompressionLevel (
+        /*[in]*/ PGPCompressionLevel pVal ) = 0;
+      virtual HRESULT __stdcall get_SignatureInSeparateFile (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_SignatureInSeparateFile (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_SigningHash (
+        /*[out,retval]*/ PGPSigningHash * pVal ) = 0;
+      virtual HRESULT __stdcall put_SigningHash (
+        /*[in]*/ PGPSigningHash pVal ) = 0;
+      virtual HRESULT __stdcall get_SDAPassword (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_SDAPassword (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0003
+{
+    MD5Hash = 0,
+    SHA1Hash = 1,
+    RIPEMD160Hash = 2,
+    SHA256Hash = 3,
+    SHA384Hash = 4,
+    SHA512Hash = 5
+};
+
+struct __declspec(uuid("74a78aea-bf81-4828-9ea1-fc0b9ab4af16"))
+CIMailActionParams;
+    // [ default ] interface ICIMailActionParams
+
+struct __declspec(uuid("7cee64b2-4c60-4fe0-8ddb-aaf31e59e24a"))
+ICIMailActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetTOAddresses,put=PutTOAddresses))
+    _bstr_t TOAddresses;
+    __declspec(property(get=GetCCAddresses,put=PutCCAddresses))
+    _bstr_t CCAddresses;
+    __declspec(property(get=GetBCCAddresses,put=PutBCCAddresses))
+    _bstr_t BCCAddresses;
+    __declspec(property(get=GetSubject,put=PutSubject))
+    _bstr_t Subject;
+    __declspec(property(get=GetBody,put=PutBody))
+    _bstr_t Body;
+    __declspec(property(get=GetCopyToClient,put=PutCopyToClient))
+    VARIANT_BOOL CopyToClient;
+    __declspec(property(get=GetUseCustomFromAddress,put=PutUseCustomFromAddress))
+    VARIANT_BOOL UseCustomFromAddress;
+    __declspec(property(get=GetCustomFromAddress,put=PutCustomFromAddress))
+    _bstr_t CustomFromAddress;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetTOAddresses ( );
+    void PutTOAddresses (
+        _bstr_t pVal );
+    _bstr_t GetCCAddresses ( );
+    void PutCCAddresses (
+        _bstr_t pVal );
+    _bstr_t GetBCCAddresses ( );
+    void PutBCCAddresses (
+        _bstr_t pVal );
+    _bstr_t GetSubject ( );
+    void PutSubject (
+        _bstr_t pVal );
+    _bstr_t GetBody ( );
+    void PutBody (
+        _bstr_t pVal );
+    VARIANT_BOOL GetCopyToClient ( );
+    void PutCopyToClient (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetUseCustomFromAddress ( );
+    void PutUseCustomFromAddress (
+        VARIANT_BOOL pVal );
+    _bstr_t GetCustomFromAddress ( );
+    void PutCustomFromAddress (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_TOAddresses (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_TOAddresses (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_CCAddresses (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_CCAddresses (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_BCCAddresses (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_BCCAddresses (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Subject (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Subject (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Body (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Body (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_CopyToClient (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_CopyToClient (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_UseCustomFromAddress (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_UseCustomFromAddress (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_CustomFromAddress (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_CustomFromAddress (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+struct __declspec(uuid("5bf98c02-7474-4a39-8016-b926bb4ba9da"))
+CIUploadActionParams;
+    // [ default ] interface ICIUploadActionParams
+
+struct __declspec(uuid("43c12faf-8c8f-4b1a-934c-8ebae708b83c"))
+ICITransferActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetLocalPath,put=PutLocalPath))
+    _bstr_t LocalPath;
+    __declspec(property(get=GetProtocol,put=PutProtocol))
+    NetworkProtocol Protocol;
+    __declspec(property(get=GetAutoLogin,put=PutAutoLogin))
+    VARIANT_BOOL AutoLogin;
+    __declspec(property(get=GetUser,put=PutUser))
+    _bstr_t User;
+    __declspec(property(get=GetPassword,put=PutPassword))
+    _bstr_t Password;
+    __declspec(property(get=GetPrivateKeyPath,put=PutPrivateKeyPath))
+    _bstr_t PrivateKeyPath;
+    __declspec(property(get=GetPrivateKeyPassword,put=PutPrivateKeyPassword))
+    _bstr_t PrivateKeyPassword;
+    __declspec(property(get=GetPublicKeyPath,put=PutPublicKeyPath))
+    _bstr_t PublicKeyPath;
+    __declspec(property(get=GetHost,put=PutHost))
+    _bstr_t Host;
+    __declspec(property(get=GetPort,put=PutPort))
+    long Port;
+    __declspec(property(get=GetRemotePath,put=PutRemotePath))
+    _bstr_t RemotePath;
+    __declspec(property(get=GetDeleteSourceFile,put=PutDeleteSourceFile))
+    VARIANT_BOOL DeleteSourceFile;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetLocalPath ( );
+    void PutLocalPath (
+        _bstr_t pVal );
+    NetworkProtocol GetProtocol ( );
+    void PutProtocol (
+        NetworkProtocol pVal );
+    VARIANT_BOOL GetAutoLogin ( );
+    void PutAutoLogin (
+        VARIANT_BOOL pVal );
+    _bstr_t GetUser ( );
+    void PutUser (
+        _bstr_t pVal );
+    _bstr_t GetPassword ( );
+    void PutPassword (
+        _bstr_t pVal );
+    _bstr_t GetPrivateKeyPath ( );
+    void PutPrivateKeyPath (
+        _bstr_t pVal );
+    _bstr_t GetPrivateKeyPassword ( );
+    void PutPrivateKeyPassword (
+        _bstr_t pVal );
+    _bstr_t GetPublicKeyPath ( );
+    void PutPublicKeyPath (
+        _bstr_t pVal );
+    _bstr_t GetHost ( );
+    void PutHost (
+        _bstr_t pVal );
+    long GetPort ( );
+    void PutPort (
+        long pVal );
+    _bstr_t GetRemotePath ( );
+    void PutRemotePath (
+        _bstr_t pVal );
+    VARIANT_BOOL GetDeleteSourceFile ( );
+    void PutDeleteSourceFile (
+        VARIANT_BOOL pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_LocalPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_LocalPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Protocol (
+        /*[out,retval]*/ NetworkProtocol * pVal ) = 0;
+      virtual HRESULT __stdcall put_Protocol (
+        /*[in]*/ NetworkProtocol pVal ) = 0;
+      virtual HRESULT __stdcall get_AutoLogin (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_AutoLogin (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_User (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_User (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Password (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Password (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_PrivateKeyPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PrivateKeyPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_PrivateKeyPassword (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PrivateKeyPassword (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_PublicKeyPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PublicKeyPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Host (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Host (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Port (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_Port (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_RemotePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_RemotePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_DeleteSourceFile (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DeleteSourceFile (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+};
+
+struct __declspec(uuid("0f141c5f-7bab-4fea-bd22-d91170304ed3"))
+ICIUploadActionParams : ICITransferActionParams
+{};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0006
+{
+    ProtocolLocal = -1,
+    ProtocolFTP = 0,
+    ProtocolFTPS = 1,
+    ProtocolFTPSExpl = 2,
+    ProtocolSFTP = 3,
+    ProtocolHTTP = 4,
+    ProtocolHTTPS = 5,
+    ProtocolFTPSAuthTLS = 8
+};
+
+struct __declspec(uuid("8387fd94-0b5d-4fe8-91b6-a424136dcb7c"))
+CIDownloadActionParams;
+    // [ default ] interface ICIDownloadActionParams
+
+struct __declspec(uuid("1a5d0780-694f-4bed-a2ec-5ce9c58d2876"))
+ICIDownloadActionParams : ICITransferActionParams
+{};
+
+struct __declspec(uuid("64071595-81f4-4c40-b504-9b70e7facef9"))
+CICleanupActionParams;
+    // [ default ] interface ICICleanupActionParams
+
+struct __declspec(uuid("c4b3c609-9488-41a5-b895-def37000fe06"))
+ICICleanupActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetFolder,put=PutFolder))
+    _bstr_t Folder;
+    __declspec(property(get=GetRecursive,put=PutRecursive))
+    VARIANT_BOOL Recursive;
+    __declspec(property(get=GetFileMask,put=PutFileMask))
+    _bstr_t FileMask;
+    __declspec(property(get=GetExcludeFileMask,put=PutExcludeFileMask))
+    VARIANT_BOOL ExcludeFileMask;
+    __declspec(property(get=GetDaysToKeepFiles,put=PutDaysToKeepFiles))
+    long DaysToKeepFiles;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetFolder ( );
+    void PutFolder (
+        _bstr_t pVal );
+    VARIANT_BOOL GetRecursive ( );
+    void PutRecursive (
+        VARIANT_BOOL pVal );
+    _bstr_t GetFileMask ( );
+    void PutFileMask (
+        _bstr_t pVal );
+    VARIANT_BOOL GetExcludeFileMask ( );
+    void PutExcludeFileMask (
+        VARIANT_BOOL pVal );
+    long GetDaysToKeepFiles ( );
+    void PutDaysToKeepFiles (
+        long pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Folder (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Folder (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Recursive (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Recursive (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_FileMask (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FileMask (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ExcludeFileMask (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_ExcludeFileMask (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_DaysToKeepFiles (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_DaysToKeepFiles (
+        /*[in]*/ long pVal ) = 0;
+};
+
+struct __declspec(uuid("057fe367-cb87-4e5f-b30e-17554ed4ab37"))
+CIReportActionParams;
+    // [ default ] interface ICIReportActionParams
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0013
+{
+    Predefined = 0,
+    Range = 1
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0014
+{
+    AllDates = 0,
+    MonthToDate = 1,
+    QuarterToDate = 2,
+    YearToDate = 3,
+    CurrentWeek = 4,
+    CurrentMonth = 5,
+    CurrentQuarter = 6,
+    CurrentYear = 7,
+    LastWeek = 8,
+    LastMonth = 9,
+    LastQuarter = 10,
+    LastYear = 11,
+    Last30Days = 12,
+    Last12Months = 13,
+    Today = 14,
+    Yesterday = 15,
+    Last24Hours = 16
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0015
+{
+    HTMLFormat = 0,
+    PDFFormat = 1,
+    VPFormat = 2
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0016
+{
+    NoFilter = -1,
+    EqualFilter = 0,
+    NotEqualFilter = 1,
+    LessFilter = 2,
+    LessOrEqualFilter = 3,
+    GreaterFilter = 4,
+    GreaterOrEqualFilter = 5,
+    ContainsFilter = 6,
+    StartsWithFilter = 7
+};
+
+struct __declspec(uuid("c9d24368-c4de-442f-9961-4014ff442698"))
+ICIReportActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetReport,put=PutReport))
+    IDispatchPtr Report;
+    __declspec(property(get=GetDateFormat,put=PutDateFormat))
+    ReportPeriodType DateFormat;
+    __declspec(property(get=GetCustomDate,put=PutCustomDate))
+    PredefinedReportPeriod CustomDate;
+    __declspec(property(get=GetFromDate,put=PutFromDate))
+    _variant_t FromDate;
+    __declspec(property(get=GetToDate,put=PutToDate))
+    _variant_t ToDate;
+    __declspec(property(get=GetReportFileFormat,put=PutReportFileFormat))
+    ReportFormat ReportFileFormat;
+    __declspec(property(get=GetOptionalParameters,put=PutOptionalParameters))
+    _bstr_t OptionalParameters;
+    __declspec(property(get=GetFilterField1,put=PutFilterField1))
+    _bstr_t FilterField1;
+    __declspec(property(get=GetFilterField2,put=PutFilterField2))
+    _bstr_t FilterField2;
+    __declspec(property(get=GetFilterOperator1,put=PutFilterOperator1))
+    ReportFilterOperator FilterOperator1;
+    __declspec(property(get=GetFilterOperator2,put=PutFilterOperator2))
+    ReportFilterOperator FilterOperator2;
+    __declspec(property(get=GetFilterValue1,put=PutFilterValue1))
+    _bstr_t FilterValue1;
+    __declspec(property(get=GetFilterValue2,put=PutFilterValue2))
+    _bstr_t FilterValue2;
+    __declspec(property(get=GetFilterAndOr,put=PutFilterAndOr))
+    ReportFiltersCombiningOperator FilterAndOr;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr GetReport ( );
+    void PutReport (
+        IDispatch * pVal );
+    ReportPeriodType GetDateFormat ( );
+    void PutDateFormat (
+        ReportPeriodType pVal );
+    PredefinedReportPeriod GetCustomDate ( );
+    void PutCustomDate (
+        PredefinedReportPeriod pVal );
+    _variant_t GetFromDate ( );
+    void PutFromDate (
+        const _variant_t & pVal );
+    _variant_t GetToDate ( );
+    void PutToDate (
+        const _variant_t & pVal );
+    ReportFormat GetReportFileFormat ( );
+    void PutReportFileFormat (
+        ReportFormat pVal );
+    _bstr_t GetOptionalParameters ( );
+    void PutOptionalParameters (
+        _bstr_t pVal );
+    _bstr_t GetFilterField1 ( );
+    void PutFilterField1 (
+        _bstr_t pVal );
+    _bstr_t GetFilterField2 ( );
+    void PutFilterField2 (
+        _bstr_t pVal );
+    ReportFilterOperator GetFilterOperator1 ( );
+    void PutFilterOperator1 (
+        ReportFilterOperator pVal );
+    ReportFilterOperator GetFilterOperator2 ( );
+    void PutFilterOperator2 (
+        ReportFilterOperator pVal );
+    _bstr_t GetFilterValue1 ( );
+    void PutFilterValue1 (
+        _bstr_t pVal );
+    _bstr_t GetFilterValue2 ( );
+    void PutFilterValue2 (
+        _bstr_t pVal );
+    ReportFiltersCombiningOperator GetFilterAndOr ( );
+    void PutFilterAndOr (
+        ReportFiltersCombiningOperator pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Report (
+        /*[out,retval]*/ IDispatch * * pVal ) = 0;
+      virtual HRESULT __stdcall put_Report (
+        /*[in]*/ IDispatch * pVal ) = 0;
+      virtual HRESULT __stdcall get_DateFormat (
+        /*[out,retval]*/ ReportPeriodType * pVal ) = 0;
+      virtual HRESULT __stdcall put_DateFormat (
+        /*[in]*/ ReportPeriodType pVal ) = 0;
+      virtual HRESULT __stdcall get_CustomDate (
+        /*[out,retval]*/ PredefinedReportPeriod * pVal ) = 0;
+      virtual HRESULT __stdcall put_CustomDate (
+        /*[in]*/ PredefinedReportPeriod pVal ) = 0;
+      virtual HRESULT __stdcall get_FromDate (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall put_FromDate (
+        /*[in]*/ VARIANT pVal ) = 0;
+      virtual HRESULT __stdcall get_ToDate (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall put_ToDate (
+        /*[in]*/ VARIANT pVal ) = 0;
+      virtual HRESULT __stdcall get_ReportFileFormat (
+        /*[out,retval]*/ ReportFormat * pVal ) = 0;
+      virtual HRESULT __stdcall put_ReportFileFormat (
+        /*[in]*/ ReportFormat pVal ) = 0;
+      virtual HRESULT __stdcall get_OptionalParameters (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_OptionalParameters (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterField1 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterField1 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterField2 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterField2 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterOperator1 (
+        /*[out,retval]*/ ReportFilterOperator * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterOperator1 (
+        /*[in]*/ ReportFilterOperator pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterOperator2 (
+        /*[out,retval]*/ ReportFilterOperator * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterOperator2 (
+        /*[in]*/ ReportFilterOperator pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterValue1 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterValue1 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterValue2 (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterValue2 (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_FilterAndOr (
+        /*[out,retval]*/ ReportFiltersCombiningOperator * pVal ) = 0;
+      virtual HRESULT __stdcall put_FilterAndOr (
+        /*[in]*/ ReportFiltersCombiningOperator pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0017
+{
+    NoCombining = -1,
+    AndCombining = 0,
+    OrCombining = 1
+};
+
+struct __declspec(uuid("3f6a8461-c21a-415f-ae30-98bdbd15348f"))
+CICommandActionParams;
+    // [ default ] interface ICICommandActionParams
+
+struct __declspec(uuid("7b4a979f-f9d7-413c-8ecd-7a5ce4b2aa3e"))
+ICICommandActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetCommand,put=PutCommand))
+    _bstr_t Command;
+    __declspec(property(get=GetParameters,put=PutParameters))
+    _bstr_t Parameters;
+    __declspec(property(get=GetWorkingFolder,put=PutWorkingFolder))
+    _bstr_t WorkingFolder;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetCommand ( );
+    void PutCommand (
+        _bstr_t pVal );
+    _bstr_t GetParameters ( );
+    void PutParameters (
+        _bstr_t pVal );
+    _bstr_t GetWorkingFolder ( );
+    void PutWorkingFolder (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Command (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Command (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Parameters (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Parameters (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_WorkingFolder (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_WorkingFolder (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+struct __declspec(uuid("82dc43d4-6c1a-43d8-a3ba-1e9101fa3f30"))
+CIStopActionParams;
+    // [ default ] interface ICIStopActionParams
+
+struct __declspec(uuid("d302ccd1-447c-4256-8957-c97aae42914c"))
+ICIStopActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetEnabled,put=PutEnabled))
+    VARIANT_BOOL Enabled;
+    __declspec(property(get=GetAction,put=PutAction))
+    StopType Action;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    VARIANT_BOOL GetEnabled ( );
+    void PutEnabled (
+        VARIANT_BOOL pVal );
+    StopType GetAction ( );
+    void PutAction (
+        StopType pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Enabled (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Enabled (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Action (
+        /*[out,retval]*/ StopType * pVal ) = 0;
+      virtual HRESULT __stdcall put_Action (
+        /*[in]*/ StopType pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0011
+{
+    StopRule = 2,
+    StopEvent = 4,
+    StopRuleAndEvent = 6
+};
+
+struct __declspec(uuid("54d2df93-c933-409f-b69f-6245f7bd6d50"))
+CIBackupActionParams;
+    // [ default ] interface ICIBackupActionParams
+
+struct __declspec(uuid("763d7a3d-acbe-41d5-a866-5a211847fd9c"))
+ICIBackupActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetFolder,put=PutFolder))
+    _bstr_t Folder;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetFolder ( );
+    void PutFolder (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Folder (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Folder (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+struct __declspec(uuid("5c9be02b-21f3-491c-a80e-4b6a51828ed0"))
+CIAWTaskActionParams;
+    // [ default ] interface ICIAWTaskActionParams
+
+struct __declspec(uuid("12799f36-fb77-4244-bf0e-fac73113a049"))
+ICIAWTaskActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetTaskName,put=PutTaskName))
+    _bstr_t TaskName;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetTaskName ( );
+    void PutTaskName (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_TaskName (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_TaskName (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+struct __declspec(uuid("286c4f19-d4cb-4fd9-9b24-898cffc0ac4d"))
+CIAS2SendActionParams;
+    // [ default ] interface ICIAS2SendActionParams
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0018
+{
+    X12 = 0,
+    EDIFACT = 1,
+    XML = 2,
+    EDIConsent = 3,
+    Binary = 4,
+    Plaintext = 5
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0019
+{
+    NoReceipt = 0,
+    UnsignedReceipt = 1,
+    SignedReceipt = 2
+};
+
+struct __declspec(uuid("a1a482f7-a86c-4805-8179-5e585320c96b"))
+ICIAS2SendActionParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetLocalPath,put=PutLocalPath))
+    _bstr_t LocalPath;
+    __declspec(property(get=GetUseClientProfile,put=PutUseClientProfile))
+    VARIANT_BOOL UseClientProfile;
+    __declspec(property(get=GetClientProfile,put=PutClientProfile))
+    _bstr_t ClientProfile;
+    __declspec(property(get=GetDeleteSourceFile,put=PutDeleteSourceFile))
+    VARIANT_BOOL DeleteSourceFile;
+    __declspec(property(get=GetHost,put=PutHost))
+    _bstr_t Host;
+    __declspec(property(get=GetPort,put=PutPort))
+    long Port;
+    __declspec(property(get=GetRemotePath,put=PutRemotePath))
+    _bstr_t RemotePath;
+    __declspec(property(get=GetUser,put=PutUser))
+    _bstr_t User;
+    __declspec(property(get=GetPassword,put=PutPassword))
+    _bstr_t Password;
+    __declspec(property(get=GetSubject,put=PutSubject))
+    _bstr_t Subject;
+    __declspec(property(get=GetContentType,put=PutContentType))
+    AS2ContentType ContentType;
+    __declspec(property(get=GetCompress,put=PutCompress))
+    VARIANT_BOOL Compress;
+    __declspec(property(get=GetEncrypt,put=PutEncrypt))
+    VARIANT_BOOL Encrypt;
+    __declspec(property(get=GetSign,put=PutSign))
+    VARIANT_BOOL Sign;
+    __declspec(property(get=GetPartnerCertificatePath,put=PutPartnerCertificatePath))
+    _bstr_t PartnerCertificatePath;
+    __declspec(property(get=GetAS2ID,put=PutAS2ID))
+    _bstr_t AS2ID;
+    __declspec(property(get=GetPartnerAS2ID,put=PutPartnerAS2ID))
+    _bstr_t PartnerAS2ID;
+    __declspec(property(get=GetReceiptPolicy,put=PutReceiptPolicy))
+    AS2ReceiptPolicy ReceiptPolicy;
+    __declspec(property(get=GetReceiptDelivery,put=PutReceiptDelivery))
+    AS2ReceiptDelivery ReceiptDelivery;
+    __declspec(property(get=GetTimeoutSec,put=PutTimeoutSec))
+    long TimeoutSec;
+    __declspec(property(get=GetRetriesCount,put=PutRetriesCount))
+    long RetriesCount;
+    __declspec(property(get=GetRetryDelaySec,put=PutRetryDelaySec))
+    long RetryDelaySec;
+    __declspec(property(get=GetAsyncReceiptTimeoutMin,put=PutAsyncReceiptTimeoutMin))
+    long AsyncReceiptTimeoutMin;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetLocalPath ( );
+    void PutLocalPath (
+        _bstr_t pVal );
+    VARIANT_BOOL GetUseClientProfile ( );
+    void PutUseClientProfile (
+        VARIANT_BOOL pVal );
+    _bstr_t GetClientProfile ( );
+    void PutClientProfile (
+        _bstr_t pVal );
+    VARIANT_BOOL GetDeleteSourceFile ( );
+    void PutDeleteSourceFile (
+        VARIANT_BOOL pVal );
+    _bstr_t GetHost ( );
+    void PutHost (
+        _bstr_t pVal );
+    long GetPort ( );
+    void PutPort (
+        long pVal );
+    _bstr_t GetRemotePath ( );
+    void PutRemotePath (
+        _bstr_t pVal );
+    _bstr_t GetUser ( );
+    void PutUser (
+        _bstr_t pVal );
+    _bstr_t GetPassword ( );
+    void PutPassword (
+        _bstr_t pVal );
+    _bstr_t GetSubject ( );
+    void PutSubject (
+        _bstr_t pVal );
+    AS2ContentType GetContentType ( );
+    void PutContentType (
+        AS2ContentType pVal );
+    VARIANT_BOOL GetCompress ( );
+    void PutCompress (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetEncrypt ( );
+    void PutEncrypt (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetSign ( );
+    void PutSign (
+        VARIANT_BOOL pVal );
+    _bstr_t GetPartnerCertificatePath ( );
+    void PutPartnerCertificatePath (
+        _bstr_t pVal );
+    _bstr_t GetAS2ID ( );
+    void PutAS2ID (
+        _bstr_t pVal );
+    _bstr_t GetPartnerAS2ID ( );
+    void PutPartnerAS2ID (
+        _bstr_t pVal );
+    AS2ReceiptPolicy GetReceiptPolicy ( );
+    void PutReceiptPolicy (
+        AS2ReceiptPolicy pVal );
+    AS2ReceiptDelivery GetReceiptDelivery ( );
+    void PutReceiptDelivery (
+        AS2ReceiptDelivery pVal );
+    long GetTimeoutSec ( );
+    void PutTimeoutSec (
+        long pVal );
+    long GetRetriesCount ( );
+    void PutRetriesCount (
+        long pVal );
+    long GetRetryDelaySec ( );
+    void PutRetryDelaySec (
+        long pVal );
+    long GetAsyncReceiptTimeoutMin ( );
+    void PutAsyncReceiptTimeoutMin (
+        long pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_LocalPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_LocalPath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_UseClientProfile (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_UseClientProfile (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_ClientProfile (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_ClientProfile (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_DeleteSourceFile (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_DeleteSourceFile (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Host (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Host (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Port (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_Port (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_RemotePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_RemotePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_User (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_User (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Password (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Password (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Subject (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Subject (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ContentType (
+        /*[out,retval]*/ AS2ContentType * pVal ) = 0;
+      virtual HRESULT __stdcall put_ContentType (
+        /*[in]*/ AS2ContentType pVal ) = 0;
+      virtual HRESULT __stdcall get_Compress (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Compress (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Encrypt (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Encrypt (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Sign (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Sign (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_PartnerCertificatePath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PartnerCertificatePath (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_AS2ID (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_AS2ID (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_PartnerAS2ID (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_PartnerAS2ID (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_ReceiptPolicy (
+        /*[out,retval]*/ AS2ReceiptPolicy * pVal ) = 0;
+      virtual HRESULT __stdcall put_ReceiptPolicy (
+        /*[in]*/ AS2ReceiptPolicy pVal ) = 0;
+      virtual HRESULT __stdcall get_ReceiptDelivery (
+        /*[out,retval]*/ AS2ReceiptDelivery * pVal ) = 0;
+      virtual HRESULT __stdcall put_ReceiptDelivery (
+        /*[in]*/ AS2ReceiptDelivery pVal ) = 0;
+      virtual HRESULT __stdcall get_TimeoutSec (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_TimeoutSec (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_RetriesCount (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_RetriesCount (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_RetryDelaySec (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_RetryDelaySec (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_AsyncReceiptTimeoutMin (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_AsyncReceiptTimeoutMin (
+        /*[in]*/ long pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0020
+{
+    Sync = 0,
+    Async = 1
+};
+
+struct __declspec(uuid("651e74f6-ea04-4b74-b8d6-121e7f22e38f"))
+CIEventRules;
+    // [ default ] interface ICIEventRules
+
+struct __declspec(uuid("46cc85df-420f-4586-a68b-a3f92cb353ab"))
+ICIEventRules : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr Item (
+        long lIndex );
+    HRESULT Delete (
+        long lIndex );
+    long Count ( );
+    IDispatchPtr Add (
+        long lIndex,
+        IDispatch * pdispParams );
+    IDispatchPtr Find (
+        _bstr_t strName );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Item (
+        /*[in]*/ long lIndex,
+        /*[out,retval]*/ IDispatch * * ppdispRule ) = 0;
+      virtual HRESULT __stdcall raw_Delete (
+        /*[in]*/ long lIndex ) = 0;
+      virtual HRESULT __stdcall raw_Count (
+        /*[out,retval]*/ long * plCount ) = 0;
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ long lIndex,
+        /*[in]*/ IDispatch * pdispParams,
+        /*[out,retval]*/ IDispatch * * ppdispNewRule ) = 0;
+      virtual HRESULT __stdcall raw_Find (
+        /*[in]*/ BSTR strName,
+        /*[out,retval]*/ IDispatch * * ppdisp ) = 0;
+};
+
+struct __declspec(uuid("28c84a20-1f0a-49d8-abf8-2aa19f18c8eb"))
+CIEventRule;
+    // [ default ] interface ICIEventRule
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0010
+{
+    Time = 1,
+    Name = 2,
+    Reason = 3,
+    TimeStamp = 4,
+    DateStamp = 5,
+    MonitorFolderStatus = 6,
+    EventName = 7,
+    ServerRunning = 1000,
+    ServerLogOldName = 1001,
+    ServerLogNewName = 1002,
+    ServerLogOldPath = 1003,
+    ServerLogNewPath = 1004,
+    ServerLogTime = 1005,
+    ServerLogFolder = 1006,
+    ServerServerNodeName = 1007,
+    SiteRunning = 2000,
+    SiteName = 2001,
+    SiteAccountManagementURL = 2002,
+    LocalIP = 3000,
+    RemoteIP = 3001,
+    LocalPort = 3002,
+    RemotePort = 3003,
+    Protocol = 3004,
+    WebTransferClientConnection = 3005,
+    ClientLogin = 4000,
+    ClientPassword = 4001,
+    ClientAccessGroup = 4002,
+    ClientEnabled = 4003,
+    ClientSettingsLevel = 4004,
+    ClientFullName = 4005,
+    ClientDescription = 4006,
+    ClientComment = 4007,
+    ClientEMail = 4008,
+    ClientPhone = 4009,
+    ClientPager = 4010,
+    ClientFax = 4011,
+    ClientHomeFolder = 4012,
+    ClientHomeFolderIsRoot = 4013,
+    ClientQuotaMax = 4014,
+    ClientQuotaUsed = 4015,
+    ClientInvalidLoginAttempts = 4016,
+    ClientCanChangePassword = 4017,
+    ClientIP = 4018,
+    ClientSSLAllowed = 4019,
+    ClientFTPAllowed = 4020,
+    ClientSFTPAllowed = 4021,
+    ClientLastLogin = 4022,
+    ClientPasswordExpiration = 4023,
+    ClientMustResetPasswordAtFirstLogin = 4024,
+    ClientAccountExpirationDate = 4025,
+    ClientAccountLocked = 4026,
+    ClientCustomField1 = 4027,
+    ClientCustomField2 = 4028,
+    ClientCustomField3 = 4029,
+    VirtualPath = 5000,
+    PhysicalPath = 5001,
+    DestinationVirtualPath = 5002,
+    DestinationPhysicalPath = 5003,
+    FolderName = 5004,
+    FileName = 5005,
+    DestinationFolderName = 5006,
+    DestinationFileName = 5007,
+    FolderOperation = 5008,
+    FileCreationDate = 5009,
+    FileCreationTime = 5010,
+    FileSize = 5011,
+    FileCRC = 5012,
+    ReportPath = 5013,
+    ReportContent = 5014,
+    ReportFileName = 5015
+};
+
+struct __declspec(uuid("1dda5e8d-ec07-413b-8c49-db5ccc46f0ea"))
+ICIEventRule : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr Statement (
+        long lIndex );
+    long StatementsCount ( );
+    HRESULT DeleteStatement (
+        long lIndex );
+    IDispatchPtr GetParams ( );
+    HRESULT SetParams (
+        IDispatch * newVal );
+    IDispatchPtr AddActionStatement (
+        long lIndex,
+        IDispatch * pdispParams );
+    IDispatchPtr AddIfStatement (
+        long lIndex,
+        EventProperty property,
+        ConditionOperator op,
+        const _variant_t & varConditionValue,
+        VARIANT_BOOL bNot );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Statement (
+        /*[in]*/ long lIndex,
+        /*[out,retval]*/ IDispatch * * ppdispStatement ) = 0;
+      virtual HRESULT __stdcall raw_StatementsCount (
+        /*[out,retval]*/ long * plCount ) = 0;
+      virtual HRESULT __stdcall raw_DeleteStatement (
+        /*[in]*/ long lIndex ) = 0;
+      virtual HRESULT __stdcall raw_GetParams (
+        /*[out,retval]*/ IDispatch * * pVal ) = 0;
+      virtual HRESULT __stdcall raw_SetParams (
+        /*[in]*/ IDispatch * newVal ) = 0;
+      virtual HRESULT __stdcall raw_AddActionStatement (
+        /*[in]*/ long lIndex,
+        /*[in]*/ IDispatch * pdispParams,
+        /*[out,retval]*/ IDispatch * * ppdispActionStatement ) = 0;
+      virtual HRESULT __stdcall raw_AddIfStatement (
+        /*[in]*/ long lIndex,
+        /*[in]*/ EventProperty property,
+        /*[in]*/ ConditionOperator op,
+        /*[in]*/ VARIANT varConditionValue,
+        /*[in]*/ VARIANT_BOOL bNot,
+        /*[out,retval]*/ IDispatch * * ppdispIfStatement ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0007
+{
+    Equals = 1,
+    Less = 2,
+    LessOrEquals = 4,
+    Contains = 8,
+    Match = 16,
+    MemberOf = 32,
+    OneOf = 64,
+    StartsWith = 128
+};
+
+struct __declspec(uuid("3caf01f0-e290-437b-a39c-3f59ae5bb2b2"))
+CIIfStatement;
+    // [ default ] interface ICIIfStatement
+
+struct __declspec(uuid("98e28e5e-332b-40f5-b840-48f9bfe5e153"))
+ICIEventRuleStatement : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=Gettype))
+    EventRuleStatementType type;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    EventRuleStatementType Gettype ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_type (
+        /*[out,retval]*/ EventRuleStatementType * pVal ) = 0;
+};
+
+struct __declspec(uuid("42679a64-3760-4943-9bc3-dc2a42842e98"))
+ICIIfStatement : ICIEventRuleStatement
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetIfSection))
+    IDispatchPtr IfSection;
+    __declspec(property(get=GetElseSection))
+    IDispatchPtr ElseSection;
+    __declspec(property(get=GetCondition))
+    IDispatchPtr Condition;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr GetIfSection ( );
+    IDispatchPtr GetElseSection ( );
+    IDispatchPtr GetCondition ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_IfSection (
+        /*[out,retval]*/ IDispatch * * ppdispActionStatements ) = 0;
+      virtual HRESULT __stdcall get_ElseSection (
+        /*[out,retval]*/ IDispatch * * ppdispActionStatements ) = 0;
+      virtual HRESULT __stdcall get_Condition (
+        /*[out,retval]*/ IDispatch * * ppdispCompoundCondition ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0004
+{
+    ActionStatement = 0,
+    IfStatement = 1
+};
+
+struct __declspec(uuid("6d57f2c4-3c1c-438d-9c76-1036bbe68ccf"))
+CIActionStatement;
+    // [ default ] interface ICIActionStatement
+
+struct __declspec(uuid("3d8aabc7-0729-4868-8428-3d2c447ec3bf"))
+ICIActionStatement : ICIEventRuleStatement
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr FailSection ( );
+    IDispatchPtr Action ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_FailSection (
+        /*[out,retval]*/ IDispatch * * ppdispActions ) = 0;
+      virtual HRESULT __stdcall raw_Action (
+        /*[out,retval]*/ IDispatch * * ppdispAction ) = 0;
+};
+
+struct __declspec(uuid("02ddface-adcc-4f1e-9647-75ab28ef57bb"))
+CIActionStatements;
+    // [ default ] interface ICIActionStatements
+
+struct __declspec(uuid("7bf321ce-b641-4d57-a109-76edc8708c4c"))
+ICIActionStatements : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr Item (
+        long lIndex );
+    long Count ( );
+    HRESULT Delete (
+        long lIndex );
+    IDispatchPtr Add (
+        long lIndex,
+        IDispatch * pdispActionParams );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Item (
+        /*[in]*/ long lIndex,
+        /*[out,retval]*/ IDispatch * * ppdispActionStatement ) = 0;
+      virtual HRESULT __stdcall raw_Count (
+        /*[out,retval]*/ long * plCount ) = 0;
+      virtual HRESULT __stdcall raw_Delete (
+        /*[in]*/ long lIndex ) = 0;
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ long lIndex,
+        /*[in]*/ IDispatch * pdispActionParams,
+        /*[out,retval]*/ IDispatch * * ppdispActionStatement ) = 0;
+};
+
+struct __declspec(uuid("97388922-b025-42fa-bd65-41094770416e"))
+CIEventAction;
+    // [ default ] interface ICIEventAction
+
+struct __declspec(uuid("5c38f400-cee1-4cef-ae27-db1f6a8dccd7"))
+ICIEventAction : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=Gettype))
+    EventActionType type;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    EventActionType Gettype ( );
+    IDispatchPtr GetParams ( );
+    HRESULT SetParams (
+        IDispatch * pdispParams );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_type (
+        /*[out,retval]*/ EventActionType * pVal ) = 0;
+      virtual HRESULT __stdcall raw_GetParams (
+        /*[out,retval]*/ IDispatch * * ppdispParams ) = 0;
+      virtual HRESULT __stdcall raw_SetParams (
+        /*[in]*/ IDispatch * pdispParams ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0005
+{
+    CommandAction = 1,
+    MailAction = 2,
+    UploadAction = 4,
+    DownloadAction = 8,
+    PGPAction = 32,
+    StopAction = 64,
+    CleanupAction = 128,
+    ReportAction = 256,
+    AS2SendAction = 512,
+    AWTaskAction = 1024,
+    BackupAction = 2048
+};
+
+struct __declspec(uuid("d88b2fae-6a30-4d4b-ba5b-6039ba3c0e94"))
+CIEventActions;
+    // [ default ] interface ICIEventActions
+
+struct __declspec(uuid("1e7376d6-5003-47fe-ada7-9b0a6bfbf888"))
+ICIEventActions : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    IDispatchPtr Item (
+        long lIndex );
+    long Count ( );
+    HRESULT Delete (
+        long lIndex );
+    IDispatchPtr Add (
+        long lIndex,
+        IDispatch * pdispParams );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Item (
+        /*[in]*/ long lIndex,
+        /*[out,retval]*/ IDispatch * * ppdispAction ) = 0;
+      virtual HRESULT __stdcall raw_Count (
+        /*[out,retval]*/ long * plCount ) = 0;
+      virtual HRESULT __stdcall raw_Delete (
+        /*[in]*/ long lIndex ) = 0;
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ long lIndex,
+        /*[in]*/ IDispatch * pdispParams,
+        /*[out,retval]*/ IDispatch * * ppdispAction ) = 0;
+};
+
+struct __declspec(uuid("59ebd13e-66dd-49bf-96b3-7aab5ee87965"))
+CICompoundCondition;
+    // [ default ] interface ICICompoundCondition
+
+struct __declspec(uuid("f649f52b-6923-40a3-86f2-50c9e5986f32"))
+ICICompoundCondition : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetOperator,put=PutOperator))
+    LogicalOperator Operator;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    LogicalOperator GetOperator ( );
+    void PutOperator (
+        LogicalOperator pVal );
+    IDispatchPtr Item (
+        long lIndex );
+    IDispatchPtr Add (
+        EventProperty property,
+        ConditionOperator op,
+        const _variant_t & varValue,
+        VARIANT_BOOL bNot );
+    HRESULT Delete (
+        long lIndex );
+    long Count ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Operator (
+        /*[out,retval]*/ LogicalOperator * pVal ) = 0;
+      virtual HRESULT __stdcall put_Operator (
+        /*[in]*/ LogicalOperator pVal ) = 0;
+      virtual HRESULT __stdcall raw_Item (
+        /*[in]*/ long lIndex,
+        /*[out,retval]*/ IDispatch * * ppdispSimpleCondition ) = 0;
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ EventProperty property,
+        /*[in]*/ ConditionOperator op,
+        /*[in]*/ VARIANT varValue,
+        /*[in]*/ VARIANT_BOOL bNot,
+        /*[out,retval]*/ IDispatch * * ppdispSimpleCondition ) = 0;
+      virtual HRESULT __stdcall raw_Delete (
+        /*[in]*/ long lIndex ) = 0;
+      virtual HRESULT __stdcall raw_Count (
+        /*[out,retval]*/ long * plCount ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0008
+{
+    LogicalOr = 0,
+    LogicalAnd = 1
+};
+
+struct __declspec(uuid("9785ce85-2e5c-43dc-a567-1abf289d6999"))
+CISimpleCondition;
+    // [ default ] interface ICISimpleCondition
+
+struct __declspec(uuid("68d1009e-a670-4d46-bb0b-b034ccd870f5"))
+ICISimpleCondition : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetOperator,put=PutOperator))
+    ConditionOperator Operator;
+    __declspec(property(get=GetValue,put=PutValue))
+    _variant_t Value;
+    __declspec(property(get=Getproperty))
+    EventProperty property;
+    __declspec(property(get=GetNot,put=PutNot))
+    VARIANT_BOOL Not;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    ConditionOperator GetOperator ( );
+    void PutOperator (
+        ConditionOperator pVal );
+    _variant_t GetValue ( );
+    void PutValue (
+        const _variant_t & pVal );
+    EventProperty Getproperty ( );
+    VARIANT_BOOL GetNot ( );
+    void PutNot (
+        VARIANT_BOOL pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Operator (
+        /*[out,retval]*/ ConditionOperator * pVal ) = 0;
+      virtual HRESULT __stdcall put_Operator (
+        /*[in]*/ ConditionOperator pVal ) = 0;
+      virtual HRESULT __stdcall get_Value (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall put_Value (
+        /*[in]*/ VARIANT pVal ) = 0;
+      virtual HRESULT __stdcall get_property (
+        /*[out,retval]*/ EventProperty * pVal ) = 0;
+      virtual HRESULT __stdcall get_Not (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Not (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+};
+
+struct __declspec(uuid("3b0f7b25-4384-4c72-a640-004da67f99d8"))
+CIEventRuleParams;
+    // [ default ] interface ICIEventRuleParams
+
+struct __declspec(uuid("71ba2e98-c6ff-4e8e-9dcb-ec45cf674b68"))
+ICIEventRuleParams : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetName,put=PutName))
+    _bstr_t Name;
+    __declspec(property(get=GetDescription,put=PutDescription))
+    _bstr_t Description;
+    __declspec(property(get=GetEnabled,put=PutEnabled))
+    VARIANT_BOOL Enabled;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetName ( );
+    void PutName (
+        _bstr_t pVal );
+    _bstr_t GetDescription ( );
+    void PutDescription (
+        _bstr_t pVal );
+    VARIANT_BOOL GetEnabled ( );
+    void PutEnabled (
+        VARIANT_BOOL pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Name (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Description (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Description (
+        /*[in]*/ BSTR pVal ) = 0;
+      virtual HRESULT __stdcall get_Enabled (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_Enabled (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+};
+
+struct __declspec(uuid("2f880b03-8f15-4434-a8d3-e3d4b84403cd"))
+CITimerEventRuleParams;
+    // [ default ] interface ICITimerEventRuleParams
+
+struct __declspec(uuid("b8b64b3c-7b5c-4324-acd6-99622da0f411"))
+ICITimerEventRuleParams : ICIEventRuleParams
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetTimeStart,put=PutTimeStart))
+    _variant_t TimeStart;
+    __declspec(property(get=GetDayOfMonth,put=PutDayOfMonth))
+    long DayOfMonth;
+    __declspec(property(get=GetMonthIndex,put=PutMonthIndex))
+    long MonthIndex;
+    __declspec(property(get=GetWeekDayIndex,put=PutWeekDayIndex))
+    long WeekDayIndex;
+    __declspec(property(get=GetDayIndex,put=PutDayIndex))
+    long DayIndex;
+    __declspec(property(get=GetMonthPeriod,put=PutMonthPeriod))
+    long MonthPeriod;
+    __declspec(property(get=GetWeekPeriod,put=PutWeekPeriod))
+    long WeekPeriod;
+    __declspec(property(get=GetDayPeriod,put=PutDayPeriod))
+    long DayPeriod;
+    __declspec(property(get=GetFixedDate,put=PutFixedDate))
+    VARIANT_BOOL FixedDate;
+    __declspec(property(get=GetRecurrence,put=PutRecurrence))
+    Recurrence _Recurrence;
+    __declspec(property(get=GetCustomPeriod,put=PutCustomPeriod))
+    long CustomPeriod;
+    __declspec(property(get=GetWeekdays,put=PutWeekdays))
+    long Weekdays;
+    __declspec(property(get=GetNextRun))
+    DATE NextRun;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _variant_t GetTimeStart ( );
+    void PutTimeStart (
+        const _variant_t & pVal );
+    long GetDayOfMonth ( );
+    void PutDayOfMonth (
+        long pVal );
+    long GetMonthIndex ( );
+    void PutMonthIndex (
+        long pVal );
+    long GetWeekDayIndex ( );
+    void PutWeekDayIndex (
+        long pVal );
+    long GetDayIndex ( );
+    void PutDayIndex (
+        long pVal );
+    long GetMonthPeriod ( );
+    void PutMonthPeriod (
+        long pVal );
+    long GetWeekPeriod ( );
+    void PutWeekPeriod (
+        long pVal );
+    long GetDayPeriod ( );
+    void PutDayPeriod (
+        long pVal );
+    VARIANT_BOOL GetFixedDate ( );
+    void PutFixedDate (
+        VARIANT_BOOL pVal );
+    Recurrence GetRecurrence ( );
+    void PutRecurrence (
+        Recurrence pVal );
+    long GetCustomPeriod ( );
+    void PutCustomPeriod (
+        long pVal );
+    long GetWeekdays ( );
+    void PutWeekdays (
+        long pVal );
+    DATE GetNextRun ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_TimeStart (
+        /*[out,retval]*/ VARIANT * pVal ) = 0;
+      virtual HRESULT __stdcall put_TimeStart (
+        /*[in]*/ VARIANT pVal ) = 0;
+      virtual HRESULT __stdcall get_DayOfMonth (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_DayOfMonth (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MonthIndex (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MonthIndex (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_WeekDayIndex (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_WeekDayIndex (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_DayIndex (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_DayIndex (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_MonthPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_MonthPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_WeekPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_WeekPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_DayPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_DayPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_FixedDate (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_FixedDate (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Recurrence (
+        /*[out,retval]*/ Recurrence * pVal ) = 0;
+      virtual HRESULT __stdcall put_Recurrence (
+        /*[in]*/ Recurrence pVal ) = 0;
+      virtual HRESULT __stdcall get_CustomPeriod (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_CustomPeriod (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_Weekdays (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_Weekdays (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_NextRun (
+        /*[out,retval]*/ DATE * pVal ) = 0;
+};
+
+enum __MIDL___MIDL_itf_SFTPCOMInterface_0000_0007_0009
+{
+    Custom = 0,
+    Daily = 1,
+    Weekly = 2,
+    Monthly = 3,
+    Yearly = 4,
+    OneTime = 5
+};
+
+struct __declspec(uuid("288f7af3-437c-480d-81a6-594f3c159b69"))
+CIFolderMonitorEventRuleParams;
+    // [ default ] interface ICIFolderMonitorEventRuleParams
+
+struct __declspec(uuid("5dff0c88-9ffa-4946-b088-199cbad101ba"))
+ICIFolderMonitorEventRuleParams : ICIEventRuleParams
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetCheckHealthInterval,put=PutCheckHealthInterval))
+    long CheckHealthInterval;
+    __declspec(property(get=GetCheckHealth,put=PutCheckHealth))
+    VARIANT_BOOL CheckHealth;
+    __declspec(property(get=GetIncludeSubfolders,put=PutIncludeSubfolders))
+    VARIANT_BOOL IncludeSubfolders;
+    __declspec(property(get=GetPath,put=PutPath))
+    _bstr_t Path;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    long GetCheckHealthInterval ( );
+    void PutCheckHealthInterval (
+        long pVal );
+    VARIANT_BOOL GetCheckHealth ( );
+    void PutCheckHealth (
+        VARIANT_BOOL pVal );
+    VARIANT_BOOL GetIncludeSubfolders ( );
+    void PutIncludeSubfolders (
+        VARIANT_BOOL pVal );
+    _bstr_t GetPath ( );
+    void PutPath (
+        _bstr_t pVal );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_CheckHealthInterval (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall put_CheckHealthInterval (
+        /*[in]*/ long pVal ) = 0;
+      virtual HRESULT __stdcall get_CheckHealth (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_CheckHealth (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_IncludeSubfolders (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall put_IncludeSubfolders (
+        /*[in]*/ VARIANT_BOOL pVal ) = 0;
+      virtual HRESULT __stdcall get_Path (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall put_Path (
+        /*[in]*/ BSTR pVal ) = 0;
+};
+
+struct __declspec(uuid("5f2675d4-86de-4f24-88ab-cebb4c473237"))
+CIAudit;
+    // [ default ] interface ICIAudit
+
+struct __declspec(uuid("45bf2fc0-a0f2-4130-aae7-ad3ff4409106"))
+CIPGPKeyInfo;
+    // [ default ] interface ICIPGPKeyInfo
+
+struct __declspec(uuid("5704f3a9-73f9-4f0b-9676-77b9cb2c00f2"))
+ICIPGPKeyInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetName))
+    _bstr_t Name;
+    __declspec(property(get=GetDescription))
+    _bstr_t Description;
+    __declspec(property(get=GetID))
+    _bstr_t ID;
+    __declspec(property(get=GetPrivate))
+    VARIANT_BOOL Private;
+    __declspec(property(get=GetSize))
+    long Size;
+    __declspec(property(get=GetCreationDate))
+    DATE CreationDate;
+    __declspec(property(get=GetNeverExpires))
+    VARIANT_BOOL NeverExpires;
+    __declspec(property(get=GetExpirationDate))
+    DATE ExpirationDate;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetName ( );
+    _bstr_t GetDescription ( );
+    _bstr_t GetID ( );
+    VARIANT_BOOL GetPrivate ( );
+    long GetSize ( );
+    DATE GetCreationDate ( );
+    VARIANT_BOOL GetNeverExpires ( );
+    DATE GetExpirationDate ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_Description (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_ID (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_Private (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall get_Size (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall get_CreationDate (
+        /*[out,retval]*/ DATE * pVal ) = 0;
+      virtual HRESULT __stdcall get_NeverExpires (
+        /*[out,retval]*/ VARIANT_BOOL * pVal ) = 0;
+      virtual HRESULT __stdcall get_ExpirationDate (
+        /*[out,retval]*/ DATE * pVal ) = 0;
+};
+
+struct __declspec(uuid("4c54fbeb-bece-42c7-894f-2fae8e1f42d3"))
+CIReportInfo;
+    // [ default ] interface ICIReportInfo
+
+struct __declspec(uuid("835c05c4-47c2-4d57-bf62-ae4b02db3dd3"))
+ICIReportInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetName))
+    _bstr_t Name;
+    __declspec(property(get=GetDefinitionPath))
+    _bstr_t DefinitionPath;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetName ( );
+    _bstr_t GetDefinitionPath ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_DefinitionPath (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+};
+
+struct __declspec(uuid("f348b423-d9b6-450d-b399-4290da0bc431"))
+CIEventInfo;
+    // [ default ] interface ICIEventInfo
+
+struct __declspec(uuid("7f60dc98-112e-413e-8ebc-4889cb55c2ca"))
+ICIEventInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=Gettype))
+    EventType type;
+    __declspec(property(get=GetName))
+    _bstr_t Name;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    EventType Gettype ( );
+    _bstr_t GetName ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_type (
+        /*[out,retval]*/ EventType * pVal ) = 0;
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+};
+
+struct __declspec(uuid("aa3a1e06-6605-4350-bd22-f20d239c5e26"))
+CISSHKeyInfo;
+    // [ default ] interface ICISSHKeyInfo
+
+struct __declspec(uuid("f5a7c625-31f8-4d32-94e8-49cbbd4e3bb4"))
+ICISSHKeyInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetID))
+    long ID;
+    __declspec(property(get=GetName))
+    _bstr_t Name;
+    __declspec(property(get=GetFingerprint))
+    _bstr_t Fingerprint;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    long GetID ( );
+    _bstr_t GetName ( );
+    _bstr_t GetFingerprint ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_ID (
+        /*[out,retval]*/ long * pVal ) = 0;
+      virtual HRESULT __stdcall get_Name (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+      virtual HRESULT __stdcall get_Fingerprint (
+        /*[out,retval]*/ BSTR * pVal ) = 0;
+};
+
+//
+// Wrapper method implementations
+//
+
+#include "sftpcominterface.tli"
+
+} // namespace SFTPCOMINTERFACELib
+
+#pragma pack(pop)

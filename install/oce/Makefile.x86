@@ -1,0 +1,29 @@
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error NLEXTERNALDIR undefined.)
+endif
+
+ifeq ($(BUILDTYPE),)
+	BUILDTYPE=dev
+endif
+
+ifeq ($(VERSION_BUILD_SHORT),)
+	VERSION_BUILD_SHORT=1
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+PRODUCT_DIR_NAME=oce
+VERSION_STR=$(VERSION_MAJOR_OCE).$(VERSION_MINOR_OCE).$(VERSION_MAINTENANCE_OCE).$(VERSION_PATCH_OCE)
+ISM_TEMPLATE_FILE_NAME=OfficeCommunicatorEnforcer.ism
+ISM_RELEASE=msi32
+ISM_PRODUCT_CONFIG=32bit
+#MSI_FILE=OfficeCommunicatorEnforcer-32-$(VERSION_STR).msi
+MSI_FILE=EDP-OfficeCommunicatorEnforcer-setup.msi
+PACKAGE_DIR_NAME=package32
+PACKAGE_FILE=OfficeCommunicatorEnforcer-32-$(VERSION_STR)-$(VERSION_BUILD_SHORT)-$(shell date +"%Y%m%d%H%M").zip
+
+include $(NLBUILDROOT)/install/scripts/Makefile.install.single

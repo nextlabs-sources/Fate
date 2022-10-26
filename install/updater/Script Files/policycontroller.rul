@@ -1,0 +1,110 @@
+#include "include/common.h"  
+#include "include/logging.h"
+#include "policycontroller.h"
+#include "include/servicecontrol.h"
+#include "setupfiles.h"
+#include "ShutDownRunningApp.rul"  
+#include "Ifx.h" 
+ 
+/*
+ *  Validate specified ICENet Server Location
+ */
+function INT ValidateIcenetServerLocation(hMSI)
+	WSTRING icenetServerLocation;
+	WSTRING label;
+	WSTRING invalidHostMessage;
+	WSTRING invliadPortMessage;
+	INT result;	
+begin          
+	 WriteToLogFile(hMSI, "Begin ValidateIcenetServerLocation()");
+	 
+	 icenetServerLocation = GetProperty(hMSI, ICENET_SERVER_LOCATION_PROP_NAME);
+	 label = IDS_ICENET_LOCATION_LABEL;
+	 invalidHostMessage = ERR_INVALID_ICENET_SERVER_LOCATION_MESSAGE;
+	 invliadPortMessage = ERR_INVALID_PORT_NUMBER_MESSAGE;
+	 result = ValidateLocationInput(hMSI, label, icenetServerLocation, invalidHostMessage, DEFAULT_WEB_SERVICE_PORT, invliadPortMessage, TRUE);
+	 if (result == 0) then
+	 	SetProperty(hMSI, ICENET_SERVER_LOCATION_PROP_NAME, icenetServerLocation);
+	 endif;                
+	 
+	 WriteToLogFile(hMSI, "End ValidateIcenetServerLocation()");
+	  
+	 return ERROR_SUCCESS;
+end;   
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  ValidateUninstallPassword
+//                                                                           
+//  Purpose:  Attempts to shutdown the agent service and displays a UI if necessary.
+//			  This function is used only in the UI sequence.
+//
+//  Returns: 0 if sucessful
+//           1 if password is incorrect
+//           2 if some other fatal error occured
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function INT ValidateUninstallPassword(hMSI)
+	INT result; 
+	STRING resultAsString;
+begin    
+	WriteToLogFile(hMSI, "Begin ValidateUninstallPassword()");
+    result = StopService(hMSI); 
+ 	
+ 	switch (result)
+		case ERROR_INCORRECT_PASSWORD:			
+ 			DenyNextDialog(hMSI);
+			MessageBox("Invalid Password!! The password you have entered is invalid. Please check your password and try again.", SEVERE);
+	 	case ERROR_AGENT_NOT_STOPPED:                            
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("Error!! An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	 
+		case ERROR_SUCCESS:      
+			AllowNextDialog(hMSI);                      
+	 	default:
+	 		DenyNextDialog(hMSI);
+	 		MessageBox("Error!! An unexpected error occured. The Policy Controller service could not be stopped.", SEVERE);	                                            				
+	 endswitch;
+	 
+	 return ERROR_SUCCESS;
+end; 
+         
+
+/*
+ * Start the Obligation Manager process
+ */                              
+function INT StartObligationManager(hMSI)
+	STRING obligationManagerDir;                                           
+	STRING obligationManagerPath;
+	NUMBER pathSize;
+begin  
+	if (!ProcessRunning("ObligationManager")) then
+		MsiGetTargetPath(hMSI, "BIN", obligationManagerDir, pathSize);
+		obligationManagerPath = obligationManagerDir ^ "ObligationManager.exe";
+		LongPathToQuote(obligationManagerPath, TRUE);
+		LaunchApplication(obligationManagerPath, "", "", SW_HIDE, 0, LAAW_OPTION_NOWAIT); 
+	endif;
+end;
+                                  
+/*
+ * Stop tye Obligation Manager process
+ */                              
+function INT StopObligationManager(hMSI)
+begin       
+	if (ProcessRunning("ObligationManager")) then  
+		ProcessEnd("ObligationManager");  
+	endif;    
+end;
+     
+/*
+ *  Retrieve the Policy Controller Directory
+ */                                         
+function STRING getPolicyControllerDirectory(installDir)
+begin    
+	return installDir ^ "Policy Controller";
+end;   
+

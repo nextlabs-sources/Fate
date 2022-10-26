@@ -1,0 +1,9 @@
+all:libresattrmgr.so
+
+
+libresattrmgr.so: resattrmgr.cpp ../../resattrlib/src/resattrlib.cpp utils.cpp ole.cpp pdf.cpp ooxml.cpp pdfattrs.cpp fsysea.cpp
+	@gcc -shared -fPIC -o libresattrmgr.so resattrmgr.cpp ../../resattrlib/src/resattrlib.cpp utils.cpp ole.cpp pdf.cpp ooxml.cpp pdfattrs.cpp fsysea.cpp -ggdb -I../include -I/usr/local/include/podofo -I../../resattrlib/include -I/usr/include/libgsf-1 -I/usr/include/glib-2.0 -I/usr/include/libxml2 -I/usr/lib/glib-2.0/include -lstdc++ -L/usr/local/lib -lgsf-1
+
+clean:
+	@rm -f libresattrmgr.so *.o *.obj
+

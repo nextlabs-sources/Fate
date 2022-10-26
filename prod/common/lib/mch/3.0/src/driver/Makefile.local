@@ -1,0 +1,31 @@
+# Makefile to buld RDE driver
+#
+# IMPORTANT: This file must be named something different from Makefile. Otherwise,
+# when build/drvBuild.bat compiles a driver, NMAKE will pickup Makefile and fail.
+
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+
+#
+# Variables
+#
+
+DRIVER_NAME=nlinjection
+DRIVER_TYPE=sys
+INF_FILE=nlinjection.inf
+RC_FILE=nlinjection.rc
+CAT_FILE=no
+VERSION_STR=8.2
+VERSION_PRODUCT=NextLabs Endpoint Data Protection
+TARGETS_DRIVER=compile_free
+
+
+#
+# Common driver variables and targets
+#
+
+include $(NLBUILDROOT)/build/Makefile.driver

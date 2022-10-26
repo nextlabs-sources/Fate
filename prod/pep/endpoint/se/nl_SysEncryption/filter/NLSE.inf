@@ -1,0 +1,86 @@
+[Version]
+Signature   = "$Windows NT$"
+Class       = "Encryption"                       ; FSFilter Encryption
+ClassGuid   = {a0a701c0-a511-42ff-aa6c-06dc0395576f}    ; FSFilter Encryption
+Provider    = "NextLabs, Inc."
+DriverVer=05/25/2011,16.24.12.485
+CatalogFile.NTx86   = nl_SysEncryption.x86.cat
+CatalogFile.NTAMD64 = nl_SysEncryption.x64.cat
+
+
+[DestinationDirs]
+DefaultDestDir          = 12
+NLSE.DriverFiles    = 12            ;%windir%\system32\drivers
+
+; Default install sections
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = NLSE.DriverFiles
+
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,,NLSE.Service
+
+
+; Default uninstall sections
+[DefaultUninstall]
+DelFiles   = NLSE.DriverFiles
+
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,0x200      ;Ensure service is stopped before deleting
+
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+
+[SourceDisksFiles.x86]
+nl_SysEncryption.sys  = 1,i386,
+
+
+
+[SourceDisksFiles.AMD64]
+nl_SysEncryption.sys  = 1,amd64,
+
+
+
+; Services Section
+[NLSE.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %12%\%DriverName%.sys        ;%windir%\system32\drivers\
+Dependencies     = FltMgr
+ServiceType      = 2                            ;SERVICE_FILE_SYSTEM_DRIVER
+StartType        = 3                            ;SERVICE_DEMAND_START
+ErrorControl     = 1                            ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "FSFilter Encryption"
+AddReg           = NLSE.AddRegistry
+
+
+; Registry Modifications
+[NLSE.AddRegistry]
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+
+; Copy Files
+[NLSE.DriverFiles]
+%DriverName%.sys
+
+
+; String Section
+[Strings]
+ServiceDescription = "NextLabs Common Library"
+ServiceName             = "NLSysEncryption"
+DriverName              = "nl_SysEncryption"
+UserAppName             = "NLSE"
+
+
+;Instances specific information.
+DefaultInstance         = "NLSE - Default Instance"
+Instance1.Name          = "NLSE - Default Instance"
+Instance1.Altitude      = "141000.1313624901"
+Instance1.Flags         = 0x0
+

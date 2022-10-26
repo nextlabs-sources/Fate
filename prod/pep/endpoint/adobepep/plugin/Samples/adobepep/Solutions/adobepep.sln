@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "acrobatpep", "acrobatpep.vcproj", "{4424D1BB-193F-48E2-963D-A68E8F1F134B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "readerpep", "readerpep.vcproj", "{7FF1552A-9D0B-4CAF-B736-669AD950BA51}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForceAdobePEP", "..\..\..\..\ForceAdobePEP\ForceAdobePEP.vcproj", "{292017AE-EBCA-4C97-946A-2BC981FE6FBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4424D1BB-193F-48E2-963D-A68E8F1F134B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4424D1BB-193F-48E2-963D-A68E8F1F134B}.Debug|Win32.Build.0 = Debug|Win32
+		{4424D1BB-193F-48E2-963D-A68E8F1F134B}.Release|Win32.ActiveCfg = Release|Win32
+		{4424D1BB-193F-48E2-963D-A68E8F1F134B}.Release|Win32.Build.0 = Release|Win32
+		{7FF1552A-9D0B-4CAF-B736-669AD950BA51}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7FF1552A-9D0B-4CAF-B736-669AD950BA51}.Debug|Win32.Build.0 = Debug|Win32
+		{7FF1552A-9D0B-4CAF-B736-669AD950BA51}.Release|Win32.ActiveCfg = Release|Win32
+		{7FF1552A-9D0B-4CAF-B736-669AD950BA51}.Release|Win32.Build.0 = Release|Win32
+		{292017AE-EBCA-4C97-946A-2BC981FE6FBC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{292017AE-EBCA-4C97-946A-2BC981FE6FBC}.Debug|Win32.Build.0 = Debug|Win32
+		{292017AE-EBCA-4C97-946A-2BC981FE6FBC}.Release|Win32.ActiveCfg = Release|Win32
+		{292017AE-EBCA-4C97-946A-2BC981FE6FBC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

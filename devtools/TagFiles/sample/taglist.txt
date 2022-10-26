@@ -1,0 +1,20 @@
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\4 DV-5 COVER.SLDPRT
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\4 DV-5 DIAPHRAGM ASSEMBLY.SLDASM
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\4 DV-5 V-RING-DIAPHRAGM ASSEMBLY.SLDASM
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\4 DV-5 V-RING.SLDPRT
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\4 DV-5 VALVE ASSEMBLY.SLDASM
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\428728.asm.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\428728.drw.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\428775.prt.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\431329.prt.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\433740.prt.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\467931.dwg
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\467932.dwg
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\467933.dwg
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\467934.dwg
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\467935.dwg
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\69506.prt.1
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\Global TFSBP SAP System Landscape (public) 20100426.pdf
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\itar-test-asm-3d-and-2d.pdf
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\tstfiles.txt
+U:\Documents\Customers\Tyco\Tagging Files\ITAR Files\badfile.pdf

@@ -1,0 +1,36 @@
+// approver.idl : IDL source for approver
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (approver.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(F4052F2D-CCC0-49A0-B768-B6D3F68662E6),
+	dual,
+	nonextensible,
+	helpstring("Iapproverobj Interface"),
+	pointer_default(unique)
+]
+interface Iapproverobj : IDispatch{
+};
+[
+	uuid(F6E616EE-8246-40FD-8EBF-B0C11EF9DFBC),
+	version(1.0),
+	helpstring("approver 1.0 Type Library")
+]
+library approverLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(D0543C0E-0C21-42D6-83D5-F193B1BB66BA),
+		helpstring("approverobj Class")
+	]
+	coclass approverobj
+	{
+		[default] interface Iapproverobj;
+	};
+};

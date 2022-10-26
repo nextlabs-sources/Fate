@@ -1,0 +1,92 @@
+#!/bin/sh
+
+# This script puts the final touch of the installer
+# Concatenating the RPM and make it installable
+
+RUNTIMEROOT=usr/local/ce
+
+if [ ! -n "$NLENFORCERSDIR" ] ; then
+    echo "\$NLENFORCERSDIR is not defined.  Please set env variable \$NLENFORCERSDIR";
+    exit;
+fi
+
+
+if [ $# -eq 3 ] ; then
+    product=$1;
+    launch_script=$2;
+    template=$3;
+else
+    echo "Usage: $0 product installation_script templatefile";
+    echo "   e.g. $0 LFSE install.template.release rpm-spec.template.release";
+    echo
+    echo "   This script pieces together an installation script "
+    echo "   and a RPM together to produce an executable .bin "
+    echo "   file for end user to install the package on linux."
+    echo
+    echo "   The launch script defines what needs to be done at"
+    echo "   install time. e.g. show license agreement, ask for"
+    echo "   ICENet, do rpm installation etc etc "
+    echo
+    echo "   The script exists so that we can put arbitrary rpm"
+    echo "   into arbitrary install script together"
+    exit 0;
+fi
+
+# Check the inputs
+
+PRODUCTDIR=${NLENFORCERSDIR}/prods/${product}
+
+if [ ! -d $PRODUCTDIR ]; then
+    echo "Invalid product: $product"
+    exit 1;
+fi
+
+if [ ! -e $PRODUCTDIR/$launch_script ]; then
+    echo "Invalid install file: $launch_script";
+    exit 1;
+fi
+
+if [ ! -e $PRODUCTDIR/$template ]; then
+    echo "Invalid template file: $template "
+    exit 1;
+fi
+
+rpmpath=${PRODUCTDIR}/build.output/rpm/RPMS/i386/
+
+
+# Compute the rpm file from the template
+rpmbase=`head $PRODUCTDIR/$template | grep Name    | cut -f2 -d" "`;
+rpmver=`head  $PRODUCTDIR/$template | grep Version | cut -f2 -d" "`;
+rpmdate=`date +%y%m%d`;
+
+rpmfile=$rpmbase-$rpmver-$rpmdate.i386.rpm
+
+# Generate the RPM file first
+./rpm_gen $product $template
+
+# Find out the line number of the launch script so that we can append 
+# the rpm file at the back
+launchline=`wc -l $PRODUCTDIR/$launch_script | cut -f1 -d" "`;
+launchline=$(($launchline+1))
+
+# Do all the replacements
+cat $PRODUCTDIR/$launch_script | \
+while read line
+    do
+        line=`echo $line | sed "s/___BJLAUNCH_LINE___/${launchline}/"`;
+        line=`echo $line | sed "s/___BJFSE_BASE___/${rpmbase}/"`;
+        line=`echo $line | sed "s/___BJFSE_RPM___/${rpmfile}/"`;
+        line=`echo $line | sed "s|___RUNTIMEROOT___|${RUNTIMEROOT}|"`;
+        echo $line >> /tmp/$$.$launch_script;
+    done
+
+# Glue the script and the RPM together
+
+outfile=`echo $rpmfile | sed "s/\.rpm/\.bin/"`
+
+cat /tmp/$$.$launch_script >> /tmp/$outfile
+cat $rpmpath$rpmfile >> /tmp/$outfile
+chmod a+x /tmp/$outfile
+mv -f /tmp/$outfile $rpmpath$outfile
+
+

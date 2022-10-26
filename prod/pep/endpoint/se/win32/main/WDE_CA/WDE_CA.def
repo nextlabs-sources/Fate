@@ -1,0 +1,20 @@
+; WDE_CA.def : Declares the module parameters for the DLL.
+
+LIBRARY      "WDE_CA"
+
+EXPORTS
+    ; Explicit exports can go here
+	fnSayHello @1
+	fnShutdown20ComplianceAgentService @2
+	fnClose20ComplianceAgentNotify @3
+	fnFind20ComplianceAgentNotify @4
+	fnFindDestiny20 @5
+	fnStream20AgentControllerToTemp @6
+	fnCleanup20TempFiles @7
+	fnDelete20EnforcerDriver @8
+	fnInstallEnforcerDriver @9
+	fnBackupEnforcerDriver @10
+	fnRestoreEnforcerDriver @11
+	fnStartEnforcerDriver @12
+	fnStopEnforcerDriver @13
+	fnDeleteEnforcerDriver @14

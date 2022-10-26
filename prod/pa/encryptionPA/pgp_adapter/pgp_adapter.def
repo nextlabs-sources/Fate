@@ -1,0 +1,4 @@
+LIBRARY	"pgp_adapter"
+
+EXPORTS
+	Encrypt

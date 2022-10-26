@@ -1,0 +1,12 @@
+LIBRARY	"PluginInstallerSDK32"
+EXPORTS
+	setEnforcerPluginTargetPath @ 1
+	setTamperResistenceConfigPath @ 2
+	setPluginConfigPath @ 3
+	setServiceInjectionPath @ 4
+	initializeEnforcerInstall @ 5
+	setEnforcerPluginTargetPathFromProperty @ 6
+	setTamperResistenceConfigPathFromProperty @ 7
+	setPluginConfigPathFromProperty @ 8
+	setServiceInjectionPathFromProperty @ 9
+	setPathFromProperty @ 10

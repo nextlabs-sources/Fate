@@ -1,0 +1,54 @@
+TARGETNAME=nl_SysEncryption
+TARGETTYPE=DRIVER
+DRIVERTYPE=FS
+
+NL_ARCHITECTURE = amd64
+NL_PLATFORM     = win7
+NL_CRYPTONAME	= CNG
+
+!if "$(_BUILDARCH)" == "x86"
+NL_ARCHITECTURE = i386
+!endif
+
+!if "$(DDK_TARGET_OS)" == "WinXP"
+NL_PLATFORM   = wxp
+NL_CRYPTONAME = OpenSSL
+!endif
+
+NL_BINDIR = obj$(DDKBUILDENV)_$(NL_PLATFORM)_$(_BUILDARCH)\$(NL_ARCHITECTURE)
+
+TARGETLIBS= $(TARGETLIBS) \
+            $(IFSKIT_LIB_PATH)\fltMgr.lib \
+			$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\modules\aes\$(NL_CRYPTONAME)\src\$(NL_BINDIR)\nl_crypto.lib \
+			$(NLBUILDROOT)\prod\common\nl_klog\src\$(NL_BINDIR)\nl_klog.lib
+
+C_DEFINES=$(C_DEFINES) -D_WIN2K_COMPAT_SLIST_USAGE
+
+INCLUDES=$(INCLUDES); \
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_SysEncryption\filter\include; \
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_SysEncryption\include; \
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_SysEncryption\common\include; \
+		$(NLBUILDROOT)\prod\pep\endpoint\se\include; \
+		$(NLBUILDROOT)\prod\pep\endpoint\se\nl_crypto\include;	\
+		$(NLBUILDROOT)\prod\common\nl_klog\include;	\
+		$(NLBUILDROOT)\prod\common\include;	\
+		$(NLBUILDROOT)\prod\common\NextLabsTaggingLib\include;
+
+SOURCES=NLSEInit.c		\
+	header.c			\
+	NLSEStream.c    	\
+	NLSEOperation.c		\
+	NLSEUtility.c 		\
+	NLSECrypto.c 		\
+	NLSEComm.c 			\
+	NLSERawAccess.c 	\
+	NLSEDrmPathList.c	\
+	nlperf.c			\
+	nldircache.c		\
+	dircontrol.c		\
+	nlprocess.c			\
+	NLFileNameInfoCache.c	\
+	pathList.c			\
+	NLSEDrmFileList.c	\
+	NLSE.rc
+

@@ -1,0 +1,51 @@
+###################################################################################
+#
+# NLDevEnf Test/Development Tool
+#
+###################################################################################
+
+.SUFFIXES: .obj .cpp
+
+VPATH  = src
+
+MSDEV  = "C:/Program Files/Microsoft Visual Studio 9.0/VC"
+MSSDK  = "C:/Program Files/Microsoft SDKs/Windows/v7.0"
+
+LIBPATH  = \
+	   /LIBPATH:$(MSDEV)"/lib" \
+	   /LIBPATH:$(MSSDK)"/Lib" \
+	   /LIBPATH:$(NLENFORCERSDIR)/platforms/win32/modules/nl_device/bin_win32
+
+LIBS =
+
+DEFINES  =
+
+INCLUDES = \
+           /Iinclude \
+	   /Isrc \
+	   /I$(MSDEV)"/include" \
+	   /I$(MSSDK)"/include" \
+	   /I$(NLENFORCERSDIR)/sdk/include \
+           /I$(NLEXTERNALDIR)/boost/boost_1_42_0
+
+CC     = $(MSDEV)/bin/cl
+LD     = $(MSDEV)/bin/link
+CFLAGS = /Zi /EHsc /MT /W3 /RTC1 /GS
+LFLAGS = /DEBUG
+
+OBJS = pcs_rpc.obj pcs_idl_lex.obj pcs_idl_grammar_tab.obj
+
+all: pcs_idl_tab pcs_rpc
+
+pcs_idl_tab:
+	flex --outfile=src/pcs_idl_lex.cpp src/pcs_idl_lexer.l
+	bison --defines --output=src/pcs_idl_grammar_tab.cpp src/pcs_idl_grammar.y
+
+pcs_rpc: $(OBJS)
+	$(LD) $(OBJS) $(LIBS) $(LIBPATH) $(LFLAGS) /OUT:pcs_rpc.exe
+
+.cpp.obj:
+	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDES) -c $<
+
+clean:
+	@rm -f *.obj *.dll *.lib *.ilk

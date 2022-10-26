@@ -1,0 +1,6 @@
+This version of control manager is strictly coming out from the
+linux version, which put the tamper proof together.
+
+It should be just a JVM launcher that's shared by all the platforms.
+
+And the tamper proof stuff should be factored out later

@@ -1,0 +1,6 @@
+EXPORTS
+	CECONN_Initialize
+	CECONN_DLL_Activate
+	CECONN_Close
+	CECONN_DLL_Deactivate
+	CSCINVOKE_CECONN_Initialize

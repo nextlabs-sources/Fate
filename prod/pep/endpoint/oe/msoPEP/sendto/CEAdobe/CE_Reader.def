@@ -1,0 +1,4 @@
+LIBRARY	"CEReader"
+
+EXPORTS
+	PlugInMain @ 1

@@ -1,0 +1,787 @@
+#include "setupfiles.h"
+    
+function INT ExtractSetupFiles(hMSI)
+	STRING resultAsString;
+	INT result;
+begin
+	WriteToLogFile(hMSI, "Begin ExtractSetupFiles()."); 
+
+	//  We currently hard code the list of setup files - Find a way to put this in a list or map
+	result = StreamFileFromBinary(hMSI, COMMON_INSTALL_DLL_KEY, COMMON_INSTALL_DLL_FILE);
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to extract required dll.  Error code: " + resultAsString + ".  Please see logs for more detail.");
+	endif; 
+	
+	result = StreamFileFromBinary(hMSI, COMM_PROFILE_TEMPLATE_KEY, COMM_PROFILE_TEMPLATE_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write communication profile template.  Error code: " + resultAsString);
+	endif; 
+
+	result = StreamFileFromBinary(hMSI, ONLINE_HELP_INDEX_TEMPLATE_KEY, ONLINE_HELP_INDEX_TEMPLATE_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write online help index file template.  Error code: " + resultAsString);
+	endif; 
+	                                                              
+result = StreamFileFromBinary(hMSI, ONLINE_HELP_INFORMATION_TEMPLATE_KEY, ONLINE_HELP_INFORMATION_TEMPLATE_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write online help information file template.  Error code: " + resultAsString);
+	endif;
+	
+	result = StreamFileFromBinary(hMSI, ONLINE_HELP_NOTIFICATIONS_TEMPLATE_KEY, ONLINE_HELP_NOTIFICATIONS_TEMPLATE_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write online help notifications file template.  Error code: " + resultAsString);
+	endif;	                                                              
+                                                              
+	result = StreamFileFromBinary(hMSI, LOGGING_PROPERTIES_TEMPLATE_KEY, LOGGING_PROPERTIES_TEMPLATE_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write logging template.  Error code: " + resultAsString);
+	endif; 
+               
+    result = StreamFileFromBinary(hMSI, PDP_STOP_DLL_KEY, PDP_STOP_DLL_FILE); 
+	if (result != ERROR_SUCCESS) then
+		NumToStr(resultAsString, result);
+		WriteToLogFile(hMSI, "Failed to write PDP Stop dll.  Error code: " + resultAsString);
+	endif; 
+	
+	WriteToLogFile(hMSI, "End ExtractSetupFiles()."); 
+
+	return result;
+end;             
+
+function INT InstallNextlabsPublicCert(hMSI)
+  string Installdir;
+  string resString;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize);  
+ 	WriteToLogFile(hMSI, "Installing Nextlabs Certificate Command:"+Installdir^"Policy Controller"^"bin"^"Certmgr.exe /add /c \"" + Installdir^"Policy Controller"^"bin"^"NextLabsPub.cer\" /s TrustedPublisher");
+ 	nResult = LaunchAppAndWait (Installdir^"Policy Controller"^"bin"^"Certmgr.exe", "/add /c \"" + Installdir^"Policy Controller"^"bin"^"NextLabsPub.cer\" /s /r localMachine TrustedPublisher", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;
+
+function INT UninstallNextlabsPublicCert(hMSI)
+  string Installdir,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+  NUMBER nFiles;
+  string svResult;
+begin                                   
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "Uninstalling Nextlabs Certificate Command:"+Installdir^"Policy Controller"^"bin"^"Certmgr.exe /del /c /n NextLabs /s /r localMachine TrustedPublisher");
+    nResult = LaunchAppAndWait (Installdir^"Policy Controller"^"bin"^"Certmgr.exe", "/del /c /n NextLabs /s /r localMachine TrustedPublisher", WAIT | LAAW_OPTION_HIDDEN );
+ 	if (LAAW_PARAMETERS.nLaunchResult  != 0 &&  LAAW_PARAMETERS.nLaunchResult  != 2) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"nldevcon.exe failed to remove root\\NLCC:"+szResult);
+        return ERROR_ACCESS_DENIED;
+ 	endif;  
+  	return nResult;
+end;
+         
+function INT InstallNLCC(hMSI)
+  string Installdir;
+  string resString;
+  NUMBER pathSize;  
+  INT nResult;
+begin                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "PC:"+Installdir^"Policy Controller"^"driver"^"nldevcon.exe install \""+Installdir^"Policy Controller"^"driver"^"nlcc.inf\" root\\NLCC");
+ 	nResult = LaunchAppAndWait(Installdir^"Policy Controller"^"driver"^"nldevcon.exe", "install \""+Installdir^"Policy Controller"^"driver"^"nlcc.inf\" root\\NLCC", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString);
+ 	return nResult;
+end;
+
+function INT UninstallNLCC(hMSI)
+  string Installdir,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+  NUMBER nFiles;
+  string svResult;
+begin                                   
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "PC:"+Installdir^"Policy Controller"^"driver"^"nldevcon.exe remove root\\NLCC");
+ 	nResult = LaunchAppAndWait(Installdir^"Policy Controller"^"driver"^"nldevcon.exe", "remove root\\NLCC", WAIT | LAAW_OPTION_HIDDEN);
+ 	if (LAAW_PARAMETERS.nLaunchResult  != 0 &&  LAAW_PARAMETERS.nLaunchResult  != 2) then
+        NumToStr(szResult,LAAW_PARAMETERS.nLaunchResult);
+        WriteToLogFile(hMSI,"nldevcon.exe failed to remove root\\NLCC:"+szResult);
+        return ERROR_ACCESS_DENIED;
+ 	endif;
+  	return nResult;
+end; 
+
+function INT DisableServiceStartByName(hMSI,serviceName)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ if(ServiceExistsService(serviceName)==TRUE) then                             
+    WriteToLogFile(hMSI,SYSTEMFOLDER^"sc.exe config "+serviceName+" start= disabled");
+    nResult = LaunchAppAndWait(SYSTEMFOLDER^"sc.exe", "config "+serviceName+" start= disabled", WAIT | LAAW_OPTION_HIDDEN);
+ else
+     WriteToLogFile(hMSI,serviceName+");."+szResult);
+ endif;
+ end;   
+
+function INT DisableServiceStart(hMSI)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+ MsiGetTargetPath(hMSI, "SystemFolder", SYSTEMFOLDER, pathSize);
+ DisableServiceStartByName(hMSI,"nlinjection");
+ DisableServiceStartByName(hMSI,"nltamper");
+ DisableServiceStartByName(hMSI,"nlcc");
+ DisableServiceStartByName(hMSI,"ComplianceEnforcerService"); 
+ return ERROR_SUCCESS;
+end;     
+    
+    
+function INT DeleteServiceByName(hMSI,serviceName)
+  string szResult;
+  INT nResult;
+begin
+    if(ServiceExistsService(serviceName)) then                             
+    WriteToLogFile(hMSI,"ServiceRemoveService "+serviceName);
+    nResult = ServiceRemoveService(serviceName); 
+    if (nResult != 0) then
+        NumToStr(szResult,nResult);
+        WriteToLogFile(hMSI,"Fail delete "+serviceName+" service"+szResult);
+        return ERROR_ACCESS_DENIED;
+    endif;
+ else
+     WriteToLogFile(hMSI,serviceName+");."+szResult);
+ endif;
+ return ERROR_SUCCESS;
+end;
+
+ 
+function INT DeleteServices(hMSI) 
+begin 
+  DeleteServiceByName(hMSI,"nlinjection");   
+  DeleteServiceByName(hMSI,"nltamper");
+  DeleteServiceByName(hMSI,"nlcc");
+  DeleteServiceByName(hMSI,"ComplianceEnforcerService");
+  return ERROR_SUCCESS;
+end;   
+
+
+function INT DeleteFlagRegistryCheck(hMSI)
+  string SYSTEMFOLDER,szResult;
+  NUMBER pathSize;  
+  INT nResult;
+begin
+RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+if (RegDBKeyExist("System\\CurrentControlSet\\Services\\nltamper") = 1) then 
+   WriteToLogFile(hMSI,"nltamper service exists. Removing invalid key" );  
+   RegDBDeleteValue("System\\CurrentControlSet\\Services\\nltamper","deleteflag");
+endif; 
+return ERROR_SUCCESS;
+end; 
+         
+function INT backupFiles(hMSI)
+    NUMBER result; 
+    STRING Installdir;                                     
+    NUMBER pathSize;
+    STRING sDir; 
+    STRING dDir;  
+    STRING sResult;                                   
+begin
+ 
+	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize);
+                  
+    if ( ExistsDir(Installdir) != EXISTS ) then
+		WriteToLogFile(hMSI, "BackupDir= "+Installdir+". backupFiles failed because backup dir does not exist");
+		return -1;
+	endif;
+                  
+	WriteToLogFile(hMSI, "Entering BackupFiles with INSTALLDIR = "+Installdir^"Policy Controller");       
+	
+	dDir=Installdir^"backup"^"config";   
+	sDir=Installdir^"Policy Controller"^"config"; 
+	
+	if ( ExistsDir(dDir) != EXISTS ) then
+		CreateDir(dDir);
+	endif;   
+	
+	if ( ExistsDir(dDir^"tamper_resistance") != EXISTS ) then
+		CreateDir(dDir^"tamper_resistance");
+	endif;               
+	
+	result=XCopyFile(sDir^"commprofile.xml",dDir,COMP_NORMAL );
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy commprofile.xml");  
+		return result;
+	endif;   
+	
+	result=XCopyFile(sDir^"config.dat",dDir,COMP_NORMAL );
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy config.dat");  
+		//return result;
+	endif;
+	
+	result=XCopyFile(sDir^"config2.dat",dDir,COMP_NORMAL );
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy config2.dat");  
+		//return result;
+	endif;
+	
+	result=XCopyFile(sDir^"tamper_resistance"^"nlca_tamper.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy nlca_tamper.cfg");  
+		return result;
+	endif;                
+	
+	result=XCopyFile(sDir^"tamper_resistance"^"nlcontextmgr_tamper.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy nlcontextmgr_tamper.cfg");  
+		return result;
+	endif;                
+	
+	result=XCopyFile(sDir^"tamper_resistance"^"PolicyController_TamperResistance.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy PolicyController_TamperResistance.cfg");  
+		return result;
+	endif;                
+	
+        
+	dDir=Installdir^"backup"^"logs";   
+	sDir=Installdir^"Policy Controller"^"logs"; 
+
+	if ( ExistsDir(dDir) != EXISTS ) then
+		CreateDir(dDir);
+	endif;   
+	
+	result=XCopyFile(sDir^"logid.dat",dDir,COMP_NORMAL );
+	if ( result< 0) then
+		WriteToLogFile(hMSI,"Failed to copy logid.dat");  
+                // not an error if the file doesn't exist
+	endif;
+	
+
+
+    result = RecursiveDelete(hMSI, Installdir^"Policy Controller\bin"); 
+    result = RecursiveDelete(hMSI, Installdir^"Policy Controller\agentLog");  
+    result = RecursiveDelete(hMSI, Installdir^"Policy Controller\config");       
+    result = DeleteDir(Installdir^"bin",ALLCONTENTS);
+    result = DeleteDir(Installdir^"agentLog",ALLCONTENTS);             
+    result = DeleteDir(Installdir^"config",ALLCONTENTS);   
+    
+    return 0;
+end;
+
+function INT WriteBackupLocationToReg(hMSI)
+    STRING Installdir;
+    NUMBER pathSize;                                     
+begin
+	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize);
+	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+	RegDBSetKeyValueEx("SOFTWARE\\NextLabs","backup",REGDB_STRING,Installdir^"backup",-1);
+	return 0;
+end;
+
+function INT RecursiveDelete(hMSI, DirToDel)
+	LIST listFiles;
+	LIST listDirs;
+    INT	result;     
+    STRING svMatchingFileName;       
+    STRING svString;
+
+begin
+	listFiles = ListCreate (STRINGLIST); 
+    if listFiles = LIST_NULL then 
+        MessageBox ("Unable to create listFiles.", SEVERE);      
+        return -1;
+    endif;    
+    listDirs = ListCreate (STRINGLIST);
+    if	listDirs = LIST_NULL then
+    	MessageBox ("Unable to create listDirs.", SEVERE);
+    	return -1;
+    endif;
+    
+	result = FindAllFiles (DirToDel, "*.*", svMatchingFileName, RESET); 
+    while(result = 0) 
+        // Add the file to the list. 
+    //    if ListAddString (listFiles, svMatchingFileName, AFTER) < 0 then 
+    //        MessageBox ("Unable to build complete file list", WARNING); 
+    //    endif; 
+        // Find the next matching file name. 
+        result = FindAllFiles(DirToDel, "*.*", svMatchingFileName, CONTINUE);
+        WriteToLogFile (hMSI, "Deleting file "+svMatchingFileName+" ... ");         
+        DeleteFile (svMatchingFileName);
+    endwhile;                           
+    
+    result = FindAllDirs (DirToDel, EXCLUDE_SUBDIR, listDirs);
+	result = ListGetFirstString (listDirs, svString); 
+    while (result != END_OF_LIST) 
+        RecursiveDelete(hMSI, svString); 
+        WriteToLogFile(hMSI, "Deleting folder " + svString +" ... "); 
+        DeleteDir(svString,ALLCONTENTS);
+        result = ListGetNextString (listDirs, svString); 
+ 	endwhile;   
+    DeleteDir(DirToDel,ALLCONTENTS);
+    return ERROR_SUCCESS;
+
+end;                 
+ 
+function INT InsertDeleteInRunonce(hMSI)
+
+  	string Installdir;
+  	NUMBER pathSize;  
+  	INT nResult;   
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+
+begin               
+	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+	WriteToLogFile(hMSI, "Writing runonce registry");                          
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);  
+	szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+	if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        //MessageBox ("RegDBCreateKeyEx failed.", SEVERE);  
+        WriteToLogFile(hMSI, "Runonce creation failed!");
+    endif; 
+    szNumName  = "DeletePCAgentLog"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\\agentLog\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        //MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+	endif;     
+	
+	szNumName  = "DeletePCBin"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\\bin\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        //MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+	endif;     
+	
+	szNumName  = "DeleteNLCC"; 
+    szNumValue = "cmd /c del \"" + WindowsFolder ^ "system32\\drivers\\nlcc.sys" + "\" /F /Q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        //MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;    
+    szNumName  = "DeletePCconfig"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\\config\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;       
+	
+	szNumName  = "DeletePCjservice"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\\jservice\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif; 
+	
+	szNumName  = "DeletePCservice"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\\service\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif;       
+	
+	szNumName  = "DeletePC"; 
+    szNumValue = "cmd /c rmdir \""+Installdir^"Policy Controller" + "\" /s /q";  
+    WriteToLogFile(hMSI,szNumValue);
+    nType      = REGDB_STRING; 
+    nSize      = -1;      
+    nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    if ( nResult < 0) then 
+        MessageBox ("RegDBSetKeyValueEx failed.", SEVERE); 
+		WriteToLogFile(hMSI, "Unable to create registry!");
+		
+	endif; 
+
+	return nResult;
+
+end; 
+
+function INT RestoreBackupAll(hMSI)
+    STRING Installdir;
+    NUMBER pathSize;
+    STRING sDir;
+    STRING dDir;    
+    NUMBER result;
+begin            
+	
+	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+                  
+    if ( ExistsDir(Installdir) != EXISTS ) then
+		WriteToLogFile(hMSI, "BackupDir= "+Installdir+". RestoreBackupAll failed because backup dir does not exist");
+		return 0;
+	endif; 
+	
+    WriteToLogFile(hMSI,"Retrieving backup files from "+Installdir+" backup folders...");  
+      
+	sDir=Installdir^"backup"^"config";   
+	dDir=Installdir^"Policy Controller"^"config"; 
+	
+	if ( ExistsDir(sDir) = EXISTS ) then      
+
+		result=XCopyFile(sDir^"commprofile.xml",dDir,COMP_NORMAL );
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy commprofile.xml");  
+			return result;
+		endif;   
+		
+		result=XCopyFile(sDir^"config.dat",dDir,COMP_NORMAL );
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy config.dat");  
+			//return result;
+		endif;
+		
+		result=XCopyFile(sDir^"config2.dat",dDir,COMP_NORMAL );
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy config2.dat");  
+			//return result;
+		endif;
+		
+		result=XCopyFile(sDir^"tamper_resistance"^"nlca_tamper.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy nlca_tamper.cfg");  
+			return result;
+		endif;                
+		
+		result=XCopyFile(sDir^"tamper_resistance"^"nlcontextmgr_tamper.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy nlcontextmgr_tamper.cfg");  
+			return result;
+		endif;                
+		
+		result=XCopyFile(sDir^"tamper_resistance"^"PolicyController_TamperResistance.cfg",dDir^"tamper_resistance",COMP_NORMAL | INCLUDE_SUBDIR);
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy PolicyController_TamperResistance.cfg");  
+			return result;
+		endif;
+
+	endif;
+	
+	sDir=Installdir^"backup"^"logs";   
+	dDir=Installdir^"Policy Controller"^"logs"; 
+	
+	if ( ExistsDir(sDir) = EXISTS ) then
+		result=XCopyFile(sDir^"logid.dat",dDir,COMP_NORMAL );
+		if ( result< 0) then
+			WriteToLogFile(hMSI,"Failed to copy logid.dat");  
+                        // Not an error if it doesn't exist
+		endif;   
+        endif;
+
+	return ERROR_SUCCESS;
+end;             
+
+function INT DeleteSetupFile(hMSI)
+	INT nResult;
+  	STRING szKey;
+  	STRING szNumName;
+  	STRING szNumValue;
+  	INT nSize;
+  	INT nType;
+begin
+	if (Is(FILE_EXISTS,PDP_STOP_DLL_FILE)) then
+		nResult = DeleteFile(PDP_STOP_DLL_FILE);     
+		if ( nResult < 0 ) then
+			WriteToLogFile(hMSI,PDP_STOP_DLL_FILE + " deletion failed !");  
+			
+		endif;
+	endif;
+	
+	if (Is(FILE_EXISTS,COMMON_INSTALL_DLL_FILE)) then
+		nResult = DeleteFile(COMMON_INSTALL_DLL_FILE); 
+		if ( nResult < 0 ) then
+			WriteToLogFile(hMSI,COMMON_INSTALL_DLL_FILE + " deletion failed !");    
+			
+			REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY ;
+			WriteToLogFile(hMSI, "Writing runonce registry");                          
+ 			RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);  
+			szKey = "SOFTWARE\\MICROSOFT\\WINDOWS\\CurrentVersion\\Runonce";
+			if (RegDBCreateKeyEx (szKey, "") < 0) then 
+        		WriteToLogFile(hMSI, "Runonce creation failed!");
+    		endif; 
+    		szNumName  = "DeleteCommon"; 
+    		szNumValue = "cmd /c del \""+COMMON_INSTALL_DLL_FILE+"\" /s /q";  
+    		WriteToLogFile(hMSI,szNumValue);
+    		nType      = REGDB_STRING; 
+    		nSize      = -1;      
+    		nResult = RegDBSetKeyValueEx (szKey, szNumName, nType, szNumValue, nSize); 
+    		if ( nResult < 0) then 
+        		WriteToLogFile(hMSI, "Unable to create registry!");
+			endif;      
+		endif;
+	endif; 
+	
+     
+	
+	return 0;
+
+end;      
+    
+    
+function INT checkAndDelete(hMSI, keyname)
+
+begin
+ 
+    WriteToLogFile(hMSI,"Checking "+ keyname+" ...");
+    if (RegDBKeyExist(keyname) = 1) then
+        if (RegDBDeleteKey(keyname) < 0) then
+        	MessageBox("Delete key "+keyname+" failed.\nPlease delete manually", SEVERE); 
+        	WriteToLogFile(hMSI,"Delete key "+keyname+" failed. Please delete manually.");
+        endif;
+    endif;
+                                                                                                    
+	return ERROR_SUCCESS;                                                                                                    
+
+end;
+    
+function INT CleanUp(hMSI)
+
+begin
+    if (RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE) < 0) then 
+        MessageBox ("First call to RegDBSetDefaultRoot failed.\nPlease check and delete manually", SEVERE);    
+        return ERROR_SUCCESS;
+    endif;         
+    
+    checkAndDelete(hMSI, "SOFTWARE\\NextLabs\\DebugMode"); 
+	checkAndDelete(hMSI, "SOFTWARE\\Wow6432Node\\NextLabs\\DebugMode"); 
+ 
+	checkAndDelete(hMSI, "SYSTEM\\CurrentControlSet\\Services\\ProcDetect"); 
+	checkAndDelete(hMSI, "SYSTEM\\CurrentControlSet\\services\\ComplianceEnforcerService" ); 
+	checkAndDelete(hMSI, "SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Minimal\\ComplianceEnforcerService" ); 
+	checkAndDelete(hMSI, "SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\Network\\ComplianceEnforcerService" ); 
+	checkAndDelete(hMSI, "SYSTEM\\ControlSet001\\services\\eventlog\\Application\\Compliant Enterprise" ); 
+	checkAndDelete(hMSI, "SYSTEM\\ControlSet002\\services\\eventlog\\Application\\Compliant Enterprise" ); 
+	checkAndDelete(hMSI, "SYSTEM\\ControlSet003\\services\\eventlog\\Application\\Compliant Enterprise");  
+	checkAndDelete(hMSI, "SYSTEM\\CurrentControlSet\\services\\eventlog\\Application\\Compliant Enterprise");
+    
+    
+end;                
+
+function INT CheckAdminUser(hMSI)
+    STRING szAdminUser;
+    NUMBER nSize;
+begin          
+	
+  	MsiGetProperty( hMSI,"AdminUser",szAdminUser, nSize );     
+  	//MessageBox("Adminuser="+szAdminUser,INFORMATION);
+    
+    if (szAdminUser != "1") then
+    	MessageBox("Policy Controller can only be uninstalled by Administrator.", SEVERE);   
+    	
+    	return ERROR_INSTALL_USEREXIT;  
+    else
+    	MsiSetProperty(hMSI,"AdminAllowRemove","1");  
+    	return 0;
+	endif;
+
+ 
+end;
+
+function INT Uninstall_nlinjection(hMSI)
+   	string Installdir;
+  	string resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin
+	WriteToLogFile(hMSI,"Entering uninstall_nlinjection");                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "PC:"+Installdir^"Policy Controller"^"bin"^"mch_install_test.exe remove");
+ 	nResult = LaunchAppAndWait(Installdir^"Policy Controller"^"bin"^"mch_install_test.exe"," remove", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString); 
+ 	return nResult;
+end;
+
+function INT Install_nlinjection(hMSI)
+   	string Installdir;
+  	string resString;
+  	NUMBER pathSize;  
+  	INT nResult;
+begin
+	WriteToLogFile(hMSI,"Entering install_nlinjection");                                  
+ 	MsiGetProperty(hMSI, "CustomActionData",Installdir, pathSize); 
+ 	WriteToLogFile(hMSI, "PC:"+Installdir^"Policy Controller"^"bin"^"mch_install_test.exe install");
+ 	nResult = LaunchAppAndWait(Installdir^"Policy Controller"^"bin"^"mch_install_test.exe"," install", WAIT | LAAW_OPTION_HIDDEN );
+ 	NumToStr(resString,nResult);
+ 	WriteToLogFile(hMSI,"Result:"+resString); 
+ 	return nResult;
+end;           
+
+
+function INT AddSafeMode(hMSI)
+    STRING svNumValue;
+    NUMBER nvSize;                                                                             
+    NUMBER nvType;
+
+begin                                            
+
+	RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE); 
+	if (RegDBGetKeyValueEx ("SYSTEM\\CurrentControlSet\\Control\\ServiceGroupOrder", "List", nvType, svNumValue, nvSize) < 0) then 
+        MessageBox ("Retrieve service group order failed.", SEVERE);           
+        WriteToLogFile(hMSI,"Retrieve service group order list failed!");
+ 		return -1;
+    else    
+    	MessageBox("debug: servicegroupoderlist = "+svNumValue, INFORMATION);
+    endif;    
+    
+    svNumValue = svNumValue + "/nNextLabs";
+    
+    if (RegDBSetKeyValueEx("SYSTEM\\CurrentControlSet\\Control\\ServiceGroupOrder", "List", REGDB_STRING_MULTI,svNumValue, nvSize + 9) < 0) then
+    	MessageBox("Failed to append to service group order list!", SEVERE);
+    	WriteToLogFile(hMSI, "Failed to append to service group order list!");    
+    	return -1;
+    endif;
+    	 
+    return 0;
+
+
+end;    
+
+function INT RemoveSafeMode(hMSI)
+	STRING svNumValue;
+    NUMBER nvSize;                                                                             
+    NUMBER nvType;
+begin
+	RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE); 
+	if (RegDBGetKeyValueEx ("SYSTEM\\CurrentControlSet\\Control\\ServiceGroupOrder", "List", nvType, svNumValue, nvSize) < 0) then 
+        MessageBox ("Retrieve service group order failed.", SEVERE);           
+        WriteToLogFile(hMSI,"Retrieve service group order list failed!");
+ 		return -1;
+    else    
+    	MessageBox("debug: servicegroupoderlist = "+svNumValue, INFORMATION);
+    endif; 
+    
+    StrReplace ( svNumValue, "Nextlabs", "", 0 ); 
+    MessageBox("debug: servicegroupoderlist retrieved = "+svNumValue, INFORMATION);
+        	
+    if (RegDBSetKeyValueEx("SYSTEM\\CurrentControlSet\\Control\\ServiceGroupOrder", "List", REGDB_STRING_MULTI,svNumValue, nvSize + 9) < 0) then
+    	MessageBox("Failed to append to service group order list!", SEVERE);
+    	WriteToLogFile(hMSI, "Failed to append to service group order list!");    
+    	return -1;
+    endif;
+    	 
+    return 0;
+end;              
+
+
+
+function INT InsertDateToRegistry(hMSI)
+    NUMBER nvResult;
+    STRING svResult;                                            
+    STRING sKey;
+    LIST ListID;  
+    STRING sMonth;
+    STRING sYear;
+    STRING sDate;
+    
+begin
+	WriteToLogFile(hMSI, "Inserting date into registry ... ");
+    if (GetSystemInfo (DATE, nvResult, svResult) < 0) then 
+        WriteToLogFile(hMSI,"Unable to retrieve system date !");
+    else    
+ 		ListID = ListCreate (STRINGLIST); 
+        nvResult = StrGetTokens (ListID, svResult, "-");
+        ListGetFirstString(ListID, sMonth);
+        ListGetNextString(ListID, sDate);
+        ListGetNextString(ListID, sYear); 
+        WriteToLogFile(hMSI, "Date retrieved : " + sMonth+"/"+sDate+"/"+sYear);
+        if (StrLength(sDate) < 2) then
+        	sDate="0"+sDate;
+        endif;
+        if (StrLength(sMonth) < 2) then
+        	sMonth="0"+sMonth;
+        endif; 
+        svResult = sMonth+"/"+sDate+"/"+sYear;
+        
+    	ListDestroy (ListID); 
+     	REGDB_OPTIONS = REGDB_OPTIONS | REGDB_OPTION_WOW64_64KEY;   
+    	RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    	sKey = "SOFTWARE\\NextLabs\\Compliant Enterprise\\Policy Controller";
+    	nvResult = RegDBSetKeyValueEx(sKey, "LastUpdated", REGDB_STRING, svResult, -1);
+    	if (nvResult < 0) then
+    		WriteToLogFile(hMSI, "Unable to create date registry key!");
+    	endif;
+    	
+    endif; 
+    return ERROR_SUCCESS;
+
+end;
+       
+function INT createUninstallShortcut(hMSI)
+ 	INT nResult;
+ 	STRING svReturnLine;
+ 	STRING InstallDir;                             
+ 	INT pathSize;     
+ 	INT nvLineNumber;  
+ 	STRING ProductCode;  
+ 	STRING svString;
+  	STRING sResult;
+begin
+	WriteToLogFile(hMSI, "Creating uninstall shortcut ... ");    
+	MsiGetProperty(hMSI, "CustomActionData",InstallDir, pathSize); 
+	nResult=FileGrep(InstallDir^"Policy Controller\\Nextlabs Policy Controller Uninstall.bat","ProductCode",svReturnLine,nvLineNumber,RESTART);
+	if (nResult < 0) then
+		WriteToLogFile(hMSI, "Error in searching product code !!");  
+		WriteToLogFile(hMSI, "InstallDir = "+InstallDir);
+		WriteToLogFile(hMSI, "svReturnLine="+svReturnLine);
+		NumToStr(sResult,nResult);
+		WriteToLogFile(hMSI, "error number = "+ sResult);
+		//MessageBox("Please check the uninstall.bat!",SEVERE);
+	    return -1;
+	endif;              
+	
+	MsiGetProperty(hMSI,"ProductCode",ProductCode,pathSize);
+	SetFileInfo(InstallDir^"Policy Controller\\Nextlabs Policy Controller Uninstall.bat",FILE_ATTRIBUTE,FILE_ATTR_NORMAL,"");
+	StrReplace(svReturnLine, "ProductCode", ProductCode, 0); 
+	WriteToLogFile(hMSI,"To be replace: "+svReturnLine);
+	nResult = FileInsertLine(InstallDir^"Policy Controller\\Nextlabs Policy Controller Uninstall.bat",svReturnLine,nvLineNumber,REPLACE);
+	if (nResult < 0) then  
+		NumToStr(svString,nResult);
+		WriteToLogFile(hMSI, "Error in replacing product code !! " + svString);
+	    return -1;
+	endif;        
+	
+	return ERROR_SUCCESS;
+end;

@@ -1,0 +1,9 @@
+LIBRARY	"PDFLib"
+EXPORTS
+	PDF_AddTags			@1
+	PDF_ReadTags		@2
+	PDF_DeleteTags		@3
+	PDF_IsPDFFile		@4
+	PDF_ParseTags		@5
+	PDF_FreeMem			@6
+	PDF_ReadSummaryTags	@7

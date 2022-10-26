@@ -1,0 +1,14 @@
+LIBRARY	"pafUI"
+
+EXPORTS
+	CreateMainFrame				@1
+	ReleaseMainFrame			@2
+	SetNEXT_OKCallBack			@3
+	SetCancelCallBack			@4
+	Change_PA_Panel				@5
+	GetParentWindow				@7
+	ShowProgressBar				@8
+	EndProgressBar				@9
+	GetLastPAWnd				@10
+	ShowHierarchicalClassifyDlg		@11
+	ReleaseBuffer               		@12

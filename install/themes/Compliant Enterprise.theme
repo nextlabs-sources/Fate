@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Theme Name="Compliant Enterprise Theme" Path="Compliant Enterprise Theme" Preview="preview.jpg" SetupImage="setup.gif">
+	<Transform id="welcome">
+		<Add Control="Image" Type="Bitmap" Region="0 0 374 234" Attributes="1" Source="welcome.jpg"/>
+		<Add Control="DlgLine" Type="Line" Region="0 234 374 0" Attributes="1"/>
+	</Transform>
+	<Transform id="interior">
+		<Add Control="Banner" Type="Bitmap" Region="0 0 374 44" Attributes="1" Source="banner.bmp"/>
+		<Add Control="BannerLine" Type="Line" Region="0 44 374 0" Attributes="1"/>
+	</Transform>
+	<Apply Transforms="welcome">
+		<Match Size="374 266"/>
+		<Include>
+			<Name>AdminWelcome</Name>
+			<Name>SetupCompleteError</Name>
+			<Name>SetupCompleteSuccess</Name>
+			<Name>SetupInitialization</Name>
+			<Name>SetupInterrupted</Name>
+			<Name>InstallWelcome</Name>
+			<Name>MaintenanceWelcome</Name>
+			<Name>PatchWelcome</Name>
+			<Name>SetupResume</Name>
+			<Name>SplashBitmap</Name>
+			<Name>Exterior</Name>
+		</Include>
+	</Apply>
+	<Apply Transforms="interior">
+		<Match Size="374 266"/>
+		<Exclude>
+			<Name>AdminWelcome</Name>
+			<Name>SetupCompleteError</Name>
+			<Name>SetupCompleteSuccess</Name>
+			<Name>SetupInitialization</Name>
+			<Name>SetupInterrupted</Name>
+			<Name>InstallWelcome</Name>
+			<Name>MaintenanceWelcome</Name>
+			<Name>PatchWelcome</Name>
+			<Name>SetupResume</Name>
+			<Name>SplashBitmap</Name>
+			<Name>Exterior</Name>
+		</Exclude>
+	</Apply>
+</Theme>

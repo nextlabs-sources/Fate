@@ -1,0 +1,3 @@
+LIBRARY	"MyProvider"
+EXPORTS
+	WSPStartup		@1

@@ -1,0 +1,79 @@
+# Produce version information
+#
+# Description:
+#	This file should be included in top-level Makefile 
+# http://sharepoint/sites/support/release/Lists/Current%00Releases/AllItems.aspx
+
+
+VERSION_PRODUCT_EDP					= Enterprise Data Protection
+VERSION_MAJOR_EDP						= 8
+VERSION_MINOR_EDP						= 5
+VERSION_MAINTENANCE_EDP			= 0
+VERSION_PATCH_EDP						= 1000
+
+VERSION_PRODUCT_KMC					= Encryption Key Management Client
+VERSION_MAJOR_KMC						= 7
+VERSION_MINOR_KMC						= 5
+VERSION_MAINTENANCE_KMC			= 0
+VERSION_PATCH_KMC						= 0
+
+VERSION_PRODUCT_LME					= Enforcer for Microsoft Live Meeting
+VERSION_MAJOR_LME						= 7
+VERSION_MINOR_LME						= 2
+VERSION_MAINTENANCE_LME			= 0
+VERSION_PATCH_LME						= 0
+
+VERSION_PRODUCT_OCE					= Enforcer for Microsoft Office Communicator
+VERSION_MAJOR_OCE						= 7
+VERSION_MINOR_OCE						= 2
+VERSION_MAINTENANCE_OCE			= 0
+VERSION_PATCH_OCE						= 0
+
+VERSION_PRODUCT_OE					= Enforcer for Microsoft Outlook 
+VERSION_MAJOR_OE						= 8
+VERSION_MINOR_OE						= 5
+VERSION_MAINTENANCE_OE			= 0
+VERSION_PATCH_OE						= 1000
+
+VERSION_PRODUCT_NE					= Network Enforcer for Windows
+VERSION_MAJOR_NE						= 7
+VERSION_MINOR_NE						= 2
+VERSION_MAINTENANCE_NE			= 0
+VERSION_PATCH_NE						= 0
+
+VERSION_PRODUCT_NLE					= System Encryption
+VERSION_MAJOR_NLE						= 8
+VERSION_MINOR_NLE						= 5
+VERSION_MAINTENANCE_NLE			= 0
+VERSION_PATCH_NLE						= 1000
+
+VERSION_PRODUCT_PC					= Policy Controller for Microsoft Windows
+VERSION_MAJOR_PC						= 8
+VERSION_MINOR_PC						= 7
+VERSION_MAINTENANCE_PC			= 0
+VERSION_PATCH_PC						= 0
+
+VERSION_PRODUCT_RDE					= Removable Device Enforcer for Microsoft Windows
+VERSION_MAJOR_RDE						= 7
+VERSION_MINOR_RDE						= 2
+VERSION_MAINTENANCE_RDE			= 0
+VERSION_PATCH_RDE						= 0
+
+VERSION_PRODUCT_WDE					= Desktop Enforcer for Microsoft Windows
+VERSION_MAJOR_WDE						= 8
+VERSION_MINOR_WDE						= 5
+VERSION_MAINTENANCE_WDE			= 0
+VERSION_PATCH_WDE						= 1000
+
+# Version info for Windows Policy Controller
+VERSION_PRODUCT_UPDATER			= NextLabs Data Protection
+VERSION_MAJOR_UPDATER				= 7
+VERSION_MINOR_UPDATER				= 7
+VERSION_MAINTENANCE_UPDATER	= 0
+VERSION_PATCH_UPDATER				= 1
+
+VERSION_PRODUCT_PCOE				= Enforcer for Microsoft Outlook 
+VERSION_MAJOR_PCOE					= 8
+VERSION_MINOR_PCOE					= 5
+VERSION_MAINTENANCE_PCOE		= 0
+VERSION_PATCH_PCOE					= 1000

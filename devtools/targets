@@ -1,0 +1,17 @@
+
+TARGETS = \
+	devtools/NlRegisterPlugins \
+	devtools/nldevcon \
+	devtools/nlconfig \
+	devtools/nldestroyer \
+	devtools/nldestroyv2 \
+	devtools/nlping \
+	devtools/nlport \
+	devtools/nlpsnap \
+	devtools/nltag \
+	devtools/plugin_framework \
+	devtools/TagFiles \
+	devtools/trcheck
+
+#	devtools/docs/minidump/demo \
+#	devtools/nlignore \     # [MattL] Ignore this for now.  This will be changing to use NLCC instead of IPC.

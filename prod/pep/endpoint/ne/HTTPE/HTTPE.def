@@ -1,0 +1,5 @@
+LIBRARY	"HTTPE"
+EXPORTS
+	InstallSPI			@1
+	UninstallSPI	@2
+	WSPStartup	@3

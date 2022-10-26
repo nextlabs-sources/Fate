@@ -1,0 +1,4 @@
+EXPORTS
+	CELog_IsPerfLogMode
+	CELog_LogA
+	CELog_LogW

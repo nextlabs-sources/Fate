@@ -1,0 +1,2856 @@
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Makefile.assembly (updater)
+#
+# Description:
+#
+# Written By:
+#	Poon Fung
+#
+# Date:
+#	2/1/2012
+#   7/16/2012 : modififed for 6.0 to 6.2 updater (Roni)
+#
+# Instructions:
+#
+#
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#
+# Check for errors
+#
+
+ifeq ($(NLBUILDROOT),)
+  $(error ERROR: NLBUILDROOT undefined)
+endif
+
+ifeq ($(NLEXTERNALDIR),)
+  $(error ERROR: NLEXTERNALDIR undefined)
+endif
+
+
+#
+# Includes
+#
+
+# ---------------------------------------------------------------------------
+# Current build
+#	The version # of each product in current build is defined in Makefile.ver.
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+
+#
+# Variables
+#
+
+PERL=perl
+
+VERSION_STR=$(VERSION_MAJOR_UPDATER).$(VERSION_MINOR_UPDATER).$(VERSION_MAINTENANCE_UPDATER).$(VERSION_PATCH_UPDATER)
+ISM_TEMPLATE_FILE_NAME=Updater.ism
+
+MSI_FILENAME32=NextLabsDataProtection-32-$(VERSION_STR)
+
+MSI_FILENAME64=NextLabsDataProtection-64-$(VERSION_STR)
+
+
+# ---------------------------------------------------------------------------
+# Archives
+#	For picking up output from previous builds, including:
+#		1. Released products
+#			- Installers are already in s:/releases
+#			- Build artifacts are in s:/build/release_artifacts/Fate/
+#		2. Release candidate builds
+#			- Built on \\nxt-bclient01
+#			- Build artifacts are in s:/build/release_candidate/artifacts/Fate/
+#		3. PCV builds
+#			- Built on \\nxt-build14
+#			- Build artifacts are in s:/build/pcv/artifacts/Fate/
+#
+# The BUILD_ARTIFACTS_INSTALL_ZIP_FILE_* variables should point to an install build
+# artifacts file. Note that Policy Controller has a separate build artifacts
+# file from the enforcers (because PC is not fully integrated into Fate).
+# The installer build artifacts file names should have the follow form:
+#	pc-5.5.10.0-6-release-20120111-install.zip
+#	fate-5.5.10.0-6-release-20120111-install.zip
+#
+# The root of the 3 repositories are the followings:
+#	RELEASE_ARTIFACTS_ROOT
+#	RELEASE_CANDIDATE_ARTIFACTS_ROOT
+#	PCV_ARTIFACTS_ROOT
+#
+# Notice that the path structure under RELEASE_ARTIFACTS_ROOT is different from
+# the other two.
+#	S:\build\release_artifacts\Fate\5.5.10.0\fate-5.5.10.0-6-release-20120111-install.zip
+#	S:\build\release_candidate\artifacts\Fate\5.5.10.0\10\fate-5.5.10.0-10-release-20120124-install.zip
+#	S:\build\pcv\artifacts\Fate\6.0.0.508\1PS_saveAs\fate-6.0.0.508-1PS_saveAs-pcv-20120131-install.zip
+#
+# If a product is suppose to come from a previous build, you must define the
+# location of an installer build artifacts so that the right binaries and
+# configurations of that product identical to what had been released or built
+# can be extracted.
+#
+# Archive version:
+#	Archive should point to the last stable release of a product.
+#		PC 6.0.0 (??? 6.0 is not formally released as of 8/24/2012, we will use current PC 6.2)
+#		KMC 5.5.5
+#		WDE 6.0.0 (??? 6.0 is not formally released as of 8/24/2012, we will use current WDE 6.2)
+#		NE 5.5.4
+#		RDE 5.5.0 (91)
+#		OE 6.0 (??? 6.0 is not formally released as of 8/24/2012, use OE 5.5.10 ???)
+#		LME 5.5.0 (96)
+#		OCE 5.5.0 (89)
+#		SE 6.0.0 (??? 6.0 is not formally released as of 8/24/2012, we will use current SE 6.2)
+#		SPWFPA (SPE) 5.6 (60)
+
+RELEASE_ARTIFACTS_ROOT=s:/build/release_artifacts
+RELEASE_CANDIDATE_ARTIFACTS_ROOT=s:/build/release_candidate/artifacts
+PCV_ARTIFACTS_ROOT=s:/build/pcv/artifacts
+
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.2.2.0/pc-6.2.2.0-25-release-20121210-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.0.0/fate-6.0.0.0-188-release-20120725-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE=$(RELEASE_ARTIFACTS_ROOT)/Fate/5.5.10.0/fate-5.5.10.0-10-release-20120124-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.1.0/fate-6.0.1.0-4-release-20120925-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.0.0/fate-6.0.0.0-180-release-20120628-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.1.0/fate-6.0.1.0-5-release-20121010-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.0.0/fate-6.0.0.0-180-release-20120628-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.0.0.0/fate-6.0.0.0-180-release-20120628-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE=$(RELEASE_ARTIFACTS_ROOT)/Fate/6.2.0.0/fate-6.2.0.0-274-release-20121017-install.zip
+BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE=$(RELEASE_ARTIFACTS_ROOT)/SharePointEnforcer/5.6.0.0/spe-5.6.0.0-60-release-20111215-install.zip
+
+BUILD_ARTIFACTS_DESTINY_IVY_DIR=S:\build\release_artifacts\Platform\6.0.0.0
+BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER=175
+
+BUILD_ARTIFACTS_DESTINY_KEY_MANAGEMENT_DIR=s:/build/staging/edp_compile
+
+# ---------------------------------------------------------------------------
+# Current assembly
+#	The currrent installer assembly has the following structure:
+#		NLBUILDROOT/install/updater/build/data
+#			common
+#				release_win_x86
+#				release_win_x64
+#			pc
+#				release_win_x86
+#				release_win_x64
+#				release_dotnet
+#				java
+#				resource
+#				resource32
+#				resource64
+#			kmc
+#				release_win_x86
+#				release_win_x64
+#				java
+#				resource
+#			wde
+#				release_win_x86
+#				release_win_x64
+#				resource
+#				resource32
+#				resource64
+#			ne
+#				release_win_x86
+#				release_win_x64
+#				resource
+#				resource32
+#				resource64
+#			rde
+#				release_win_x86
+#				release_win_x64
+#				resource
+#				resource32
+#				resource64
+#			oe
+#				release_win_x86
+#				release_win_x64
+#				resource
+#				resource32
+#				resource64
+#			lme
+#				release_win_x86
+#				resource
+#			oce
+#				release_win_x86
+#				release_win_x64
+#				resource
+#				resource32
+#			se
+#				release_win_x86
+#				release_win_x64
+#				java
+#				resource
+#				resource32
+#				resource64
+#			installer
+#				release_win_x86
+#				release_win_x64
+#				Script Files
+#					include
+
+DIST_BIN_x86_DIR=$(NLBUILDROOT)/bin/release_win_x86
+DIST_BIN_x64_DIR=$(NLBUILDROOT)/bin/release_win_x64
+DIST_BIN_DOTNET_DIR=$(NLBUILDROOT)/bin/release_dotnet2
+DIST_BIN_JAVA_DIR=$(NLBUILDROOT)/bin/java
+DIST_XLIB_x86_DIR=$(NLBUILDROOT)/xlib/release_win_x86
+DIST_XLIB_x64_DIR=$(NLBUILDROOT)/xlib/release_win_x64
+INSTALL_DIR=$(NLBUILDROOT)/install
+INSTALL_WDE_DIR=$(INSTALL_DIR)/wde
+INSTALL_LME_DIR=$(INSTALL_DIR)/lme
+INSTALL_UPDATER_DIR=$(NLBUILDROOT)/install/updater
+
+PROD_COMMON_DIR=$(NLBUILDROOT)/prod/common
+
+PROD_PA_DIR=$(NLBUILDROOT)/prod/pa
+
+PROD_PC_DIR=$(NLBUILDROOT)/prod/pc
+PROD_PC_CONFIG_DIR=$(PROD_PC_DIR)/configuration
+
+PROD_PC_CONTEXT_CONFIG_DIR=$(NLBUILDROOT)/prod/pep/common/nlcontextmanager/configuration
+
+PROD_ENDPOINT_DIR=$(NLBUILDROOT)/prod/pep/endpoint
+PROD_WDE_DIR=$(PROD_ENDPOINT_DIR)/wde
+PROD_WDE_CONFIG_DIR=$(PROD_WDE_DIR)/configuration
+
+PROD_NE_DIR=$(PROD_ENDPOINT_DIR)/ne
+PROD_NE_CONFIG_DIR=$(PROD_NE_DIR)/configuration
+
+PROD_RDE_DIR=$(PROD_ENDPOINT_DIR)/rde
+PROD_RDE_CONFIG_DIR=$(PROD_RDE_DIR)/configuration
+PROD_RDE_DRIVER_DIR=$(PROD_RDE_DIR)/driver/drivers
+
+PROD_OE_DIR=$(PROD_ENDPOINT_DIR)/oe
+PROD_OE_CONFIG_DIR=$(PROD_OE_DIR)/configuration
+
+PROD_LME_DIR=$(PROD_ENDPOINT_DIR)/lme
+PROD_LME_CONFIG_DIR=$(PROD_LME_DIR)/configuration
+
+PROD_OCE_DIR=$(PROD_ENDPOINT_DIR)/oce
+PROD_OCE_CONFIG_DIR=$(PROD_OCE_DIR)/configuration
+
+PROD_SE_DIR=$(PROD_ENDPOINT_DIR)/se
+PROD_SE_CONFIG_DIR=$(PROD_SE_DIR)/configuration
+
+ASSEMBLY_DIR=$(INSTALL_UPDATER_DIR)/build/data
+ASSEMBLY_COMMON_DIR=$(ASSEMBLY_DIR)/common
+ASSEMBLY_PC_DIR=$(ASSEMBLY_DIR)/pc
+ASSEMBLY_KMC_DIR=$(ASSEMBLY_DIR)/kmc
+ASSEMBLY_WDE_DIR=$(ASSEMBLY_DIR)/wde
+ASSEMBLY_NE_DIR=$(ASSEMBLY_DIR)/ne
+ASSEMBLY_RDE_DIR=$(ASSEMBLY_DIR)/rde
+ASSEMBLY_OE_DIR=$(ASSEMBLY_DIR)/oe
+ASSEMBLY_LME_DIR=$(ASSEMBLY_DIR)/lme
+ASSEMBLY_OCE_DIR=$(ASSEMBLY_DIR)/oce
+ASSEMBLY_SE_DIR=$(ASSEMBLY_DIR)/se
+ASSEMBLY_SPWFPA_DIR=$(ASSEMBLY_DIR)/spwfpa
+ASSEMBLY_INSTALLER_DIR=$(ASSEMBLY_DIR)/installer
+
+ASSEMBLY_COMMON_BIN32_DIR=$(ASSEMBLY_COMMON_DIR)/release_win_x86
+ASSEMBLY_COMMON_BIN64_DIR=$(ASSEMBLY_COMMON_DIR)/release_win_x64
+ASSEMBLY_COMMON_RES_DIR=$(ASSEMBLY_COMMON_DIR)/resource
+
+ASSEMBLY_PC_BIN32_DIR=$(ASSEMBLY_PC_DIR)/release_win_x86
+ASSEMBLY_PC_BIN64_DIR=$(ASSEMBLY_PC_DIR)/release_win_x64
+ASSEMBLY_PC_DOTNET_DIR=$(ASSEMBLY_PC_DIR)/release_dotnet
+ASSEMBLY_PC_JAVA_DIR=$(ASSEMBLY_PC_DIR)/java
+ASSEMBLY_PC_RES_DIR=$(ASSEMBLY_PC_DIR)/resource
+ASSEMBLY_PC_RES32_DIR=$(ASSEMBLY_PC_DIR)/resource32
+ASSEMBLY_PC_RES64_DIR=$(ASSEMBLY_PC_DIR)/resource64
+
+ASSEMBLY_KMC_BIN32_DIR=$(ASSEMBLY_KMC_DIR)/release_win_x86
+ASSEMBLY_KMC_BIN64_DIR=$(ASSEMBLY_KMC_DIR)/release_win_x64
+ASSEMBLY_KMC_JAVA_DIR=$(ASSEMBLY_KMC_DIR)/java
+ASSEMBLY_KMC_RES_DIR=$(ASSEMBLY_KMC_DIR)/resource
+
+ASSEMBLY_WDE_BIN32_DIR=$(ASSEMBLY_WDE_DIR)/release_win_x86
+ASSEMBLY_WDE_BIN64_DIR=$(ASSEMBLY_WDE_DIR)/release_win_x64
+ASSEMBLY_WDE_RES_DIR=$(ASSEMBLY_WDE_DIR)/resource
+ASSEMBLY_WDE_RES32_DIR=$(ASSEMBLY_WDE_DIR)/resource32
+ASSEMBLY_WDE_RES64_DIR=$(ASSEMBLY_WDE_DIR)/resource64
+
+ASSEMBLY_NE_BIN32_DIR=$(ASSEMBLY_NE_DIR)/release_win_x86
+ASSEMBLY_NE_BIN64_DIR=$(ASSEMBLY_NE_DIR)/release_win_x64
+ASSEMBLY_NE_RES_DIR=$(ASSEMBLY_NE_DIR)/resource
+ASSEMBLY_NE_RES32_DIR=$(ASSEMBLY_NE_DIR)/resource32
+ASSEMBLY_NE_RES64_DIR=$(ASSEMBLY_NE_DIR)/resource64
+
+ASSEMBLY_RDE_BIN32_DIR=$(ASSEMBLY_RDE_DIR)/release_win_x86
+ASSEMBLY_RDE_BIN64_DIR=$(ASSEMBLY_RDE_DIR)/release_win_x64
+ASSEMBLY_RDE_RES_DIR=$(ASSEMBLY_RDE_DIR)/resource
+ASSEMBLY_RDE_RES32_DIR=$(ASSEMBLY_RDE_DIR)/resource32
+ASSEMBLY_RDE_RES64_DIR=$(ASSEMBLY_RDE_DIR)/resource64
+
+ASSEMBLY_OE_BIN32_DIR=$(ASSEMBLY_OE_DIR)/release_win_x86
+ASSEMBLY_OE_BIN64_DIR=$(ASSEMBLY_OE_DIR)/release_win_x64
+ASSEMBLY_OE_RES_DIR=$(ASSEMBLY_OE_DIR)/resource
+ASSEMBLY_OE_RES32_DIR=$(ASSEMBLY_OE_DIR)/resource32
+ASSEMBLY_OE_RES64_DIR=$(ASSEMBLY_OE_DIR)/resource64
+
+ASSEMBLY_LME_BIN32_DIR=$(ASSEMBLY_LME_DIR)/release_win_x86
+ASSEMBLY_LME_BIN64_DIR=$(ASSEMBLY_LME_DIR)/release_win_x64
+ASSEMBLY_LME_RES_DIR=$(ASSEMBLY_LME_DIR)/resource
+ASSEMBLY_LME_RES32_DIR=$(ASSEMBLY_LME_DIR)/resource32
+
+ASSEMBLY_OCE_BIN32_DIR=$(ASSEMBLY_OCE_DIR)/release_win_x86
+ASSEMBLY_OCE_BIN64_DIR=$(ASSEMBLY_OCE_DIR)/release_win_x64
+ASSEMBLY_OCE_RES_DIR=$(ASSEMBLY_OCE_DIR)/resource
+ASSEMBLY_OCE_RES32_DIR=$(ASSEMBLY_OCE_DIR)/resource32
+
+ASSEMBLY_SE_BIN32_DIR=$(ASSEMBLY_SE_DIR)/release_win_x86
+ASSEMBLY_SE_BIN64_DIR=$(ASSEMBLY_SE_DIR)/release_win_x64
+ASSEMBLY_SE_JAVA_DIR=$(ASSEMBLY_SE_DIR)/java
+ASSEMBLY_SE_RES_DIR=$(ASSEMBLY_SE_DIR)/resource
+ASSEMBLY_SE_RES32_DIR=$(ASSEMBLY_SE_DIR)/resource32
+ASSEMBLY_SE_RES64_DIR=$(ASSEMBLY_SE_DIR)/resource64
+
+ASSEMBLY_SPWFPA_BIN32_DIR=$(ASSEMBLY_SPWFPA_DIR)/release_win_x86
+ASSEMBLY_SPWFPA_BIN64_DIR=$(ASSEMBLY_SPWFPA_DIR)/release_win_x64
+ASSEMBLY_SPWFPA_DOTNET_DIR=$(ASSEMBLY_SPWFPA_DIR)/release_dotnet
+ASSEMBLY_SPWFPA_RES_DIR=$(ASSEMBLY_SPWFPA_DIR)/resource
+ASSEMBLY_SPWFPA_RES32_DIR=$(ASSEMBLY_SPWFPA_DIR)/resource32
+ASSEMBLY_SPWFPA_RES64_DIR=$(ASSEMBLY_SPWFPA_DIR)/resource64
+
+ASSEMBLY_INSTALLER_BIN32_DIR=$(ASSEMBLY_INSTALLER_DIR)/release_win_x86
+ASSEMBLY_INSTALLER_BIN64_DIR=$(ASSEMBLY_INSTALLER_DIR)/release_win_x64
+ASSEMBLY_INSTALLER_RES_DIR=$(ASSEMBLY_INSTALLER_DIR)/resource
+ASSEMBLY_INSTALLER_SCRIPT_DIR=$(ASSEMBLY_DIR)/Script Files
+
+PACKAGE32_DIR=$(INSTALL_UPDATER_DIR)/build/package32
+PACKAGE64_DIR=$(INSTALL_UPDATER_DIR)/build/package64
+
+VERSION_FILE=$(ASSEMBLY_DIR)/NextLabsDataProtection.ver
+
+
+
+#
+# Print environment
+#
+
+$(info )
+$(info ==========================================================================)
+$(info NLBUILDROOT      = $(NLBUILDROOT))
+$(info NLEXTERNALDIR    = $(NLEXTERNALDIR))
+$(info ==========================================================================)
+
+
+#
+# Targets
+#
+
+# ---------------------------------------------------------------------------
+# Build composition
+#	A requirement of the MMR updater is that it can install all of the latest
+#	endpoint products. This means that an updater may need to package products
+#	from different builds. For example, a MMR 2/12 updater package may include:
+#		- PC 5.5.11 (10)  -- archive from release candidate artifacts
+#		- KMC 5.5.4 (52)  -- archive from release artifacts
+#		- WDE 5.5.11 (12) -- current build
+#		- NE 5.5.4 (52)   -- archive from release artifacts
+#		- RDE 5.5.0 (9x)  -- archive from release candidate artifacts
+#		- OE 5.5.11 (3)   -- archive from release candidate artifacts
+#		- LME 5.5.0 (9x)  -- archive from release candidate artifacts
+#		- OCE 5.5.0 (9x)  -- archive from release candidate artifacts
+#		- SE 5.5.6 (8)    -- archive from release artifacts
+#
+# In order to configure for such a complex build, you need to do the followings:
+#	1. Set up each of BUILD_ARTIFACTS_INSTALL_ZIP_FILE_* in the above "Archive"
+#		section to point to the right install build artifacts file for all those
+#		products that are from previous builds.
+#	2. Set up the "all" build target below to build from either current or archive.
+#
+# The following is a list of composite build targets. Since common is installed
+# by PC, both content should come from he same source.
+#	prepare_common_current
+#	prepare_common_archive
+#	prepare_pc_current
+#	prepare_pc_archive
+#	prepare_kmc_current
+#	prepare_kmc_archive
+#	prepare_wde_current
+#	prepare_wde_archive
+#	prepare_ne_current
+#	prepare_ne_archive
+#	prepare_rde_current
+#	prepare_rde_archive
+#	prepare_oe_current
+#	prepare_oe_archive
+#	prepare_lme_current
+#	prepare_lme_archive
+#	prepare_oce_current
+#	prepare_oce_archive
+#	prepare_se_current
+#	prepare_se_archive
+#	prepare_spwfpa_archive
+#	prepare_installer_current
+#
+# Example 1: Build updater using current build only.
+#	all: prepare_common_current prepare_pc_current prepare_kmc_current prepare_wde_current prepare_ne_current \
+#		prepare_rde_current prepare_oe_current prepare_lme_current prepare_oce_current prepare_se_current \
+#		prepare_spwfpa_archive prepare_installer_current
+#
+# Example 2: Build updater using the above example.
+#	all: prepare_common_archive prepare_pc_archive prepare_kmc_archive prepare_wde_current prepare_ne_archive \
+#		prepare_rde_archive prepare_oe_archive prepare_lme_archive prepare_oce_archive prepare_se_archive \
+#		prepare_spwfpa_archive prepare_installer_current
+
+.PHONY: all
+all: prepare_current
+
+# Notes: prepare_ism_file MUST be the last target. Version #s in Updater.ism file is updated based
+# on version #s from Makefile.ver of current build and version #s extracted from .zip archives.
+# echo_version_file should be one of the last targets so that it will list all product version #s.
+.PHONY: prepare_current
+prepare_current: prepare_version_file \
+	prepare_common_current prepare_pc_current prepare_kmc_current prepare_wde_current prepare_ne_current \
+	prepare_rde_current prepare_oe_current prepare_lme_current prepare_oce_current prepare_se_current \
+	prepare_spwfpa_archive prepare_installer_current \
+	echo_version_file prepare_ism_file
+
+# Notes: prepare_ism_file MUST be the last target. Version #s in Updater.ism file is updated based
+# on version #s from Makefile.ver of current build and version #s extracted from .zip archives.
+# echo_version_file should be one of the last targets so that it will list all product version #s.
+.PHONY: prepare_archive
+prepare_archive: prepare_version_file \
+	prepare_common_archive prepare_pc_archive prepare_kmc_archive prepare_wde_archive prepare_ne_archive \
+	prepare_rde_archive prepare_oe_archive prepare_lme_archive prepare_oce_archive prepare_se_archive \
+	prepare_spwfpa_archive prepare_installer_current \
+	echo_version_file prepare_ism_file
+
+# ---------------------------------------------------------------------------
+# Version and ISM files
+
+.PHONY: prepare_version_file
+prepare_version_file:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo "Create NextLabsDataProtection.ver file"
+	@echo "-----------------------------------------------------------------------------"
+	@if [ ! -d $(ASSEMBLY_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_DIR) ;			\
+	fi
+	echo "NextLabs Data Protection v$(VERSION_STR) ($(VERSION_BUILD_SHORT))" > $(VERSION_FILE)
+
+	date >> $(VERSION_FILE)
+
+
+.PHONY: echo_version_file
+echo_version_file:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo "Echo NextLabsDataProtection.ver file"
+	@echo "-----------------------------------------------------------------------------"
+	cat $(VERSION_FILE)
+
+
+
+.PHONY: prepare_ism_file
+
+prepare_ism_file:
+
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo "Update ISM file"
+	@echo "-----------------------------------------------------------------------------"
+	@if [ ! -d $(ASSEMBLY_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_DIR) ;			\
+	fi
+	"$(PERL)" $(INSTALL_UPDATER_DIR)/makeIsmFile.pl --template=$(ISM_TEMPLATE_FILE_NAME) \
+		--msiFileName32=$(MSI_FILENAME32) --msiFileName64=$(MSI_FILENAME64)
+
+# ---------------------------------------------------------------------------
+# Common
+
+.PHONY: prepare_common_current
+prepare_common_current: prepare_common_info_current \
+	prepare_common_bin_x86_current prepare_common_bin_x64_current \
+	prepare_common_external_x86_current prepare_common_external_x64_current \
+	prepare_common_bin_dotnet_current \
+	prepare_common_resource_current
+
+.PHONY: prepare_common_archive
+prepare_common_archive: prepare_common_info_archive \
+	prepare_common_bin_x86_archive prepare_common_bin_x64_archive \
+	prepare_common_external_x86_archive prepare_common_external_x64_archive \
+	prepare_common_bin_dotnet_archive \
+	prepare_common_resource_archive
+
+.PHONY: prepare_common_info_current
+prepare_common_info_current:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Common from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_PC).$(VERSION_MINOR_PC).$(VERSION_MAINTENANCE_PC).$(VERSION_PATCH_PC)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " DIST_BIN_DOTNET_DIR  = $(DIST_BIN_DOTNET_DIR)"
+	@echo " NLEXTERNALDIR        = $(NLEXTERNALDIR)"
+	@echo " ASSEMBLY_COMMON_DIR  = $(ASSEMBLY_COMMON_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+
+.PHONY: prepare_common_info_archive
+prepare_common_info_archive:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Common from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)"
+	@echo " ASSEMBLY_COMMON_DIR                 = $(ASSEMBLY_COMMON_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+
+.PHONY: prepare_common_bin_x86_current
+prepare_common_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/cebrain32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cecem32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceconn32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceeval32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celog32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celogging32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cemarshal5032.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepepman32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceprivate32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cesdk32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cesec32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceservice32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cetransport32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NextLabsTaggingLib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc_ulib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_sysenc_lib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcommonlib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcontextmgr.exe" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcontextmgr_plugin32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pafUI32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_encrypt32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_filetagging32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pa_pe32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pdflib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pgp_adapter32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/resattrlib32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/resattrmgr32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/TagViewMenu32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/tag_office2k732.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/zip_adapter32.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+
+.PHONY: prepare_common_bin_x64_current
+prepare_common_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/cebrain.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cecem.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceconn.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceeval.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celog.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celogging.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cemarshal50.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepepman.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceprivate.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cesdk.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cesec.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceservice.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cetransport.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NextLabsTaggingLib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc_ulib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_sysenc_lib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcommonlib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcontextmgr.exe" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcontextmgr_plugin.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pafUI.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_encrypt.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_filetagging.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pa_pe.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pdflib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pgp_adapter.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/resattrlib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/resattrmgr.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/TagViewMenu.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/tag_office2k7.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/zip_adapter.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+
+.PHONY: prepare_common_bin_x86_archive
+prepare_common_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cebrain32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cecem32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceconn32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceeval32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/celog32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/celogging32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cemarshal5032.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepepman32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceprivate32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cesdk32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cesec32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceservice32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cetransport32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/NextLabsTaggingLib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcc_ulib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nl_sysenc_lib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcommonlib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcontextmgr.exe' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcontextmgr_plugin32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pafUI32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pa_encrypt32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pa_filetagging32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pa_pe32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pdflib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pgp_adapter32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/resattrlib32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/resattrmgr32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/TagViewMenu32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/tag_office2k732.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/zip_adapter32.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+
+.PHONY: prepare_common_bin_x64_archive
+prepare_common_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cebrain.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cecem.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceconn.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceeval.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/celog.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/celogging.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cemarshal50.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepepman.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceprivate.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cesdk.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cesec.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceservice.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cetransport.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/NextLabsTaggingLib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcc_ulib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nl_sysenc_lib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcommonlib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcontextmgr.exe' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcontextmgr_plugin.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pafUI.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pa_encrypt.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pa_filetagging.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pa_pe.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pdflib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pgp_adapter.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/resattrlib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/resattrmgr.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/TagViewMenu.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/tag_office2k7.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/zip_adapter.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+
+.PHONY: prepare_common_bin_dotnet_current
+prepare_common_bin_dotnet_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_DOTNET_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_DOTNET_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_DOTNET_DIR)/NextLabs.CSCInvoke.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_DOTNET_DIR)/NextLabs.CSCInvoke.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+
+# Notes: Somehow Ivy or PC build script made Nextlabs.CSCinvoke.dll into something funny.
+# This is likely to affect .NET SDK interface.
+.PHONY: prepare_common_bin_dotnet_archive
+prepare_common_bin_dotnet_archive:
+	@if [ ! -d $(ASSEMBLY_COMMON_DOTNET_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_DOTNET_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/Nextlabs.CSCinvoke.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/Nextlabs.CSCinvoke.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+
+# Notes: We are getting the Podofo library from //depot/external/podofo-0.8.1-NextLabs-WFSE/.
+# This version of Podofo.dll contains a WFSE bug fix that has gone into PC 5.5.8.2.
+# For releases 5.5.4.x, 5.5.5.x, 5.5.6.x, 5.5.7.x, 5.5.8.0-1, 5.5.9.x and 5.5.10.x, the Podofo
+# library used was from //depot/external/podofo-0.8.1/. The new Podofo should work with older
+# releases. If you build 5.5.6.x using this updater, you will get the new library unless we
+# change this script to grab the old version.
+.PHONY: prepare_common_external_x86_current
+prepare_common_external_x86_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN32_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90u.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90u.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/vcomp90.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/freetype/bin/freetype6.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/tiff-4.0.0beta2/libtiff/libtiff.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/podofo-0.8.1-NextLabs-WFSE/release_lib_win32_vs2008/PoDoFoLib.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/zlib/zlib1.dll" "$(ASSEMBLY_COMMON_BIN32_DIR)/"
+
+
+# Notes: We are getting the Podofo library from //depot/external/podofo-0.8.1-NextLabs-WFSE/.
+# This version of Podofo.dll contains a WFSE bug fix that has gone into PC 5.5.8.2.
+# For releases 5.5.4.x, 5.5.5.x, 5.5.6.x, 5.5.7.x, 5.5.8.0-1, 5.5.9.x and 5.5.10.x, the Podofo
+# library used was from //depot/external/podofo-0.8.1/. The new Podofo should work with older
+# releases. If you build 5.5.6.x using this updater, you will get the new library unless we
+# change this script to grab the old version.
+.PHONY: prepare_common_external_x64_current
+prepare_common_external_x64_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_BIN64_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfc90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfc90u.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfcm90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/mfcm90u.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/vcomp90.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/tiff-4.0.0beta2/release_lib_x64/libtiff.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/podofo-0.8.1-NextLabs-WFSE/release_lib_x64_vs2008/PoDoFoLib.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/zlib/zlib-1.2.5/release_lib_x64/zlibwapi.dll" "$(ASSEMBLY_COMMON_BIN64_DIR)/"
+
+
+.PHONY: prepare_common_external_x86_archive
+prepare_common_external_x86_archive:
+	@if [ ! -d $(DEST_COMMON_BIN32_DIR) ]; then		\
+		mkdir -p $(DEST_COMMON_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/atl90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90u.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90u.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcm90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcp90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcr90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/vcomp90.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.MFC.manifest' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.OpenMP.manifest' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/freetype6.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/libtiff.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/VS2008/PoDoFoLib.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/zlib1.dll' -d "$(ASSEMBLY_COMMON_BIN32_DIR)"
+
+.PHONY: prepare_common_external_x64_archive
+prepare_common_external_x64_archive:
+	@if [ ! -d $(DEST_COMMON_BIN64_DIR) ]; then		\
+		mkdir -p $(DEST_COMMON_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/atl90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/mfc90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/mfc90u.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/mfcm90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/mfcm90u.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/msvcm90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/msvcp90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/msvcr90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/vcomp90.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.MFC.manifest' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.OpenMP.manifest' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/libtiff.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/VS2008/PoDoFoLib.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/zlib1.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/zlibwapi.dll' -d "$(ASSEMBLY_COMMON_BIN64_DIR)"
+
+.PHONY: prepare_common_resource_current
+prepare_common_resource_current:
+	@if [ ! -d $(ASSEMBLY_COMMON_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_RES_DIR) ;			\
+	fi
+	cp -f "$(PROD_PA_DIR)/encryptionPA/configuration/encryption_adapters32.conf" "$(ASSEMBLY_COMMON_RES_DIR)/"
+	cp -f "$(PROD_PA_DIR)/encryptionPA/configuration/encryption_adapters.conf" "$(ASSEMBLY_COMMON_RES_DIR)/"
+
+.PHONY: prepare_common_resource_archive
+prepare_common_resource_archive:
+	@if [ ! -d $(ASSEMBLY_COMMON_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_COMMON_RES_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/encryption_adapters32.conf' -d "$(ASSEMBLY_COMMON_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/encryption_adapters.conf' -d "$(ASSEMBLY_COMMON_RES_DIR)"
+
+# ---------------------------------------------------------------------------
+# Policy Controller
+
+.PHONY: prepare_pc_current
+prepare_pc_current: prepare_pc_info_current \
+	prepare_pc_bin_x86_current prepare_pc_bin_x64_current \
+	prepare_pc_external_x86_current prepare_pc_external_x64_current \
+	prepare_pc_bin_java_current prepare_pc_external_java_current \
+	prepare_pc_resource_current
+
+.PHONY: prepare_pc_archive
+prepare_pc_archive: prepare_pc_info_archive \
+	prepare_pc_bin_x86_archive prepare_pc_bin_x64_archive \
+	prepare_pc_external_x86_archive prepare_pc_external_x64_archive \
+	prepare_pc_bin_java_archive prepare_pc_external_java_archive \
+	prepare_pc_resource_archive
+
+.PHONY: prepare_pc_info_current
+prepare_pc_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Policy Controller from Current Build"
+	@echo " VERSION_STR                                = $(VERSION_MAJOR_PC).$(VERSION_MINOR_PC).$(VERSION_MAINTENANCE_PC).$(VERSION_PATCH_PC)"
+	@echo " VERSION_BUILD_SHORT                        = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR                           = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR                           = $(DIST_BIN_x64_DIR)"
+	@echo " DIST_BIN_JAVA_DIR                          = $(DIST_BIN_JAVA_DIR)"
+	@echo " NLEXTERNALDIR                              = $(NLEXTERNALDIR)"
+	@echo " BUILD_ARTIFACTS_DESTINY_IVY_DIR            = $(BUILD_ARTIFACTS_DESTINY_IVY_DIR)"
+	@echo " BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER = $(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER)"
+	@echo " ASSEMBLY_PC_DIR                            = $(ASSEMBLY_PC_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_PC) v$(VERSION_MAJOR_PC).$(VERSION_MINOR_PC).$(VERSION_MAINTENANCE_PC).$(VERSION_PATCH_PC) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_pc_info_archive
+prepare_pc_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Policy Controller from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)"
+	@echo " ASSEMBLY_PC_DIR                     = $(ASSEMBLY_PC_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/ReadMe.txt'
+	cat ReadMe.txt >> $(VERSION_FILE)
+	rm -f ReadMe.txt
+
+.PHONY: prepare_pc_bin_x86_current
+prepare_pc_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_PC_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/cebrain32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cecem32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceconn32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceeval32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceinjection32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cekif32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/celog32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cemarshal5032.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpconn32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpeval32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpgeneric32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdplog32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpman.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpprivate32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpprotect32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepdpsec32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cepepman32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceprivate32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cesdk32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceTamperproof32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cetransctrl32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/cetransport32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/Decrypt.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/IPCJNI32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/IPCStub32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mch30_setup32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mch_install_test.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_client32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_framework32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_plugin32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlca_service.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlTamperproofConfig32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper_plugin32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pdpjni32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/PDPStop32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/StopEnforcer.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nldevcon.exe" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pcs_server32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceservice32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/KeyManagementConsumer32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc_dispatcher32.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc.sys" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.sys" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/lib/mch/3.0/lib/free/nlinjection32.sys" "$(ASSEMBLY_PC_BIN32_DIR)/"
+
+.PHONY: prepare_pc_bin_x64_current
+prepare_pc_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_PC_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/cebrain.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cecem.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceconn.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceeval.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceinjection.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cekif.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/celog.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cemarshal50.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpconn.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpeval.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpgeneric.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdplog.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpman.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpprivate.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpprotect.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepdpsec.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cepepman.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceprivate.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cesdk.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceTamperproof.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cetransctrl.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/cetransport.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/Decrypt.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/IPCJNI.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/IPCStub.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/mch30_setup.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/mch_install_test.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_client.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_framework.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_plugin.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlca_service.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlTamperproofConfig.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper_plugin.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pdpjni.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/PDPStop.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/StopEnforcer.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nldevcon.exe" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pcs_server.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceservice.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/KeyManagementConsumer.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc_dispatcher.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc.sys" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.sys" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/lib/mch/3.0/lib/free/nlinjection64.sys" "$(ASSEMBLY_PC_BIN64_DIR)/"
+
+# Notes: Somehow IVY of PC build script changed IPCStub32.dll to ipcstub32.dll.
+# nl_tamper.sys is not in PC installer assembly.
+.PHONY: prepare_pc_bin_x86_archive
+prepare_pc_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_PC_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cebrain32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cecem32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceconn32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceeval32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceinjection32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cekif32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/celog32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cemarshal5032.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpconn32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpeval32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpgeneric32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdplog32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpman.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpprivate32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpprotect32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepdpsec32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cepepman32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceprivate32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cesdk32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceTamperproof32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cetransctrl32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/cetransport32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/Decrypt.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/IPCJNI32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ipcstub32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/mch30_setup32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/mch_install_test.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlca_client32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlca_framework32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlca_plugin32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlca_service.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlTamperproofConfig32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nl_tamper_plugin32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pdpjni32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/PDPStop32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/StopEnforcer.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nldevcon.exe' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/pcs_server32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/ceservice32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/KeyManagementConsumer32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcc_dispatcher32.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/WdfCoInstaller01009.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlcc.sys' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nlinjection32.sys' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+#	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/nl_tamper.sys' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.sys" "$(ASSEMBLY_PC_BIN32_DIR)/"
+
+# Notes: Somehow IVY of PC build script changed IPCStub.dll to ipcstub.dll.
+# nl_tamper.sys is not in PC installer assembly.
+.PHONY: prepare_pc_bin_x64_archive
+prepare_pc_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_PC_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cebrain.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cecem.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceconn.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceeval.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceinjection.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cekif.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/celog.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cemarshal50.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpconn.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpeval.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpgeneric.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdplog.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpman.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpprivate.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpprotect.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepdpsec.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cepepman.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceprivate.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cesdk.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceTamperproof.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cetransctrl.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/cetransport.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/Decrypt.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/IPCJNI.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ipcstub.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/mch30_setup.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/mch_install_test.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlca_client.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlca_framework.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlca_plugin.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlca_service.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlTamperproofConfig.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nl_tamper_plugin.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pdpjni.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/PDPStop.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/StopEnforcer.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nldevcon.exe' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/pcs_server.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/ceservice.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/KeyManagementConsumer.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcc_dispatcher.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/WdfCoInstaller01009.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlcc.sys' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nlinjection64.sys' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+#	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nl_tamper.sys' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.sys" "$(ASSEMBLY_PC_BIN64_DIR)/"
+
+.PHONY: prepare_pc_external_x86_current
+prepare_pc_external_x86_current:
+	@if [ ! -d $(ASSEMBLY_PC_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN32_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90u.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90u.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/vcomp90.dll" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_PC_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/wdfCoInstaller/1.9/x86/WdfCoInstaller01009.dll" "$(ASSEMBLY_PC_BIN32_DIR)"
+
+.PHONY: prepare_pc_external_x64_current
+prepare_pc_external_x64_current:
+	@if [ ! -d $(ASSEMBLY_PC_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_BIN64_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfc90u.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.MFC/mfcm90u.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/vcomp90.dll" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.MFC/Microsoft.VC90.MFC.manifest" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.OpenMP/Microsoft.VC90.OpenMP.manifest" "$(ASSEMBLY_PC_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/wdfCoInstaller/1.9/amd64/WdfCoInstaller01009.dll" "$(ASSEMBLY_PC_BIN64_DIR)"
+
+.PHONY: prepare_pc_external_x86_archive
+prepare_pc_external_x86_archive:
+	@if [ ! -d $(DEST_PC_BIN32_DIR) ]; then		\
+		mkdir -p $(DEST_PC_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/atl90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90u.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90u.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcm90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcp90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcr90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/vcomp90.dll' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.MFC.manifest' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x86/Microsoft.VC90.OpenMP.manifest' -d "$(ASSEMBLY_PC_BIN32_DIR)"
+
+.PHONY: prepare_pc_external_x64_archive
+prepare_pc_external_x64_archive:
+	@if [ ! -d $(DEST_PC_BIN64_DIR) ]; then		\
+		mkdir -p $(DEST_PC_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/atl90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfc90u.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/mfcm90u.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcm90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcp90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x86/msvcr90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/lib/release_win_x64/vcomp90.dll' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.MFC.manifest' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/release_win_x64/Microsoft.VC90.OpenMP.manifest' -d "$(ASSEMBLY_PC_BIN64_DIR)"
+
+.PHONY: prepare_pc_bin_java_current
+prepare_pc_bin_java_current:
+	@if [ ! -d $(ASSEMBLY_PC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_JAVA_DIR) ;			\
+	fi
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/agent-common-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/agent-common.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/agent-controlmanager-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/agent-controlmanager.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/agent-ipc-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/agent-ipc.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/agent-tools-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/agent-tools.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/agent-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/agent-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/client-pf-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/client-pf.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-domain-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-domain-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-domain-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-domain.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-framework-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-framework-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-framework-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-framework.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-oil-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-oil.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-pf-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-pf.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-version-impl-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-version-impl.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/common-version-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/common-version.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/dabs-agent-services-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/dabs-agent-services.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/dabs-common-services-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/dabs-common-services.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/deployment-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/deployment-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/log-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/log-types.jar"
+#	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/hibernate-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/hibernate.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/management-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/management-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/policy-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/policy-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/server-base-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/server-base.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/server-shared-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/server-shared-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/version-types-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/version-types.jar"
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/version-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).jar" "$(ASSEMBLY_PC_JAVA_DIR)/version.jar"
+	cp -f "$(DIST_BIN_JAVA_DIR)/NLCCService.jar" "$(ASSEMBLY_PC_JAVA_DIR)/"
+
+
+
+.PHONY: prepare_pc_bin_java_archive
+prepare_pc_bin_java_archive:
+	@if [ ! -d $(ASSEMBLY_PC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_JAVA_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/agent-common.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/agent-controlmanager.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/agent-ipc.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/agent-tools.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/agent-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/client-pf.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-domain-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-domain.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-framework-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-framework.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-oil.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-pf.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-version-impl.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/common-version.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/dabs-agent-services.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/dabs-common-services.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/deployment-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/log-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/management-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/policy-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/server-base.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/server-shared-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/version-types.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/version.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/NLCCService.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+
+.PHONY: prepare_pc_external_java_current
+prepare_pc_external_java_current:
+	@if [ ! -d $(ASSEMBLY_PC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_JAVA_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/activation.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/antlr.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/axis.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/castor-0.9.5.4.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'server/apps/inquiryCenter/WEB-INF/lib/commons-cli-1.0.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/commons-cli-1.0.jar" "$(ASSEMBLY_PC_JAVA_DIR)/commons-cli.jar"
+
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/commons-collections-2.1.1.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/commons-discovery-0.2.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/commons-logging.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/crypt.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+#	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/dnsjava.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	cp -f "$(NLEXTERNALDIR)/dnsjava/dnsjava.jar" "$(ASSEMBLY_PC_JAVA_DIR)/"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/ehcache-1.1.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/jargs.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/jaxrpc.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/mail.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/saaj.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'server-shared-services.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/wsdl4j-1.5.1.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_DESTINY_IVY_DIR)/build-$(BUILD_ARTIFACTS_DESTINY_IVY_VERSION_NUMBER).zip" 'agent/lib/xercesImpl.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+
+.PHONY: prepare_pc_external_java_archive
+prepare_pc_external_java_archive:
+	@if [ ! -d $(ASSEMBLY_PC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_PC_JAVA_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/activation.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/antlr.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/axis.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/castor.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/castor.jar" "$(ASSEMBLY_PC_JAVA_DIR)/castor-0.9.5.4.jar"
+	#unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/c3p0.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/commons-cli.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/commons-collections.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/commons-collections.jar" "$(ASSEMBLY_PC_JAVA_DIR)/commons-collections-2.1.1.jar"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/commons-discovery.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/commons-discovery.jar" "$(ASSEMBLY_PC_JAVA_DIR)/commons-discovery-0.2.jar"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/commons-logging.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/crypt.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/dnsjava.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/ehcache.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/ehcache.jar" "$(ASSEMBLY_PC_JAVA_DIR)/ehcache-1.1.jar"
+#	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/hibernate.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/jargs.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/jaxrpc.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/mail.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/saaj.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/server-shared-services.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/wsdl4j.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+	mv -f "$(ASSEMBLY_PC_JAVA_DIR)/wsdl4j.jar" "$(ASSEMBLY_PC_JAVA_DIR)/wsdl4j-1.5.1.jar"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/jlib/xercesImpl.jar' -d "$(ASSEMBLY_PC_JAVA_DIR)"
+
+.PHONY: prepare_pc_resource_current
+prepare_pc_resource_current:
+	@if [ ! -d $(ASSEMBLY_PC_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_PC_RES32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_PC_RES64_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES64_DIR) ;			\
+	fi
+	cp -f "$(PROD_COMMON_DIR)/nlcc/driver/nlcc.inf" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/fs/filter/nl_tamper.inf" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(PROD_PC_DIR)/configuration/TamperResistance.cfg" "$(ASSEMBLY_PC_RES_DIR)/PolicyController_TamperResistance.cfg"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_tamper.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlcc.x86.cat" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.x86.cat" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin32.cfg" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_plugin32.cfg" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/procexp.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/procexp.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskkill.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/taskkill.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskmgr.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/taskmgr.exe.ini"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc.x64.cat" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.x64.cat" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin.cfg" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_plugin.cfg" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/procexp.exe.ini" "$(ASSEMBLY_PC_RES64_DIR)/procexp64.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskkill.exe.ini" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskmgr.exe.ini" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_COMMON_DIR)/nlcc/service/java/NLCCService.properties" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_ENDPOINT_DIR)/wde/configuration/license.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/app-icon.ico" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/agentprofile.xml" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/folder.info" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/help/images/GreyInfo.gif" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/help/images/GreyNotifs.gif" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/help/images/GreyWhatsThis.gif" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/mapping.xml" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(INSTALL_DIR)/pc/resource/NextLabs Clickwrap Agreement v5-07 (2).rtf" "$(ASSEMBLY_PC_RES_DIR)/"
+
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin.cfg" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin32.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nlcontextmgr_tamper.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+
+	echo "$(VERSION_PRODUCT_PC) v$(VERSION_MAJOR_PC).$(VERSION_MINOR_PC).$(VERSION_MAINTENANCE_PC).$(VERSION_PATCH_PC) ($(VERSION_BUILD))" > "$(ASSEMBLY_PC_RES_DIR)/README.txt"
+
+# Notes: nl_tamper*.cat files are missing from PC installer archive. Also, nl_tamper_plugin32.cfg
+# is also missing.
+.PHONY: prepare_pc_resource_archive
+prepare_pc_resource_archive:
+	@if [ ! -d $(ASSEMBLY_PC_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_PC_RES32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_PC_RES64_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_PC_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/nlcc.inf' -d "$(ASSEMBLY_PC_RES_DIR)"
+
+# the zip file contains incorrect nl_tamper.inf
+# taking the nl_tamper.inf file from current
+#	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/nl_tamper.inf' -d "$(ASSEMBLY_PC_RES_DIR)"
+	cp -f "$(PROD_PC_DIR)/tamper/fs/filter/nl_tamper.inf" "$(ASSEMBLY_PC_RES_DIR)/"
+
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/PolicyController_TamperResistance.cfg' -d "$(ASSEMBLY_PC_RES_DIR)"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_tamper.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/ReadMe.txt' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/nlcc.x86.cat' -d "$(ASSEMBLY_PC_RES32_DIR)"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_tamper.x86.cat" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin32.cfg" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/content/configuration/nlca_plugin32.cfg" "$(ASSEMBLY_PC_RES32_DIR)/"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/procexp.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/procexp.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskkill.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/taskkill.exe.ini"
+	cp -f "$(PROD_PC_DIR)/cesdk/client/service/tamperproof/injection/taskmgr.exe32.ini" "$(ASSEMBLY_PC_RES32_DIR)/taskmgr.exe.ini"
+	cp -f "$(DIST_BIN_x64_DIR)/nlcc.x64.cat" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_tamper.x64.cat" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_DIR)/tamper/configuration/nl_tamper_plugin.cfg" "$(ASSEMBLY_PC_RES64_DIR)/"
+#	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x64/nl_tamper_plugin.cfg' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/nlca_plugin.cfg' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/procexp.exe.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/procexp.exe32.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/procexp64.exe.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/taskkill.exe.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/taskkill.exe32.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/taskmgr.exe.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource64/taskmgr.exe32.ini' -d "$(ASSEMBLY_PC_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/release_win_x86/NLCCService.properties' -d "$(ASSEMBLY_PC_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/license.cfg' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/app-icon.ico' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/agentprofile.xml' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/mapping.xml' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/dependencies/main/resource/folder.info' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/help/images/GreyInfo.gif' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/help/images/GreyNotifs.gif' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/help/images/GreyWhatsThis.gif' -d"$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/installercommon.dll' -d "$(ASSEMBLY_PC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_PC)" 'build_install/main/resource/NextLabs Clickwrap Agreement v5-07 (2).rtf' -d "$(ASSEMBLY_PC_RES_DIR)"
+
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin.cfg" "$(ASSEMBLY_PC_RES64_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nl_contextmgr_plugin32.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+	cp -f "$(PROD_PC_CONTEXT_CONFIG_DIR)/nlcontextmgr_tamper.cfg" "$(ASSEMBLY_PC_RES_DIR)/"
+
+
+# ---------------------------------------------------------------------------
+# Key Management Client
+
+.PHONY: prepare_kmc_current
+prepare_kmc_current: prepare_kmc_info_current \
+	prepare_kmc_bin_x86_current prepare_kmc_bin_x64_current \
+	prepare_kmc_bin_java_current \
+	prepare_kmc_resource_current
+
+.PHONY: prepare_kmc_archive
+prepare_kmc_archive: prepare_kmc_info_archive \
+	prepare_kmc_bin_x86_archive prepare_kmc_bin_x64_archive \
+	prepare_kmc_bin_java_archive \
+	prepare_kmc_resource_archive
+
+.PHONY: prepare_kmc_info_current
+prepare_kmc_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Key Management Client from Current Build"
+	@echo " VERSION_STR                                = $(VERSION_MAJOR_KMC).$(VERSION_MINOR_KMC).$(VERSION_MAINTENANCE_KMC).$(VERSION_PATCH_KMC)"
+	@echo " VERSION_BUILD_SHORT                        = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR                           = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR                           = $(DIST_BIN_x64_DIR)"
+	@echo " DIST_BIN_JAVA_DIR                          = $(DIST_BIN_JAVA_DIR)"
+	@echo " BUILD_ARTIFACTS_DESTINY_KEY_MANAGEMENT_DIR = $(BUILD_ARTIFACTS_DESTINY_KEY_MANAGEMENT_DIR)"
+	@echo " ASSEMBLY_KMC_DIR                           = $(ASSEMBLY_KMC_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_KMC) v$(VERSION_MAJOR_KMC).$(VERSION_MINOR_KMC).$(VERSION_MAINTENANCE_KMC).$(VERSION_PATCH_KMC) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_kmc_info_archive
+prepare_kmc_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Key Management Client from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)"
+	@echo " ASSEMBLY_KMC_DIR                     = $(ASSEMBLY_KMC_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/main/resource/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_kmc_bin_x86_current
+prepare_kmc_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_KMC_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/cesdk32.dll" "$(ASSEMBLY_KMC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ceservice32.dll" "$(ASSEMBLY_KMC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/KeyManagementConsumer32.dll" "$(ASSEMBLY_KMC_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/KeyUtil.exe" "$(ASSEMBLY_KMC_BIN32_DIR)/"
+
+.PHONY: prepare_kmc_bin_x64_current
+prepare_kmc_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_KMC_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/cesdk.dll" "$(ASSEMBLY_KMC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ceservice.dll" "$(ASSEMBLY_KMC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/KeyManagementConsumer.dll" "$(ASSEMBLY_KMC_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/KeyUtil.exe" "$(ASSEMBLY_KMC_BIN64_DIR)/"
+
+.PHONY: prepare_kmc_bin_x86_archive
+prepare_kmc_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_KMC_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x86/cesdk32.dll' -d "$(ASSEMBLY_KMC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x86/ceservice32.dll' -d "$(ASSEMBLY_KMC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x86/KeyManagementConsumer32.dll' -d "$(ASSEMBLY_KMC_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x86/KeyUtil.exe' -d "$(ASSEMBLY_KMC_BIN32_DIR)"
+
+.PHONY: prepare_kmc_bin_x64_archive
+prepare_kmc_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_KMC_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x64/cesdk.dll' -d "$(ASSEMBLY_KMC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x64/ceservice.dll' -d "$(ASSEMBLY_KMC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x64/KeyManagementConsumer.dll' -d "$(ASSEMBLY_KMC_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/release_win_x64/KeyUtil.exe' -d "$(ASSEMBLY_KMC_BIN64_DIR)"
+
+.PHONY: prepare_kmc_bin_java_current
+prepare_kmc_bin_java_current:
+	@if [ ! -d $(ASSEMBLY_KMC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_JAVA_DIR) ;			\
+	fi
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_KEY_MANAGEMENT_DIR)/KeyManagementService.jar" "$(ASSEMBLY_KMC_JAVA_DIR)/"
+
+.PHONY: prepare_kmc_bin_java_archive
+prepare_kmc_bin_java_archive:
+	@if [ ! -d $(ASSEMBLY_KMC_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_JAVA_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/jars/KeyManagementService.jar' -d "$(ASSEMBLY_KMC_JAVA_DIR)/"
+
+.PHONY: prepare_kmc_resource_current
+prepare_kmc_resource_current:
+	@if [ ! -d $(ASSEMBLY_KMC_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_RES_DIR) ;			\
+	fi
+	cp -f "$(BUILD_ARTIFACTS_DESTINY_KEY_MANAGEMENT_DIR)/KeyManagementService.properties" "$(ASSEMBLY_KMC_RES_DIR)/"
+	echo "$(VERSION_PRODUCT_KMC) v$(VERSION_MAJOR_KMC).$(VERSION_MINOR_KMC).$(VERSION_MAINTENANCE_KMC).$(VERSION_PATCH_KMC) ($(VERSION_BUILD))" > "$(ASSEMBLY_KMC_RES_DIR)/README.txt"
+
+.PHONY: prepare_kmc_resource_archive
+prepare_kmc_resource_archive:
+	@if [ ! -d $(ASSEMBLY_KMC_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_KMC_RES_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/main/resource/KeyManagementService.properties' -d "$(ASSEMBLY_KMC_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_KMC)" 'install/KMService/build/data/main/resource/README.txt' -d "$(ASSEMBLY_KMC_RES_DIR)"
+
+# ---------------------------------------------------------------------------
+# Windows Desktop Enforcer
+
+.PHONY: prepare_wde_current
+prepare_wde_current: prepare_wde_info_current \
+	prepare_wde_bin_x86_current prepare_wde_bin_x64_current \
+	prepare_wde_external_x86_current prepare_wde_external_x64_current \
+	prepare_wde_resource_current \
+	prepare_wde_package_current
+
+.PHONY: prepare_wde_archive
+prepare_wde_archive: prepare_wde_info_archive \
+	prepare_wde_bin_x86_archive prepare_wde_bin_x64_archive \
+	prepare_wde_external_x86_archive prepare_wde_external_x64_archive \
+	prepare_wde_resource_archive \
+	prepare_wde_package_archive
+
+.PHONY: prepare_wde_info_current
+prepare_wde_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Windows Desktop Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_WDE).$(VERSION_MINOR_WDE).$(VERSION_MAINTENANCE_WDE).$(VERSION_PATCH_WDE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " NLEXTERNALDIR        = $(NLEXTERNALDIR)"
+	@echo " ASSEMBLY_WDE_DIR     = $(ASSEMBLY_WDE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_WDE) v$(VERSION_MAJOR_WDE).$(VERSION_MINOR_WDE).$(VERSION_MAINTENANCE_WDE).$(VERSION_PATCH_WDE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_wde_info_archive
+prepare_wde_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Windows Desktop Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)"
+	@echo " ASSEMBLY_WDE_DIR                     = $(ASSEMBLY_WDE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_wde_bin_x86_current
+prepare_wde_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/basepep32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/BasePEPPlugin32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/diagnostic32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/edpmanager.exe" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/edpmdlg32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/edpmgrutility32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/enhancement32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/iePEP32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ipcproxy32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/ipcstub32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlsce.exe" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlscekeeper32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLVisualLabelingPA200332.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLVisualLabelingPA200732.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLOfficePEP32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLVLViewPrint32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/notification32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/OutlookAddin32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/PCStatus32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/WdeAddTags.exe" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLReaderPEP32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/NLReaderPEP32.api"
+	cp -f "$(DIST_BIN_x86_DIR)/NLAcrobatPEP32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/NLAcrobatPEP32.api"
+	cp -f "$(DIST_BIN_x86_DIR)/AdobePEPTrm32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+
+	cp -f "$(DIST_BIN_x86_DIR)/cbpep32.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+
+	cp -f "$(DIST_BIN_x86_DIR)/procdetect.sys" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+
+.PHONY: prepare_wde_bin_x64_current
+prepare_wde_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/basepep.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/BasePEPPlugin.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/diagnostic.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/edpmanager.exe" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/edpmdlg.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/edpmgrutility.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/enhancement.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/iePEP.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ipcproxy.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/ipcstub.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlsce.exe" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlscekeeper.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NLVisualLabelingPA2003.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NLVisualLabelingPA2007.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NLOfficePEP.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+
+	cp -f "$(DIST_BIN_x64_DIR)/NLVLViewPrint.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/notification.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/OutlookAddin.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/PCStatus.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/WdeAddTags.exe" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+
+	cp -f "$(DIST_BIN_x64_DIR)/cbpep.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+
+	cp -f "$(DIST_BIN_x64_DIR)/procdetect.sys" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+
+.PHONY: prepare_wde_bin_x86_archive
+prepare_wde_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_WDE_BIN32_DIR) ;				\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/basepep32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/BasePEPPlugin32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/diagnostic32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/edpmanager.exe' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/edpmdlg32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/edpmgrutility32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/enhancement32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/iePEP32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/ipcproxy32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/ipcstub32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/nlsce.exe' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/nlscekeeper32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLVisualLabelingPA200332.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLVisualLabelingPA200732.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLOfficePEP32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLVLViewPrint32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/notification32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/OutlookAddin32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/PCStatus32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/procdetect.sys' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/WdeAddTags.exe' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLReaderPEP32.api' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/NLAcrobatPEP32.api' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/AdobePEPTrm32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/cbpep32.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+
+
+.PHONY: prepare_wde_bin_x64_archive
+prepare_wde_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/basepep.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/BasePEPPlugin.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/diagnostic.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/edpmanager.exe' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/edpmdlg.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/edpmgrutility.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/enhancement.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/iePEP.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/ipcproxy.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/ipcstub.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/nlsce.exe' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/nlscekeeper.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/NLVisualLabelingPA2003.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/NLVisualLabelingPA2007.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/NLOfficePEP.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/NLVLViewPrint.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/notification.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/OutlookAddin.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/PCStatus.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/procdetect.sys' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/WdeAddTags.exe' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/cbpep.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+
+
+.PHONY: prepare_wde_external_x86_current
+prepare_wde_external_x86_current:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_WDE_BIN32_DIR) ;				\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_WDE_BIN32_DIR)/"
+
+.PHONY: prepare_wde_external_x64_current
+prepare_wde_external_x64_current:
+	@if [ ! -d $(ASSEMBLY_WDE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_WDE_BIN64_DIR)/"
+
+.PHONY: prepare_wde_external_x86_archive
+prepare_wde_external_x86_archive:
+	@if [ ! -d $(DEST_WDE_BIN32_DIR) ]; then			\
+		mkdir -p $(DEST_WDE_BIN32_DIR) ;				\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/atl90.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/msvcm90.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/msvcp90.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/msvcr90.dll' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x86/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_WDE_BIN32_DIR)"
+
+.PHONY: prepare_wde_external_x64_archive
+prepare_wde_external_x64_archive:
+	@if [ ! -d $(DEST_WDE_BIN64_DIR) ]; then			\
+		mkdir -p $(DEST_WDE_BIN64_DIR) ;				\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/atl90.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/msvcm90.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/msvcp90.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/msvcr90.dll' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/release_win_x64/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_WDE_BIN64_DIR)"
+
+.PHONY: prepare_wde_resource_current
+prepare_wde_resource_current:
+	@if [ ! -d $(ASSEMBLY_WDE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_WDE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_WDE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_WDE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_RES64_DIR) ;			\
+	fi
+
+	cp -f "$(PROD_WDE_CONFIG_DIR)/license.cfg" "$(ASSEMBLY_WDE_RES_DIR)/"
+	cp -f "$(PROD_ENDPOINT_DIR)/adobepep/configuration/acrobat.exe.ini" "$(ASSEMBLY_WDE_RES_DIR)/"
+	cp -f "$(PROD_ENDPOINT_DIR)/adobepep/configuration/acrord32.exe.ini" "$(ASSEMBLY_WDE_RES_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_WDE_RES_DIR)/WindowsDesktopEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/dialog32.ini" "$(ASSEMBLY_WDE_RES32_DIR)/dialog.ini"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/menu_l32.ini" "$(ASSEMBLY_WDE_RES32_DIR)/menu_l.ini"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/menu_r32.ini" "$(ASSEMBLY_WDE_RES32_DIR)/menu_r.ini"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/notify32.ini" "$(ASSEMBLY_WDE_RES32_DIR)/notify.ini"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/status_plugin32.ini" "$(ASSEMBLY_WDE_RES32_DIR)/status_plugin.ini"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/wde_base_plugin32.cfg" "$(ASSEMBLY_WDE_RES32_DIR)/wde_base_plugin.cfg"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/dialog.ini" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/menu_l.ini" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/menu_r.ini" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/notify.ini" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/status_plugin.ini" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/wde_base_plugin.cfg" "$(ASSEMBLY_WDE_RES64_DIR)/"
+	cp -f "$(PROD_WDE_DIR)/ScreenCapture/configuration/nl_screencap_plugin32.cfg" "$(ASSEMBLY_WDE_RES32_DIR)/nl_screencap_plugin.cfg"
+	cp -f "$(PROD_WDE_DIR)/ScreenCapture/configuration/nl_screencap_plugin.cfg" "$(ASSEMBLY_WDE_RES64_DIR)/"
+
+	cp -f "$(PROD_WDE_CONFIG_DIR)/commonbrowserenforcer_tamperresistance.cfg" "$(ASSEMBLY_WDE_RES_DIR)/"
+
+
+	echo "$(VERSION_PRODUCT_WDE) v$(VERSION_MAJOR_WDE).$(VERSION_MINOR_WDE).$(VERSION_MAINTENANCE_WDE).$(VERSION_PATCH_WDE) ($(VERSION_BUILD))" > "$(ASSEMBLY_WDE_RES_DIR)/README.txt"
+
+
+
+
+.PHONY: prepare_wde_resource_archive
+prepare_wde_resource_archive:
+	@if [ ! -d $(ASSEMBLY_WDE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_WDE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_WDE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_WDE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_WDE_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/license.cfg' -d "$(ASSEMBLY_WDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/acrobat.exe.ini' -d "$(ASSEMBLY_WDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/acrord32.exe.ini' -d "$(ASSEMBLY_WDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/WindowsDesktopEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_WDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/README.txt' -d "$(ASSEMBLY_WDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/dialog.ini' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/menu_l.ini' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/menu_r.ini' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/nl_screencap_plugin.cfg' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/notify.ini' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/status_plugin.ini' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts32/wde_base_plugin.cfg' -d "$(ASSEMBLY_WDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/dialog.ini' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/menu_l.ini' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/menu_r.ini' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/nl_screencap_plugin.cfg' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/notify.ini' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/status_plugin.ini' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts64/wde_base_plugin.cfg' -d "$(ASSEMBLY_WDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/data/artifacts/commonbrowserenforcer_tamperresistance.cfg' -d "$(ASSEMBLY_WDE_RES_DIR)"
+
+
+
+.PHONY: prepare_wde_package_current
+prepare_wde_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_WDE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/WindowsDesktopEnforcer_product.xml"
+	cp -f "$(PROD_WDE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/WindowsDesktopEnforcer_product.xml"
+
+.PHONY: prepare_wde_package_archive
+prepare_wde_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/WindowsDesktopEnforcer_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_WDE)" 'install/wde/build/package64/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/WindowsDesktopEnforcer_product.xml"
+
+# ---------------------------------------------------------------------------
+# Network Enforcer
+
+.PHONY: prepare_ne_current
+prepare_ne_current: prepare_ne_info_current \
+	prepare_ne_bin_x86_current prepare_ne_bin_x64_current \
+	prepare_ne_resource_current \
+	prepare_ne_package_current
+
+.PHONY: prepare_ne_archive
+prepare_ne_archive: prepare_ne_info_archive \
+	prepare_ne_bin_x86_archive prepare_ne_bin_x64_archive \
+	prepare_ne_resource_archive \
+	prepare_ne_package_archive
+
+.PHONY: prepare_ne_info_current
+prepare_ne_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Network Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_NE).$(VERSION_MINOR_NE).$(VERSION_MAINTENANCE_NE).$(VERSION_PATCH_NE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " ASSEMBLY_NE_DIR      = $(ASSEMBLY_NE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_NE) v$(VERSION_MAJOR_NE).$(VERSION_MINOR_NE).$(VERSION_MAINTENANCE_NE).$(VERSION_PATCH_NE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_ne_info_archive
+prepare_ne_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Network Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)"
+	@echo " ASSEMBLY_NE_DIR                     = $(ASSEMBLY_NE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/artifacts/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_ne_bin_x86_current
+prepare_ne_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_NE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/ftpe32.dll" "$(ASSEMBLY_NE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/hpe32.dll" "$(ASSEMBLY_NE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/Httpe32.dll" "$(ASSEMBLY_NE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/InstallSPICaller32.exe" "$(ASSEMBLY_NE_BIN32_DIR)/"
+
+.PHONY: prepare_ne_bin_x64_current
+prepare_ne_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_NE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/ftpe.dll" "$(ASSEMBLY_NE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/hpe.dll" "$(ASSEMBLY_NE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/Httpe.dll" "$(ASSEMBLY_NE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/InstallSPICaller.exe" "$(ASSEMBLY_NE_BIN64_DIR)/"
+
+.PHONY: prepare_ne_bin_x86_archive
+prepare_ne_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_NE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x86/ftpe32.dll' -d "$(ASSEMBLY_NE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x86/hpe32.dll' -d "$(ASSEMBLY_NE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x86/httpe32.dll' -d "$(ASSEMBLY_NE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x86/InstallSPICaller32.exe' -d "$(ASSEMBLY_NE_BIN32_DIR)"
+
+.PHONY: prepare_ne_bin_x64_archive
+prepare_ne_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_NE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x64/ftpe.dll' -d "$(ASSEMBLY_NE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x64/hpe.dll' -d "$(ASSEMBLY_NE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x64/httpe.dll' -d "$(ASSEMBLY_NE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/release_win_x64/InstallSPICaller.exe' -d "$(ASSEMBLY_NE_BIN64_DIR)"
+
+.PHONY: prepare_ne_resource_current
+prepare_ne_resource_current:
+	@if [ ! -d $(ASSEMBLY_NE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_NE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_NE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES64_DIR) ;			\
+	fi
+	cp -f "$(PROD_NE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_NE_RES_DIR)/NetworkEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_NE_CONFIG_DIR)/ftpe.ini" "$(ASSEMBLY_NE_RES_DIR)/"
+	cp -f "$(PROD_NE_CONFIG_DIR)/hpe.ini" "$(ASSEMBLY_NE_RES_DIR)/"
+	cp -f "$(PROD_NE_CONFIG_DIR)/httpe.ini" "$(ASSEMBLY_NE_RES_DIR)/"
+	cp -f "$(PROD_NE_CONFIG_DIR)/ftpte.exe.ini" "$(ASSEMBLY_NE_RES32_DIR)/"
+	cp -f "$(PROD_NE_CONFIG_DIR)/smartftp.exe.ini" "$(ASSEMBLY_NE_RES64_DIR)/"
+	echo "$(VERSION_PRODUCT_NE) v$(VERSION_MAJOR_NE).$(VERSION_MINOR_NE).$(VERSION_MAINTENANCE_NE).$(VERSION_PATCH_NE) ($(VERSION_BUILD))" > "$(ASSEMBLY_NE_RES_DIR)/README.txt"
+
+.PHONY: prepare_ne_resource_archive
+prepare_ne_resource_archive:
+	@if [ ! -d $(ASSEMBLY_NE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_NE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_NE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_NE_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/artifacts/NetworkEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_NE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/artifacts/README.txt' -d "$(ASSEMBLY_NE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/main/resource/configuration/ftpe.ini' -d "$(ASSEMBLY_NE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/main/resource/configuration/hpe.ini' -d "$(ASSEMBLY_NE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/main/resource/configuration/httpe.ini' -d "$(ASSEMBLY_NE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/main/resource/configuration/ftpte.exe.ini' -d "$(ASSEMBLY_NE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/data/main/resource/configuration/smartftp.exe.ini' -d "$(ASSEMBLY_NE_RES64_DIR)"
+
+.PHONY: prepare_ne_package_current
+prepare_ne_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_NE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/NetworkEnforcer_product.xml"
+	cp -f "$(PROD_NE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/NetworkEnforcer_product.xml"
+
+.PHONY: prepare_ne_package_archive
+prepare_ne_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/NetworkEnforcer_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_NE)" 'install/ne/build/package64/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/NetworkEnforcer_product.xml"
+
+# ---------------------------------------------------------------------------
+# Removable Device Enforcer
+
+.PHONY: prepare_rde_current
+prepare_rde_current: prepare_rde_info_current \
+	prepare_rde_bin_x86_current prepare_rde_bin_x64_current \
+	prepare_rde_resource_current \
+	prepare_rde_package_current
+
+.PHONY: prepare_rde_archive
+prepare_rde_archive: prepare_rde_info_archive \
+	prepare_rde_bin_x86_archive prepare_rde_bin_x64_archive \
+	prepare_rde_resource_archive \
+	prepare_rde_package_archive
+
+.PHONY: prepare_rde_info_current
+prepare_rde_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Removal Device Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_RDE).$(VERSION_MINOR_RDE).$(VERSION_MAINTENANCE_RDE).$(VERSION_PATCH_RDE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " ASSEMBLY_RDE_DIR     = $(ASSEMBLY_RDE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_RDE) v$(VERSION_MAJOR_RDE).$(VERSION_MINOR_RDE).$(VERSION_MAINTENANCE_RDE).$(VERSION_PATCH_RDE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_rde_info_archive
+prepare_rde_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Removal Device Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)"
+	@echo " ASSEMBLY_RDE_DIR                     = $(ASSEMBLY_RDE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_rde_bin_x86_current
+prepare_rde_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_RDE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/logon_detection_win7.exe" "$(ASSEMBLY_RDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NextLabsCredentialProvider32.dll" "$(ASSEMBLY_RDE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_devenf_plugin32.dll" "$(ASSEMBLY_RDE_BIN32_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/i386/nl_devenf.sys" "$(ASSEMBLY_RDE_BIN32_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/i386/WdfCoInstaller01009.dll" "$(ASSEMBLY_RDE_BIN32_DIR)/"
+
+.PHONY: prepare_rde_bin_x64_current
+prepare_rde_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_RDE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/logon_detection_win7.exe" "$(ASSEMBLY_RDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NextLabsCredentialProvider.dll" "$(ASSEMBLY_RDE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_devenf_plugin.dll" "$(ASSEMBLY_RDE_BIN64_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/amd64/nl_devenf.sys" "$(ASSEMBLY_RDE_BIN64_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/amd64/WdfCoInstaller01009.dll" "$(ASSEMBLY_RDE_BIN64_DIR)/"
+
+.PHONY: prepare_rde_bin_x86_archive
+prepare_rde_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_RDE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin32/logon_detection_win7.exe' -d "$(ASSEMBLY_RDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin32/NextLabsCredentialProvider32.dll' -d "$(ASSEMBLY_RDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin32/nl_devenf.sys' -d "$(ASSEMBLY_RDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin32/nl_devenf_plugin32.dll' -d "$(ASSEMBLY_RDE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin32/WdfCoInstaller01009.dll' -d "$(ASSEMBLY_RDE_BIN32_DIR)"
+
+.PHONY: prepare_rde_bin_x64_archive
+prepare_rde_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_RDE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin64/logon_detection_win7.exe' -d "$(ASSEMBLY_RDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin64/NextLabsCredentialProvider.dll' -d "$(ASSEMBLY_RDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin64/nl_devenf.sys' -d "$(ASSEMBLY_RDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin64/nl_devenf_plugin.dll' -d "$(ASSEMBLY_RDE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/bin64/WdfCoInstaller01009.dll' -d "$(ASSEMBLY_RDE_BIN64_DIR)"
+
+.PHONY: prepare_rde_resource_current
+prepare_rde_resource_current:
+	@if [ ! -d $(ASSEMBLY_RDE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_RDE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_RDE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_RDE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_RES64_DIR) ;			\
+	fi
+	cp -f "$(PROD_RDE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_RDE_RES_DIR)/RemovableDeviceEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_RDE_CONFIG_DIR)/rde_plugin32.cfg" "$(ASSEMBLY_RDE_RES32_DIR)/"
+	cp -f "$(PROD_RDE_CONFIG_DIR)/rde_plugin.cfg" "$(ASSEMBLY_RDE_RES64_DIR)/"
+	cp -f "$(PROD_RDE_DIR)/user/nl_devenf_plugin.def" "$(ASSEMBLY_RDE_RES_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/nl_devenf.inf" "$(ASSEMBLY_RDE_RES32_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/nl_devenf.x86.cat" "$(ASSEMBLY_RDE_RES32_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/nl_devenf.inf" "$(ASSEMBLY_RDE_RES64_DIR)/"
+	cp -f "$(PROD_RDE_DRIVER_DIR)/nl_devenf.x64.cat" "$(ASSEMBLY_RDE_RES64_DIR)/"
+	echo "$(VERSION_PRODUCT_RDE) v$(VERSION_MAJOR_RDE).$(VERSION_MINOR_RDE).$(VERSION_MAINTENANCE_RDE).$(VERSION_PATCH_RDE) ($(VERSION_BUILD))" > "$(ASSEMBLY_RDE_RES_DIR)/README.txt"
+
+.PHONY: prepare_rde_resource_archive
+prepare_rde_resource_archive:
+	@if [ ! -d $(ASSEMBLY_RDE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_RDE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_RDE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_RDE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_RDE_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource/nl_devenf_plugin.def' -d "$(ASSEMBLY_RDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource/README.txt' -d "$(ASSEMBLY_RDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource/RemovableDeviceEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_RDE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource32/nl_devenf.inf' -d "$(ASSEMBLY_RDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource32/nl_devenf.x86.cat' -d "$(ASSEMBLY_RDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource32/rde_plugin32.cfg' -d "$(ASSEMBLY_RDE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource64/nl_devenf.inf' -d "$(ASSEMBLY_RDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource64/nl_devenf.x64.cat' -d "$(ASSEMBLY_RDE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/data/resource64/rde_plugin.cfg' -d "$(ASSEMBLY_RDE_RES64_DIR)"
+
+.PHONY: prepare_rde_package_current
+prepare_rde_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_RDE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/RemovalDeviceEnforcer_product.xml"
+	cp -f "$(PROD_RDE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/RemovalDeviceEnforcer_product.xml"
+
+.PHONY: prepare_rde_package_archive
+prepare_rde_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/RemovalDeviceEnforcer_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_RDE)" 'install/rde/build/package64/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/RemovalDeviceEnforcer_product.xml"
+
+# ---------------------------------------------------------------------------
+# Outlook Enforcer
+
+.PHONY: prepare_oe_current
+prepare_oe_current: prepare_oe_info_current \
+	prepare_oe_bin_x86_current prepare_oe_bin_x64_current \
+	prepare_oe_external_x86_current prepare_oe_external_x64_current \
+	prepare_oe_resource_current \
+	prepare_oe_package_current
+
+.PHONY: prepare_oe_archive
+prepare_oe_archive: prepare_oe_info_archive \
+	prepare_oe_bin_x86_archive prepare_oe_bin_x64_archive \
+	prepare_oe_external_x86_archive prepare_oe_external_x64_archive \
+	prepare_oe_resource_archive \
+	prepare_oe_package_archive
+
+.PHONY: prepare_oe_info_current
+prepare_oe_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Outlook Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_OE).$(VERSION_MINOR_OE).$(VERSION_MAINTENANCE_OE).$(VERSION_PATCH_OE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " NLEXTERNALDIR        = $(NLEXTERNALDIR)"
+	@echo " ASSEMBLY_OE_DIR      = $(ASSEMBLY_OE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_OE) v$(VERSION_MAJOR_OE).$(VERSION_MINOR_OE).$(VERSION_MAINTENANCE_OE).$(VERSION_PATCH_OE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_oe_info_archive
+prepare_oe_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Outlook Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)"
+	@echo " ASSEMBLY_OE_DIR                     = $(ASSEMBLY_OE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/resource/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_oe_bin_x86_current
+prepare_oe_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_OE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/adaptercomm32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/adaptermanager32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/approvaladapter32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/CEOffice32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/CE_Explorer32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/InjectExp32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/InstallOEX64.exe" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mso2010PEP32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mso2K3PEP32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/mso2K7PEP32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/odhd201032.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/odhd2K332.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/odhd2K732.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/OEService32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/WindowBlocker32.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+
+.PHONY: prepare_oe_bin_x64_current
+prepare_oe_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_OE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/adaptercomm.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/adaptermanager.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/approvaladapter.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/CEOffice.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/CE_Explorer.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/InjectExp.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/mso2010PEP.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/odhd2010.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/odhd2K3.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/odhd2K7.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/OEService.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/WindowBlocker.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+
+.PHONY: prepare_oe_bin_x86_archive
+prepare_oe_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_OE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/adaptercomm32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/adaptermanager32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/approvaladapter32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/CEOffice32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/CE_Explorer32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/InjectExp32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/InstallOEX64.exe' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/mso2010PEP32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/mso2k3PEP32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/mso2k7PEP32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/odhd201032.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/odhd2k332.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/odhd2k732.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/OEService32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/WindowBlocker32.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+
+.PHONY: prepare_oe_bin_x64_archive
+prepare_oe_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_OE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/adaptercomm.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/adaptermanager.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/approvaladapter.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/CEOffice.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/CE_Explorer.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/InjectExp.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/mso2010PEP.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/odhd2010.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/odhd2k3.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/odhd2k7.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/OEService.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/WindowBlocker.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+
+.PHONY: prepare_oe_external_x86_current
+prepare_oe_external_x86_current:
+	@if [ ! -d $(ASSEMBLY_OE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_OE_BIN32_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/boost/boost_1_43_0/stage-x86/lib/boost_regex-vc90-mt-1_43.dll" "$(ASSEMBLY_OE_BIN32_DIR)/"
+
+.PHONY: prepare_oe_external_x64_current
+prepare_oe_external_x64_current:
+	@if [ ! -d $(ASSEMBLY_OE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/atl90.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcm90.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcp90.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/msvcr90.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.ATL/Microsoft.VC90.ATL.manifest" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/microsoft/redist/amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest" "$(ASSEMBLY_OE_BIN64_DIR)/"
+	cp -f "$(NLEXTERNALDIR)/boost/boost_1_43_0/stage-x64/lib/boost_regex-vc90-mt-1_43.dll" "$(ASSEMBLY_OE_BIN64_DIR)/"
+
+.PHONY: prepare_oe_external_x86_archive
+prepare_oe_external_x86_archive:
+	@if [ ! -d $(DEST_OE_BIN32_DIR) ]; then			\
+		mkdir -p $(DEST_OE_BIN32_DIR) ;				\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/atl90.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/msvcm90.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/msvcp90.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/msvcr90.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x86/boost_regex-vc90-mt-1_43.dll' -d "$(ASSEMBLY_OE_BIN32_DIR)"
+
+.PHONY: prepare_oe_external_x64_archive
+prepare_oe_external_x64_archive:
+	@if [ ! -d $(DEST_OE_BIN64_DIR) ]; then			\
+		mkdir -p $(DEST_OE_BIN64_DIR) ;				\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/atl90.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/msvcm90.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/msvcp90.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/msvcr90.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/release_win_x64/boost_regex-vc90-mt-1_43.dll' -d "$(ASSEMBLY_OE_BIN64_DIR)"
+
+.PHONY: prepare_oe_resource_current
+prepare_oe_resource_current:
+	@if [ ! -d $(ASSEMBLY_OE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_OE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_OE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES64_DIR) ;			\
+	fi
+	cp -f "$(PROD_OE_CONFIG_DIR)/license.cfg" "$(ASSEMBLY_OE_RES32_DIR)/"
+	cp -f "$(PROD_OE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_OE_RES_DIR)/OutlookEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_OE_DIR)/msoPEP/approvaladapter/approvaladapter.ini" "$(ASSEMBLY_OE_RES32_DIR)/"
+	cp -f "$(PROD_OE_DIR)/msoPEP/sendto/OEService/nl_OE_plugin32.cfg" "$(ASSEMBLY_OE_RES32_DIR)/nl_OE_plugin.cfg"
+	cp -f "$(PROD_OE_DIR)/msoPEP/sendto/OEService/nl_OE_plugin.cfg" "$(ASSEMBLY_OE_RES64_DIR)/"
+	echo "$(VERSION_PRODUCT_OE) v$(VERSION_MAJOR_OE).$(VERSION_MINOR_OE).$(VERSION_MAINTENANCE_OE).$(VERSION_PATCH_OE) ($(VERSION_BUILD))" > "$(ASSEMBLY_OE_RES_DIR)/README.txt"
+
+.PHONY: prepare_oe_resource_archive
+prepare_oe_resource_archive:
+	@if [ ! -d $(ASSEMBLY_OE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_OE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_OE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OE_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/main/resource/OutlookEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_OE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/resource/README.txt' -d "$(ASSEMBLY_OE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/resource32/approvaladapter.ini' -d "$(ASSEMBLY_OE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/resource32/nl_OE_plugin32.cfg' -d "$(ASSEMBLY_OE_RES32_DIR)"
+	cp -f "$(ASSEMBLY_OE_RES32_DIR)/nl_OE_plugin32.cfg" "$(ASSEMBLY_OE_RES32_DIR)/nl_OE_plugin.cfg"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/data/resource64/nl_OE_plugin.cfg' -d "$(ASSEMBLY_OE_RES64_DIR)"
+
+.PHONY: prepare_oe_package_current
+prepare_oe_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_OE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/OutlookEnforcer_product.xml"
+	cp -f "$(PROD_OE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/OutlookEnforcer_product.xml"
+
+# Notes: There is a problem with OE-64 where product.xml is not in the package.
+.PHONY: prepare_oe_package_archive
+prepare_oe_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/OutlookEnforcer_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OE)" 'install/oe/build/package32/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/OutlookEnforcer_product.xml"
+
+# ---------------------------------------------------------------------------
+# Live Meeting Enforcer
+
+.PHONY: prepare_lme_current
+prepare_lme_current: prepare_lme_info_current \
+	prepare_lme_bin_x86_current \
+	prepare_lme_resource_current
+
+.PHONY: prepare_lme_archive
+prepare_lme_archive: prepare_lme_info_archive \
+	prepare_lme_bin_x86_archive \
+	prepare_lme_resource_archive
+
+.PHONY: prepare_lme_info_current
+prepare_lme_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Live Meeting Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_LME).$(VERSION_MINOR_LME).$(VERSION_MAINTENANCE_LME).$(VERSION_PATCH_LME)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " ASSEMBLY_LME_DIR     = $(ASSEMBLY_LME_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_LME) v$(VERSION_MAJOR_LME).$(VERSION_MINOR_LME).$(VERSION_MAINTENANCE_LME).$(VERSION_PATCH_LME) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_lme_info_archive
+prepare_lme_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Live Meeting Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)"
+	@echo " ASSEMBLY_LME_DIR                     = $(ASSEMBLY_LME_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/resource/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_lme_bin_x86_current
+prepare_lme_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_LME_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_LME_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/nllme32.dll" "$(ASSEMBLY_LME_BIN32_DIR)/"
+
+.PHONY: prepare_lme_bin_x86_archive
+prepare_lme_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_LME_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_LME_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/bin32/nllme32.dll' -d "$(ASSEMBLY_LME_BIN32_DIR)"
+
+.PHONY: prepare_lme_resource_current
+prepare_lme_resource_current:
+	@if [ ! -d $(ASSEMBLY_LME_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_LME_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_LME_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_LME_RES32_DIR) ;			\
+	fi
+	cp -f "$(INSTALL_LME_DIR)/resource/deleteLME.reg" "$(ASSEMBLY_LME_RES_DIR)/"
+	cp -f "$(PROD_LME_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_LME_RES_DIR)/LiveMeetingEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_LME_CONFIG_DIR)/PWConsole.exe.ini" "$(ASSEMBLY_LME_RES32_DIR)/"
+	echo "$(VERSION_PRODUCT_LME) v$(VERSION_MAJOR_LME).$(VERSION_MINOR_LME).$(VERSION_MAINTENANCE_LME).$(VERSION_PATCH_LME) ($(VERSION_BUILD))" > "$(ASSEMBLY_LME_RES_DIR)/README.txt"
+
+.PHONY: prepare_lme_resource_archive
+prepare_lme_resource_archive:
+	@if [ ! -d $(ASSEMBLY_LME_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_LME_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_LME_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_LME_RES32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/resource/deleteLME.reg' -d "$(ASSEMBLY_LME_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/resource/LiveMeetingEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_LME_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/resource/README.txt' -d "$(ASSEMBLY_LME_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_LME)" 'install/lme/build/data/resource32/PWConsole.exe.ini' -d "$(ASSEMBLY_LME_RES32_DIR)"
+
+# ---------------------------------------------------------------------------
+# Office Communicator Enforcer
+
+.PHONY: prepare_oce_current
+prepare_oce_current: prepare_oce_info_current \
+	prepare_oce_bin_x86_current prepare_oce_bin_x64_current \
+	prepare_oce_resource_current \
+	prepare_oce_package_current
+
+.PHONY: prepare_oce_archive
+prepare_oce_archive: prepare_oce_info_archive \
+	prepare_oce_bin_x86_archive prepare_oce_bin_x64_archive \
+	prepare_oce_resource_archive \
+	prepare_oce_package_archive
+
+.PHONY: prepare_oce_info_current
+prepare_oce_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Office Communicator Enforcer from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_OCE).$(VERSION_MINOR_OCE).$(VERSION_MAINTENANCE_OCE).$(VERSION_PATCH_OCE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " ASSEMBLY_OCE_DIR     = $(ASSEMBLY_OCE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_OCE) v$(VERSION_MAJOR_OCE).$(VERSION_MINOR_OCE).$(VERSION_MAINTENANCE_OCE).$(VERSION_PATCH_OCE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_oce_info_archive
+prepare_oce_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Office Communicator Enforcer from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)"
+	@echo " ASSEMBLY_OCE_DIR                     = $(ASSEMBLY_OCE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/resource/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_oce_bin_x86_current
+prepare_oce_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_OCE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/ipcproxy32.dll" "$(ASSEMBLY_OCE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/uccpPEP32.dll" "$(ASSEMBLY_OCE_BIN32_DIR)/"
+
+.PHONY: prepare_oce_bin_x64_current
+prepare_oce_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_OCE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/ipcproxy.dll" "$(ASSEMBLY_OCE_BIN64_DIR)/"
+
+.PHONY: prepare_oce_bin_x86_archive
+prepare_oce_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_OCE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/bin32/ipcproxy32.dll' -d "$(ASSEMBLY_OCE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/bin32/uccpPEP32.dll' -d "$(ASSEMBLY_OCE_BIN32_DIR)"
+
+.PHONY: prepare_oce_bin_x64_archive
+prepare_oce_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_OCE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/bin64/ipcproxy.dll' -d "$(ASSEMBLY_OCE_BIN64_DIR)"
+
+.PHONY: prepare_oce_resource_current
+prepare_oce_resource_current:
+	@if [ ! -d $(ASSEMBLY_OCE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_OCE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_OCE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_RES32_DIR) ;			\
+	fi
+	cp -f "$(PROD_OCE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_OCE_RES_DIR)/OfficeCommunicatorEnforcer_TamperResistance.cfg"
+	cp -f "$(PROD_OCE_CONFIG_DIR)/communicator.exe.ini" "$(ASSEMBLY_OCE_RES32_DIR)/"
+	echo "$(VERSION_PRODUCT_OCE) v$(VERSION_MAJOR_OCE).$(VERSION_MINOR_OCE).$(VERSION_MAINTENANCE_OCE).$(VERSION_PATCH_OCE) ($(VERSION_BUILD))" > "$(ASSEMBLY_OCE_RES_DIR)/README.txt"
+
+.PHONY: prepare_oce_resource_archive
+prepare_oce_resource_archive:
+	@if [ ! -d $(ASSEMBLY_OCE_RES_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_OCE_RES_DIR) ;				\
+	fi
+	@if [ ! -d $(ASSEMBLY_OCE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_OCE_RES32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/resource/OfficeCommunicatorEnforcer_TamperResistance.cfg' -d "$(ASSEMBLY_OCE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/resource/README.txt' -d "$(ASSEMBLY_OCE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/data/resource32/communicator.exe.ini' -d "$(ASSEMBLY_OCE_RES32_DIR)"
+
+.PHONY: prepare_oce_package_current
+prepare_oce_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_OCE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/OfficeCommunicatorEnforcer_product.xml"
+	cp -f "$(PROD_OCE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/OfficeCommunicatorEnforcer_product.xml"
+
+.PHONY: prepare_oce_package_archive
+prepare_oce_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/OfficeCommunicatorEnforcer_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_OCE)" 'install/oce/build/package64/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/OfficeCommunicatorEnforcer_product.xml"
+
+# ---------------------------------------------------------------------------
+# System Encryption
+
+.PHONY: prepare_se_current
+prepare_se_current: prepare_se_info_current \
+	prepare_se_bin_x86_current prepare_se_bin_x64_current \
+	prepare_se_bin_java_current prepare_se_resource_current \
+	prepare_se_package_current
+
+.PHONY: prepare_se_archive
+prepare_se_archive: prepare_se_info_archive \
+	prepare_se_bin_x86_archive prepare_se_bin_x64_archive \
+	prepare_se_bin_java_archive prepare_se_resource_archive \
+	prepare_se_package_archive
+
+.PHONY: prepare_se_info_current
+prepare_se_info_current: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble System Encryption from Current Build"
+	@echo " VERSION_STR          = $(VERSION_MAJOR_NLE).$(VERSION_MINOR_NLE).$(VERSION_MAINTENANCE_NLE).$(VERSION_PATCH_NLE)"
+	@echo " VERSION_BUILD_SHORT  = $(VERSION_BUILD_SHORT)"
+	@echo " DIST_BIN_x86_DIR     = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR     = $(DIST_BIN_x64_DIR)"
+	@echo " DIST_BIN_JAVA_DIR    = $(DIST_BIN_JAVA_DIR)"
+	@echo " NLEXTERNALDIR        = $(NLEXTERNALDIR)"
+	@echo " ASSEMBLY_SE_DIR      = $(ASSEMBLY_SE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	echo "$(VERSION_PRODUCT_NLE) v$(VERSION_MAJOR_NLE).$(VERSION_MINOR_NLE).$(VERSION_MAINTENANCE_NLE).$(VERSION_PATCH_NLE) ($(VERSION_BUILD))" >> "$(VERSION_FILE)"
+
+.PHONY: prepare_se_info_archive
+prepare_se_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble System Encryption from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)"
+	@echo " ASSEMBLY_SE_DIR                     = $(ASSEMBLY_SE_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/README.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_se_bin_x86_current
+prepare_se_bin_x86_current:
+	@if [ ! -d $(ASSEMBLY_SE_BIN32_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_SE_BIN32_DIR) ;				\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/IconBadging32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/KeyManagementConsumer32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlsefw_plugin32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlse_plugin32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlSysEncryption.exe" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nlSysEncryptionObligation.exe" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_autounwrapper.exe" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/pcs_server32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLPortableEncryption.exe" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NLPortableEncryptionCtx32.dll" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_klog.sys" "$(ASSEMBLY_SE_BIN32_DIR)/nl_klog.dll"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_SysEncryption.sys" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_SysEncryptionFW.sys" "$(ASSEMBLY_SE_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nl_crypto.sys" "$(ASSEMBLY_SE_BIN32_DIR)/nl_crypto.dll"
+
+.PHONY: prepare_se_bin_x64_current
+prepare_se_bin_x64_current:
+	@if [ ! -d $(ASSEMBLY_SE_BIN64_DIR) ]; then			\
+		mkdir -p $(ASSEMBLY_SE_BIN64_DIR) ;				\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/IconBadging.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/KeyManagementConsumer.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlsefw_plugin.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlse_plugin.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlSysEncryption.exe" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nlSysEncryptionObligation.exe" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_autounwrapper.exe" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/pcs_server.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NLPortableEncryption.exe" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NLPortableEncryptionCtx.dll" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_klog.sys" "$(ASSEMBLY_SE_BIN64_DIR)/nl_klog.dll"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_SysEncryption.sys" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_SysEncryptionFW.sys" "$(ASSEMBLY_SE_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nl_crypto.sys" "$(ASSEMBLY_SE_BIN64_DIR)/nl_crypto.dll"
+
+.PHONY: prepare_se_bin_x86_archive
+prepare_se_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_SE_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/IconBadging32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/KeyManagementConsumer32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nlsefw_plugin32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nlse_plugin32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nlSysEncryption.exe' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nlSysEncryptionObligation.exe' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nl_autounwrapper.exe' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nl_crypto.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)/"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nl_klog.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nl_SysEncryption.sys' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/nl_SysEncryptionFW.sys' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/pcs_server32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/NLPortableEncryption.exe' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x86/NLPortableEncryptionCtx32.dll' -d "$(ASSEMBLY_SE_BIN32_DIR)"
+
+.PHONY: prepare_se_bin_x64_archive
+prepare_se_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_SE_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/IconBadging.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/KeyManagementConsumer.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nlsefw_plugin.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nlse_plugin.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nlSysEncryption.exe' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nlSysEncryptionObligation.exe' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nl_autounwrapper.exe' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nl_klog.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nl_crypto.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nl_SysEncryption.sys' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/nl_SysEncryptionFW.sys' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/pcs_server.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/NLPortableEncryption.exe' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/release_win_x64/NLPortableEncryptionCtx.dll' -d "$(ASSEMBLY_SE_BIN64_DIR)"
+
+.PHONY: prepare_se_bin_java_current
+prepare_se_bin_java_current:
+	@if [ ! -d $(ASSEMBLY_SE_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_JAVA_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_JAVA_DIR)/SystemEncryptionService.jar" "$(ASSEMBLY_SE_JAVA_DIR)/"
+
+.PHONY: prepare_se_bin_java_archive
+prepare_se_bin_java_archive:
+	@if [ ! -d $(ASSEMBLY_SE_JAVA_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_JAVA_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/jars/SystemEncryptionService.jar' -d "$(ASSEMBLY_SE_JAVA_DIR)"
+
+.PHONY: prepare_se_resource_current
+prepare_se_resource_current:
+	@if [ ! -d $(ASSEMBLY_SE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES64_DIR) ;			\
+	fi
+	cp -f "$(PROD_SE_CONFIG_DIR)/license.cfg" "$(ASSEMBLY_SE_RES_DIR)/"
+	cp -f "$(PROD_SE_CONFIG_DIR)/SystemEncryptionService.properties" "$(ASSEMBLY_SE_RES_DIR)/"
+	cp -f "$(PROD_SE_CONFIG_DIR)/TamperResistance.cfg" "$(ASSEMBLY_SE_RES_DIR)/SystemEncryption_TamperResistance.cfg"
+	cp -f "$(PROD_SE_CONFIG_DIR)/nlsefw_plugin32.cfg" "$(ASSEMBLY_SE_RES32_DIR)/"
+	cp -f "$(PROD_SE_CONFIG_DIR)/nlse_plugin32.cfg" "$(ASSEMBLY_SE_RES32_DIR)/"
+	cp -f "$(PROD_SE_CONFIG_DIR)/nlsefw_plugin.cfg" "$(ASSEMBLY_SE_RES64_DIR)/"
+	cp -f "$(PROD_SE_CONFIG_DIR)/nlse_plugin.cfg" "$(ASSEMBLY_SE_RES64_DIR)/"
+	cp -f "$(PROD_SE_DIR)/nl_SysEncryption/filter/NLSE.inf" "$(ASSEMBLY_SE_RES_DIR)/"
+	cp -f "$(PROD_SE_DIR)/nl_SysEncryptionFW/filter/NLSEFW.inf" "$(ASSEMBLY_SE_RES_DIR)/"
+	echo "$(VERSION_PRODUCT_NLE) v$(VERSION_MAJOR_NLE).$(VERSION_MINOR_NLE).$(VERSION_MAINTENANCE_NLE).$(VERSION_PATCH_NLE) ($(VERSION_BUILD))" > "$(ASSEMBLY_SE_RES_DIR)/README.txt"
+
+.PHONY: prepare_se_resource_archive
+prepare_se_resource_archive:
+	@if [ ! -d $(ASSEMBLY_SE_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SE_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SE_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SE_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/license.cfg' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/NLSE.inf' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/NLSEFW.inf' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/README.txt' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/SystemEncryptionService.properties' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts/SystemEncryption_TamperResistance.cfg' -d "$(ASSEMBLY_SE_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts32/nlsefw_plugin32.cfg' -d "$(ASSEMBLY_SE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts32/nlse_plugin32.cfg' -d "$(ASSEMBLY_SE_RES32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts64/nlsefw_plugin.cfg' -d "$(ASSEMBLY_SE_RES64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/data/artifacts64/nlse_plugin.cfg' -d "$(ASSEMBLY_SE_RES64_DIR)"
+
+.PHONY: prepare_se_package_current
+prepare_se_package_current:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	cp -f "$(PROD_SE_CONFIG_DIR)/product.xml" "$(PACKAGE32_DIR)/SystemEncryption_product.xml"
+	cp -f "$(PROD_SE_CONFIG_DIR)/product.xml" "$(PACKAGE64_DIR)/SystemEncryption_product.xml"
+
+.PHONY: prepare_se_package_archive
+prepare_se_package_archive:
+	@if [ ! -d $(PACKAGE32_DIR) ]; then		\
+		mkdir -p $(PACKAGE32_DIR) ;			\
+	fi
+	@if [ ! -d $(PACKAGE64_DIR) ]; then		\
+		mkdir -p $(PACKAGE64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/package32/product.xml' -d "$(PACKAGE32_DIR)"
+	mv -f "$(PACKAGE32_DIR)/product.xml" "$(PACKAGE32_DIR)/SystemEncryption_product.xml"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SE)" 'install/se/build/package64/product.xml' -d "$(PACKAGE64_DIR)"
+	mv -f "$(PACKAGE64_DIR)/product.xml" "$(PACKAGE64_DIR)/SystemEncryption_product.xml"
+
+# ---------------------------------------------------------------------------
+# SharePoint Workflow Policy Assistant
+
+.PHONY: prepare_spwfpa_archive
+prepare_spwfpa_archive: prepare_spwfpa_info_archive \
+	prepare_spwfpa_bin_x86_archive prepare_spwfpa_bin_x64_archive \
+	prepare_spwfpa_external_x86_archive prepare_spwfpa_external_x64_archive \
+	prepare_spwfpa_bin_dotnet_archive \
+	prepare_spwfpa_resource_archive
+
+.PHONY: prepare_spwfpa_info_archive
+prepare_spwfpa_info_archive: prepare_version_file
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble SharePoint Workflow Policy Assistant from Archive"
+	@echo " BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE = $(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)"
+	@echo " ASSEMBLY_SPWFPA_DIR                  = $(ASSEMBLY_SPWFPA_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/resource/ReadMe.txt'
+	cat README.txt >> $(VERSION_FILE)
+	rm -f README.txt
+
+.PHONY: prepare_spwfpa_bin_x86_archive
+prepare_spwfpa_bin_x86_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/wfRetry32.dll' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+
+.PHONY: prepare_spwfpa_bin_x64_archive
+prepare_spwfpa_bin_x64_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/wfRetry.dll' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+
+.PHONY: prepare_spwfpa_external_x86_archive
+prepare_spwfpa_external_x86_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_BIN32_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/atl90.dll' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/msvcm90.dll' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/msvcp90.dll' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/msvcr90.dll' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin32/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_SPWFPA_BIN32_DIR)"
+
+.PHONY: prepare_spwfpa_external_x64_archive
+prepare_spwfpa_external_x64_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_BIN64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/atl90.dll' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/msvcm90.dll' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/msvcp90.dll' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/msvcr90.dll' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/Microsoft.VC90.ATL.manifest' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/bin64/Microsoft.VC90.CRT.manifest' -d "$(ASSEMBLY_SPWFPA_BIN64_DIR)"
+
+.PHONY: prepare_spwfpa_bin_dotnet_archive
+prepare_spwfpa_bin_dotnet_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_DOTNET_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_DOTNET_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/binCs/NextLabs.CSCInvoke.dll' -d "$(ASSEMBLY_SPWFPA_DOTNET_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/binCs/WorkflowAdapter.exe' -d "$(ASSEMBLY_SPWFPA_DOTNET_DIR)"
+
+.PHONY: prepare_spwfpa_resource_archive
+prepare_spwfpa_resource_archive:
+	@if [ ! -d $(ASSEMBLY_SPWFPA_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_RES_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SPWFPA_RES32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_RES32_DIR) ;			\
+	fi
+	@if [ ! -d $(ASSEMBLY_SPWFPA_RES64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_SPWFPA_RES64_DIR) ;			\
+	fi
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/configuration/EDP.jpg' -d "$(ASSEMBLY_SPWFPA_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/configuration/nl_wfRetry_plugin.cfg' -d "$(ASSEMBLY_SPWFPA_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/configuration/wfMsg.html' -d "$(ASSEMBLY_SPWFPA_RES_DIR)"
+	unzip -jo "$(BUILD_ARTIFACTS_INSTALL_ZIP_FILE_SPE)" 'install/wfpa/build/data/resource/ReadMe.txt' -d "$(ASSEMBLY_SPWFPA_RES_DIR)"
+
+# ---------------------------------------------------------------------------
+# Installer
+
+.PHONY: prepare_installer_current
+prepare_installer_current: prepare_installer_info_current \
+	prepare_installer_x86_current prepare_installer_x64_current \
+	prepare_installer_resource_current \
+	prepare_installer_script_current
+
+.PHONY: prepare_installer_info_current
+prepare_installer_info_current:
+	@echo ""
+	@echo "-----------------------------------------------------------------------------"
+	@echo " Assemble Installer Support from Current Build"
+	@echo " DIST_BIN_x86_DIR        = $(DIST_BIN_x86_DIR)"
+	@echo " DIST_BIN_x64_DIR        = $(DIST_BIN_x64_DIR)"
+	@echo " INSTALL_WDE_DIR         = $(INSTALL_WDE_DIR)"
+	@echo " ASSEMBLY_INSTALLER_DIR  = $(ASSEMBLY_INSTALLER_DIR)"
+	@echo "-----------------------------------------------------------------------------"
+
+.PHONY: prepare_installer_x86_current
+prepare_installer_x86_current:
+	@if [ ! -d $(ASSEMBLY_INSTALLER_BIN32_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_INSTALLER_BIN32_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x86_DIR)/nlQuench.exe" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/PluginInstallerSDK32.dll" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/nldevcon.exe" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/"
+	cp -f "$(DIST_BIN_x86_DIR)/NlRegisterPlugins32.exe" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/NlRegisterPlugins.exe"
+# the following redundant file is just for NE
+	cp -f "$(DIST_BIN_x86_DIR)/NlRegisterPlugins32.exe" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/NlRegisterPlugins32.exe"
+	cp -f "$(DIST_XLIB_x86_DIR)/InstallerCommon32.dll" "$(ASSEMBLY_INSTALLER_BIN32_DIR)/InstallerCommon.dll"
+
+.PHONY: prepare_installer_x64_current
+prepare_installer_x64_current:
+	@if [ ! -d $(ASSEMBLY_INSTALLER_BIN64_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_INSTALLER_BIN64_DIR) ;			\
+	fi
+	cp -f "$(DIST_BIN_x64_DIR)/nlQuench.exe" "$(ASSEMBLY_INSTALLER_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/PluginInstallerSDK.dll" "$(ASSEMBLY_INSTALLER_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/nldevcon.exe" "$(ASSEMBLY_INSTALLER_BIN64_DIR)/"
+	cp -f "$(DIST_BIN_x64_DIR)/NlRegisterPlugins.exe" "$(ASSEMBLY_INSTALLER_BIN64_DIR)/NlRegisterPlugins.exe"
+
+.PHONY: prepare_installer_resource_current
+prepare_installer_resource_current:
+	@if [ ! -d $(ASSEMBLY_INSTALLER_RES_DIR) ]; then		\
+		mkdir -p $(ASSEMBLY_INSTALLER_RES_DIR) ;			\
+	fi
+# TBD: Updater should have its own copy of resouce files
+#	cp -f "$(INSTALL_WDE_DIR)/src/resource/ce-32.ico" "$(ASSEMBLY_INSTALLER_RES_DIR)/"
+#	cp -f "$(INSTALL_WDE_DIR)/src/resource/NextLabs Clickwrap Agreement v5-07 (2).rtf" "$(ASSEMBLY_INSTALLER_RES_DIR)/"
+#	cp -f "$(PROD_WDE_DIR)/iePEP/import/ce_deny.gif" "$(ASSEMBLY_INSTALLER_RES_DIR)/"
+#	cp -f "$(PROD_WDE_DIR)/iePEP/import/ce_deny.html" "$(ASSEMBLY_INSTALLER_RES_DIR)/"
+
+.PHONY: prepare_installer_script_current
+prepare_installer_script_current:
+	@if [ ! -d "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)" ]; then		\
+		mkdir -p "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)" ;			\
+	fi
+	@if [ ! -d "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/include" ]; then		\
+		mkdir -p "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/include" ;			\
+	fi
+
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/Setup.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/Setup.rul" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/Setupfiles.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/Setupfiles.rul" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/PolicyController.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/PolicyController.rul" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/ShutDownRunningApp.rul" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/include/CommonInstallScript.obl" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/include/PluginInstallerSDK.obl" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/include/common.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/include/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/include/logging.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/include/"
+	cp -f "$(INSTALL_UPDATER_DIR)/Script Files/include/servicecontrol.h" "$(ASSEMBLY_INSTALLER_SCRIPT_DIR)/include/"
+
+.PHONY: clean
+clean:
+	rm -rf $(ASSEMBLY_DIR)

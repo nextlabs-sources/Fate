@@ -1,0 +1,126 @@
+;/*++
+;
+;Copyright (c) 1990-2000  Microsoft Corporation
+;
+;Module Name:
+;    NL_DEVENF.INF
+;
+;Abstract:
+;    INF file for installing the Driver Frameworks NLDEVENF Driver
+;
+;Installation Notes: 
+;    Using Devcon: Type "devcon install NLDEVENF.inf root\NLDEVENF" to install
+;
+;--*/
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=NextLabs
+ClassGuid={ECE4B676-CA05-40d8-99C2-67B97A83C2D8}
+Provider=NextLabs, Inc.
+DriverVer=05/20/2010,6.0.6000.16386
+CatalogFile.NTx86=nl_devenf.x86.cat
+CatalogFile.NTamd64=nl_devenf.x64.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=NextLabsClassReg     
+
+[NextLabsClassReg]
+HKR,,NoInstallClass,,1
+HKR,,NoDisplayClass,,1
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles.x86]
+nl_devenf.sys  = 1,\i386
+[SourceDisksFiles.amd64]
+nl_devenf.sys  = 1,\amd64
+
+;*****************************************
+; NLDEVENF  Install Section
+;*****************************************
+
+[Manufacturer]
+%StdMfg%=Standard,NTx86,NTamd64
+
+; Following section is meant for Windows 2000 as it 
+; cannot parse decorated model sections
+[Standard.NTx86]
+;
+; Hw Id is root\NLDEVENF
+;
+%NLDEVENF.DeviceDesc%=NLDEVENF_Device, root\NLDEVENF
+
+; Decorated model section take precedence over undecorated 
+; ones on XP and later.
+[Standard.NTamd64]
+%NLDEVENF.DeviceDesc%=NLDEVENF_Device, root\NLDEVENF
+
+[NLDEVENF_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+nl_devenf.sys
+
+;-------------- Service installation
+[NLDEVENF_Device.NT.Services]
+AddService = NLDEVENF,%SPSVCINST_ASSOCSERVICE%, NLDEVENF_Service_Inst
+
+; -------------- NLDEVENF driver install sections
+[NLDEVENF_Service_Inst]
+DisplayName    = %NLDEVENF.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START 
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\nl_devenf.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- NLDEVENF_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+NLDEVENF_Device_CoInstaller_CopyFiles = 11
+
+[NLDEVENF_Device.NT.CoInstallers]
+AddReg=NLDEVENF_Device_CoInstaller_AddReg
+CopyFiles=NLDEVENF_Device_CoInstaller_CopyFiles
+
+[NLDEVENF_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "wdfcoinstaller01009.dll,WdfCoInstaller"
+HKLM, System\CurrentControlSet\Control\Class\{36fc9e60-c465-11cf-8056-444553540000}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{6bdd1fc6-810f-11d0-bec7-08002be2092f}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{7ebefbc0-3200-11d2-b4c2-00a0C9697d07}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{c06ff265-ae09-48f0-812c-16753d7cba83}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{d48179be-ec20-11d1-b6b8-00c04fa372a7}, UpperFilters, 0x00010008, NLDevEnf
+HKLM, System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}, UpperFilters, 0x00010008, NLDevEnf
+
+
+[NLDEVENF_Device_CoInstaller_CopyFiles]
+wdfcoinstaller01009.dll
+
+[SourceDisksFiles.x86]
+wdfcoinstaller01009.dll=1,\i386 ; make sure the number matches with SourceDisksNames
+
+[SourceDisksFiles.amd64]
+wdfcoinstaller01009.dll=1,\amd64 ; make sure the number matches with SourceDisksNames
+
+
+[NLDEVENF_Device.NT.Wdf]
+KmdfService =  NLDEVENF, NLDEVENF_wdfsect
+[NLDEVENF_wdfsect]
+KmdfLibraryVersion = 1.9
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+StdMfg = "(Standard system devices)"
+DiskId1 = "NLDevEnf Installation Disk #1"
+NLDEVENF.DeviceDesc = "Enterprise DLP Removable Device Enforcer"
+NLDEVENF.SVCDESC    = "Enterprise DLP Removable Device Enforcer"

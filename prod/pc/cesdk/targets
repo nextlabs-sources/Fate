@@ -1,0 +1,18 @@
+
+TARGETS = \
+	prod/common/brain \
+	prod/pc/cesdk/client/stub/CEM \
+	prod/pc/marshal \
+	prod/pc/transport \
+	prod/pc/cesdk/client/stub/PEPMan \
+	prod/pc/cesdk/client/stub/CONN \
+	prod/pc/cesdk/client/stub/EVAL \
+	prod/pc/cesdk/client/stub/LOG \
+	prod/pc/cesdk/client/stub/SEC \
+	prod/pc/cesdk/client/stub/service \
+	prod/pc/cesdk/client/stub/SingleDLL \
+	prod/pc/cesdk/client/stub/CEPrivate \
+	prod/pc/quenchhash \
+	prod/pc/cesdk/client/applications/nlQuench \
+	prod/pc/ceInjection \
+	prod/pc/cesdk/client/service/tamperproof

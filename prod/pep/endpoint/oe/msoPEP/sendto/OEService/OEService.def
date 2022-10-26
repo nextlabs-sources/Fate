@@ -1,0 +1,6 @@
+LIBRARY	"OEService"
+
+EXPORTS
+
+	PluginEntry	@ 1
+	PluginUnload @ 2

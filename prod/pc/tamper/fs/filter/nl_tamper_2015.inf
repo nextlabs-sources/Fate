@@ -1,0 +1,72 @@
+[Version]
+Signature   = "$Windows NT$"
+Class       = "Security Enhancer"                       ; FSFilter Security Enhancer
+ClassGuid   = {d02bc3da-0c8e-4945-9bd5-f1883c226c8c}    ; FSFilter Security Enhancer
+Provider    = "NextLabs, Inc."
+DriverPackageType	= FileSystemFilter
+DriverVer=03/04/2011,5.5
+CatalogFile.NTx86   = nl_tamper.x86.cat
+CatalogFile.NTAMD64 = nl_tamper.x64.cat
+
+[DestinationDirs]
+DefaultDestDir          = 12
+NLTamper.DriverFiles    = 12            ;%windir%\system32\drivers
+
+; Default install sections
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = NLTamper.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,,NLTamper.Service
+
+; Default uninstall sections
+[DefaultUninstall]
+DelFiles   = NLTamper.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,0x200      ;Ensure service is stopped before deleting
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles.x86]
+nl_tamper.sys  = 1
+
+[SourceDisksFiles.AMD64]
+nl_tamper.sys  = 1
+
+; Services Section
+[NLTamper.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %12%\%DriverName%.sys        ;%windir%\system32\drivers\
+Dependencies     = FltMgr
+ServiceType      = 2                            ;SERVICE_FILE_SYSTEM_DRIVER
+StartType        = 3                            ;SERVICE_DEMAND_START
+ErrorControl     = 1                            ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "FSFilter Security Enhancer"
+AddReg           = NLTamper.AddRegistry
+
+; Registry Modifications
+[NLTamper.AddRegistry]
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+; Copy Files
+[NLTamper.DriverFiles]
+%DriverName%.sys
+
+; String Section
+[Strings]
+ServiceDescription = "NextLabs Common Library"
+ServiceName             = "NLTamper"
+DriverName              = "nl_tamper"
+UserAppName             = "NLTamper"
+
+;Instances specific information.
+DefaultInstance         = "NLTamper - Default Instance"
+Instance1.Name          = "NLTamper - Default Instance"
+Instance1.Altitude      = "80000.127961796732274"
+Instance1.Flags         = 0x0

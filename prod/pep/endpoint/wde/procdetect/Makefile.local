@@ -1,0 +1,61 @@
+# Makefile to build driver
+#
+# IMPORTANT: This file must be named something different from Makefile. Otherwise,
+# when build/Makefile.driver.bat compiles a driver, NMAKE will pickup Makefile and fail.
+# Currently, the file must be named as "Makefile.local"
+
+ifeq ($(NLBUILDROOT),)
+  $(error NLBUILDROOT undefined.)
+endif
+
+include $(NLBUILDROOT)/build/Makefile.ver
+
+
+#
+# Variables
+#
+
+# The name of the driver
+DRIVER_NAME=procdetect
+
+# The type of this kernel module
+#   - sys: this is a driver
+#   - lib: this is a kernel library
+DRIVER_TYPE=sys
+
+# The inf file for this driver
+# If this is a kernel library, this variable is not necessary
+INF_FILE=procdetect.inf
+
+# Resource file for this driver
+# If this is a kernel library, this variable is not necessary
+RC_FILE=procdetect.rc
+
+# CoInstaller DLL used by WDF
+# If this driver is not a WDF driver, we don't need this
+#COINSTALLER_FILE=yes
+
+# Should compiler create CAT file?
+# If this is a kernel library, this variable is not necessary
+# The INF file decide whether there is CAT files. Normally, PNP driver needs to have CAT files
+#CAT_FILE=yes
+
+# Version strings
+VERSION_STR=8.4
+
+# Product Names
+VERSION_PRODUCT=NextLabs Endpoint Enforcers
+
+# Default Target
+# If user input: "make --file=Makefile.local", then compile_free will be used.
+# This will compile objfre_wxp_x86 and objfre_win7_amd64
+# If user use other target, for example, "make --file=Makefile.local compile_checked", then compile_free will be overwritten by compile_checked.
+# And objchk_wxp_x86 and objchk_win7_amd64 will be compiled
+TARGETS_DRIVER=compile_free
+
+
+#
+# Common driver variables and targets
+#
+
+include $(NLBUILDROOT)/build/Makefile.driver

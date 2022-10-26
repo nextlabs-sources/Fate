@@ -1,0 +1,10 @@
+; ftpadapter.def : Declares the module parameters.
+
+LIBRARY      "ftpadapter.DLL"
+
+EXPORTS
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer PRIVATE
+	RepositoryUpload
+	RepositoryUploadEx
+	ReleaseRepositoryUploadExPWCH

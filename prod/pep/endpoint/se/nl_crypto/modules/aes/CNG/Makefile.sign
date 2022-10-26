@@ -1,0 +1,24 @@
+##################################################################################
+#
+# Sign nl_tamper
+#
+##################################################################################
+
+INF2CAT  = C:/WinDDK/7600.16385.1/bin/selfsign/inf2cat.exe
+SIGNTOOL = c:/tools/nlsigntool.exe
+
+TARGETS = \
+	objchk_win7_x86/i386 \
+	objfre_win7_x86/i386 \
+	objchk_win7_amd64/amd64 \
+	objfre_win7_amd64/amd64
+
+.PHONY: $(TARGETS)
+
+MY_PWD = $(subst /cygdrive/c,c:,$(PWD))
+
+all: $(TARGETS)
+	@echo Complete
+
+$(TARGETS):
+	@$(SIGNTOOL) $(MY_PWD)/$@/nl_crypto.sys

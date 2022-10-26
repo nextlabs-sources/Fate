@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NLVisualLabelingPA", "NLVisualLabelingPA.vcproj", "{797C0547-593A-4782-BB20-697DEC2E272F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug2k3|Win32 = debug2k3|Win32
+		Debug2k7|Win32 = Debug2k7|Win32
+		release2k3|Win32 = release2k3|Win32
+		Release2k7|Win32 = Release2k7|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{797C0547-593A-4782-BB20-697DEC2E272F}.debug2k3|Win32.ActiveCfg = debug2k3|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.debug2k3|Win32.Build.0 = debug2k3|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.Debug2k7|Win32.ActiveCfg = Debug2k7|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.Debug2k7|Win32.Build.0 = Debug2k7|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.release2k3|Win32.ActiveCfg = release2k3|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.release2k3|Win32.Build.0 = release2k3|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.Release2k7|Win32.ActiveCfg = Release2k7|Win32
+		{797C0547-593A-4782-BB20-697DEC2E272F}.Release2k7|Win32.Build.0 = Release2k7|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

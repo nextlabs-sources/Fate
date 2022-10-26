@@ -1,0 +1,34 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_OE)
+VERSION_MAJOR		= $(VERSION_MAJOR_OE)
+VERSION_MINOR		= $(VERSION_MINOR_OE)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_OE)
+VERSION_PATCH		= $(VERSION_PATCH_OE)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS   = 
+SUBTARGET = WindowBlocker
+
+SRC = \
+      src/WindowBlocker.cpp
+
+INCPATH += \
+  ./include \
+  $(NLBUILDROOT)/prod/common/include		 \
+  $(NLBUILDROOT)/prod/common/lib/mch/3.0/inc \
+  $(NLEXTERNALDIR)/boost/boost_1_45_0
+
+LIBPATH += \
+  $(BUILDOUTPUTDIR)/$(LIBDIR) \
+  $(NLBUILDROOT)/prod/common/lib/mch/3.0/lib/free
+
+
+ifeq ($(TARGETENVARCH), x86)
+LIBS +=  madCHook32
+else
+LIBS += madCHook64
+endif
+
+DFLAGS += -DWINDOWBLOCKER_EXPORTS -DMADCHOOK

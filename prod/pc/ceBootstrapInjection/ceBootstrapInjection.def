@@ -1,0 +1,8 @@
+LIBRARY   CEBOOTSTRAPINJECTION
+
+
+SECTIONS
+	.HKT   Read Write Shared
+
+EXPORTS
+	InstallHook			@1 

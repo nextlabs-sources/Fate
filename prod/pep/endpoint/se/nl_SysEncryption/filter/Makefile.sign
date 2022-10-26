@@ -1,0 +1,42 @@
+##################################################################################
+#
+# Sign nl_SysEncryption
+#
+# Sequence:
+#
+#   (1) Stamp the INF
+#   (2) Sign the targets
+#   (3) Create a catalog
+#   (4) Sign the catalog
+#
+##################################################################################
+
+INF2CAT  = C:/WinDDK/7600.16385.1/bin/selfsign/inf2cat.exe
+STAMPINF = C:/WinDDK/7600.16385.1/bin/x86/stampinf.exe
+SIGNTOOL = c:/tools/nlsigntool.exe
+
+TARGETS = \
+	objchk_wxp_x86/i386 \
+	objfre_wxp_x86/i386 \
+	objchk_win7_amd64/amd64 \
+	objfre_win7_amd64/amd64
+
+.PHONY: $(TARGETS)
+
+MY_PWD = $(subst /cygdrive/c,c:,$(PWD))
+
+all: stampinf $(TARGETS) catalog signcats
+	@echo Complete
+
+signcats:
+	@$(SIGNTOOL) $(MY_PWD)/nl_SysEncryption.cat
+	@$(SIGNTOOL) $(MY_PWD)/nl_SysEncryption64.cat
+
+stampinf:
+	@cmd /c "$(STAMPINF) -f NLSE.inf -d * -v *"
+
+catalog:
+	@$(INF2CAT) /driver:. /os:XP_X86,7_X64 /v
+
+$(TARGETS):
+	@$(SIGNTOOL) $(MY_PWD)/$@/nl_SysEncryption.sys

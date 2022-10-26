@@ -1,0 +1,23 @@
+<!--$Id$-->
+<project name="nl_SysEncryption" default="rebuild" basedir="." >
+
+  <property file="${basedir}/build.properties"/>
+  <import file="${common.build.script.dir}/native_make_build.xml"/>
+  <echo message="Property file:${basedir}/build.properties" />
+
+  <target name="build" description="Compile source code">
+     <make dir="${src.dir}" /> 
+
+     <copy file="${basedir}/user/release_bin_win32/nlse_plugin.dll" todir="${build.dir}/../../../../build/main/build_native/release_lib_win32" />
+     <copy file="${basedir}/user/release_bin_win32/nlse_plugin.lib" todir="${build.dir}/../../../../build/main/build_native/release_lib_win32" />
+     <copy file="${basedir}/user/bin_win32/nlse_plugin.dll" todir="${build.dir}/../../../../build/main/build_native/lib_win32" />
+     <copy file="${basedir}/user/bin_win32/nlse_plugin.lib" todir="${build.dir}/../../../../build/main/build_native/lib_win32" />
+ </target>
+
+  <target name="rebuild" description="Compile source code">
+      
+     <makeclean dir="${src.dir}" /> 
+
+	 <ant target="build" />
+ </target>
+</project>

@@ -1,0 +1,8 @@
+EXPORTS
+	NL_KLOG_Initialize
+	NL_KLOG_Shutdown
+	NL_KLOG_Log
+	NL_KLOG_SetLevel
+	NL_KLOG_SetFile
+	DllInitialize PRIVATE
+	DllUnload PRIVATE

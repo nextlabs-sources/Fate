@@ -1,0 +1,35 @@
+HKCR
+{
+	enhancement.NLEDPManager.1 = s 'NLEDPManager Class'
+	{
+		CLSID = s '{68501D9A-B1A1-4EF3-9607-B9B8C0EFEDC0}'
+	}
+	enhancement.NLEDPManager = s 'NLEDPManager Class'
+	{
+		CLSID = s '{68501D9A-B1A1-4EF3-9607-B9B8C0EFEDC0}'
+		CurVer = s 'enhancement.NLEDPManager.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {68501D9A-B1A1-4EF3-9607-B9B8C0EFEDC0} = s 'NLEDPManager Class'
+		{
+			ProgID = s 'enhancement.NLEDPManager.1'
+			VersionIndependentProgID = s 'enhancement.NLEDPManager'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			
+			val AppID = s '%APPID%' 
+			'TypeLib' = s '{92C9A2CB-2573-4370-B522-0856A68A59DD}'
+			
+			Elevation
+			{
+				val Enabled = d 1
+				val IconReference = s '@%MODULE%,-201'
+			}
+			val LocalizedString = s '@%MODULE%,-100'
+		}
+	}
+}

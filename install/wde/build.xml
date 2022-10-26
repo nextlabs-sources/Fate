@@ -1,0 +1,62 @@
+<project name="OfficeCommunicatorEnforcer" 
+	 default="build" 
+	 basedir="." 
+	 xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <property file="build.override.properties" />
+  <property file="build.properties" />
+
+  <!-- Copy common build scripts and resources -->
+  <mkdir dir="${common.build.script.dir}" />
+  <get src="${common.build.script.location}" 
+       dest="${common.build.script.dir}/build_script-5.5.zip" 
+       usetimestamp="true" 
+       verbose="true"/>
+  <unzip src="${common.build.script.dir}/build_script-5.5.zip" 
+         dest="${common.build.script.dir}" 
+	 overwrite="false" />  
+
+  <import file="${common.build.script.dir}/installer_build.xml" />
+  <import file="${common.build.script.dir}/version_build.xml" />
+
+  <property name="build.native.dir" value="${build.main.installer.dir}/build_native" />
+  <property name="ide.build.native.dir" value="${src.main.installer.dir}/build_native" />
+
+
+  <target name="copy_resource"
+          description="Copy all files from src/resource to build/resource"
+		  depends="create_version_jar,common_build.copy_resource">
+
+	  	  <loadproperties srcfile="${build.root.dir}/version.properties"/>
+		  <replace file="${build.main.resource.dir}/ReadMe.txt" token="{MAJOR.VERSION}" value="${major}"/>	
+		  <replace file="${build.main.resource.dir}/ReadMe.txt" token="{MINOR.VERSION}" value="${minor}"/>	
+		  <replace file="${build.main.resource.dir}/ReadMe.txt" token="{MAINTENANCE.VERSION}" value="${maintenance}"/>	
+		  <replace file="${build.main.resource.dir}/ReadMe.txt" token="{PATCH.VERSION}" value="${patch}"/>	
+		  <replace file="${build.main.resource.dir}/ReadMe.txt" token="{BUILD}" value="${build}"/>
+  </target>
+  
+ 
+
+  
+
+
+  <target name="build" 
+          description="Build the project" 
+          depends="common_build.download_dependencies, copy_resource" />  
+
+
+  <target name="build_installer"
+          description="Build the project"
+          depends="installer_build.build_installer">
+  </target>
+
+
+  <!-- Nightly Build.  Same as build, but doesn't create the empty version -->
+  <target name="nightly_build" 
+          description="Build the project" 
+          depends="common_build.clean, build_installer" /> 
+
+<!-- Installshield IDE tasks -->
+ 
+
+</project>

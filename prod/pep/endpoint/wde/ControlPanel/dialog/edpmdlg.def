@@ -1,0 +1,7 @@
+LIBRARY   emgrdlg
+
+
+EXPORTS
+	DoAction			@1 
+	DoTab				@2 
+	QueryStatus			@3

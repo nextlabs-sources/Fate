@@ -1,0 +1,78 @@
+<!-- Network Enforcer Control Center Configuration -->
+
+<!-- HTTP Header Injection -->
+<Obligation>
+  <DisplayName>HTTP Header Injection</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>HTTP_HEADER_INJECTION</Name>
+  <Arguments>
+    <Argument usereditable="true">
+      <Name>Field_Key</Name>
+    </Argument> 
+    <Argument usereditable="true">
+      <Name>Field_Value</Name>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>LogId</Name>
+      <Value default="true">$CELogUid</Value>
+    </Argument> 
+  </Arguments>
+</Obligation>
+
+<!-- HTTP Redirection -->
+<Obligation>
+  <DisplayName>HTTP Redirect</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>HTTP_REDIRECT</Name>
+  <Arguments>
+    <Argument usereditable="true">
+      <Name>Redirect_URL</Name>
+    </Argument> 
+  </Arguments>
+</Obligation>
+
+<!-- Actions -->
+<ActionList>
+  <Action>
+    <Name>UPLOAD</Name>
+    <DisplayName>Upload</DisplayName>
+    <ShortName>UP</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>DOWNLOAD</Name>
+    <DisplayName>Download</DisplayName>
+    <ShortName>DL</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>HOST_CONNECT</Name>
+    <DisplayName>Host Connect</DisplayName>
+    <ShortName>HC</ShortName>
+    <Category>Network</Category>
+  </Action>
+  <Action>
+    <Name>NETWORK_ACCESS</Name>
+    <DisplayName>Network Access</DisplayName>
+    <ShortName>NA</ShortName>
+    <Category>Network</Category>
+  </Action>
+  <Action>
+    <Name>FTP</Name>
+    <DisplayName>FTP</DisplayName>
+    <ShortName>FT</ShortName>
+    <Category>Network</Category>
+  </Action>
+  <Action>
+    <Name>FTPS</Name>
+    <DisplayName>FTPS</DisplayName>
+    <ShortName>FS</ShortName>
+    <Category>Network</Category>
+  </Action>
+  <Action>
+    <Name>SFTP</Name>
+    <DisplayName>SFTP</DisplayName>
+    <ShortName>SF</ShortName>
+    <Category>Network</Category>
+  </Action>
+</ActionList>

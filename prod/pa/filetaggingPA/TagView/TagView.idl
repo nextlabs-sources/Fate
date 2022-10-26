@@ -1,0 +1,63 @@
+// TagView.idl : IDL source for TagView
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TagView.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(a817e7a2-43fa-11d0-9e44-00aa00b6770a),
+	dual,
+	helpstring("IComponentRegistrar Interface"),
+	pointer_default(unique)
+]
+interface IComponentRegistrar : IDispatch
+{
+	[id(1)]	HRESULT Attach([in] BSTR bstrPath);
+	[id(2)]	HRESULT RegisterAll();
+	[id(3)]	HRESULT UnregisterAll();
+	[id(4)]	HRESULT GetComponents([out] SAFEARRAY(BSTR)* pbstrCLSIDs, [out] SAFEARRAY(BSTR)* pbstrDescriptions);
+	[id(5)]	HRESULT RegisterComponent([in] BSTR bstrCLSID);
+	[id(6)] HRESULT UnregisterComponent([in] BSTR bstrCLSID);
+};
+
+[
+	object,
+	uuid(2772336A-9A23-4978-80F8-0E6CC61E42AD),
+	dual,
+	nonextensible,
+	helpstring("IShellExt Interface"),
+	pointer_default(unique)
+]
+interface IShellExt : IDispatch{
+};
+[
+	uuid(841E6D40-DBFD-47F2-8756-999F952E6C56),
+	version(1.0),
+	helpstring("TagView 1.0 Type Library"),
+	custom(a817e7a1-43fa-11d0-9e44-00aa00b6770a,"{93FBAC56-1C03-4907-8BA8-E654D930A4E3}")
+]
+library TagViewLib
+{
+	importlib("stdole2.tlb");
+
+	[
+		uuid(93FBAC56-1C03-4907-8BA8-E654D930A4E3),
+		helpstring("ComponentRegistrar Class")
+	]
+	coclass CompReg
+	{
+		[default] interface IComponentRegistrar;
+	};
+	[
+		uuid(E7F164F5-8E7C-4AAB-BC8D-96A396661BFA),
+		helpstring("ShellExt Class")
+	]
+	coclass ShellExt
+	{
+		[default] interface IShellExt;
+	};
+};

@@ -1,0 +1,48 @@
+# Kernel Makefile Template for compiling the kernel module on v2.6
+# To be concatentate with the Makefile.inc to generate the Makefile
+
+OS_NAME_MAP = ";Darwin=Darwin;CYGWIN_NT-5.1=CYGWIN_NT-5.1;CYGWIN_NT-5.2=CYGWIN_NT-5.1;CYGWIN_NT-5.2-WOW64=CYGWIN_NT-5.2-WOW64;Linux=Linux;"
+UNAME = $(shell uname -s)
+OS := $(shell echo ${OS_NAME_MAP} | sed 's/.*;${UNAME}=\([^;]*\);.*/\1/')
+
+ifeq ($(BUILDTYPE), release)
+  CFLAGS   += -O2
+  DFLAGS   += -D$(OS)
+  DRVDIR    = release_drivers
+else
+  CFLAGS   += -Wall
+  DFLAGS   += -DDEBUG -D$(OS)
+  BUILDTYPE = debug
+  DRVDIR    = drivers
+endif
+
+ifeq ($(KVERSION),) 
+  KDIR   := /lib/modules/`uname -r`/build
+  KVER_DIR :=`uname -r`
+else
+  KDIR   := /lib/modules/$(KVERSION)/build
+  KVER_DIR := $(KVERSION)
+endif
+
+INCP = $(addprefix -I, $(INCPATH))
+
+# Weird recursive compile method by the kernel source tree
+
+obj-m := $(KTARGET)
+CFLAGS += $(INCP) $(DFLAGS)
+
+# Rule for building kernel module targets
+all:
+	$(MAKE) -f Makefile -C $(KDIR) M=$(PWD) modules
+	@if [ -n "$(BUILDOUTPUTDIR)" ] ; then               \
+	  if [ ! -d $(BUILDOUTPUTDIR)/$(DRVDIR)/$(KVER_DIR) ] ; then    \
+	    mkdir -p $(BUILDOUTPUTDIR)/$(DRVDIR)/$(KVER_DIR) ;          \
+	  fi ;                                      \
+	  cp -f *.ko $(BUILDOUTPUTDIR)/$(DRVDIR)/$(KVER_DIR) ;          \
+	fi
+
+# Rule for cleaning up
+clean:
+	$(MAKE) -f Makefile -C $(KDIR) M=$(PWD) clean
+	rm -f Makefile
+

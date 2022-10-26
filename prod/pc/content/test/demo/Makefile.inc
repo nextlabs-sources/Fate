@@ -1,0 +1,23 @@
+
+VERSION_PRODUCT		= $(VERSION_PRODUCT_PC)
+VERSION_MAJOR		= $(VERSION_MAJOR_PC)
+VERSION_MINOR		= $(VERSION_MINOR_PC)
+VERSION_MAINTENANCE = $(VERSION_MAINTENANCE_PC)
+VERSION_PATCH		= $(VERSION_PATCH_PC)
+
+COMPILER=VS2008
+PLATFORMSDK=7.0
+
+SUBDIRS = 
+TARGET  = content_redaction
+
+SRC = src/content_redaction.cpp
+
+INCPATH += \
+  ../../analyze/include \
+  $(NLEXTERNALDIR)/boost/boost_1_36_0
+
+LIBPATH += \
+  $(NLEXTERNALDIR)/boost/boost_1_36_0/libs/regex/build/vc80
+
+LIBS += ole32 ntquery

@@ -1,0 +1,5 @@
+LIBRARY	"nlcommonlib"
+EXPORTS
+	nl_CacheData		@1
+	nl_GetData			@2
+	nl_FreeMem			@3

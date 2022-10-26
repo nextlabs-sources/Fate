@@ -1,0 +1,9 @@
+; CE_Explorer.def : Declares the module parameters.
+
+LIBRARY      "CE_Explorer.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE

@@ -1,0 +1,4 @@
+EXPORTS
+		GetSecurityAttributes @1
+		GetLogger @2
+		GetLoggedInUsers @3

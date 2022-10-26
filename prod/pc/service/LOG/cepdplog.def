@@ -1,0 +1,3 @@
+EXPORTS
+	PDP_CELOG_LogDecision
+	PDP_CELOG_LogAssistantData

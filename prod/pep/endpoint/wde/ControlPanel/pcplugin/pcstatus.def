@@ -1,0 +1,3 @@
+LIBRARY	"PCStatus"
+EXPORTS
+	QueryStatus			@1

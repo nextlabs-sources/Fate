@@ -1,0 +1,36 @@
+// cbPep.idl : IDL source for cbPep
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (cbPep.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(069C9AA9-4DBB-4CA5-9FE2-4585C0F6360D),
+	dual,
+	nonextensible,
+	helpstring("INxtShellExtension Interface"),
+	pointer_default(unique)
+]
+interface INxtShellExtension : IDispatch{
+};
+[
+	uuid(06893719-9D67-4DFC-AEEA-D08B905D20BD),
+	version(1.0),
+	helpstring("cbPep 1.0 Type Library")
+]
+library cbPepLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(7ABFB944-EB91-4E60-826E-BC9AB54DD6AB),
+		helpstring("NxtShellExtension Class")
+	]
+	coclass NxtShellExtension
+	{
+		[default] interface INxtShellExtension;
+	};
+};

@@ -1,0 +1,36 @@
+// iePEP.idl : IDL source for iePEP
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (iePEP.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(3F131C72-FC92-43E1-ACB4-A932C8F9AAA7),
+	dual,
+	nonextensible,
+	helpstring("IIEObj Interface"),
+	pointer_default(unique)
+]
+interface IIEObj : IDispatch{
+};
+[
+	uuid(62CFD49B-1845-4AF4-BCCC-2A0139133C06),
+	version(1.0),
+	helpstring("iePEP 1.0 Type Library")
+]
+library iePEPLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(FB159F40-0C40-4480-9A72-71C1D07606B7),
+		helpstring("IEObj Class")
+	]
+	coclass IEObj
+	{
+		[default] interface IIEObj;
+	};
+};

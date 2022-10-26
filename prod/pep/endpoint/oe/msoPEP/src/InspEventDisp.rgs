@@ -1,0 +1,27 @@
+HKCR
+{
+	msoPEP.InspEventDisp.1 = s 'InspEventDisp Class'
+	{
+		CLSID = s '{B7B085B6-90D9-4C6E-BCF0-A69553ABAD95}'
+	}
+	msoPEP.InspEventDisp = s 'InspEventDisp Class'
+	{
+		CLSID = s '{B7B085B6-90D9-4C6E-BCF0-A69553ABAD95}'
+		CurVer = s 'msoPEP.InspEventDisp.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B7B085B6-90D9-4C6E-BCF0-A69553ABAD95} = s 'InspEventDisp Class'
+		{
+			ProgID = s 'msoPEP.InspEventDisp.1'
+			VersionIndependentProgID = s 'msoPEP.InspEventDisp'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{CF63E1A8-F4CF-4E0A-AB37-3F68119D40E7}'
+		}
+	}
+}

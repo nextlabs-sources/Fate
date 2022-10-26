@@ -1,0 +1,8 @@
+EXPORTS
+        CEM_AllocateString
+        CEM_GetString
+        CEM_FreeString
+        CEM_ReallocateString
+	CEM_CreateResourceA
+	CEM_CreateResourceW
+	CEM_FreeResource

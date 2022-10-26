@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NLTag", "NLTag.vcproj", "{983C45D2-4D51-48A0-8421-27B1CC0E04F1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resattrmgr", "..\..\prod\common\resattrmgr\resattrmgr.vcproj", "{32469E9B-7F43-4331-B4A4-6C61A796B355}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Debug|Win32.Build.0 = Debug|Win32
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Debug|x64.ActiveCfg = Debug|x64
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Debug|x64.Build.0 = Debug|x64
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Release|Win32.ActiveCfg = Release|Win32
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Release|Win32.Build.0 = Release|Win32
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Release|x64.ActiveCfg = Release|x64
+		{983C45D2-4D51-48A0-8421-27B1CC0E04F1}.Release|x64.Build.0 = Release|x64
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Debug|Win32.Build.0 = Debug|Win32
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Debug|x64.ActiveCfg = Debug|x64
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Debug|x64.Build.0 = Debug|x64
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Release|Win32.ActiveCfg = Release|Win32
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Release|Win32.Build.0 = Release|Win32
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Release|x64.ActiveCfg = Release|x64
+		{32469E9B-7F43-4331-B4A4-6C61A796B355}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,20 @@
+@idl header
+{
+#include <cstdio>
+#include <cstdlib>
+#include <windows.h>
+
+#include "CEsdk.h"
+#include "ceservice.h"
+
+}
+
+@idl method SE_DrmGetPaths( @idl param [out,ptr,alloc,size*out_paths_size] (wchar_t*) out_paths ,
+                            @idl param [out] (int) out_paths_size ,
+                            @idl param [in] (BOOL) in_fast_write )
+
+@idl method SE_DrmAddPath( @idl param [in,ptr] (const wchar_t*) in_path ,
+                           @idl param [in] (BOOL) in_fast_write )
+
+@idl method SE_DrmRemovePath( @idl param [in,ptr] (const wchar_t*) in_path ,
+                              @idl param [in] (BOOL) in_fast_write )

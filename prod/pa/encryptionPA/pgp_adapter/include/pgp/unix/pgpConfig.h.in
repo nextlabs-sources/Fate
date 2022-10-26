@@ -1,0 +1,13 @@
+/*
+ * pgpConfig.h -- Configuration for the PGPcdk.  This file contains
+ * the configuration information for the PGPcdk, and it should be
+ * included in all PGPcdk source files.
+ *
+ * $Id: pgpConfig.h.in 55 1999-08-08 19:38:08Z heller $
+ */
+
+#include "pgpPFLConfig.h"
+
+/* Tags for exported functions, needed for dynamic linking on some platforms */
+#define PGPTTYE
+

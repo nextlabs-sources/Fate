@@ -1,0 +1,542 @@
+<!-- Windows Desktop Enforcer Control Center Configuration -->
+
+<!-- Print Watermark -->
+<Obligation>
+  <DisplayName>Print Watermark</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>NL_WATERMARK</Name>
+  <Arguments>
+
+     <Argument> 
+       <Name>Format</Name> 
+       <Value>1 Line</Value> 
+       <Value>4 Line</Value> 
+     </Argument>
+
+     <Argument> 
+       <Name>Font Style</Name> 
+       <Value>Light</Value> 
+       <Value>Normal</Value> 
+     </Argument>
+
+     <Argument> 
+       <Name>Message</Name> 
+     </Argument>
+
+  </Arguments>
+</Obligation>
+
+<!-- HTTP Header Injection -->
+<Obligation>
+  <DisplayName>HTTP Header Injection</DisplayName> 
+  <RunAt>PEP</RunAt> 
+  <Name>NL_HTTP_HEADER_INJECTION</Name> 
+ <Arguments>
+ <Argument usereditable="true">
+  <Name>Key</Name> 
+  </Argument>
+ <Argument usereditable="true">
+  <Name>Value</Name> 
+  </Argument>
+ <Argument usereditable="true">
+  <Name>Valid From</Name> 
+  </Argument>
+ <Argument usereditable="true">
+  <Name>Valid To</Name> 
+  </Argument>
+  </Arguments>
+ </Obligation>
+
+<!-- Tag on Usage (Automatic) -->
+<Obligation>
+  <DisplayName>Automatic TagOnUsage</DisplayName>
+  <RunAt>PDP</RunAt>
+  <RunBy>User</RunBy> 
+  <ExecPath>C:\Program Files\NextLabs\Desktop Enforcer\bin\WdeAddTags.exe</ExecPath>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+      <Value>$ResourceAttribute.Name</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Tag Value</Name>
+      <Value>$ResourceAttribute.Values</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+      <Value>The following file needs to be tagged:</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-file</Name>
+      <Value>$CESource</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-app</Name>
+      <Value>$CEApplication</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-action</Name>
+      <Value>$CEAction</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-auto</Name>
+      <Value default="true">Yes</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<!-- Tag on Usage (Interactive) -->
+<Obligation>
+  <DisplayName>Interactive TagOnUsage</DisplayName>
+  <RunAt>PDP</RunAt>
+  <RunBy>User</RunBy> 
+  <ExecPath>C:\Program Files\NextLabs\Desktop Enforcer\bin\WdeAddTags.exe</ExecPath>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+      <Value>$ResourceAttribute.Name</Value>
+    </Argument>
+    <Argument>
+      <Name>Tag Value</Name>
+      <Value>$ResourceAttribute.Values</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Optional</Name>
+      <Value>Yes</Value>
+      <Value default="true">No</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+      <Value>The following file needs to be tagged:</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-file</Name>
+      <Value>$CESource</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-app</Name>
+      <Value>$CEApplication</Value>
+    </Argument>
+    <Argument usereditable="false" hidden="true">
+      <Name>-action</Name>
+      <Value>$CEAction</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<!-- View Overlay -->
+<Obligation>
+	<DisplayName>View Overlay</DisplayName>
+	<RunAt>PEP</RunAt>
+	<Name>VIEW_OVERLAY</Name>
+     <Arguments>
+	<Argument usereditable="false">
+		<Name>Text Format</Name>	
+                <Value>%userId%userName%gmtTime%localTime%fileName%filePath%hostName%PolicyName</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Text(Confidential\n%hostName, %userName)</Name>
+	</Argument>
+	<Argument usereditable="false">
+	<Name>Policy Name</Name>
+		<Value default="true">$CEPolicy</Value>
+	</Argument>
+	<Argument usereditable="true">
+	<Name>Transparency</Name>
+		<Value default="true">35</Value>
+	</Argument>
+	<Argument usereditable="false">
+		<Name>Font Name</Name>
+		<Value default="true">Arial</Value>
+		<Value>Arial Black</Value>
+		<Value>Courier New</Value>
+		<Value>Impact</Value>
+		<Value>Times New Roman</Value>
+		<Value>Verdana</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Font Size (Line 1 , in pt)</Name>
+		<Value default="true">36</Value>		
+        </Argument>
+	<Argument usereditable="true">
+		<Name>Font Size (Line 2 , in pt)</Name>
+		<Value default="true">28</Value>		
+        </Argument>
+	<Argument usereditable="false">
+		<Name>Font Bold</Name>
+		<Value default="true">false</Value>
+		<Value>true</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Font Color</Name>
+		<Value default="true">#888888</Value>
+	</Argument>
+	<Argument usereditable="false">
+		<Name>Placement</Name>
+		<Value default="true">repeat</Value>
+		<Value>center</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Left Margin (in pixels, for repeat only)</Name>
+		<Value default="true">100</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Top Margin (in pixels, for repeat only)</Name>
+		<Value default="true">100</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Horizontal Spacing (in pixels, for repeat only)</Name>
+		<Value default="true">200</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Vertical Spacing (in pixels, for repeat only)</Name>
+		<Value default="true">300</Value>
+	</Argument>
+     </Arguments>
+</Obligation>
+
+<!-- Print Overlay -->
+<Obligation>
+	<DisplayName>Print Overlay</DisplayName>
+	<RunAt>PEP</RunAt>
+	<Name>Print_OVERLAY</Name>
+     <Arguments>
+	<Argument usereditable="false">
+		<Name>Text Format</Name>	
+		<Value>%userId%userName%gmtTime%localTime%fileName%filePath%hostName%PolicyName</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Text(Confidential\n%hostName, %userName)</Name>
+	</Argument>
+	<Argument usereditable="false">
+	<Name>Policy Name</Name>
+		<Value default="true">$CEPolicy</Value>
+	</Argument>
+	<Argument usereditable="true">
+	<Name>Transparency</Name>
+		<Value default="true">35</Value>
+	</Argument>
+	<Argument usereditable="false">
+		<Name>Font Name</Name>
+		<Value default="true">Arial</Value>
+		<Value>Arial Black</Value>
+		<Value>Courier New</Value>
+		<Value>Impact</Value>
+		<Value>Times New Roman</Value>
+		<Value>Verdana</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Font Size (Line 1 , in pt)</Name>
+		<Value default="true">36</Value>		
+        </Argument>
+	<Argument usereditable="true">
+		<Name>Font Size (Line 2, in pt)</Name>
+		<Value default="true">28</Value>		
+        </Argument>
+	<Argument usereditable="false">
+		<Name>Font Bold</Name>
+		<Value default="true">false</Value>
+		<Value>true</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Font Color</Name>
+		<Value default="true">#888888</Value>
+	</Argument>
+	<Argument usereditable="false">
+		<Name>Placement</Name>
+		<Value default="true">repeat</Value>
+		<Value>center</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Left and Right Margins (in inches, for repeat only)</Name>
+		<Value default="true">1</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Top and Bottom Margin (in inches, for repeat only)</Name>
+		<Value default="true">2</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Horizontal Spacing (in inches, for repeat only)</Name>
+		<Value default="true">2</Value>
+	</Argument>
+	<Argument usereditable="true">
+		<Name>Vertical Spacing (in inches, for repeat only)</Name>
+		<Value default="true">3</Value>
+	</Argument>
+     </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>SE Encryption</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>SE_ENCRYPTION</Name>
+</Obligation>
+
+<Obligation>
+  <DisplayName>View Overlay</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>VIEW_OVERLAY</Name>
+  <Arguments>
+    <Argument usereditable="false">
+      <Name>Text Format</Name>
+      <Value>%userId%userName%gmtTime%localTime%fileName%filePath%hostName%PolicyName%date%time</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Text(Confidential\n%hostName, %userName)</Name>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Policy Name</Name>
+      <Value default="true">$CEPolicy</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Transparency</Name>
+      <Value default="true">35</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Font Name</Name>
+      <Value default="true">Arial</Value>
+      <Value>Arial Black</Value>
+      <Value>Courier New</Value>
+      <Value>Impact</Value>
+      <Value>Times New Roman</Value>
+      <Value>Verdana</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Size (Line 1 , in pt)</Name>
+      <Value default="true">36</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Size (Line 2 , in pt)</Name>
+      <Value default="true">28</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Font Bold</Name>
+      <Value default="true">false</Value>
+      <Value>true</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Color</Name>
+      <Value default="true">#888888</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Placement</Name>
+      <Value default="true">repeat</Value>
+      <Value>center</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Left Margin (in pixels, for repeat only)</Name>
+      <Value default="true">100</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Top Margin (in pixels, for repeat only)</Name>
+      <Value default="true">100</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Horizontal Spacing (in pixels, for repeat only)</Name>
+      <Value default="true">200</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Vertical Spacing (in pixels, for repeat only)</Name>
+      <Value default="true">300</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Date Format</Name>
+      <Value default="true">%m:%d</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Time Format</Name>
+      <Value default="true">%H:%M</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<!-- Print Overlay -->
+<Obligation>
+  <DisplayName>Print Overlay</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>Print_OVERLAY</Name>
+  <Arguments>
+    <Argument usereditable="false">
+      <Name>Text Format</Name>
+      <Value>%userId%userName%gmtTime%localTime%fileName%filePath%hostName%PolicyName%date%time</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Text(Confidential\n%hostName, %userName)</Name>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Policy Name</Name>
+      <Value default="true">$CEPolicy</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Transparency</Name>
+      <Value default="true">35</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Font Name</Name>
+      <Value default="true">Arial</Value>
+      <Value>Arial Black</Value>
+      <Value>Courier New</Value>
+      <Value>Impact</Value>
+      <Value>Times New Roman</Value>
+      <Value>Verdana</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Size (Line 1 , in pt)</Name>
+      <Value default="true">36</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Size (Line 2, in pt)</Name>
+      <Value default="true">28</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Font Bold</Name>
+      <Value default="true">false</Value>
+      <Value>true</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Font Color</Name>
+      <Value default="true">#888888</Value>
+    </Argument>
+    <Argument usereditable="false">
+      <Name>Placement</Name>
+      <Value default="true">repeat</Value>
+      <Value>center</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Left and Right Margins (in inches, for repeat only)</Name>
+      <Value default="true">1</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Top and Bottom Margin (in inches, for repeat only)</Name>
+      <Value default="true">2</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Horizontal Spacing (in inches, for repeat only)</Name>
+      <Value default="true">2</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Vertical Spacing (in inches, for repeat only)</Name>
+      <Value default="true">3</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Date Format</Name>
+      <Value default="true">%m:%d</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Time Format</Name>
+      <Value default="true">%H:%M</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Automatic File Tagging</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>AUTOMATIC_FILE_TAGGING</Name>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Tag Value</Name>
+    </Argument>
+    <Argument>
+      <Name>Target</Name>
+      <Value default="true">Source</Value>
+      <Value>Destination</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+
+<Obligation>
+  <DisplayName>Interactive File Tagging</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>INTERACTIVE_FILE_TAGGING</Name>
+  <Arguments>
+    <Argument>
+      <Name>Tag Name</Name>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Tag Value</Name>
+    </Argument>
+    <Argument>
+      <Name>Target</Name>
+      <Value default="true">Source</Value>
+      <Value>Destination</Value>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Description</Name>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<Obligation>
+  <DisplayName>Password Based Encryption</DisplayName>
+  <RunAt>PEP</RunAt>
+  <Name>PASSWORD_BASED_ENCRYPTION</Name>
+  <Arguments>
+    <Argument usereditable="false">
+      <Name>Encryption Adapter</Name>
+      <Value default="true">ZIP</Value>
+    </Argument>
+
+    <Argument usereditable="true">
+      <Name>Description</Name>
+    </Argument>
+    <Argument usereditable="true">
+      <Name>Optional</Name>
+      <Value default="true">false</Value>
+      <Value>true</Value>
+    </Argument>
+  </Arguments>
+</Obligation>
+
+<!-- Actions -->
+<ActionList>
+  <Action>
+    <Name>UPLOAD</Name>
+    <DisplayName>Upload</DisplayName>
+    <ShortName>UP</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>DOWNLOAD</Name>
+    <DisplayName>Download</DisplayName>
+    <ShortName>DL</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>SCREEN_CAPTURE</Name>
+    <DisplayName>Screen Capture</DisplayName>
+    <ShortName>SC</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>ATTACH_DEVICE</Name>
+    <DisplayName>Attach Device</DisplayName>
+    <ShortName>AD</ShortName>
+    <Category>Device</Category>
+  </Action>
+  <Action>
+    <Name>DECRYPT</Name>
+    <DisplayName>Decrypt</DisplayName>
+    <ShortName>DC</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>SEND</Name>
+    <DisplayName>Send</DisplayName>
+    <ShortName>SD</ShortName>
+    <Category>Transform</Category>
+  </Action>
+  <Action>
+    <Name>CONVERT</Name>
+    <DisplayName>Convert</DisplayName>
+    <ShortName>SV</ShortName>
+    <Category>Transform</Category>
+  </Action>
+</ActionList>

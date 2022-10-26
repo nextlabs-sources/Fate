@@ -1,0 +1,6 @@
+
+TARGETS = \
+	install/pcinstalltool/enforcerStopperV2 \
+	install/pcinstalltool/OEInstallPrep \
+	install/pcinstalltool/OEPlugin \
+	install/pcinstalltool/PCStop

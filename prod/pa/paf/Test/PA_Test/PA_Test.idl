@@ -1,0 +1,18 @@
+// PA_Test.idl : IDL source for PA_Test
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (PA_Test.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(741CE528-0D36-42B8-9462-FE17320E400A),
+	version(1.0),
+	helpstring("PA_Test 1.0 Type Library")
+]
+library PA_TestLib
+{
+	importlib("stdole2.tlb");
+};
